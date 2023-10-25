@@ -1,0 +1,78 @@
+.App {
+  text-align: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  padding-top: 20rem;
+}
+
+.satellites {
+  border: 4px solid black;
+  animation: rotate-axis 10s linear infinite;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes rotate-axis {
+  from {
+      transform: rotateZ(350deg) perspective(800px) rotateY(0deg);
+  }
+  to {
+      transform: rotateZ(350deg) perspective(800px) rotateY(360deg);
+  }
+}
+
+.satellite {
+  position: absolute;
+  width: 100px;
+  transform: rotateY(calc(var(--i) * 1deg)) translateZ(500px);
+}
+
+
+
+
+.flip-outer {
+  width: 300px;
+  height: 300px;
+}
+.flip-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: all 1s;
+  transform-style: preserve-3d;
+}
+.flip-inner:hover {
+  transform: rotateY(180deg) rotateZ(-180deg);
+} 
+
+.front {
+  position: absolute;
+  width: 100%;
+  backface-visibility: hidden;
+  z-index: 1;
+}
+.back {
+  position: absolute;
+  width: 400px;
+  height: 500px;
+  background-color: gray;
+  text-align: center;
+  transform: rotateY(180deg) rotateZ(180deg);
+  backface-visibility: hidden;
+  /* 글자 위치를 좀 더 예쁘게 하기 위해 */
+  padding-top: 50px;
+  box-sizing: border-box;
+}
+.test {
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden; 
+  }

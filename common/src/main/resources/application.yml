@@ -1,12 +1,10 @@
 spring:
   config:
-#    import: "optional:configserver:{Config 서버 IP}:{포트}" #config server uri
-    import: optional:configserver:http://localhost:61070 #config server uri
+    import: "optional:configserver:https://ssok.site" #config server uri
   cloud:
     config:
-      name: test
-#      name: { 도메인 이름 }
-      profile: test
+      name: config
+      profile: { 도메인 이름 }
 
 encrypt:
   key: ${ssh-encrypt-key}

@@ -4,7 +4,8 @@ spring:
   cloud:
     config:
       name: config
-      profile: { 도메인 이름 }
+      profile: test
+#      profile: { 도메인 이름 }
 
 encrypt:
   key: ${ssh-encrypt-key}

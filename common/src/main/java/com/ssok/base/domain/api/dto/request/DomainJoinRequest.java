@@ -1,4 +1,4 @@
-package com.ssok.base.domainname.api.dto.request;
+package com.ssok.base.domain.api.dto.request;
 
 import lombok.Builder;
 

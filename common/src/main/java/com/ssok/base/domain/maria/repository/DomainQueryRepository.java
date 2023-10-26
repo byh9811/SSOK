@@ -1,4 +1,4 @@
-package com.ssok.base.domainname.repository;
+package com.ssok.base.domain.maria.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

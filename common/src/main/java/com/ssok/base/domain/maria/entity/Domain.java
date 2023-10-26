@@ -1,4 +1,4 @@
-package com.ssok.base.domainname.entity;
+package com.ssok.base.domain.maria.entity;
 
 import com.ssok.base.global.entity.BaseEntity;
 import lombok.AccessLevel;
@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -22,8 +23,10 @@ public class Domain extends BaseEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column
     private int age;
 
 }

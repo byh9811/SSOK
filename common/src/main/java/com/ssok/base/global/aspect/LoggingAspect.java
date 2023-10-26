@@ -24,7 +24,7 @@ public class LoggingAspect {
 	/**
 	 * 도메인 관련 메서드 수행 시간이 얼마나 소요되는지 기록하는 로그
 	 * */
-	@Around(value = "execution(* com.kkini.core.domain..*(..))")
+	@Around(value = "execution(* com.ssok.base.domain..*(..))")
 	public Object loggingExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
 		log.debug("Entered Method ({}) With Parameter ({})", joinPoint.getSignature().toShortString(), Arrays.toString(joinPoint.getArgs()));
 

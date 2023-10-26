@@ -1,5 +1,5 @@
  # gredle 이미지 불러오기
-FROM adoptopenjdk/openjdk11
+FROM adoptopenjdk/openjdk17
 
 # jar 파일을 Docker Container의 WORKDIR 위치로 복사 (이미지 생성할 때 동작)
 #WORKDIR /config

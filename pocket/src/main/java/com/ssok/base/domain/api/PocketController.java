@@ -6,12 +6,14 @@ import com.ssok.base.domain.service.PocketQueryService;
 import com.ssok.base.domain.service.PocketService;
 import com.ssok.base.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import static com.ssok.base.global.api.ApiResponse.OK;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/pocket")
 public class PocketController {
 
@@ -32,4 +34,9 @@ public class PocketController {
         return OK(new DomainJoinResponse("dummy", 20));
     }
 
+    @GetMapping("/test")
+    public ApiResponse<?> test(){
+        log.info("test in  in  in");
+        return OK("TESTdONE");
+    }
 }

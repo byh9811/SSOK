@@ -11,3 +11,4 @@ ARG ssh_encrypt_key
 ENV ssh-encrypt-key $ssh_encrypt_key
 
 ENTRYPOINT ["java", "-jar","-Dspring.cloud.config.profile=dev", "/app.jar"]
+

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
-public class DomainQueryService {
+public class PocketQueryService {
 
     private final DomainMongoRepository domainMongoRepository;
 

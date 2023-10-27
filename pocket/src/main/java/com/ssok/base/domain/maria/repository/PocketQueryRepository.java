@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class DomainQueryRepository {
+public class PocketQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 

@@ -3,8 +3,8 @@ package com.ssok.base.domain.api;
 import com.ssok.base.RestDocsSupport;
 import com.ssok.base.domain.api.dto.request.DomainJoinRequest;
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
-import com.ssok.base.domain.service.DomainQueryService;
-import com.ssok.base.domain.service.DomainService;
+import com.ssok.base.domain.service.PocketQueryService;
+import com.ssok.base.domain.service.PocketService;
 import com.ssok.base.domain.service.dto.DomainDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,12 +24,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class DomainControllerDocsTest extends RestDocsSupport {
 
-    private final DomainService domainService = mock(DomainService.class);
-    private final DomainQueryService domainQueryService = mock(DomainQueryService.class);
+    private final PocketService pocketService = mock(PocketService.class);
+    private final PocketQueryService pocketQueryService = mock(PocketQueryService.class);
 
     @Override
     protected Object initController() {
-        return new DomainController(domainService, domainQueryService);
+        return new PocketController(pocketService, pocketQueryService);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class DomainControllerDocsTest extends RestDocsSupport {
                 .age(10)
                 .build();
 
-        given(domainService.createDomain(any(DomainDto.class)))
+        given(pocketService.createDomain(any(DomainDto.class)))
                 .willReturn(DomainJoinResponse.builder()
                         .nickname("name")
                         .age(20)
@@ -79,7 +79,7 @@ public class DomainControllerDocsTest extends RestDocsSupport {
                 .age(10)
                 .build();
 
-        given(domainService.createDomain(any(DomainDto.class)))
+        given(pocketService.createDomain(any(DomainDto.class)))
                 .willReturn(DomainJoinResponse.builder()
                         .nickname("name")
                         .age(20)

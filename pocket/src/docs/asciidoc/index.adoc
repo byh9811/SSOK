@@ -10,4 +10,6 @@ endif::[]
 :sectlinks:
 
 [[DOMAIN-API]]
+== Domain-API
 include::domain/domain.adoc[]
+// include::domain/domain.adoc[]

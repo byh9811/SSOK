@@ -48,7 +48,7 @@ public class DomainControllerDocsTest extends RestDocsSupport {
                 );
 
         mockMvc.perform(
-                        post("/domain")
+                        post("/pocket")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -87,7 +87,7 @@ public class DomainControllerDocsTest extends RestDocsSupport {
                 );
 
         mockMvc.perform(
-                        get("/domain")
+                        get("/pocket")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )

@@ -1,6 +1,6 @@
 package com.ssok.mydata.global.config;
 
-import com.ssok.mydata.global.interceptor.JwtAuthenticationFilter;
+import com.ssok.mydata.global.filter.JwtAuthenticationFilter;
 import com.ssok.mydata.global.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +48,6 @@ public class SecurityConfig {
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

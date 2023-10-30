@@ -59,6 +59,9 @@ dependencies {
 	// RestDocs
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
+	//openfeign 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.8'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	annotationProcessor 'org.projectlombok:lombok'

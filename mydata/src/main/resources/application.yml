@@ -4,7 +4,7 @@ spring:
   cloud:
     config:
       name: config
-      profile: test
+      profile: mydata
 
 encrypt:
   key: ${ssh-encrypt-key}

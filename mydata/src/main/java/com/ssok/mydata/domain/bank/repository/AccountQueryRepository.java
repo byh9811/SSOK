@@ -21,7 +21,7 @@ public class AccountQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<AccountList> findAccountListByMemberCi(long memberCi, long cursor, int limit) {
+    public List<AccountList> findAccountListByMemberCi(String memberCi, long cursor, int limit) {
         return queryFactory
                 .select(Projections.constructor(AccountList.class,
                         account.accountNum.as("account_num"),

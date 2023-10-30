@@ -20,7 +20,7 @@ public class CardQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<CardList> findCardListByCardId(long memberCi, long cursor, int limit) {
+    public List<CardList> findCardListByCardId(String memberCi, long cursor, int limit) {
         return queryFactory.select(Projections.constructor(CardList.class,
                         card.id.as("card_id"),
                         card.cardCompany.as("company"),

@@ -33,7 +33,7 @@ public class AccountApi {
     {
         HttpHeaders headers = new HttpHeaders();
         headers.add("x-api-tran-id", "1234567890M00000000000001");
-        AccountListResponse response = accountQueryService.findAccountList(Long.parseLong(user.getUsername()), accountListRequest.getNext_page(), accountListRequest.getLimit());
+        AccountListResponse response = accountQueryService.findAccountList(user.getUsername(), accountListRequest.getNext_page(), accountListRequest.getLimit());
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

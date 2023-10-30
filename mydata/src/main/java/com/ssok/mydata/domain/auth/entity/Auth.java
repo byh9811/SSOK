@@ -20,18 +20,22 @@ import java.sql.Date;
 public class Auth {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ColumnDefault("true")
-    private Boolean bankList;
+    private String userCi;
 
-    @ColumnDefault("true")
-    private Boolean bankDeposit;
-
-    @ColumnDefault("true")
-    private Boolean cardList;
-
-    @ColumnDefault("true")
-    private Boolean cardCard;
+//    @ColumnDefault("true")
+//    private Boolean bankList;
+//
+//    @ColumnDefault("true")
+//    private Boolean bankDeposit;
+//
+//    @ColumnDefault("true")
+//    private Boolean cardList;
+//
+//    @ColumnDefault("true")
+//    private Boolean cardCard;
 
 }

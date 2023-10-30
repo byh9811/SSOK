@@ -16,7 +16,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long memberCi;
+    private String memberCi;
 
     private String bank;
 

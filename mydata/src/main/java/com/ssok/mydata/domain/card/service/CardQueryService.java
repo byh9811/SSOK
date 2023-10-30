@@ -17,7 +17,7 @@ public class CardQueryService {
 
     private final CardQueryRepository cardQueryRepository;
 
-    public CardListResponse findCardList(long memberCi, long cursor, int limit) {
+    public CardListResponse findCardList(String memberCi, long cursor, int limit) {
 
         List<CardList> cardList = cardQueryRepository.findCardListByCardId(memberCi, cursor, limit);
 

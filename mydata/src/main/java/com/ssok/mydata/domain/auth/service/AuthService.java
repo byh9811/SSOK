@@ -36,8 +36,8 @@ public class AuthService {
     private final JwtUtils jwtUtils;
     private final DummyUtils dummyUtils;
 
-    public void registerToken(long userCi) {
-        if (authRepository.existsById(userCi)) {
+    public void registerToken(String userCi) {
+        if (authRepository.existsByUserCi(userCi)) {
             log.warn("이미 이 회원에 대해 더미데이터를 생성했습니다!!");
             return;
         }
@@ -45,7 +45,7 @@ public class AuthService {
         // 인증 정보 저장
         authRepository.save(
                 Auth.builder()
-                        .id(userCi)
+                        .userCi(userCi)
                         .build());
 
         // 계좌 5개 생성

@@ -54,7 +54,7 @@ public class AuthApi {
         HttpHeaders headers = new HttpHeaders();
         headers.add("x-api-tran-id", "1234567890M00000000000001");
         String userCi = body.get("user_ci");
-        authService.registerToken(Long.parseLong(userCi));
+        authService.registerToken(userCi);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

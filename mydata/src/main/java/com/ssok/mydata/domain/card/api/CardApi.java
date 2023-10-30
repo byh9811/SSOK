@@ -41,7 +41,7 @@ public class CardApi {
     {
         HttpHeaders headers = new HttpHeaders();
         headers.add("x-api-tran-id", "1234567890M00000000000001");
-        CardListResponse cardList = cardQueryService.findCardList(Long.parseLong(user.getUsername()), accountListRequest.getNext_page(), accountListRequest.getLimit());
+        CardListResponse cardList = cardQueryService.findCardList(user.getUsername(), accountListRequest.getNext_page(), accountListRequest.getLimit());
         return new ResponseEntity<>(cardList, headers, HttpStatus.OK);
     }
 

@@ -20,7 +20,7 @@ public class AccountQueryService {
 
     private final AccountQueryRepository accountQueryRepository;
 
-    public AccountListResponse findAccountList(long memberCi, long cursor, int limit) {
+    public AccountListResponse findAccountList(String memberCi, long cursor, int limit) {
 
         List<AccountList> accountList = accountQueryRepository.findAccountListByMemberCi(memberCi, cursor, limit);
         return AccountListResponse.builder()

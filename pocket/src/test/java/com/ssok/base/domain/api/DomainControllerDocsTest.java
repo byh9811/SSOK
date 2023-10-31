@@ -3,7 +3,7 @@ package com.ssok.base.domain.api;
 import com.ssok.base.RestDocsSupport;
 import com.ssok.base.domain.api.dto.request.DomainJoinRequest;
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
-import com.ssok.base.domain.service.PocketQueryService;
+//import com.ssok.base.domain.service.PocketQueryService;
 import com.ssok.base.domain.service.PocketService;
 import com.ssok.base.domain.service.dto.DomainDto;
 import org.junit.jupiter.api.DisplayName;
@@ -25,11 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class DomainControllerDocsTest extends RestDocsSupport {
 
     private final PocketService pocketService = mock(PocketService.class);
-    private final PocketQueryService pocketQueryService = mock(PocketQueryService.class);
+//    private final PocketQueryService pocketQueryService = mock(PocketQueryService.class);
 
     @Override
     protected Object initController() {
-        return new PocketController(pocketService, pocketQueryService);
+//        return new PocketController(pocketService, pocketQueryService);
+        return new PocketController(pocketService);
     }
 
     @Test

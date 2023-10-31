@@ -48,28 +48,31 @@ class _KeyboardControllerDownState extends State<KeyboardControllerDown> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        newDx = widget.dx;
-        newDy = (widget.dy + 1).clamp(0, maxHeight);
-        widget.onDirectionChanged(newDx, newDy);
-      },
-      onTapDown: (details) {
-        startMoving();
-      },
-      onTapUp: (details) {
-        stopMoving();
-      },
-      onTapCancel: () {
-        stopMoving();
-      },
-      child: Container(
-        alignment: Alignment.center,
-        width: 40,
-        height: 40,
-        child: Icon(
-          Icons.south,
-          size: 30,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+      child: InkWell(
+        onTap: () {
+          newDx = widget.dx;
+          newDy = (widget.dy + 1).clamp(0, maxHeight);
+          widget.onDirectionChanged(newDx, newDy);
+        },
+        onTapDown: (details) {
+          startMoving();
+        },
+        onTapUp: (details) {
+          stopMoving();
+        },
+        onTapCancel: () {
+          stopMoving();
+        },
+        child: Container(
+          alignment: Alignment.center,
+          width: 40,
+          height: 40,
+          child: Icon(
+            Icons.south,
+            size: 30,
+          ),
         ),
       ),
     );

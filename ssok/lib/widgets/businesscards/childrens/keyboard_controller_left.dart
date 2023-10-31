@@ -36,7 +36,7 @@ class _KeyboardControllerLeftState extends State<KeyboardControllerLeft> {
 
   void startMoving() {
     longPressTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {
-      newDx = (widget.dx - 1).clamp(0, maxHeight);
+      newDx = (widget.dx - 1).clamp(0, maxWidth);
       newDy = widget.dy; // 왼쪽으로 10 이동
       widget.onDirectionChanged(newDx, newDy);
     });
@@ -48,28 +48,31 @@ class _KeyboardControllerLeftState extends State<KeyboardControllerLeft> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        newDx = (widget.dx - 1).clamp(0, maxHeight);
-        newDy = widget.dy;
-        widget.onDirectionChanged(newDx, newDy);
-      },
-      onTapDown: (details) {
-        startMoving();
-      },
-      onTapUp: (details) {
-        stopMoving();
-      },
-      onTapCancel: () {
-        stopMoving();
-      },
-      child: Container(
-        alignment: Alignment.center,
-        width: 40,
-        height: 40,
-        child: Icon(
-          Icons.west,
-          size: 30,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+      child: InkWell(
+        onTap: () {
+          newDx = (widget.dx - 1).clamp(0, maxWidth);
+          newDy = widget.dy;
+          widget.onDirectionChanged(newDx, newDy);
+        },
+        onTapDown: (details) {
+          startMoving();
+        },
+        onTapUp: (details) {
+          stopMoving();
+        },
+        onTapCancel: () {
+          stopMoving();
+        },
+        child: Container(
+          alignment: Alignment.center,
+          width: 40,
+          height: 40,
+          child: Icon(
+            Icons.west,
+            size: 30,
+          ),
         ),
       ),
     );

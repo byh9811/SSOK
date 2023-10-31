@@ -16,17 +16,36 @@ class SelfCreateCardPage extends StatefulWidget {
 }
 
 class _SelfCreateCardPageState extends State<SelfCreateCardPage> {
-  int index = -1;
+  int currentOffsetIndex = -1;
   String name = "";
   String registeredName = "";
-  // bool isChecked = false;
   String job = "";
   String registeredJob = "";
-  // bool isChecked2 = false;
-  List<bool> isCheckedList = [false, false];
+  String company = "";
+  String registeredCompany = "";
+  String address = "";
+  String registeredAddress = "";
+  String phone = "";
+  String registeredPhone = "";
+  String fax = "";
+  String registeredFax = "";
+  String email = "";
+  String registeredEmail = "";
+  String website = "";
+  String registeredWebsite = "";
+  List<bool> isCheckedList = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
   void isCheckedChange() {
-    int temp = index;
+    int temp = currentOffsetIndex;
     for (int i = 0; i <= isCheckedList.length; i++) {
       temp++;
       if (temp >= isCheckedList.length) {
@@ -34,13 +53,19 @@ class _SelfCreateCardPageState extends State<SelfCreateCardPage> {
       }
       if (isCheckedList[temp]) {
         setState(() {
-          index = temp;
+          currentOffsetIndex = temp;
         });
         return;
       }
     }
     setState(() {
-      index = -1;
+      currentOffsetIndex = -1;
+    });
+  }
+
+  void isCheckedFocus(int num) {
+    setState(() {
+      currentOffsetIndex = num;
     });
   }
 
@@ -80,16 +105,22 @@ class _SelfCreateCardPageState extends State<SelfCreateCardPage> {
                   },
                   name: registeredName,
                   job: registeredJob,
-                  currentOffsetIndex: index,
+                  company: registeredCompany,
+                  address: registeredAddress,
+                  phone: registeredPhone,
+                  fax: registeredFax,
+                  email: registeredEmail,
+                  website: registeredWebsite,
+                  currentOffsetIndex: currentOffsetIndex,
                 ),
                 SingleChildScrollView(
                     child: Column(
                   children: [
-                    SizedBox(height: screenHeight * 0.03),
+                    SizedBox(height: screenHeight * 0.02),
                     BusinessCardText(
                       title: "이름",
                       hintContent: "이름 입력",
-                      updateName: (newValue) {
+                      updateValue: (newValue) {
                         setState(() {
                           name = newValue;
                         });
@@ -99,18 +130,19 @@ class _SelfCreateCardPageState extends State<SelfCreateCardPage> {
                           isCheckedList[0] = !isCheckedList[0];
                           if (!isCheckedList[0]) {
                             registeredName = "";
+                            isCheckedChange();
                           } else {
                             registeredName = name;
+                            isCheckedFocus(0);
                           }
                         });
-                        isCheckedChange();
                       },
                       isChecked: isCheckedList[0],
                     ),
                     BusinessCardText(
                       title: "직책(업무)",
                       hintContent: "직책(업무) 입력",
-                      updateName: (newValue) {
+                      updateValue: (newValue) {
                         setState(() {
                           job = newValue;
                         });
@@ -120,39 +152,147 @@ class _SelfCreateCardPageState extends State<SelfCreateCardPage> {
                           isCheckedList[1] = !isCheckedList[1];
                           if (!isCheckedList[1]) {
                             registeredJob = "";
+                            isCheckedChange();
                           } else {
                             registeredJob = job;
+                            isCheckedFocus(1);
                           }
                         });
-                        isCheckedChange();
                       },
                       isChecked: isCheckedList[1],
                     ),
-
-                    // BusinessCardText(
-                    //   title: "회사",
-                    //   hintContent: "회사 입력",
-                    // ),
-                    // BusinessCardText(
-                    //   title: "주소",
-                    //   hintContent: "주소 입력",
-                    // ),
-                    // BusinessCardText(
-                    //   title: "휴대폰",
-                    //   hintContent: "휴대폰 입력",
-                    // ),
-                    // BusinessCardText(
-                    //   title: "FAX",
-                    //   hintContent: "FAX 입력",
-                    // ),
-                    // BusinessCardText(
-                    //   title: "이메일",
-                    //   hintContent: "이메일 입력",
-                    // ),
-                    // BusinessCardText(
-                    //   title: "홈페이지",
-                    //   hintContent: "홈페이지 입력",
-                    // ),
+                    BusinessCardText(
+                      title: "회사",
+                      hintContent: "회사 입력",
+                      updateValue: (newValue) {
+                        setState(() {
+                          company = newValue;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isCheckedList[2] = !isCheckedList[2];
+                          if (!isCheckedList[2]) {
+                            registeredCompany = "";
+                            isCheckedChange();
+                          } else {
+                            registeredCompany = company;
+                            isCheckedFocus(2);
+                          }
+                        });
+                      },
+                      isChecked: isCheckedList[2],
+                    ),
+                    BusinessCardText(
+                      title: "주소",
+                      hintContent: "주소 입력",
+                      updateValue: (newValue) {
+                        setState(() {
+                          address = newValue;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isCheckedList[3] = !isCheckedList[3];
+                          if (!isCheckedList[3]) {
+                            registeredAddress = "";
+                            isCheckedChange();
+                          } else {
+                            registeredAddress = address;
+                            isCheckedFocus(3);
+                          }
+                        });
+                      },
+                      isChecked: isCheckedList[3],
+                    ),
+                    BusinessCardText(
+                      title: "휴대폰",
+                      hintContent: "휴대폰 입력",
+                      updateValue: (newValue) {
+                        setState(() {
+                          phone = newValue;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isCheckedList[4] = !isCheckedList[4];
+                          if (!isCheckedList[4]) {
+                            registeredPhone = "";
+                            isCheckedChange();
+                          } else {
+                            registeredPhone = phone;
+                            isCheckedFocus(4);
+                          }
+                        });
+                      },
+                      isChecked: isCheckedList[4],
+                    ),
+                    BusinessCardText(
+                      title: "FAX",
+                      hintContent: "FAX 입력",
+                      updateValue: (newValue) {
+                        setState(() {
+                          fax = newValue;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isCheckedList[5] = !isCheckedList[5];
+                          if (!isCheckedList[5]) {
+                            registeredFax = "";
+                            isCheckedChange();
+                          } else {
+                            registeredFax = fax;
+                            isCheckedFocus(5);
+                          }
+                        });
+                      },
+                      isChecked: isCheckedList[5],
+                    ),
+                    BusinessCardText(
+                      title: "이메일",
+                      hintContent: "이메일 입력",
+                      updateValue: (newValue) {
+                        setState(() {
+                          email = newValue;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isCheckedList[6] = !isCheckedList[6];
+                          if (!isCheckedList[6]) {
+                            registeredEmail = "";
+                            isCheckedChange();
+                          } else {
+                            registeredEmail = email;
+                            isCheckedFocus(6);
+                          }
+                        });
+                      },
+                      isChecked: isCheckedList[6],
+                    ),
+                    BusinessCardText(
+                      title: "홈페이지",
+                      hintContent: "홈페이지 입력",
+                      updateValue: (newValue) {
+                        setState(() {
+                          website = newValue;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isCheckedList[7] = !isCheckedList[7];
+                          if (!isCheckedList[7]) {
+                            registeredWebsite = "";
+                            isCheckedChange();
+                          } else {
+                            registeredWebsite = website;
+                            isCheckedFocus(7);
+                          }
+                        });
+                      },
+                      isChecked: isCheckedList[7],
+                    ),
                     SizedBox(height: screenHeight * 0.06),
                     MainButton(
                       title: "등록",
@@ -175,12 +315,24 @@ class BusinessCardBox extends StatefulWidget {
     required this.onTap,
     required this.name,
     required this.job,
+    required this.company,
+    required this.address,
+    required this.phone,
+    required this.fax,
+    required this.email,
+    required this.website,
   }) : super(key: key);
 
   final int currentOffsetIndex;
   final Function() onTap;
   final String name;
   final String job;
+  final String company;
+  final String address;
+  final String phone;
+  final String fax;
+  final String email;
+  final String website;
 
   @override
   State<BusinessCardBox> createState() => _BusinessCardBoxState();
@@ -188,7 +340,16 @@ class BusinessCardBox extends StatefulWidget {
 
 class _BusinessCardBoxState extends State<BusinessCardBox> {
   late List<String> values;
-  List<Offset> offsets = [Offset(0, 0), Offset(0, 0)];
+  List<Offset> offsets = [
+    Offset(0, 0),
+    Offset(0, 0),
+    Offset(0, 0),
+    Offset(0, 0),
+    Offset(0, 0),
+    Offset(0, 0),
+    Offset(0, 0),
+    Offset(0, 0),
+  ];
   late double maxWidth;
   late double maxHeight;
 
@@ -206,7 +367,16 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    List<String> titleList = ["이름", "직책(업무)"];
+    List<String> titleList = [
+      "이름",
+      "직책(업무)",
+      "회사",
+      "주소",
+      "휴대폰",
+      "FAX",
+      "이메일",
+      "홈페이지"
+    ];
     return Column(
       children: [
         Row(
@@ -226,10 +396,6 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                   height: screenHeight * 0.18,
                   color: Colors.amber,
                 ),
-                // PositionedText(
-                //   offset: offset,
-                //   text: widget.name,
-                // ),
                 DraggableText(
                   name: widget.name,
                   offset: offsets[0],
@@ -248,6 +414,60 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                     });
                   },
                 ),
+                DraggableText(
+                  name: widget.company,
+                  offset: offsets[2],
+                  onPositionChanged: (newOffset) {
+                    setState(() {
+                      offsets[2] = newOffset;
+                    });
+                  },
+                ),
+                DraggableText(
+                  name: widget.address,
+                  offset: offsets[3],
+                  onPositionChanged: (newOffset) {
+                    setState(() {
+                      offsets[3] = newOffset;
+                    });
+                  },
+                ),
+                DraggableText(
+                  name: widget.phone,
+                  offset: offsets[4],
+                  onPositionChanged: (newOffset) {
+                    setState(() {
+                      offsets[4] = newOffset;
+                    });
+                  },
+                ),
+                DraggableText(
+                  name: widget.fax,
+                  offset: offsets[5],
+                  onPositionChanged: (newOffset) {
+                    setState(() {
+                      offsets[5] = newOffset;
+                    });
+                  },
+                ),
+                DraggableText(
+                  name: widget.email,
+                  offset: offsets[6],
+                  onPositionChanged: (newOffset) {
+                    setState(() {
+                      offsets[6] = newOffset;
+                    });
+                  },
+                ),
+                DraggableText(
+                  name: widget.website,
+                  offset: offsets[7],
+                  onPositionChanged: (newOffset) {
+                    setState(() {
+                      offsets[7] = newOffset;
+                    });
+                  },
+                ),
               ],
             ),
             IconButton(
@@ -259,7 +479,9 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
             ),
           ],
         ),
+        SizedBox(height: 8.0),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
               onTap: widget.onTap,
@@ -283,6 +505,7 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                     : titleList[widget.currentOffsetIndex]),
               ),
             ),
+            SizedBox(width: 5.0),
             KeyboardControllerUp(
               dx: widget.currentOffsetIndex == -1
                   ? 0
@@ -350,58 +573,6 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
   }
 }
 
-// class PositionedText extends StatefulWidget {
-//   const PositionedText({
-//     Key? key,
-//     required this.offset,
-//     required this.text,
-//   }) : super(key: key);
-//   final String text;
-//   final Offset offset;
-
-//   @override
-//   State<PositionedText> createState() => _PositionedTextState();
-// }
-
-// class _PositionedTextState extends State<PositionedText> {
-//   Offset offset = Offset(0, 0);
-//   late double maxWidth;
-//   late double maxHeight;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     // 화면의 최대 너비와 높이를 가져옵니다.
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       maxWidth = MediaQuery.of(context).size.width * 0.54;
-//       maxHeight = MediaQuery.of(context).size.height * 0.16;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Positioned(
-//       //스택의 자식 위치를 제어하는 위젯
-//       //오프셋 클래스 하나의 위치를 x,y로 지정
-//       left: widget.offset.dx,
-//       top: widget.offset.dy,
-//       child: GestureDetector(
-//         child: Text(widget.text),
-//         //제스처를 감지하는 위젯
-//         onPanUpdate: (details) {
-//           //드래그해서 이동한 위치만큼 Offset을 수정해서 State 변경
-//           setState(() {
-//             offset = Offset(
-//               (widget.offset.dx + details.delta.dx).clamp(0, maxWidth),
-//               (widget.offset.dy + details.delta.dy).clamp(0, maxHeight),
-//             );
-//           });
-//         },
-//       ),
-//     );
-//   }
-// }
-
 class DraggableText extends StatefulWidget {
   const DraggableText({
     Key? key,
@@ -455,14 +626,14 @@ class BusinessCardText extends StatefulWidget {
     Key? key,
     required this.title,
     required this.hintContent,
-    required this.updateName,
+    required this.updateValue,
     required this.onTap,
     required this.isChecked,
   }) : super(key: key);
 
   final String title;
   final String hintContent;
-  final Function(String) updateName;
+  final Function(String) updateValue;
   final Function() onTap;
   final bool isChecked;
 
@@ -499,7 +670,7 @@ class _BusinessCardTextState extends State<BusinessCardText> {
                       onChanged: (newValue) {
                         // 사용자가 입력한 값을 value에 업데이트
                         setState(() {
-                          widget.updateName(newValue);
+                          widget.updateValue(newValue);
                         });
                       },
 

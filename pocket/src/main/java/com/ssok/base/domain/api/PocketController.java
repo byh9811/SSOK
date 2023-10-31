@@ -2,7 +2,7 @@ package com.ssok.base.domain.api;
 
 import com.ssok.base.domain.api.dto.request.DomainJoinRequest;
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
-import com.ssok.base.domain.service.PocketQueryService;
+//import com.ssok.base.domain.service.PocketQueryService;
 import com.ssok.base.domain.service.PocketService;
 import com.ssok.base.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import static com.ssok.base.global.api.ApiResponse.OK;
 public class PocketController {
 
     private final PocketService pocketService;
-    private final PocketQueryService pocketQueryService;
+//    private final PocketQueryService pocketQueryService;
 
     @PostMapping
     public ApiResponse<DomainJoinResponse> createDomain(

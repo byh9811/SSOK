@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ssok/screens/identification/service_aggreement_page.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/register_button.dart';
 
@@ -10,6 +12,7 @@ class IDPage extends StatefulWidget {
 }
 
 class _IdPageState extends State<IDPage> {
+  final String assetName = '';
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -17,7 +20,18 @@ class _IdPageState extends State<IDPage> {
     return Column(
       children: [
         SizedBox(height: screenHeight * 0.04),
-        introText(),
+        Row(
+          children: [
+            introText(),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 15.0),
+              child: SvgPicture.asset(
+                "assets/id.svg",
+                height: 45,
+              ),
+            ),
+          ],
+        ),
         SizedBox(height: screenHeight * 0.03),
         titleText(text: "주민등록증"),
         contentBox(
@@ -34,7 +48,17 @@ class _IdPageState extends State<IDPage> {
                 height: screenHeight * 0.06,
                 width: screenWidth * 0.7,
                 child: registerButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ServiceAggreementPage(
+                          onTap: () {
+                            print("주민등록증에서");
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
               )
             ],
@@ -57,7 +81,17 @@ class _IdPageState extends State<IDPage> {
                 height: screenHeight * 0.06,
                 width: screenWidth * 0.7,
                 child: registerButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ServiceAggreementPage(
+                          onTap: () {
+                            print("운전면허증에서");
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
               )
             ],

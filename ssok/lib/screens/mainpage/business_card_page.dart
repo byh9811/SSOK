@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ssok/widgets/content_box.dart';
+import 'package:ssok/widgets/modals/business_create_modal.dart';
 import 'package:ssok/widgets/register_button.dart';
 
 class BusinessCardPage extends StatefulWidget {
@@ -14,8 +15,8 @@ class _IdPageState extends State<BusinessCardPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      child: Column(children: [
+    return Column(
+      children: [
         SizedBox(height: screenHeight * 0.1),
         introText(),
         SizedBox(height: screenHeight * 0.08),
@@ -33,14 +34,25 @@ class _IdPageState extends State<BusinessCardPage> {
                 height: screenHeight * 0.06,
                 width: screenWidth * 0.7,
                 child: registerButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                              ),
+                              child: BusinessCreateModal());
+                        });
+                  },
                 ),
               )
             ],
           ),
           0.27,
         ),
-      ]),
+      ],
     );
   }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget registerButton({required VoidCallback onPressed}) {
   return ElevatedButton(
-    onPressed: () {},
+    onPressed: onPressed,
     style: ElevatedButton.styleFrom(
       backgroundColor: Color(0xFF00ADEF),
       shape: RoundedRectangleBorder(
@@ -12,6 +12,9 @@ Widget registerButton({required VoidCallback onPressed}) {
         ),
       ),
     ),
-    child: Text("등록", style: TextStyle(fontSize: 18)),
+    child: Text(
+      "등록",
+      style: TextStyle(fontSize: 18),
+    ),
   );
 }

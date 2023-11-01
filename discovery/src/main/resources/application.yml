@@ -1,15 +1,10 @@
-server:
-  port: 8761
-
 spring:
-  application:
-    name: discovery
   config:
-    import: ""
-
-eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone : http://localhost:8761/eureka/
+    import: "optional:configserver:https://ssok.site" #config server uri
+  cloud:
+    config:
+      name: config
+      profile: local
+      label: discovery
+encrypt:
+  key: ${ssh-encrypt-key}

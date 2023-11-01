@@ -8,14 +8,14 @@ import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_right.d
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_up.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
 
-class SelfCreateCardPage extends StatefulWidget {
-  const SelfCreateCardPage({super.key});
+class CardSelfCreatePage extends StatefulWidget {
+  const CardSelfCreatePage({super.key});
 
   @override
-  State<SelfCreateCardPage> createState() => _SelfCreateCardPageState();
+  State<CardSelfCreatePage> createState() => _CardSelfCreatePageState();
 }
 
-class _SelfCreateCardPageState extends State<SelfCreateCardPage> {
+class _CardSelfCreatePageState extends State<CardSelfCreatePage> {
   int currentOffsetIndex = -1;
   String name = "";
   String registeredName = "";
@@ -87,6 +87,16 @@ class _SelfCreateCardPageState extends State<SelfCreateCardPage> {
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.notifications_none,
+                color: Color(0xFF676767),
+                size: 30.0,
+              ),
+              onPressed: () {},
+            )
+          ],
           iconTheme: IconThemeData(
             color: Colors.black, // 원하는 색상으로 변경
           ),

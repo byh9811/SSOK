@@ -53,7 +53,8 @@ class _IdPageState extends State<IDPage> {
                       MaterialPageRoute(
                         builder: (context) => ServiceAggreementPage(
                           onTap: () {
-                            print("주민등록증에서");
+                            Navigator.of(context)
+                                .pushReplacementNamed('/id/create');
                           },
                         ),
                       ),
@@ -86,7 +87,8 @@ class _IdPageState extends State<IDPage> {
                       MaterialPageRoute(
                         builder: (context) => ServiceAggreementPage(
                           onTap: () {
-                            print("운전면허증에서");
+                            Navigator.of(context)
+                                .pushReplacementNamed('/drive/id/create');
                           },
                         ),
                       ),

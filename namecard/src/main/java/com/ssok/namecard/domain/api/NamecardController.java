@@ -9,6 +9,7 @@ import com.ssok.namecard.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,14 +24,12 @@ public class NamecardController {
     /** 명함 등록 */
     @PostMapping("/")
     public ApiResponse<Void> createNamecardRequest(
-        @RequestBody NamecardCreateRequest namecardCreateRequest
+        @RequestBody NamecardCreateRequest namecardCreateRequest,
+        @RequestHeader String memberId
     ){
-        namecardService.createNamecard(namecardCreateRequest);
+        namecardService.createNamecard(namecardCreateRequest, memberId);
         return OK(null);
     }
-
-
-
 
     /* example
 

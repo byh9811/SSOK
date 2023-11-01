@@ -16,11 +16,11 @@ public class NamecardService {
 
     private final NamecardRepository namecardRepository;
 
-
     public void createNamecard(NamecardCreateRequest namecardCreateRequest) {
         Namecard namecard = Namecard.fromRequest(namecardCreateRequest);
         namecardRepository.save(namecard);
     }
+
 
 
 }

@@ -11,9 +11,9 @@ spring:
           ignore-local-ssh-settings: true
           private-key: |
             -----BEGIN EC PRIVATE KEY-----
-            MHcCAQEEIDxujNif21U8pF28SibSpAFmNv5yYFiSbgi7hpjaootBoAoGCCqGSM49
-            AwEHoUQDQgAE4fgXrmggSin3JeSz/cd6yG05W4bcokLoMRMJYeXM9ZqNQzlbdhiE
-            5nG1mYZ51kwqKfLLdEwkrWQ9EyD9MbjtOw==
+            MHcCAQEEIFKQkHjt9k+EZN2ObHJpqKyBdvT1YG4DnhucqR863U53oAoGCCqGSM49
+            AwEHoUQDQgAEeGJnUOomW3bRqtW/05A5TPry3ogznsaAMARE3SZimM1RJnwc0lZM
+            3Nye6LiF3zx476wUovGDmbsGV6ZAsDRtRQ==
             -----END EC PRIVATE KEY-----
           host-key: AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
           host-key-algorithm: ecdsa-sha2-nistp256

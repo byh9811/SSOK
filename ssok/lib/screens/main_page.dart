@@ -43,7 +43,7 @@ class _MainPageState extends State<MainPage> {
         ],
         title: Image.asset(
           'assets/logo.png',
-          height: 32,
+          height: 35,
         ),
         centerTitle: true,
         backgroundColor: Colors.white,

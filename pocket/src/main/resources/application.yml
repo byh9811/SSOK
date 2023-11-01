@@ -1,16 +1,24 @@
 spring:
   config:
     import: "optional:configserver:https://ssok.site" #config server uri
-#  cloud:
-#    config:
-#      name: config
-#      profile: pocket
-##      profile: { 도메인 이름 }
-  datasource:
-    url: jdbc:h2:mem:testdb # H2 데이터베이스를 사용할 때의 URL 설정입니다
-    driver-class-name: org.h2.Driver # H2 데이터베이스의 드라이버 클래스
-    username: sa # 기본 사용자 이름
-    password: # 비밀번호는 비워둡니다
+  cloud:
+    config:
+      name: config
+      profile: local
+      label: pocket
+
+#  datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: "jdbc:mariadb://pocket.ssok.site:3306/ssok_pocket?useUnicode=true&rewriteBatchedStatements=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true"
+#    username: "ssokpocketid"
+#    password: "ssokpocketpw"
+#    hikari:
+#      maximumPoolSize: 1
+#  datasource:
+#    url: jdbc:h2:mem:testdb # H2 데이터베이스를 사용할 때의 URL 설정입니다
+#    driver-class-name: org.h2.Driver # H2 데이터베이스의 드라이버 클래스
+#    username: sa # 기본 사용자 이름
+#    password: # 비밀번호는 비워둡니다
 
     h2:
       console:

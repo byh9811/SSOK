@@ -9,6 +9,7 @@ import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -39,22 +40,24 @@ public class NamecardController {
         return OK(namecardQueryService.getUserByName(name));
     }
 
-    /* example
-
-    @PostMapping
-    public ApiResponse<DomainJoinResponse> createDomain(
-            @RequestBody DomainJoinRequest domainJoinRequest
-    ) {
-        return OK(new DomainJoinResponse("dummy", 20));
+    /** 명함 상세 조회 */
+    @GetMapping("/{namecardId}")
+    public ApiResponse<?> getNamecardDetail(@PathVariable Long namecardId){
+        return OK(null);
     }
 
-    @GetMapping
-    public ApiResponse<DomainJoinResponse> getDomain(
-            @RequestBody DomainJoinRequest domainJoinRequest
-    ) {
-        return OK(new DomainJoinResponse("dummy", 20));
+    /** 명함 교환 1:1 */
+    @PostMapping("/")
+    public ApiResponse<?> exchangeNamecards(){
+        return OK(null);
     }
 
-    */
+    /** 명함 목록 조회 */
+
+    /** 명함 지도 조회 */
+
+    /** 명함 타임라인 조회 */
+
+    /** 명함 메모 조회 */
 
 }

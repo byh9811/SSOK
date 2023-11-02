@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class memberController {
     @GetMapping("/service")
     public String springCloudService() {
+        System.out.println("test");
         return "spring-cloud-service 호출!";
     }
 }

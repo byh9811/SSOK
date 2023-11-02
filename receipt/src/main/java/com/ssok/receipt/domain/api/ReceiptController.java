@@ -1,36 +1,41 @@
 package com.ssok.receipt.domain.api;
 
-import com.ssok.receipt.domain.api.dto.request.ReceiptJoinRequest;
-import com.ssok.receipt.domain.api.dto.response.ReceiptJoinResponse;
+import com.ssok.receipt.domain.api.dto.request.ReceiptCreateRequest;
+import com.ssok.receipt.domain.api.dto.response.ReceiptCreateResponse;
 import com.ssok.receipt.domain.service.ReceiptQueryService;
 import com.ssok.receipt.domain.service.ReceiptService;
+import com.ssok.receipt.domain.service.dto.ReceiptCreateDto;
+import com.ssok.receipt.domain.service.dto.ReceiptQueryDto;
 import com.ssok.receipt.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.ssok.receipt.global.api.ApiResponse.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/receipt")
+@RequestMapping("/api/receipt-service")
 public class ReceiptController {
 
     private final ReceiptService receiptService;
     private final ReceiptQueryService receiptQueryService;
 
     @PostMapping
-    public ApiResponse<ReceiptJoinResponse> createReceipt(
-            @RequestBody ReceiptJoinRequest receiptJoinRequest
+    public ApiResponse<ReceiptCreateResponse> createReceipt(
+            @RequestBody ReceiptCreateRequest receiptCreateRequest
     ) {
-        return OK(new ReceiptJoinResponse("dummy", 20));
+        receiptService.createReceipt(ReceiptCreateDto.fromRequest(receiptCreateRequest));
+        return OK(new ReceiptCreateResponse("dummy", 20));
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<ReceiptJoinResponse> getReceipt(
-            @PathVariable("id") String
-            @RequestBody ReceiptJoinRequest receiptJoinRequest
+    @GetMapping
+    public ApiResponse<List<ReceiptCreateResponse>> getReceiptList(
+            @RequestBody ReceiptCreateRequest receiptCreateRequest
     ) {
-        return OK(new ReceiptJoinResponse("dummy", 20));
+        List<ReceiptCreateResponse> receiptList = receiptQueryService.getReceiptList(ReceiptQueryDto.fromRequest(receiptCreateRequest));
+        return OK(receiptList);
     }
 
 }

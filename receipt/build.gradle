@@ -48,11 +48,14 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-	//객체 ToString을 위한 @ToStringBuilder
+	// 객체 ToString을 위한 @ToStringBuilder
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 
-	//openfeign 추가
+	// openfeign 추가
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.8'
+
+	// eureka client 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'

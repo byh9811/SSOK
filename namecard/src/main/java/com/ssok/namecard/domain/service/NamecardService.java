@@ -20,7 +20,4 @@ public class NamecardService {
         Namecard namecard = Namecard.fromRequest(namecardCreateRequest, memberId);
         namecardRepository.save(namecard);
     }
-
-
-
 }

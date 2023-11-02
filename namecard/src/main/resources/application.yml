@@ -4,7 +4,7 @@ spring:
   cloud:
     config:
       name: config
-      profile: local
+      profile: dev
       label: namecard
 
 encrypt:

@@ -19,11 +19,11 @@ public class PocketService {
     private final PocketRepository pocketRepository;
     private final DomainMongoRepository domainMongoRepository;
 
-//    public DomainJoinResponse createDomain(DomainDto domainDto) {
+    public DomainJoinResponse createDomain(DomainDto domainDto) {
 //        return pocketRepository.fin
-////        DomainJoinResponse domainJoinResponse = new DomainJoinResponse(domainDto.nickname(), domainDto.age());
-////        return domainJoinResponse;
-//    }
+        DomainJoinResponse domainJoinResponse = new DomainJoinResponse(domainDto.nickname(), domainDto.age());
+        return domainJoinResponse;
+    }
     /**
      *
      */
@@ -31,4 +31,6 @@ public class PocketService {
         return domainMongoRepository.findByAge(age);
 
     }
+
+
 }

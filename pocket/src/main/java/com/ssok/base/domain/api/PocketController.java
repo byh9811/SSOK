@@ -14,7 +14,7 @@ import static com.ssok.base.global.api.ApiResponse.OK;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("api/pocket-service")
+@RequestMapping("/api/pocket-service")
 public class PocketController {
 
     private final PocketService pocketService;

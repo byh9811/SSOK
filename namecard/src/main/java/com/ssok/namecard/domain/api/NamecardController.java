@@ -25,7 +25,7 @@ public class NamecardController {
     @PostMapping("/")
     public ApiResponse<Void> createNamecardRequest(
         @RequestBody NamecardCreateRequest namecardCreateRequest,
-        @RequestHeader String memberId
+        @RequestHeader Long memberId
     ){
         namecardService.createNamecard(namecardCreateRequest, memberId);
         return OK(null);

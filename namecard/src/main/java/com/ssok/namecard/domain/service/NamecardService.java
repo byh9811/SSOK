@@ -16,8 +16,8 @@ public class NamecardService {
 
     private final NamecardRepository namecardRepository;
 
-    public void createNamecard(NamecardCreateRequest namecardCreateRequest) {
-        Namecard namecard = Namecard.fromRequest(namecardCreateRequest);
+    public void createNamecard(NamecardCreateRequest namecardCreateRequest, Long memberId) {
+        Namecard namecard = Namecard.fromRequest(namecardCreateRequest, memberId);
         namecardRepository.save(namecard);
     }
 

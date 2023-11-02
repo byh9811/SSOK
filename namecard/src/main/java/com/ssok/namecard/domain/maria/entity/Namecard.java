@@ -28,9 +28,9 @@ public class Namecard extends BaseEntity {
     private String namecardFax;
     private String namecardWebsite;
 
-    public static Namecard fromRequest(NamecardCreateRequest namecardCreateRequest){
+    public static Namecard fromRequest(NamecardCreateRequest namecardCreateRequest, Long memberId){
         return Namecard.builder()
-                       .memberId(namecardCreateRequest.memberId())
+                       .memberId(memberId)
                        .namecardName(namecardCreateRequest.namecardName())
                        .namecardImage(namecardCreateRequest.namecardImage())
                        .namecardEmail(namecardCreateRequest.namecardEmail())

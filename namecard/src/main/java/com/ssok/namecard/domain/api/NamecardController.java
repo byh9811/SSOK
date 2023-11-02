@@ -1,7 +1,11 @@
 package com.ssok.namecard.domain.api;
 
+import static com.ssok.namecard.global.api.ApiResponse.ERROR;
 import static com.ssok.namecard.global.api.ApiResponse.OK;
 
+import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
+import com.ssok.namecard.domain.exception.NamecardException;
+import com.ssok.namecard.domain.maria.entity.Namecard;
 import com.ssok.namecard.domain.mongo.document.TestUser;
 import com.ssok.namecard.domain.service.NamecardQueryService;
 import com.ssok.namecard.domain.service.NamecardService;
@@ -25,7 +29,12 @@ public class NamecardController {
     private final NamecardService namecardService;
     private final NamecardQueryService namecardQueryService;
 
-    /** 명함 등록 */
+    /**
+     * 명함 등록
+     * @param namecardCreateRequest
+     * @param memberId
+     * @return
+     */
     @PostMapping("/")
     public ApiResponse<Void> createNamecardRequest(
         @RequestBody NamecardCreateRequest namecardCreateRequest,
@@ -35,9 +44,17 @@ public class NamecardController {
         return OK(null);
     }
 
-    @GetMapping("/test")
-    public ApiResponse<TestUser> getTestUser(@RequestParam String name){
-        return OK(namecardQueryService.getUserByName(name));
+    /**
+     * 1:1 명함 교환
+     * @param exchangeSingleRequest
+     * @return
+     */
+    @PostMapping("/exchange/single")
+    public ApiResponse<Void> exchangeNamecards(
+        @RequestBody ExchangeSingleRequest exchangeSingleRequest
+    ){
+        namecardService.exchangeSingle(exchangeSingleRequest);
+        return OK(null);
     }
 
     /** 명함 상세 조회 */
@@ -46,11 +63,6 @@ public class NamecardController {
         return OK(null);
     }
 
-    /** 명함 교환 1:1 */
-    @PostMapping("/")
-    public ApiResponse<?> exchangeNamecards(){
-        return OK(null);
-    }
 
     /** 명함 목록 조회 */
 
@@ -59,5 +71,9 @@ public class NamecardController {
     /** 명함 타임라인 조회 */
 
     /** 명함 메모 조회 */
+    @GetMapping("/test")
+    public ApiResponse<TestUser> getTestUser(@RequestParam String name){
+        return OK(namecardQueryService.getUserByName(name));
+    }
 
 }

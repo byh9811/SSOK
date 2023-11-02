@@ -4,6 +4,7 @@ import com.ssok.namecard.global.entity.BaseEntity;
 import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -15,10 +16,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class Exchange extends BaseEntity {
 
-    private String memberId;
-    private String namecardId;
-    private String exchangeLatitude;
-    private String exchangeLongitude;
+    private Long memberId;
+    private Long namecardId;
+    private Double exchangeLatitude;
+    private Double exchangeLongitude;
     private String exchangeNote;
-    private String exchangeFavorite;
+    private Boolean exchangeIsFavorite;
 }

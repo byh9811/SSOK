@@ -2,7 +2,6 @@ package com.ssok.namecard.domain.maria.entity;
 
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.entity.BaseEntity;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

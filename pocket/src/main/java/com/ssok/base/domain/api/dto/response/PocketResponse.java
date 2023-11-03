@@ -15,11 +15,15 @@ public class PocketResponse {
     // 누적 탄소중립포인트
     private Long pocketTotalPoint;
 
+    // 누적 잔금 저축 금액
+    private Long pocketTotalChange;
+
     @Builder
-    public PocketResponse(Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint) {
+    public PocketResponse(Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint, Long pocketTotalChange) {
         this.pocketSaving = pocketSaving;
         this.pocketTotalDonate = pocketTotalDonate;
         this.pocketTotalPoint = pocketTotalPoint;
+        this.pocketTotalChange = pocketTotalChange;
     }
 
     public static PocketResponse of(Pocket pocket){
@@ -27,6 +31,7 @@ public class PocketResponse {
                 .pocketSaving(pocket.getPocketSaving())
                 .pocketTotalDonate(pocket.getPocketTotalDonate())
                 .pocketTotalPoint(pocket.getPocketTotalPoint())
+                .pocketTotalChange(pocket.getPocketTotalChange())
                 .build();
     }
 }

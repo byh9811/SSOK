@@ -10,14 +10,19 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 
+/**
+ * 포켓 엔티티 / PK : 멤버 식별자
+ *
+ * @author 홍진식
+ */
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pocket extends BaseEntity {
     @Id
-    @Column(name = "member_UUID")
-    private Long memberUUID;
+    @Column(name = "member_seq")
+    private Long memberSeq;
 
     private Long pocketSaving;
 
@@ -26,8 +31,8 @@ public class Pocket extends BaseEntity {
     private Long pocketTotalPoint;
 
     @Builder
-    public Pocket(Long memberUUID, Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint) {
-        this.memberUUID = memberUUID;
+    public Pocket(Long memberSeq, Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint) {
+        this.memberSeq = memberSeq;
         this.pocketSaving = pocketSaving;
         this.pocketTotalDonate = pocketTotalDonate;
         this.pocketTotalPoint = pocketTotalPoint;

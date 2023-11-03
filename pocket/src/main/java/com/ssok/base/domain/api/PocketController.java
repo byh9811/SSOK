@@ -23,6 +23,7 @@ public class PocketController {
     @PostMapping
     public ApiResponse<DomainJoinResponse> createDomain(
             @RequestBody DomainJoinRequest domainJoinRequest
+//            @RequestHeader("Auth") String token
     ) {
         return OK(new DomainJoinResponse("dummy", 20));
     }

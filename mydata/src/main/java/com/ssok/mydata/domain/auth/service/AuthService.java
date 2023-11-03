@@ -82,7 +82,7 @@ public class AuthService {
         auth.makeCard();
 
         Card card = Card.builder()
-                .card_id(UUID.randomUUID().toString())
+                .cardId(UUID.randomUUID().toString())
                 .memberCi(userCi)
                 .cardCompany(cardRequest.getCardCompany())
                 .accountId(accountRepository.findByMemberCi(userCi).get().getId())

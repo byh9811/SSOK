@@ -4,9 +4,13 @@ import com.ssok.mydata.domain.card.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface CardRepository extends JpaRepository<Card, Long> {
+import java.util.Optional;
 
-    boolean existsByMemberCi(Long memberCi);
+@Repository
+public interface CardRepository extends JpaRepository<Card, String> {
+
+    boolean existsByMemberCi(String memberCi);
+
+    Optional<Card> findByCardId(String cardId);
 
 }

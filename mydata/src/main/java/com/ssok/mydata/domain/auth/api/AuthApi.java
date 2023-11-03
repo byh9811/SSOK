@@ -49,7 +49,7 @@ public class AuthApi {
     }
 
     @PostMapping("/register/account")
-    public ResponseEntity<Void> registerBank(
+    public ResponseEntity<Void> registerAccount(
             @RequestBody Map<String, String> body
     ) {
         HttpHeaders headers = new HttpHeaders();
@@ -63,7 +63,7 @@ public class AuthApi {
     @PostMapping("/register/card")
     public ResponseEntity<Void> registerCard(
             @RequestBody CardRequest cardRequest
-            ) {
+    ) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("x-api-tran-id", "1234567890M00000000000001");
         authService.registerCard(cardRequest);

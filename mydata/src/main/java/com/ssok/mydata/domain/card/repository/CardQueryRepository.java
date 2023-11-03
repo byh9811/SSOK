@@ -22,7 +22,7 @@ public class CardQueryRepository {
 
     public List<CardList> findCardListByCardId(String memberCi, long cursor, int limit) {
         return queryFactory.select(Projections.constructor(CardList.class,
-                        card.id.as("card_id"),
+                        card.cardId.as("card_id"),
                         card.cardCompany.as("company"),
                         card.cardNum.as("card_num"),
                         card.isConsent.as("is_consent"),
@@ -38,10 +38,10 @@ public class CardQueryRepository {
                 .fetch();
     }
 
-    public CardInfoResponse findCardInfoById(long cardId) {
+    public CardInfoResponse findCardInfoById(String cardId) {
         return queryFactory
                 .select(Projections.constructor(CardInfoResponse.class,
-                        card.id.as("card_id"),
+                        card.cardId.as("card_id"),
                         card.cardCompany.as("company"),
                         card.cardNum.as("card_num"),
                         card.cardType.as("card_type"),
@@ -54,7 +54,7 @@ public class CardQueryRepository {
                 ))
                 .from(card)
                 .where(
-                        card.id.eq(cardId)
+                        card.cardId.eq(cardId)
                 )
                 .fetchFirst();
     }

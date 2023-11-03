@@ -2,10 +2,7 @@ package com.ssok.mydata.domain.card.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
@@ -17,7 +14,10 @@ import java.time.LocalDateTime;
 public class Card {
 
     @Id
-    private String card_id;
+    private Long id;
+
+    @Column(name = "card_id", unique = true)
+    private String cardId;
 
     private String memberCi;
 

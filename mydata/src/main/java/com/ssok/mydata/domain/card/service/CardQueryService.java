@@ -28,7 +28,7 @@ public class CardQueryService {
                 .build();
     }
 
-    public CardInfoResponse findCardInfo(long cardId) {
+    public CardInfoResponse findCardInfo(String cardId) {
         return cardQueryRepository.findCardInfoById(cardId);
     }
 

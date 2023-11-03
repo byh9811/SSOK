@@ -3,6 +3,7 @@ package com.ssok.mydata.domain.card.api.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -22,6 +23,6 @@ public class PayResponse {
     private String approvedNum;
 
     @JsonProperty("approved_dtime")
-    private Date approvedDtime;
+    private LocalDateTime approvedDtime;
 
 }

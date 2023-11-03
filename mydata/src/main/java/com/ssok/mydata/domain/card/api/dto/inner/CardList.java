@@ -9,7 +9,7 @@ import lombok.Data;
 public class CardList {
 
         @JsonProperty("card_id")
-        private Long cardId;
+        private String cardId;
 
         @JsonProperty("company")
         private String company;

@@ -49,7 +49,7 @@ public class CardApi {
     public ResponseEntity<CardInfoResponse> getCardInfo(
             @RequestHeader("x-api-tran-id") String tranId,
             @RequestHeader("x-api-type") String type,
-            @PathVariable("card_id") long cardId,
+            @PathVariable("card_id") String cardId,
             @Valid @ModelAttribute CardInfoRequest cardInfoRequest)
     {
         HttpHeaders headers = new HttpHeaders();
@@ -62,20 +62,7 @@ public class CardApi {
     public ResponseEntity<CardTransactionListResponse> getCardTransactionList(
             @RequestHeader("x-api-tran-id") String tranId,
             @RequestHeader("x-api-type") String type,
-            @PathVariable("card_id") long cardId,
-            @Valid @ModelAttribute CardTransactionListRequest cardTransactionListRequest)
-    {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("x-api-tran-id", "1234567890M00000000000001");
-        return new ResponseEntity<>(cardHistoryQueryService.findCardHistory(cardId, cardTransactionListRequest.getNext_page(), cardTransactionListRequest.getLimit()), headers, HttpStatus.OK);
-    }
-
-    // 무한 스크롤 테스트용
-    @GetMapping("/{card_id}/approval-domestic/test")
-    public ResponseEntity<CardTransactionListResponse> getCardTransactionListTest(
-            @RequestHeader("x-api-tran-id") String tranId,
-            @RequestHeader("x-api-type") String type,
-            @PathVariable("card_id") long cardId,
+            @PathVariable("card_id") String cardId,
             @Valid @ModelAttribute CardTransactionListRequest cardTransactionListRequest)
     {
         HttpHeaders headers = new HttpHeaders();
@@ -86,10 +73,10 @@ public class CardApi {
     @PostMapping("/{card_id}/pay")
     public ResponseEntity<PayResponse> pay(
             @AuthenticationPrincipal User user,
-            @PathVariable("card_id") long cardId,
+            @PathVariable("card_id") String cardId,
             @Valid @RequestBody TransactionRequest transactionRequest)
     {
-        PayResponse pay = cardService.pay(Long.parseLong(user.getUsername()), cardId, transactionRequest);
+        PayResponse pay = cardService.pay(user.getUsername(), cardId, transactionRequest);
         return new ResponseEntity<>(pay, HttpStatus.OK);
     }
 

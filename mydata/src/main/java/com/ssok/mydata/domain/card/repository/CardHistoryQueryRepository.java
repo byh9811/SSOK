@@ -19,7 +19,7 @@ public class CardHistoryQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<CardTransactionList> findCardTransactionList(long cardId, Long cursor, int limit) {
+    public List<CardTransactionList> findCardTransactionList(String cardId, Long cursor, int limit) {
         return queryFactory.select(Projections.constructor(CardTransactionList.class,
                         cardHistory.id.as("history_id"),
                         cardHistory.approvedNum.as("approved_num"),
@@ -35,7 +35,7 @@ public class CardHistoryQueryRepository {
         ))
                 .from(cardHistory)
                 .where(
-                        cardHistory.card.id.eq(cardId).and(ltCursor(cursor))
+                        cardHistory.card.cardId.eq(cardId).and(ltCursor(cursor))
                 )
                 .orderBy(new OrderSpecifier<>(Order.DESC, cardHistory.id))
                 .limit(limit + 1)

@@ -16,7 +16,7 @@ public class CardHistoryQueryService {
 
     private final CardHistoryQueryRepository cardHistoryQueryRepository;
 
-    public CardTransactionListResponse findCardHistory(long cardId, Long cursor, int limit) {
+    public CardTransactionListResponse findCardHistory(String cardId, Long cursor, int limit) {
         List<CardTransactionList> cardList = cardHistoryQueryRepository.findCardTransactionList(cardId, cursor, limit);
         if (cardList.isEmpty()) {
             return CardTransactionListResponse.builder()

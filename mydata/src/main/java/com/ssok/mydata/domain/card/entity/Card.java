@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class Card {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "card_id", unique = true)

@@ -2,7 +2,6 @@ package com.ssok.namecard.domain.service.dto;
 
 public record NamecardCreateRequest(
     String namecardName,
-    String namecardImage,
     String namecardEmail,
     String namecardCompany,
     String namecardJob,

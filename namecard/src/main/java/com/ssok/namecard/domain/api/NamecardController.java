@@ -1,17 +1,15 @@
 package com.ssok.namecard.domain.api;
 
-import static com.ssok.namecard.global.api.ApiResponse.ERROR;
 import static com.ssok.namecard.global.api.ApiResponse.OK;
 
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
-import com.ssok.namecard.domain.exception.NamecardException;
-import com.ssok.namecard.domain.maria.entity.Namecard;
 import com.ssok.namecard.domain.mongo.document.TestUser;
 import com.ssok.namecard.domain.service.NamecardQueryService;
 import com.ssok.namecard.domain.service.NamecardService;
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/namecard-service")
@@ -32,15 +33,16 @@ public class NamecardController {
     /**
      * 명함 등록
      * @param namecardCreateRequest
-     * @param memberId
+     * @param memberId`
      * @return
      */
     @PostMapping("/")
     public ApiResponse<Void> createNamecardRequest(
-        @RequestBody NamecardCreateRequest namecardCreateRequest,
-        @RequestHeader Long memberId
+        @RequestHeader Long memberId,
+        @RequestPart NamecardCreateRequest namecardCreateRequest,
+        @RequestPart MultipartFile multipartFile
     ){
-        namecardService.createNamecard(namecardCreateRequest, memberId);
+        namecardService.createNamecard(namecardCreateRequest, memberId, multipartFile);
         return OK(null);
     }
 

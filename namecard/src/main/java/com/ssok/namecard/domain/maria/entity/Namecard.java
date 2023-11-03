@@ -5,6 +5,7 @@ import com.ssok.namecard.global.entity.BaseEntity;
 import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -27,17 +28,20 @@ public class Namecard extends BaseEntity {
     private String namecardFax;
     private String namecardWebsite;
 
-    public static Namecard fromRequest(NamecardCreateRequest namecardCreateRequest, Long memberId){
+
+    public static Namecard from(NamecardCreateRequest namecardCreateRequest, Long memberId,
+        String uploadUrl) {
+
         return Namecard.builder()
                        .memberId(memberId)
                        .namecardName(namecardCreateRequest.namecardName())
-                       .namecardImage(namecardCreateRequest.namecardImage())
+                       .namecardImage(uploadUrl)
                        .namecardEmail(namecardCreateRequest.namecardEmail())
                        .namecardCompany(namecardCreateRequest.namecardCompany())
                        .namecardJob(namecardCreateRequest.namecardJob())
                        .namecardAddress(namecardCreateRequest.namecardAddress())
                        .namecardPhone(namecardCreateRequest.namecardPhone())
-                       .namecardFax(namecardCreateRequest.namecardFax())
+                       .namecardFax(builder().namecardFax)
                        .namecardWebsite(namecardCreateRequest.namecardWebsite())
                        .build();
     }

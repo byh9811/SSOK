@@ -10,12 +10,14 @@ import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.api.ApiError;
 import com.ssok.namecard.global.api.ApiResponse;
 import com.ssok.namecard.global.exception.ErrorCode;
+import com.ssok.namecard.global.service.GCSService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -25,6 +27,7 @@ public class NamecardService {
 
     private final NamecardRepository namecardRepository;
     private final ExchangeRepository exchangeRepository;
+    private final GCSService gcsService;
 
     public Namecard findById(Long id){
         return namecardRepository.findById(id)
@@ -34,8 +37,14 @@ public class NamecardService {
     }
 
 
-    public void createNamecard(NamecardCreateRequest namecardCreateRequest, Long memberId) {
-        Namecard namecard = Namecard.fromRequest(namecardCreateRequest, memberId);
+    public void createNamecard(NamecardCreateRequest namecardCreateRequest, Long memberId, MultipartFile multipartFile) {
+
+        if (multipartFile == null) {
+            throw new NamecardException(ErrorCode.NAMECARD_BAD_REQUEST);
+        }
+        String uploadUrl = gcsService.uploadFile(multipartFile);
+
+        Namecard namecard = Namecard.from(namecardCreateRequest, memberId, uploadUrl);
         namecardRepository.save(namecard);
     }
 

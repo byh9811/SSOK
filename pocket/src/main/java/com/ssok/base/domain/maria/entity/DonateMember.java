@@ -19,8 +19,12 @@ import javax.persistence.*;
 public class DonateMember extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "donate_seq")
-    private Long donateSeq;
+    @Column(name = "donate_member_seq")
+    private Long donateMemberSeq;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "donate_seq")
+    private Donate donate;
 
     private Long memberSeq;
 
@@ -28,8 +32,9 @@ public class DonateMember extends BaseEntity {
     private Long totalDonateAmt;
 
     @Builder
-    public DonateMember(Long donateSeq, Long memberSeq, Long totalDonateAmt) {
-        this.donateSeq = donateSeq;
+    public DonateMember(Long donateMemberSeq, Donate donate, Long memberSeq, Long totalDonateAmt) {
+        this.donateMemberSeq = donateMemberSeq;
+        this.donate = donate;
         this.memberSeq = memberSeq;
         this.totalDonateAmt = totalDonateAmt;
     }

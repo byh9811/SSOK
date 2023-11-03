@@ -8,6 +8,7 @@ import com.ssok.base.domain.maria.repository.PocketRepository;
 import com.ssok.base.domain.mongo.document.Domain;
 import com.ssok.base.domain.mongo.repository.DomainMongoRepository;
 import com.ssok.base.domain.service.dto.DomainDto;
+import com.ssok.base.domain.service.dto.PocketHistoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -63,5 +64,8 @@ public class PocketService {
 
         return PocketResponse.of(pocket);
 
+    }
+
+    public void createPocketHistory(PocketHistoryDto dto) {
     }
 }

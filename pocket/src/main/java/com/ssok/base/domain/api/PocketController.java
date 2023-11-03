@@ -1,9 +1,11 @@
 package com.ssok.base.domain.api;
 
 import com.ssok.base.domain.api.dto.request.DomainJoinRequest;
+import com.ssok.base.domain.api.dto.request.PocketHistoryRequest;
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
 import com.ssok.base.domain.api.dto.response.PocketResponse;
 import com.ssok.base.domain.maria.entity.Pocket;
+import com.ssok.base.domain.maria.entity.PocketHistory;
 import com.ssok.base.domain.service.PocketQueryService;
 import com.ssok.base.domain.service.PocketService;
 import com.ssok.base.global.api.ApiResponse;
@@ -64,5 +66,12 @@ public class PocketController {
         PocketResponse response = pocketService.createPocket(memberUuid);
         return OK(response);
     }
+
+    @PostMapping("/pocket/change")
+    public ApiResponse<?> createPocketHistory(@RequestBody PocketHistoryRequest request, @RequestHeader String memberUuid){
+        pocketService.createPocketHistory(request.toDto(memberUuid));
+        return OK(null);
+    }
+
 
 }

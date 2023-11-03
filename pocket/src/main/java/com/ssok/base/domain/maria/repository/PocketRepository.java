@@ -1,6 +1,5 @@
 package com.ssok.base.domain.maria.repository;
 
-import com.ssok.base.domain.maria.entity.Domain;
 import com.ssok.base.domain.maria.entity.Pocket;
 import org.springframework.data.jpa.repository.JpaRepository;
 

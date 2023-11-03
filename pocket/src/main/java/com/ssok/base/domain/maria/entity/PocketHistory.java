@@ -34,9 +34,10 @@ public class PocketHistory extends BaseEntity {
     private String pocketHistoryTitle;
 
     @Builder
-    public PocketHistory(Long pocketHistorySeq, Long memberSeq, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle) {
+    public PocketHistory(Long pocketHistorySeq, Long memberSeq, PocketHistoryType pocketHistoryType, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle) {
         this.pocketHistorySeq = pocketHistorySeq;
         this.memberSeq = memberSeq;
+        this.pocketHistoryType = pocketHistoryType;
         this.pocketHistoryTransAmt = pocketHistoryTransAmt;
         this.pocketHistoryResultAmt = pocketHistoryResultAmt;
         this.pocketHistoryTitle = pocketHistoryTitle;

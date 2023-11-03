@@ -63,7 +63,7 @@ public class JwtUtils {
     }
 
     // JWT 토큰 생성
-    public String createAccessToken(long userCi) {
+    public String createAccessToken(String userCi) {
         return Jwts.builder()
                 .setHeader(createHeader())
                 .setClaims(createClaims(true, userCi))
@@ -72,7 +72,7 @@ public class JwtUtils {
     }
 
     // JWT 토큰 생성
-    public String createRefreshToken(long userCi) {
+    public String createRefreshToken(String userCi) {
         return Jwts.builder()
                 .setHeader(createHeader())
                 .setClaims(createClaims(false, userCi))
@@ -89,7 +89,7 @@ public class JwtUtils {
         return header;
     }
 
-    private Claims createClaims(boolean isAccessToken, long userCi) {
+    private Claims createClaims(boolean isAccessToken, String userCi) {
         Claims claims = Jwts.claims();
 
         claims.setIssuer("Bank");

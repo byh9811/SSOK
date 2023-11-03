@@ -3,6 +3,8 @@ package com.ssok.mydata.global.util;
 import com.ssok.mydata.global.enumerate.*;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Component
@@ -19,7 +21,7 @@ public class DummyUtils {
         StringBuilder accountNum = new StringBuilder();
 
         accountNum.append(random.nextInt(9) + 1);
-        for(int i=0; i<13; i++) {
+        for(int i=0; i<14; i++) {
             accountNum.append(random.nextInt(10));
         }
         return accountNum.toString();
@@ -30,8 +32,9 @@ public class DummyUtils {
      *
      * @return 랜덤 날짜
      */
-    public Date getDate() {
-        return new Date(new Date().getTime() - (long) (random.nextDouble() * 94672800000L));
+    public LocalDateTime getDate() {
+        long randomLong = Math.abs(random.nextLong()) % 94672800000L;
+        return LocalDateTime.now().minus(randomLong, ChronoUnit.MILLIS);
     }
 
     /**

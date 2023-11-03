@@ -3,6 +3,7 @@ package com.ssok.mydata.domain.bank.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -22,7 +23,7 @@ public class Account {
 
     private String prodName;
 
-    private Date issueDate;
+    private LocalDateTime issueDate;
 
     private String accountNum;
 
@@ -30,7 +31,7 @@ public class Account {
 
     private String savingMethod;
 
-    private Date expDate;
+    private LocalDateTime expDate;
 
     private Double commitAmt;
 

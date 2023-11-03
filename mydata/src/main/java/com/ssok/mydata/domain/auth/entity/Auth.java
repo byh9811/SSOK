@@ -23,19 +23,18 @@ public class Auth {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ColumnDefault("true")
-    private String userCi;
+    private String memberCi;
 
-//    @ColumnDefault("true")
-//    private Boolean bankList;
-//
-//    @ColumnDefault("true")
-//    private Boolean bankDeposit;
-//
-//    @ColumnDefault("true")
-//    private Boolean cardList;
-//
-//    @ColumnDefault("true")
-//    private Boolean cardCard;
+    private Boolean registeredAccount;
+
+    private Boolean registeredCard;
+
+    public void makeAccount() {
+        registeredAccount = true;
+    }
+
+    public void makeCard() {
+        registeredCard = false;
+    }
 
 }

@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,8 +17,7 @@ import java.sql.Date;
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String card_id;
 
     private String memberCi;
 
@@ -37,6 +37,6 @@ public class Card {
 
     private Long annualFee;
 
-    private Long issueDate;
+    private LocalDateTime issueDate;
 
 }

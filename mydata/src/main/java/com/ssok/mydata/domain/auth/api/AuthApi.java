@@ -1,6 +1,7 @@
 package com.ssok.mydata.domain.auth.api;
 
 import com.ssok.mydata.domain.auth.api.dto.request.AuthRequest;
+import com.ssok.mydata.domain.auth.api.dto.request.CardRequest;
 import com.ssok.mydata.domain.auth.api.dto.request.TokenRequest;
 import com.ssok.mydata.domain.auth.service.AuthService;
 import com.ssok.mydata.domain.auth.api.dto.response.AuthResponse;
@@ -32,7 +33,7 @@ public class AuthApi {
 
     @PostMapping("/token")
     public ResponseEntity<? extends TokenResponse> getAccessToken(
-            @RequestHeader("x-user-ci") long userCI,
+            @RequestHeader("x-user-ci") String userCi,
             @RequestHeader("x-api-tran-id") String tranId,
             @RequestBody TokenRequest tokenRequest)
     {
@@ -42,19 +43,30 @@ public class AuthApi {
 //        if (userCI == null) {       // AT 갱신 로직
 //            return new ResponseEntity<>(new TokenResponse(), headers, HttpStatus.TEMPORARY_REDIRECT);
 //        } else {        // AT 발급 로직
-            return new ResponseEntity<>(authService.getAccessToken(userCI), headers, HttpStatus.OK);
+            return new ResponseEntity<>(authService.getAccessToken(userCi), headers, HttpStatus.OK);
 //        }
 
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Void> registerAuth(
+    @PostMapping("/register/account")
+    public ResponseEntity<Void> registerBank(
             @RequestBody Map<String, String> body
     ) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("x-api-tran-id", "1234567890M00000000000001");
         String userCi = body.get("user_ci");
-        authService.registerToken(userCi);
+        authService.registerAccount(userCi);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/register/card")
+    public ResponseEntity<Void> registerCard(
+            @RequestBody CardRequest cardRequest
+            ) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("x-api-tran-id", "1234567890M00000000000001");
+        authService.registerCard(cardRequest);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

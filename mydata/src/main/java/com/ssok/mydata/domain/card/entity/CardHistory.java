@@ -3,6 +3,7 @@ package com.ssok.mydata.domain.card.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -22,13 +23,13 @@ public class CardHistory {
 
     private String approvedNum;
 
-    private Date approvedDtime;
+    private LocalDateTime approvedDtime;
 
     private String status;
 
     private String payType;
 
-    private Date transDtime;
+    private LocalDateTime transDtime;
 
     private String merchantName;
 

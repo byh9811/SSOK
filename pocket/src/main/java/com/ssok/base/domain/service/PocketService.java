@@ -43,10 +43,10 @@ public class PocketService {
 
     public PocketResponse createPocket(String memberUuid) {
         // memberUuid로 pk 뽑기 / 없으면 에러처리
-        Long memberSeq = 1L;
+        Long memberSeq = isMemberExist(memberUuid);
 
-        Optional<Pocket> findPocket = pocketRepository.findById(memberSeq);
-        if(findPocket.isPresent()){
+
+        if(isPocketExist(memberSeq)){
             throw new DuplicateKeyException("중복된 값 입니다."); // http 에러 코드 같이 보내는거로 수정
         }
 
@@ -67,5 +67,38 @@ public class PocketService {
     }
 
     public void createPocketHistory(PocketHistoryDto dto) {
+        // memberUuid로 pk 뽑기 / 없으면 에러처리
+        Long memberSeq = isMemberExist(dto.getMemberUuid());
+
+
+        if(isPocketExist(memberSeq)){
+            throw new DuplicateKeyException("중복된 값 입니다."); // http 에러 코드 같이 보내는거로 수정
+        }
+    }
+
+
+    /**
+     * @author 홍진식
+     *
+     * Uuid로 member의 pk를 받거나, 유효한 멤버인지 확인하는 method
+     *
+     * @param memberUuid
+     * @return memberSeq
+     */
+    private Long isMemberExist(String memberUuid){
+        return 1L;
+    }
+
+    /**
+     * @author 홍진식
+     *
+     * Pocekt이 존재하는지 검사하는 함수
+     *
+     * @param memberSeq
+     * @return true : 존재 / false : 미존재
+     */
+    private Boolean isPocketExist(Long memberSeq){
+        Optional<Pocket> findPocket = pocketRepository.findById(memberSeq);
+        return findPocket.isPresent();
     }
 }

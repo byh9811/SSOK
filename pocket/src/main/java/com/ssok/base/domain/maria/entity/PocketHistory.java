@@ -22,6 +22,10 @@ public class PocketHistory extends BaseEntity {
     private Long pocketHistorySeq;
     // 멤버 식별자
     private Long memberSeq;
+
+    @Enumerated(EnumType.STRING)
+    private PocketHistoryType pocketHistoryType;
+
     // 이동 금액
     private Long pocketHistoryTransAmt;
     // 남은 금액

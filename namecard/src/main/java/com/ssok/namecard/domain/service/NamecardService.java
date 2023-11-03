@@ -25,6 +25,7 @@ public class NamecardService {
     private final NamecardRepository namecardRepository;
     private final ExchangeRepository exchangeRepository;
     private final GCSService gcsService;
+    private final NamecardEventHandler namecardEventHandler;
 
     public Namecard findById(Long id){
         return namecardRepository.findById(id)
@@ -42,7 +43,9 @@ public class NamecardService {
         /** todo : memberUuid -> memberId로 변경 로직 작성해야함 */
         Long memberId = 1L;
         Namecard namecard = Namecard.from(namecardCreateRequest, memberId, uploadUrl);
-        namecardRepository.save(namecard);
+        Namecard savedNamecard = namecardRepository.save(namecard);
+
+        namecardEventHandler.createNamecard(uploadUrl, memberId, savedNamecard.getId());
     }
 
     public void exchangeSingle(ExchangeSingleRequest exchangeSingleRequest) {
@@ -72,6 +75,8 @@ public class NamecardService {
                                              .namecardId(exchangeSingleRequest.namecardAId()).build();
                 exchangeRepository.save(exchangeA);
                 exchangeRepository.save(exchangeB);
+
+                namecardEventHandler.exchangeNamecard(exchangeSingleRequest);
             },
             () -> {
                 throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);

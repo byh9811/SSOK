@@ -2,6 +2,7 @@ package com.ssok.base.domain.maria.entity;
 
 import com.ssok.base.global.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,12 @@ public class PocketHistory extends BaseEntity {
     // 내역 제목
     private String pocketHistoryTitle;
 
+    @Builder
+    public PocketHistory(Long pocketHistorySeq, Long memberSeq, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle) {
+        this.pocketHistorySeq = pocketHistorySeq;
+        this.memberSeq = memberSeq;
+        this.pocketHistoryTransAmt = pocketHistoryTransAmt;
+        this.pocketHistoryResultAmt = pocketHistoryResultAmt;
+        this.pocketHistoryTitle = pocketHistoryTitle;
+    }
 }

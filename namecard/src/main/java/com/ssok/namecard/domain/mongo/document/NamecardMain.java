@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Id;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "namecard_main")
 @Builder
+@ToString
+@Getter
 public class NamecardMain {
 
     @Id
@@ -17,6 +21,7 @@ public class NamecardMain {
     private List<Namecard> favorites;
     private List<Namecard> namecards;
 
+    @Getter
     public static class Namecard{
         private Long id;              //명함 식별자
         private Long memberId;          //회원 식별자

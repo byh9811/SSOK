@@ -3,6 +3,8 @@ package com.ssok.namecard.domain.api;
 import static com.ssok.namecard.global.api.ApiResponse.OK;
 
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
+import com.ssok.namecard.domain.api.dto.response.NamecardMainResponse;
+import com.ssok.namecard.domain.mongo.document.NamecardMain;
 import com.ssok.namecard.domain.service.NamecardQueryService;
 import com.ssok.namecard.domain.service.NamecardService;
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
@@ -52,7 +54,17 @@ public class NamecardController {
         return OK(null);
     }
 
-    /** 명함 목록 조회 */
+    /** 명함 목록 조회 - 메인 */
+    @GetMapping("/")
+    public ApiResponse<NamecardMainResponse> getNamecardMain(
+        @RequestHeader String memberUuid
+    ){
+        NamecardMain namecardMain = namecardQueryService.getNamecardMain(memberUuid);
+        log.info("컨트롤러 메인페이지 로그: {}", namecardMain);
+        NamecardMainResponse namecardMainResponse = new NamecardMainResponse(namecardMain);
+        return OK(namecardMainResponse);
+    }
+
 
     /** 명함 상세 조회 */
     @GetMapping("/{namecardId}")

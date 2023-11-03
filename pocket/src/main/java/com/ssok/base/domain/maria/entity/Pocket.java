@@ -24,10 +24,13 @@ public class Pocket extends BaseEntity {
     @Column(name = "member_seq")
     private Long memberSeq;
 
+    // 누적 금액
     private Long pocketSaving;
 
+    // 누적 기부 금액
     private Long pocketTotalDonate;
 
+    // 누적 탄소중립포인트
     private Long pocketTotalPoint;
 
     @Builder

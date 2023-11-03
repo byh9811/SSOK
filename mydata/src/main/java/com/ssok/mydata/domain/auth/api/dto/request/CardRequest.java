@@ -10,20 +10,20 @@ import java.time.LocalDateTime;
 @Getter
 public class CardRequest {
 
-    private String userCi;
+    private String user_ci;
 
-    private String cardCompany;
+    private String card_company;
 
-    private String cardName;
+    private String card_name;
 
-    private String cardNum;
+    private String card_num;
 
-    private Integer cardMember;
+    private Integer card_member;
 
-    private String cardType;
+    private String card_type;
 
-    private Long annualFee;
+    private Long annual_fee;
 
-    private LocalDateTime issueDate;
+    private LocalDateTime issue_date;
 
 }

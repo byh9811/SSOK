@@ -66,7 +66,7 @@ public class AuthService {
     }
 
     public void registerCard(CardRequest cardRequest) {
-        String userCi = cardRequest.getUserCi();
+        String userCi = cardRequest.getUser_ci();
         Auth auth = getAuth(userCi);
 
         if (!auth.getRegisteredAccount()) {
@@ -84,15 +84,15 @@ public class AuthService {
         Card card = Card.builder()
                 .cardId(UUID.randomUUID().toString())
                 .memberCi(userCi)
-                .cardCompany(cardRequest.getCardCompany())
+                .cardCompany(cardRequest.getCard_company())
                 .accountId(accountRepository.findByMemberCi(userCi).get().getId())
-                .cardNum(cardRequest.getCardNum())
+                .cardNum(cardRequest.getCard_num())
                 .isConsent(true)
-                .cardName(cardRequest.getCardName())
-                .cardMember(cardRequest.getCardMember())
-                .cardType(cardRequest.getCardType())
-                .annualFee(cardRequest.getAnnualFee())
-                .issueDate(cardRequest.getIssueDate())
+                .cardName(cardRequest.getCard_name())
+                .cardMember(cardRequest.getCard_member())
+                .cardType(cardRequest.getCard_type())
+                .annualFee(cardRequest.getAnnual_fee())
+                .issueDate(cardRequest.getIssue_date())
                 .build();
 
         cardRepository.save(card);

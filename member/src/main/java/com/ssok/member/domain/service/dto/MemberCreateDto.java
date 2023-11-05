@@ -34,7 +34,7 @@ public class MemberCreateDto {
                 .memberPassword(this.password)
                 .memberName(this.name)
                 .memberPhone(this.phone)
-                .memberUUID(UUID.randomUUID().toString())
+                .memberUuid(UUID.randomUUID().toString())
                 .build();
     }
 }

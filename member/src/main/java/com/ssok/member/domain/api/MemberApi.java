@@ -8,7 +8,7 @@ import com.ssok.member.domain.api.dto.response.MemberSeqResponse;
 import com.ssok.member.domain.api.dto.response.TokenResponse;
 import com.ssok.member.domain.service.dto.MemberCreateDto;
 import com.ssok.member.domain.service.dto.MemberLoginDto;
-import com.ssok.member.domain.service.dto.MemberUUIDDto;
+import com.ssok.member.domain.service.dto.MemberUuidDto;
 import com.ssok.member.domain.service.dto.VerifySmsRequest;
 import com.ssok.member.global.api.ApiResponse;
 import com.ssok.member.domain.api.dto.request.MessageRequest;
@@ -47,7 +47,9 @@ public class MemberApi {
 
     @PostMapping("/member/seq")
     public ApiResponse<MemberSeqResponse> getMemberPk(@RequestBody MemberSeqRequest memberSeqRequest){
-        MemberSeqResponse memberSeqResponse = memberService.getUUID(MemberUUIDDto.of(memberSeqRequest));
+        System.out.println(memberSeqRequest.getUuid()+"zzzz");
+        log.info(memberSeqRequest.getUuid());
+        MemberSeqResponse memberSeqResponse = memberService.getUuid(MemberUuidDto.of(memberSeqRequest));
         return OK(memberSeqResponse);
     }
 

@@ -65,7 +65,7 @@ public class PaymentService {
         paymentItemRepository.saveAll(paymentItemList);
 
         // 쏙 영수증 서버로 결제 내역 송신
-        CreateReceiptRequest createReceiptRequest = CreateReceiptRequest.fromEntity(payRequest.getCardId(), payment, paymentItemList);
+        CreateReceiptRequest createReceiptRequest = CreateReceiptRequest.fromEntity(payRequest.getCardNum(), payment, paymentItemList);
         receiptClient.saveNewTransaction(posPayRequest.getAccessToken(), createReceiptRequest);
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class CreateReceiptRequest {
 
-    private String cardId; // 결제 카드 Id
+    private String cardNum; // 결제 카드 번호
 
     private String cardType; // 결제 유형
 
@@ -37,9 +37,9 @@ public class CreateReceiptRequest {
 
     private List<PaymentItem> paymentItemList; // 구매 품목 리스트
 
-    public static CreateReceiptRequest fromEntity(String cardId, Payment payment, List<PaymentItem> paymentItemList) {
+    public static CreateReceiptRequest fromEntity(String cardNum, Payment payment, List<PaymentItem> paymentItemList) {
         return CreateReceiptRequest.builder()
-                .cardId(cardId)
+                .cardNum(cardNum)
                 .cardType(payment.getPaymentCardType().getCode())
                 .amount(payment.getPaymentAmount())
                 .type(payment.getPaymentType().getCode())

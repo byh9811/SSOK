@@ -1,5 +1,6 @@
 package com.ssok.namecard.domain.service;
 
+import com.ssok.namecard.client.MemberServiceClient;
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
 import com.ssok.namecard.domain.exception.ExchangeException;
 import com.ssok.namecard.domain.exception.NamecardException;
@@ -27,6 +28,7 @@ public class NamecardService {
     private final ExchangeRepository exchangeRepository;
     private final GCSService gcsService;
     private final NamecardEventHandler namecardEventHandler;
+    private final MemberServiceClient memberServiceClient;
 
     public Namecard findById(Long id){
         return namecardRepository.findById(id)
@@ -41,8 +43,9 @@ public class NamecardService {
             throw new NamecardException(ErrorCode.NAMECARD_BAD_REQUEST);
         }
         String uploadUrl = gcsService.uploadFile(multipartFile);
-        /** todo : memberUuid -> memberSeq로 변경 로직 작성해야함 */
-        Long memberSeq = Long.parseLong(memberUuid);
+
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+
         Namecard namecard = Namecard.from(namecardCreateRequest, memberSeq, uploadUrl);
         Namecard savedNamecard = namecardRepository.save(namecard);
 

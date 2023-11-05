@@ -34,7 +34,6 @@ public class MemberService {
     public MemberSeqResponse getUuid(MemberUuidDto memberUUIDDto){
         Member member = memberRepository.findMemberByMemberUuid(memberUUIDDto.getUuid()).orElseThrow();
         return MemberSeqResponse.builder()
-                .memberUuid(memberUUIDDto.getUuid())
                 .memberSeq(member.getMemberSeq())
                 .build();
     }

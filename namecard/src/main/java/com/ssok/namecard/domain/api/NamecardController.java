@@ -2,6 +2,7 @@ package com.ssok.namecard.domain.api;
 
 import static com.ssok.namecard.global.api.ApiResponse.OK;
 
+import com.ssok.namecard.client.MemberServiceClient;
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
 import com.ssok.namecard.domain.api.dto.response.NamecardMainResponse;
 import com.ssok.namecard.domain.mongo.document.NamecardMain;
@@ -29,6 +30,7 @@ public class NamecardController {
 
     private final NamecardService namecardService;
     private final NamecardQueryService namecardQueryService;
+    private final MemberServiceClient memberServiceClient;
 
     /**
      * 명함 등록
@@ -39,7 +41,7 @@ public class NamecardController {
         @RequestPart NamecardCreateRequest namecardCreateRequest,
         @RequestPart MultipartFile multipartFile
     ){
-        log.info("유유융유ㅜㅠ아이디: {}", memberUuid);
+        log.info("UUID: {}", memberUuid);
         namecardService.createNamecard(namecardCreateRequest, memberUuid, multipartFile);
         return OK(null);
     }
@@ -83,12 +85,10 @@ public class NamecardController {
 
 
 
-    /** member-service test */
-//    @GetMapping
-//    public ApiResponse<String> getMemberUuid(){
-//        String uuid = namecardService.getMemberUuid();
-//        return OK(uuid);
-//    }
+    @GetMapping
+    public ApiResponse<Long> getMemberSeq(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+        return memberServiceClient.getMemberSeq(memberUuid);
+    }
 
 
 

@@ -82,9 +82,4 @@ public class NamecardService {
         }
 
     }
-
-//    public String getMemberUuid() {
-//
-//
-//    }
 }

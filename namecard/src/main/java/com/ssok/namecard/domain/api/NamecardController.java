@@ -85,7 +85,7 @@ public class NamecardController {
 
 
 
-    @GetMapping
+    @GetMapping("/member")
     public ApiResponse<Long> getMemberSeq(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
         return memberServiceClient.getMemberSeq(memberUuid);
     }

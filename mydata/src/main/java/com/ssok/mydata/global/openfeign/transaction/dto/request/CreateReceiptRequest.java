@@ -29,8 +29,6 @@ public class CreateReceiptRequest {
 
     private String shopNumber; // 사업자 등록 번호
 
-    private String businessNumber; // 사업자 등록 번호
-
     private String receiptNumber; // 영수증 번호
 
     private LocalDateTime transactionDatetime;
@@ -45,7 +43,7 @@ public class CreateReceiptRequest {
                 .type(payment.getPaymentType().getCode())
                 .installPeriod(payment.getPaymentInstallPeriod())
                 .shopName(payment.getPaymentStoreName())
-                .businessNumber(payment.getPaymentBusinessNumber())
+                .shopNumber(payment.getPaymentBusinessNumber())
                 .receiptNumber(payment.getPaymentReceiptNumber())
                 .transactionDatetime(payment.getPaymentTransactionDatetime())
                 .paymentItemList(paymentItemList)

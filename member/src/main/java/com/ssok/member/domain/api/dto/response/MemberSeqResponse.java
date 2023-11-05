@@ -7,6 +7,6 @@ import lombok.*;
 @Getter
 @Builder
 public class MemberSeqResponse {
-    private String UUID;
+    private String memberUuid;
     private Long memberSeq;
 }

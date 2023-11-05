@@ -15,7 +15,7 @@ public class MemberUuidDto {
 
     public static MemberUuidDto of(MemberSeqRequest memberSeqRequest){
         return MemberUuidDto.builder()
-                .uuid(memberSeqRequest.getUuid())
+                .uuid(memberSeqRequest.getMemberUuid())
                 .build();
     }
 }

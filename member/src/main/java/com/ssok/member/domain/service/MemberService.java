@@ -32,7 +32,7 @@ public class MemberService {
     public MemberSeqResponse getUuid(MemberUuidDto memberUUIDDto){
         Member member = memberRepository.findMemberByMemberUuid(memberUUIDDto.getUuid()).orElseThrow();
         return MemberSeqResponse.builder()
-                .UUID(memberUUIDDto.getUuid())
+                .memberUuid(memberUUIDDto.getUuid())
                 .memberSeq(member.getMemberSeq())
                 .build();
     }

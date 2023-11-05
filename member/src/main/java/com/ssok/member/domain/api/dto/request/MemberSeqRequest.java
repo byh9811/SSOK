@@ -7,5 +7,5 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class MemberSeqRequest {
-    private String uuid;
+    private String memberUuid;
 }

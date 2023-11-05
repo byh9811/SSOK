@@ -40,11 +40,18 @@ public class MemberApi {
         return "spring-cloud-service 호출!";
     }
     //회원 Seq 조회
+//    @PostMapping("/member/seq")
+//    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody MemberSeqRequest memberSeqRequest){
+//        System.out.println(memberSeqRequest.getMemberUuid()+"zzzz");
+//        log.info(memberSeqRequest.getMemberUuid());
+//        MemberSeqResponse memberSeqResponse = memberService.getUuid(MemberUuidDto.of(memberSeqRequest));
+//        return OK(memberSeqResponse);
+//    }
     @PostMapping("/member/seq")
-    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody MemberSeqRequest memberSeqRequest){
-        System.out.println(memberSeqRequest.getMemberUuid()+"zzzz");
-        log.info(memberSeqRequest.getMemberUuid());
-        MemberSeqResponse memberSeqResponse = memberService.getUuid(MemberUuidDto.of(memberSeqRequest));
+    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody String memberUuid){
+        System.out.println("memberUuid");
+        log.info(memberUuid);
+        MemberSeqResponse memberSeqResponse = memberService.getUuid(memberUuid);
         return OK(memberSeqResponse);
     }
     // 연동 계좌번호 조회

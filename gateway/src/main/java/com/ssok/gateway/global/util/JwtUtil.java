@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 @Slf4j
@@ -26,7 +28,14 @@ public class JwtUtil {
     private String SECRET_KEY;
     @Value("${secret.refresh}")
     private String REFRESH_KEY;
-
+    // 객체 초기화, secretKey를 Base64로 인코딩한다.
+    @PostConstruct
+    protected void init() {
+        System.out.println("SECRET_KEY: " + SECRET_KEY);
+        System.out.println("REFRESH_KEY = " + REFRESH_KEY);
+        SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
+        REFRESH_KEY = Base64.getEncoder().encodeToString(REFRESH_KEY.getBytes());
+    }
     // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
     public List<String> getToken(ServerHttpRequest request, String tokenName) {
         return request.getHeaders().get(tokenName);
@@ -38,6 +47,7 @@ public class JwtUtil {
         return memberUUId;
     }
     public Claims getClaimsFromAccessToken(String token) {
+        System.out.println("access-token : "+token);
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
 //                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))

@@ -54,7 +54,7 @@ public class Namecard extends BaseEntity {
                        .namecardJob(namecardCreateRequest.namecardJob())
                        .namecardAddress(namecardCreateRequest.namecardAddress())
                        .namecardPhone(namecardCreateRequest.namecardPhone())
-                       .namecardFax(builder().namecardFax)
+                       .namecardFax(namecardCreateRequest.namecardFax())
                        .namecardWebsite(namecardCreateRequest.namecardWebsite())
                        .build();
     }

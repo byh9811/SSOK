@@ -23,6 +23,8 @@ public class CreateReceiptRequest {
 
     private String type; // 승인, 취소, 정정
 
+    private String approvedNum; // 승인 번호
+
     private Integer installPeriod; // 할부 기간
 
     private String shopName; // 상호명
@@ -41,6 +43,7 @@ public class CreateReceiptRequest {
                 .cardType(payment.getPaymentCardType().getCode())
                 .amount(payment.getPaymentAmount())
                 .type(payment.getPaymentType().getCode())
+                .approvedNum(payment.getPaymentApprovedNum())
                 .installPeriod(payment.getPaymentInstallPeriod())
                 .shopName(payment.getPaymentStoreName())
                 .shopNumber(payment.getPaymentBusinessNumber())

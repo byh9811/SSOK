@@ -3,9 +3,12 @@ package com.ssok.member.domain.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssok.member.domain.api.dto.request.MemberCreateRequest;
 import com.ssok.member.domain.api.dto.request.MemberLoginRequest;
+import com.ssok.member.domain.api.dto.request.MemberSeqRequest;
+import com.ssok.member.domain.api.dto.response.MemberSeqResponse;
 import com.ssok.member.domain.api.dto.response.TokenResponse;
 import com.ssok.member.domain.service.dto.MemberCreateDto;
 import com.ssok.member.domain.service.dto.MemberLoginDto;
+import com.ssok.member.domain.service.dto.MemberUUIDDto;
 import com.ssok.member.domain.service.dto.VerifySmsRequest;
 import com.ssok.member.global.api.ApiResponse;
 import com.ssok.member.domain.api.dto.request.MessageRequest;
@@ -40,6 +43,12 @@ public class MemberApi {
     public String springCloudService() {
         System.out.println("test");
         return "spring-cloud-service 호출!";
+    }
+
+    @PostMapping("/member/seq")
+    public ApiResponse<MemberSeqResponse> getMemberPk(@RequestBody MemberSeqRequest memberSeqRequest){
+        MemberSeqResponse memberSeqResponse = memberService.getUUID(MemberUUIDDto.of(memberSeqRequest));
+        return OK(memberSeqResponse);
     }
 
     //인증번호 발송

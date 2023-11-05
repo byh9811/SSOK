@@ -1,10 +1,12 @@
 package com.ssok.member.domain.service;
 
+import com.ssok.member.domain.api.dto.response.MemberSeqResponse;
 import com.ssok.member.domain.api.dto.response.TokenResponse;
 import com.ssok.member.domain.entity.Member;
 import com.ssok.member.domain.repository.MemberRepository;
 import com.ssok.member.domain.service.dto.MemberCreateDto;
 import com.ssok.member.domain.service.dto.MemberLoginDto;
+import com.ssok.member.domain.service.dto.MemberUUIDDto;
 import com.ssok.member.domain.token.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,13 @@ public class MemberService {
         if(member == null)
             return true;
         return false;
+    }
+    public MemberSeqResponse getUUID(MemberUUIDDto memberUUIDDto){
+        Member member = memberRepository.findMemberByMemberUUID(memberUUIDDto.getUUID()).orElseThrow();
+        return MemberSeqResponse.builder()
+                .UUID(memberUUIDDto.getUUID())
+                .memberSeq(member.getMemberSeq())
+                .build();
     }
     public void save(MemberCreateDto memberCreateDto) {
         Member member = memberCreateDto.toEntity();

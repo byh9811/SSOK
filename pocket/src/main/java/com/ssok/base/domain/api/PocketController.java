@@ -77,7 +77,6 @@ public class PocketController {
     @PostMapping("/pocket/history")
     public ApiResponse<?> createPocketHistory(@RequestBody PocketHistoryRequest request, @RequestHeader String memberUuid){
         pocketService.createPocketHistory(request.toDto(memberUuid));
-
         return OK(null);
     }
 

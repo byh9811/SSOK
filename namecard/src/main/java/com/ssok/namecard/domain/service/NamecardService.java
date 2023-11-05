@@ -44,8 +44,7 @@ public class NamecardService {
         }
         String uploadUrl = gcsService.uploadFile(multipartFile);
 
-        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
-
+        Long memberSeq =  memberServiceClient.getMemberSeq(memberUuid).getResponse();
         Namecard namecard = Namecard.from(namecardCreateRequest, memberSeq, uploadUrl);
         Namecard savedNamecard = namecardRepository.save(namecard);
 

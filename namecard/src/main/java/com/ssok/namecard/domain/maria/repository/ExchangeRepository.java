@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ExchangeRepository extends JpaRepository<Exchange, Long> {
 
-    Optional<Exchange> findByNamecardIdAndMemberId(Long namecardAId, Long memberBId);
+    Optional<Exchange> findByNamecard_NamecardSeqAndMemberSeq(Long namecardAId, Long memberBId);
 }

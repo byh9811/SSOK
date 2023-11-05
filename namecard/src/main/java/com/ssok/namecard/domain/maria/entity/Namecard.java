@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +23,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class Namecard extends BaseEntity {
 
-    private Long memberId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long namecardSeq;
+    private Long memberSeq;
     private String namecardName;
     private String namecardImage;
     private String namecardEmail;
@@ -36,11 +42,11 @@ public class Namecard extends BaseEntity {
 
 
 
-    public static Namecard from(NamecardCreateRequest namecardCreateRequest, Long memberId,
+    public static Namecard from(NamecardCreateRequest namecardCreateRequest, Long memberSeq,
         String uploadUrl) {
 
         return Namecard.builder()
-                       .memberId(memberId)
+                       .memberSeq(memberSeq)
                        .namecardName(namecardCreateRequest.namecardName())
                        .namecardImage(uploadUrl)
                        .namecardEmail(namecardCreateRequest.namecardEmail())

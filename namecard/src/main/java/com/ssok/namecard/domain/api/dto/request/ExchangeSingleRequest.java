@@ -1,13 +1,12 @@
 package com.ssok.namecard.domain.api.dto.request;
 
-import com.ssok.namecard.domain.maria.entity.Namecard;
 import javax.validation.constraints.NotNull;
 
 public record ExchangeSingleRequest(
-    @NotNull Long memberAId,
-    @NotNull Long memberBId,
-    @NotNull Long namecardAId,
-    @NotNull Long namecardBId,
+    @NotNull Long memberASeq,
+    @NotNull Long memberBSeq,
+    @NotNull Long namecardASeq,
+    @NotNull Long namecardBSeq,
     @NotNull Double lat,
     @NotNull Double lon
 ) {

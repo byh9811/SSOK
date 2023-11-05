@@ -72,8 +72,8 @@ public class NamecardController {
 
 
     /** 명함 상세 조회 */
-    @GetMapping("/{namecardId}")
-    public ApiResponse<?> getNamecardDetail(@PathVariable Long namecardId){
+    @GetMapping("/{namecardSeq}")
+    public ApiResponse<?> getNamecardDetail(@PathVariable Long namecardSeq){
         return OK(null);
     }
 

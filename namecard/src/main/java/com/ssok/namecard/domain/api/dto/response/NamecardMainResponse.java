@@ -6,15 +6,15 @@ import lombok.Builder;
 
 @Builder
 public record NamecardMainResponse(
-    Long id,  //내 명함 id
-    Long memberId,
+    Long namecardSeq,  //내 명함 id
+    Long memberSeq,
     String namecardImg,
     List<NamecardResponse>favorites,
     List<NamecardResponse> namecards
 ) {
 
     public NamecardMainResponse(NamecardMain namecardMain) {
-        this(namecardMain.getId(), namecardMain.getMemberId(), namecardMain.getNamecardImg(),
+        this(namecardMain.getNamecardMainSeq(), namecardMain.getMemberSeq(), namecardMain.getNamecardImg(),
             NamecardResponse.toNamecardResponses(namecardMain.getFavorites()),
             NamecardResponse.toNamecardResponses(namecardMain.getNamecards()));
     }

@@ -17,16 +17,16 @@ public class NamecardQueryService {
 
     private final NamecardMainMongoRepository namecardMainMongoRepository;
 
-    public NamecardMain findByMemberId(Long id){
-        return namecardMainMongoRepository.findByMemberId(id)
+    public NamecardMain findByMemberSeq(Long id){
+        return namecardMainMongoRepository.findByMemberSeq(id)
                                    .orElseThrow(
                                        () -> new NamecardException(ErrorCode.NAMECARD_NOT_FOUND)
                                    );
     }
     public NamecardMain getNamecardMain(String memberUuid) {
         //todo memberUuid -> memberSeq
-        Long memberId = Long.parseLong(memberUuid);
-        NamecardMain namecardMain = findByMemberId(memberId);
+        Long memberSeq = Long.parseLong(memberUuid);
+        NamecardMain namecardMain = findByMemberSeq(memberSeq);
         log.info("메인페이지 조회: {}", namecardMain);
         return namecardMain;
     }

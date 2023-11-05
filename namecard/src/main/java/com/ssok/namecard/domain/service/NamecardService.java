@@ -41,29 +41,29 @@ public class NamecardService {
             throw new NamecardException(ErrorCode.NAMECARD_BAD_REQUEST);
         }
         String uploadUrl = gcsService.uploadFile(multipartFile);
-        /** todo : memberUuid -> memberId로 변경 로직 작성해야함 */
-        Long memberId = Long.parseLong(memberUuid);
-        Namecard namecard = Namecard.from(namecardCreateRequest, memberId, uploadUrl);
+        /** todo : memberUuid -> memberSeq로 변경 로직 작성해야함 */
+        Long memberSeq = Long.parseLong(memberUuid);
+        Namecard namecard = Namecard.from(namecardCreateRequest, memberSeq, uploadUrl);
         Namecard savedNamecard = namecardRepository.save(namecard);
 
-        namecardEventHandler.createNamecard(uploadUrl, memberId, savedNamecard.getId());
+        namecardEventHandler.createNamecard(uploadUrl, memberSeq, savedNamecard.getNamecardSeq());
     }
 
     public void exchangeSingle(ExchangeSingleRequest exchangeSingleRequest) {
 
         /* 명함 교환 했었는지 여부 */
-        Long memberBId = exchangeSingleRequest.memberBId();
-        Namecard namecardA = findById(exchangeSingleRequest.namecardAId());
-        Namecard namecardB = findById(exchangeSingleRequest.namecardAId());
-        Optional<Exchange> byNamecardIdAndMemberId = exchangeRepository.findByNamecardIdAndMemberId(
-            namecardA.getId(), memberBId);
-        if(byNamecardIdAndMemberId != null){
+        Long memberBSeq = exchangeSingleRequest.memberBSeq();
+        Namecard namecardA = findById(exchangeSingleRequest.namecardASeq());
+        Namecard namecardB = findById(exchangeSingleRequest.namecardASeq());
+        Optional<Exchange> byNamecardSeqAndMemberSeq = exchangeRepository.findByNamecard_NamecardSeqAndMemberSeq(
+            namecardA.getNamecardSeq(), memberBSeq);
+        if(byNamecardSeqAndMemberSeq != null){
             Exchange exchangeA = Exchange.builder()
                                          .exchangeLatitude(exchangeSingleRequest.lat())
                                          .exchangeLongitude(exchangeSingleRequest.lon())
                                          .exchangeNote("")
                                          .exchangeIsFavorite(false)
-                                         .memberId(exchangeSingleRequest.memberAId())
+                                         .memberSeq(exchangeSingleRequest.memberASeq())
                                          .namecard(namecardB).build();
             /* B가 A명함 받음 */
             Exchange exchangeB = Exchange.builder()
@@ -71,7 +71,7 @@ public class NamecardService {
                                          .exchangeLongitude(exchangeSingleRequest.lon())
                                          .exchangeNote("")
                                          .exchangeIsFavorite(false)
-                                         .memberId(exchangeSingleRequest.memberBId())
+                                         .memberSeq(exchangeSingleRequest.memberBSeq())
                                          .namecard(namecardA).build();
             exchangeRepository.save(exchangeA);
             exchangeRepository.save(exchangeB);

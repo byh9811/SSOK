@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface NamecardMainMongoRepository extends MongoRepository<NamecardMain, Long> {
 
-    Optional<NamecardMain> findByMemberId(Long memberId);
+    Optional<NamecardMain> findByMemberSeq(Long memberSeq);
 }

@@ -29,8 +29,8 @@ public class NamecardEventHandler {
                                    );
     }
 
-    public void createNamecard(String uploadUrl, Long memberId, Long namecardId) {
-        NamecardMain namecardMain = NamecardMain.from(uploadUrl, memberId, namecardId);
+    public void createNamecard(String uploadUrl, Long memberSeq, Long namecardSeq) {
+        NamecardMain namecardMain = NamecardMain.from(uploadUrl, memberSeq, namecardSeq);
         namecardMainMongoRepository.save(namecardMain);
     }
 
@@ -39,8 +39,8 @@ public class NamecardEventHandler {
     public void exchangeNamecard(Namecard namecardA, Namecard namecardB, Exchange exchangeA,
         Exchange exchangeB) {
 
-        NamecardMain namecardMainA = findById(namecardA.getId());
-        NamecardMain namecardMainB = findById(namecardB.getId());
+        NamecardMain namecardMainA = findById(namecardA.getNamecardSeq());
+        NamecardMain namecardMainB = findById(namecardB.getNamecardSeq());
 
         NamecardMongo namecardMongoA = NamecardMongo.from(namecardA);
         NamecardMongo namecardMongoB = NamecardMongo.from(namecardB);

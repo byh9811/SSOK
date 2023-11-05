@@ -39,7 +39,7 @@ public class MemberApi {
         System.out.println("test");
         return "spring-cloud-service 호출!";
     }
-
+    //회원 Seq 조회
     @PostMapping("/member/seq")
     public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody MemberSeqRequest memberSeqRequest){
         System.out.println(memberSeqRequest.getMemberUuid()+"zzzz");
@@ -47,6 +47,7 @@ public class MemberApi {
         MemberSeqResponse memberSeqResponse = memberService.getUuid(MemberUuidDto.of(memberSeqRequest));
         return OK(memberSeqResponse);
     }
+    // 연동 계좌번호 조회
     @PostMapping("/member/account")
     public ApiResponse<MemberAccountResponse> getMemberAccount(@RequestBody MemberAccountRequest memberAccountRequest){
         MemberAccountResponse memberAccountResponse = memberService.getAccount(MemberAccountDto.of(memberAccountRequest));

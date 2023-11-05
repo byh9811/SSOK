@@ -22,6 +22,8 @@ public class PocketHistory extends BaseEntity {
     private Long pocketHistorySeq;
     // 멤버 식별자
     private Long memberSeq;
+    // 영수증 식별자
+    private Long receiptSeq;
 
     @Enumerated(EnumType.STRING)
     private PocketHistoryType pocketHistoryType;
@@ -34,9 +36,10 @@ public class PocketHistory extends BaseEntity {
     private String pocketHistoryTitle;
 
     @Builder
-    public PocketHistory(Long pocketHistorySeq, Long memberSeq, PocketHistoryType pocketHistoryType, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle) {
+    public PocketHistory(Long pocketHistorySeq, Long memberSeq, Long receiptSeq, PocketHistoryType pocketHistoryType, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle) {
         this.pocketHistorySeq = pocketHistorySeq;
         this.memberSeq = memberSeq;
+        this.receiptSeq = receiptSeq;
         this.pocketHistoryType = pocketHistoryType;
         this.pocketHistoryTransAmt = pocketHistoryTransAmt;
         this.pocketHistoryResultAmt = pocketHistoryResultAmt;

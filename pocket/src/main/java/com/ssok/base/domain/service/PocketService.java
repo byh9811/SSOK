@@ -107,6 +107,7 @@ public class PocketService {
         // pocketHistory 생성
         PocketHistory pocketHistory = PocketHistory.builder()
                 .memberSeq(memberSeq)
+                .receiptSeq(dto.getReceiptSeq())
                 .pocketHistoryType(type)
                 .pocketHistoryTransAmt(dto.getPocketHistoryTransAmt())
                 .pocketHistoryResultAmt(findPocket.getPocketSaving())

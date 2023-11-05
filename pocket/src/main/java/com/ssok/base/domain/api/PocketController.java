@@ -52,6 +52,7 @@ public class PocketController {
     }
 
     /**
+     * @autor 홍진식
      *
      * @param memberUuid 헤더로부터 얻은 Uuid
      * @return PocketResponse
@@ -67,11 +68,30 @@ public class PocketController {
         return OK(response);
     }
 
-    @PostMapping("/pocket/change")
+    /**
+     * @autor 홍진식
+     * @param request 요청 정보
+     * @param memberUuid 헤더로부터 얻은 Uuid
+     * @return
+     */
+    @PostMapping("/pocket/history")
     public ApiResponse<?> createPocketHistory(@RequestBody PocketHistoryRequest request, @RequestHeader String memberUuid){
         pocketService.createPocketHistory(request.toDto(memberUuid));
+
         return OK(null);
     }
 
+    /**
+     * 포켓 머니 조회
+     */
+
+    /**
+     * 포켓 조화
+     */
+
+
+    /**
+     * 포켓 상세 조회
+     */
 
 }

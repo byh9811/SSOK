@@ -1,9 +1,6 @@
 package com.ssok.mydata.domain.card.api;
 
-import com.ssok.mydata.domain.card.api.dto.request.CardInfoRequest;
-import com.ssok.mydata.domain.card.api.dto.request.CardListRequest;
-import com.ssok.mydata.domain.card.api.dto.request.CardTransactionListRequest;
-import com.ssok.mydata.domain.card.api.dto.request.TransactionRequest;
+import com.ssok.mydata.domain.card.api.dto.request.*;
 import com.ssok.mydata.domain.card.api.dto.response.CardInfoResponse;
 import com.ssok.mydata.domain.card.api.dto.response.CardListResponse;
 import com.ssok.mydata.domain.card.api.dto.response.CardTransactionListResponse;
@@ -70,18 +67,18 @@ public class CardApi {
         return new ResponseEntity<>(cardHistoryQueryService.findCardHistory(cardId, cardTransactionListRequest.getNext_page(), cardTransactionListRequest.getLimit()), headers, HttpStatus.OK);
     }
 
-    @PostMapping("/{card_id}/pay")
-    public ResponseEntity<PayResponse> pay(
-            @AuthenticationPrincipal User user,
-            @PathVariable("card_id") String cardId,
-            @Valid @RequestBody TransactionRequest transactionRequest)
-    {
-        PayResponse pay = cardService.pay(user.getUsername(), cardId, transactionRequest);
-        return new ResponseEntity<>(pay, HttpStatus.OK);
-    }
+//    @PostMapping("/pay")
+//    public ResponseEntity<PayResponse> pay(
+//            @AuthenticationPrincipal User user,
+//            @RequestBody PayRequest payRequest)
+//    {
+//        PayResponse pay = cardService.pay(user.getUsername(), payRequest);
+//        return new ResponseEntity<>(pay, HttpStatus.OK);
+//    }
 
-    @GetMapping("/recentHistoryId")
-    public ResponseEntity<Long> findLastCardHistoryId() {
-        return ResponseEntity.ok(cardHistoryQueryService.findLastCardHistoryId());
-    }
+//    @GetMapping("/recentHistoryId")
+//    public ResponseEntity<Long> findLastCardHistoryId() {
+//        return ResponseEntity.ok(cardHistoryQueryService.findLastCardHistoryId());
+//    }
+
 }

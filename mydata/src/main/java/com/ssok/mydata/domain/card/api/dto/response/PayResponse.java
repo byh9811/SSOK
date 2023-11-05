@@ -13,16 +13,8 @@ import java.util.Date;
 @Builder
 public class PayResponse {
 
-    @JsonProperty("rsp_code")
-    private String rspCode;
-
-    @JsonProperty("rsp_msg")
-    private String rspMsg;
-
-    @JsonProperty("approved_num")
     private String approvedNum;
 
-    @JsonProperty("approved_dtime")
     private LocalDateTime approvedDtime;
 
 }

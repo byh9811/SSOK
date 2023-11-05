@@ -2,9 +2,10 @@ package com.ssok.namecard.domain.mongo.repository;
 
 
 import com.ssok.namecard.domain.mongo.document.NamecardMain;
+import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface NamecardMainMongoRepository extends MongoRepository<NamecardMain, String> {
+public interface NamecardMainMongoRepository extends MongoRepository<NamecardMain, Long> {
 
-    NamecardMain findByMemberId(Long memberId);
+    Optional<NamecardMain> findByMemberId(Long memberId);
 }

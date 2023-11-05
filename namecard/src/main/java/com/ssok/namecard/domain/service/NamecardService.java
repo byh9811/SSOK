@@ -10,6 +10,7 @@ import com.ssok.namecard.domain.maria.repository.NamecardRepository;
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.exception.ErrorCode;
 import com.ssok.namecard.global.service.GCSService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class NamecardService {
         }
         String uploadUrl = gcsService.uploadFile(multipartFile);
         /** todo : memberUuid -> memberId로 변경 로직 작성해야함 */
-        Long memberId = 1L;
+        Long memberId = Long.parseLong(memberUuid);
         Namecard namecard = Namecard.from(namecardCreateRequest, memberId, uploadUrl);
         Namecard savedNamecard = namecardRepository.save(namecard);
 
@@ -52,35 +53,38 @@ public class NamecardService {
 
         /* 명함 교환 했었는지 여부 */
         Long memberBId = exchangeSingleRequest.memberBId();
-        Long namecardAId = exchangeSingleRequest.namecardAId();
+        Namecard namecardA = findById(exchangeSingleRequest.namecardAId());
+        Namecard namecardB = findById(exchangeSingleRequest.namecardAId());
+        Optional<Exchange> byNamecardIdAndMemberId = exchangeRepository.findByNamecardIdAndMemberId(
+            namecardA.getId(), memberBId);
+        if(byNamecardIdAndMemberId != null){
+            Exchange exchangeA = Exchange.builder()
+                                         .exchangeLatitude(exchangeSingleRequest.lat())
+                                         .exchangeLongitude(exchangeSingleRequest.lon())
+                                         .exchangeNote("")
+                                         .exchangeIsFavorite(false)
+                                         .memberId(exchangeSingleRequest.memberAId())
+                                         .namecard(namecardB).build();
+            /* B가 A명함 받음 */
+            Exchange exchangeB = Exchange.builder()
+                                         .exchangeLatitude(exchangeSingleRequest.lat())
+                                         .exchangeLongitude(exchangeSingleRequest.lon())
+                                         .exchangeNote("")
+                                         .exchangeIsFavorite(false)
+                                         .memberId(exchangeSingleRequest.memberBId())
+                                         .namecard(namecardA).build();
+            exchangeRepository.save(exchangeA);
+            exchangeRepository.save(exchangeB);
 
-        exchangeRepository.findByNamecardIdAndMemberId(namecardAId, memberBId).ifPresentOrElse(
-            value -> {
-                /* A가 B명함 받음 */
-                Exchange exchangeA = Exchange.builder()
-                                             .exchangeLatitude(exchangeSingleRequest.lat())
-                                             .exchangeLongitude(exchangeSingleRequest.lon())
-                                             .exchangeNote("")
-                                             .exchangeIsFavorite(false)
-                                             .memberId(exchangeSingleRequest.memberAId())
-                                             .namecardId(exchangeSingleRequest.namecardBId()).build();
+            namecardEventHandler.exchangeNamecard(namecardA, namecardB, exchangeA, exchangeB);
+        } else{
+            throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
+        }
 
-                /* B가 A명함 받음 */
-                Exchange exchangeB = Exchange.builder()
-                                             .exchangeLatitude(exchangeSingleRequest.lat())
-                                             .exchangeLongitude(exchangeSingleRequest.lon())
-                                             .exchangeNote("")
-                                             .exchangeIsFavorite(false)
-                                             .memberId(exchangeSingleRequest.memberBId())
-                                             .namecardId(exchangeSingleRequest.namecardAId()).build();
-                exchangeRepository.save(exchangeA);
-                exchangeRepository.save(exchangeB);
-
-                namecardEventHandler.exchangeNamecard(exchangeSingleRequest);
-            },
-            () -> {
-                throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
-            }
-        );
     }
+
+//    public String getMemberUuid() {
+//
+//
+//    }
 }

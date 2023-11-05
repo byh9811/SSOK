@@ -35,10 +35,11 @@ public class NamecardController {
      */
     @PostMapping("/")
     public ApiResponse<Void> createNamecardRequest(
-        @RequestHeader String memberUuid,
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid,
         @RequestPart NamecardCreateRequest namecardCreateRequest,
         @RequestPart MultipartFile multipartFile
     ){
+        log.info("유유융유ㅜㅠ아이디: {}", memberUuid);
         namecardService.createNamecard(namecardCreateRequest, memberUuid, multipartFile);
         return OK(null);
     }
@@ -74,9 +75,21 @@ public class NamecardController {
 
     /** 명함 지도 조회 */
 
+
+
     /** 명함 타임라인 조회 */
 
     /** 명함 메모 조회 */
+
+
+
+    /** member-service test */
+//    @GetMapping
+//    public ApiResponse<String> getMemberUuid(){
+//        String uuid = namecardService.getMemberUuid();
+//        return OK(uuid);
+//    }
+
 
 
 }

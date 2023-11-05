@@ -2,10 +2,13 @@ package com.ssok.namecard.domain.maria.entity;
 
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.entity.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -27,6 +30,10 @@ public class Namecard extends BaseEntity {
     private String namecardPhone;
     private String namecardFax;
     private String namecardWebsite;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "namecard")
+    private List<Exchange> exchanges = new ArrayList<>();
+
 
 
     public static Namecard from(NamecardCreateRequest namecardCreateRequest, Long memberId,

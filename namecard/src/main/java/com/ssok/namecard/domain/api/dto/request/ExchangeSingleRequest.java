@@ -1,5 +1,6 @@
 package com.ssok.namecard.domain.api.dto.request;
 
+import com.ssok.namecard.domain.maria.entity.Namecard;
 import javax.validation.constraints.NotNull;
 
 public record ExchangeSingleRequest(

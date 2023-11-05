@@ -17,8 +17,9 @@ public class DonateController {
 
     @PostMapping("/donate")
     public ApiResponse<?> createDonate(@RequestHeader String memberUuid, @RequestBody DonateRequest request){
-        donateService.createDonate(request.toDto(memberUuid));
+        donateService.doDonate(request.toDto(memberUuid));
 
+        return ApiResponse.OK(null);
     }
 
 }

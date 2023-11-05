@@ -2,6 +2,7 @@ package com.ssok.base.domain.service;
 
 import com.ssok.base.domain.maria.entity.Donate;
 import com.ssok.base.domain.maria.entity.DonateMember;
+import com.ssok.base.domain.maria.entity.DonateMemberKey;
 import com.ssok.base.domain.maria.entity.Pocket;
 import com.ssok.base.domain.maria.repository.DonateMemberRepository;
 import com.ssok.base.domain.maria.repository.DonateRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -24,37 +26,70 @@ public class DonateService {
     private final PocketRepository pocketRepository;
     private final PocketService pocketService;
 
-    public void createDonate(DonateDto dto) {
+    /**
+     * @author 홍진식
+     *
+     * 기부진행 로직
+     *
+     * 예외처리
+     * 1. 멤버 유효 검사 2.기부 유효 검사(존재, 종료) 3. DonateMember 없으면 생성  4. 금액 검사(pocketservice 위임) 5. DonateMember 존재 여부에 따른 비즈니스 로직 실행
+     *
+     * @param dto
+     */
+    public void doDonate(DonateDto dto) {
         // memberUuid로 pk 뽑기 / 없으면 에러처리
         Long memberSeq = isMemberExist(dto.getMemberUuid());
 
-        // pocket 존재 여부
-        Pocket findPocket = pocketRepository.findById(memberSeq).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
-
-        // 금액이 양수인지 검사
-        if(dto.getDonateAmt() <= 0){
-            throw new IllegalArgumentException("이동 금액은 0원 이상이여야 합니다.");
-        }
-
-        // 포켓머니 금액 검사
-        if(dto.getDonateAmt() > findPocket.getPocketSaving()){
-            throw new IllegalArgumentException("보유 보켓머니가 부족합니다.");
-        }
-
         Donate donate = donateRepository.findById(dto.getDonateSeq()).orElseThrow(() -> new NoSuchElementException("기부가 존재하지 않습니다"));
+        if(!donate.getDonateState()){
+            throw new IllegalArgumentException("종료된 기부입니다.");
+        }
+        Optional<DonateMember> findDonateMember = donateMemberRepository.findById(DonateMemberKey.builder()
+                .donate(donate)
+                .memberSeq(memberSeq)
+                .build());
 
-        // pocket history 생성
+        Boolean isDonateMemberExist = isDonateMemberExist(findDonateMember);
+
+        DonateMember donateMember = null;
+        if(isDonateMemberExist){
+            donateMember = findDonateMember.get();
+        }else{
+            donateMember = DonateMember.builder()
+                    .donate(donate)
+                    .memberSeq(memberSeq)
+                    .totalDonateAmt(0L)
+                    .build();
+        }
+
+        // pocket history 생성 -> 금액 검사 모두 진행
         pocketService.createDonationPocketHistory(dto.toDto(memberSeq, donate));
-        // 기부 금액 적용
-        findPocket.transferDonation(dto.getDonateAmt());
 
-//        DonateMember = donateMemberRepository.findById()
+        // 누적 기부금액 update
+        donateMember.updateTotalDonateAmt(dto.getDonateAmt());
 
-//        Donate donate = Donate.builder()
+        // 기부 변경
+        donate.updateDonation(dto.getDonateAmt(), isDonateMemberExist);
 
+        // 만약 DonateMember가 존재하지 않았다면 저장
+        if(!isDonateMemberExist){
+            donateMemberRepository.save(donateMember);
+        }
     }
 
-
+    /**
+     * @author 홍진식
+     *
+     * DonateMember가 있는지 찾는 함수
+     *
+     * @return true : 존재 / false : 미존재
+     */
+    private boolean isDonateMemberExist(Optional<DonateMember> findDonateMember){
+        if(findDonateMember.isPresent()){
+            return true;
+        }
+        return false;
+    }
 
 
 

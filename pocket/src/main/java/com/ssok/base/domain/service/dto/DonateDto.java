@@ -1,5 +1,7 @@
 package com.ssok.base.domain.service.dto;
 
+import com.ssok.base.domain.maria.entity.Donate;
+import com.ssok.base.domain.maria.entity.PocketHistoryType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +19,16 @@ public class DonateDto {
         this.donateAmt = donateAmt;
         this.donateSeq = donateSeq;
     }
+
+    public DonatePocketHistoryDto toDto(Long memberSeq, Donate donate){
+        return DonatePocketHistoryDto.builder()
+                .memberSeq(memberSeq)
+                .donate(donate)
+                .pocketHistoryType("DONATION")
+                .pocketHistoryTransAmt(this.donateAmt)
+                .build();
+
+    }
+
+
 }

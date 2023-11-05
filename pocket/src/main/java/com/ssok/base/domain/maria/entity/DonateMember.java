@@ -16,26 +16,30 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@IdClass(DonateMemberKey.class)
 public class DonateMember extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "donate_member_seq")
-    private Long donateMemberSeq;
-
+//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "donate_member_seq")
+//    private Long donateMemberSeq;
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "donate_seq")
     private Donate donate;
-
+    @Id
     private Long memberSeq;
 
     // 누적 기부 금액
     private Long totalDonateAmt;
 
     @Builder
-    public DonateMember(Long donateMemberSeq, Donate donate, Long memberSeq, Long totalDonateAmt) {
-        this.donateMemberSeq = donateMemberSeq;
+    public DonateMember(Donate donate, Long memberSeq, Long totalDonateAmt) {
         this.donate = donate;
         this.memberSeq = memberSeq;
         this.totalDonateAmt = totalDonateAmt;
+    }
+
+    public void updateTotalDonateAmt(Long donateAmt) {
+        this.totalDonateAmt += donateAmt;
     }
 }

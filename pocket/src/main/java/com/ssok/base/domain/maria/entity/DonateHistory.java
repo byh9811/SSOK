@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class DonateHistory {
     @Id @OneToOne
     @JoinColumn(name = "pocket_history_seq")
-    PocketHistory pocketHistory;
+    private PocketHistory pocketHistory;
 
     @ManyToOne
     @JoinColumn(name = "donate_seq")

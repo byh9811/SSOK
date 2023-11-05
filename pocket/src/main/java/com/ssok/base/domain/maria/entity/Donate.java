@@ -36,4 +36,12 @@ public class Donate {
         this.donateTitle = donateTitle;
         this.donate_image = donate_image;
     }
+
+
+    public void updateDonation(Long donateAmt, Boolean isDonateMemberExist) {
+        if(!isDonateMemberExist){
+            this.donateTotalDonator += 1;
+        }
+        this.donateTotalDonation += donateAmt;
+    }
 }

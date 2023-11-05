@@ -1,17 +1,12 @@
 package com.ssok.member.domain.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssok.member.domain.api.dto.request.MemberCreateRequest;
-import com.ssok.member.domain.api.dto.request.MemberLoginRequest;
-import com.ssok.member.domain.api.dto.request.MemberSeqRequest;
+import com.ssok.member.domain.api.dto.request.*;
+import com.ssok.member.domain.api.dto.response.MemberAccountResponse;
 import com.ssok.member.domain.api.dto.response.MemberSeqResponse;
 import com.ssok.member.domain.api.dto.response.TokenResponse;
-import com.ssok.member.domain.service.dto.MemberCreateDto;
-import com.ssok.member.domain.service.dto.MemberLoginDto;
-import com.ssok.member.domain.service.dto.MemberUuidDto;
-import com.ssok.member.domain.service.dto.VerifySmsRequest;
+import com.ssok.member.domain.service.dto.*;
 import com.ssok.member.global.api.ApiResponse;
-import com.ssok.member.domain.api.dto.request.MessageRequest;
 import com.ssok.member.domain.api.dto.response.SmsResponse;
 import com.ssok.member.domain.service.MemberQService;
 import com.ssok.member.domain.service.MemberService;
@@ -46,13 +41,17 @@ public class MemberApi {
     }
 
     @PostMapping("/member/seq")
-    public ApiResponse<MemberSeqResponse> getMemberPk(@RequestBody MemberSeqRequest memberSeqRequest){
+    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody MemberSeqRequest memberSeqRequest){
         System.out.println(memberSeqRequest.getMemberUuid()+"zzzz");
         log.info(memberSeqRequest.getMemberUuid());
         MemberSeqResponse memberSeqResponse = memberService.getUuid(MemberUuidDto.of(memberSeqRequest));
         return OK(memberSeqResponse);
     }
-
+    @PostMapping("/member/account")
+    public ApiResponse<MemberAccountResponse> getMemberAccount(@RequestBody MemberAccountRequest memberAccountRequest){
+        MemberAccountResponse memberAccountResponse = memberService.getAccount(MemberAccountDto.of(memberAccountRequest));
+        return OK(memberAccountResponse);
+    }
     //인증번호 발송
     @PostMapping("/sms/send")
     public ApiResponse<SmsResponse> sendSms(@RequestBody MessageRequest messageRequest) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {

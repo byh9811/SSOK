@@ -25,6 +25,7 @@ public class AuthPermissionFilter extends AbstractGatewayFilterFactory<AuthPermi
 
     public static class Config {
         //config
+
     }
 
     /*토큰 검증 필터*/

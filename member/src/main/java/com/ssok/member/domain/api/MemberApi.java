@@ -47,8 +47,8 @@ public class MemberApi {
 
     @PostMapping("/member/seq")
     public ApiResponse<MemberSeqResponse> getMemberPk(@RequestBody MemberSeqRequest memberSeqRequest){
-        System.out.println(memberSeqRequest.getUuid()+"zzzz");
-        log.info(memberSeqRequest.getUuid());
+        System.out.println(memberSeqRequest.getMemberUuid()+"zzzz");
+        log.info(memberSeqRequest.getMemberUuid());
         MemberSeqResponse memberSeqResponse = memberService.getUuid(MemberUuidDto.of(memberSeqRequest));
         return OK(memberSeqResponse);
     }

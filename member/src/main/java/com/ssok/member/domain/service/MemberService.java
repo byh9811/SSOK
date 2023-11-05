@@ -6,7 +6,7 @@ import com.ssok.member.domain.entity.Member;
 import com.ssok.member.domain.repository.MemberRepository;
 import com.ssok.member.domain.service.dto.MemberCreateDto;
 import com.ssok.member.domain.service.dto.MemberLoginDto;
-import com.ssok.member.domain.service.dto.MemberUUIDDto;
+import com.ssok.member.domain.service.dto.MemberUuidDto;
 import com.ssok.member.domain.token.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,10 +29,10 @@ public class MemberService {
             return true;
         return false;
     }
-    public MemberSeqResponse getUUID(MemberUUIDDto memberUUIDDto){
-        Member member = memberRepository.findMemberByMemberUUID(memberUUIDDto.getUUID()).orElseThrow();
+    public MemberSeqResponse getUuid(MemberUuidDto memberUUIDDto){
+        Member member = memberRepository.findMemberByMemberUuid(memberUUIDDto.getUuid()).orElseThrow();
         return MemberSeqResponse.builder()
-                .UUID(memberUUIDDto.getUUID())
+                .UUID(memberUUIDDto.getUuid())
                 .memberSeq(member.getMemberSeq())
                 .build();
     }
@@ -46,8 +46,8 @@ public class MemberService {
 
         Member member = memberRepository.findMemberByMemberIdAndMemberPassword(memberLoginDto.getLoginId(), memberLoginDto.getPassword()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
         //둘 다 새로 발급
-        String accessToken = jwtTokenProvider.createAccessToken(member.getMemberUUID());
-        String refreshToken = jwtTokenProvider.createRefreshToken(member.getMemberUUID());
+        String accessToken = jwtTokenProvider.createAccessToken(member.getMemberUuid());
+        String refreshToken = jwtTokenProvider.createRefreshToken(member.getMemberUuid());
         member.updateRefreshToken(refreshToken);   //DB Refresh 토큰 갱신
         return TokenResponse.builder()
                 .accessToken(accessToken)

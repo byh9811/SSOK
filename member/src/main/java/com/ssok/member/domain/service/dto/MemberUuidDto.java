@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberUUIDDto {
-    private String UUID;
+public class MemberUuidDto {
+    private String uuid;
 
-    public static MemberUUIDDto of(MemberSeqRequest memberSeqRequest){
-        return MemberUUIDDto.builder()
-                .UUID(memberSeqRequest.getUUID())
+    public static MemberUuidDto of(MemberSeqRequest memberSeqRequest){
+        return MemberUuidDto.builder()
+                .uuid(memberSeqRequest.getUuid())
                 .build();
     }
 }

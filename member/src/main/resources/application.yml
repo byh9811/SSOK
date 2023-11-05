@@ -1,0 +1,10 @@
+spring:
+  config:
+    import: "optional:configserver:https://ssok.site" #config server uri
+  cloud:
+    config:
+      name: config
+      profile: local
+      label: member
+encrypt:
+  key: ${ssh-encrypt-key}

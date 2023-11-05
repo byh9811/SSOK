@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
-@FeignClient(name = "member-service")
+@FeignClient(name = "member-service", url = "https://member.ssok.site")
 public interface MemberServiceClient {
 
     @GetMapping(produces = "application/json", value = "/member/seq")

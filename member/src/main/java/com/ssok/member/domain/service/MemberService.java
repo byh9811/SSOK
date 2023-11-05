@@ -31,12 +31,18 @@ public class MemberService {
             return true;
         return false;
     }
-    public MemberSeqResponse getUuid(MemberUuidDto memberUUIDDto){
-        Member member = memberRepository.findMemberByMemberUuid(memberUUIDDto.getUuid()).orElseThrow();
-        return MemberSeqResponse.builder()
-                .memberSeq(member.getMemberSeq())
-                .build();
-    }
+//    public MemberSeqResponse getUuid(MemberUuidDto memberUUIDDto){
+//        Member member = memberRepository.findMemberByMemberUuid(memberUUIDDto.getUuid()).orElseThrow();
+//        return MemberSeqResponse.builder()
+//                .memberSeq(member.getMemberSeq())
+//                .build();
+//    }
+public MemberSeqResponse getUuid(String memberUuid){
+    Member member = memberRepository.findMemberByMemberUuid(memberUuid).orElseThrow();
+    return MemberSeqResponse.builder()
+            .memberSeq(member.getMemberSeq())
+            .build();
+}
     public MemberAccountResponse getAccount(MemberAccountDto memberAccountDto) {
         Member member = memberRepository.findMemberByMemberSeq(memberAccountDto.getMemberSeq()).orElseThrow();
         return MemberAccountResponse.builder()

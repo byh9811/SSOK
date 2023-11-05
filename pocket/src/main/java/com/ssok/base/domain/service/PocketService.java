@@ -88,19 +88,23 @@ public class PocketService {
      */
 
     public void createDonationPocketHistory(DonatePocketHistoryDto dto){
+        // 포켓 검색
         Pocket findPocket = pocketRepository.findById(dto.getMemberSeq()).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
 
+        // 금액이 양수인지 검사
+        if(dto.getPocketHistoryTransAmt() <= 0){
+            throw new IllegalArgumentException("이동 금액은 0원 이상이여야 합니다.");
+        }
 
-        PocketHistoryType type = PocketHistoryType.DONATION;
-
+        // 기부가 가능 한지 금액 검사
         checkIsTransfer(dto.getPocketHistoryTransAmt(), findPocket);
-
+        // 기부(비즈니스 로직)
         findPocket.transferDonation(dto.getPocketHistoryTransAmt());
 
         // pocketHistory 생성
         PocketHistory pocketHistory = PocketHistory.builder()
                 .memberSeq(dto.getMemberSeq())
-                .pocketHistoryType(type)
+                .pocketHistoryType(PocketHistoryType.DONATION)
                 .pocketHistoryTransAmt(dto.getPocketHistoryTransAmt())
                 .pocketHistoryResultAmt(findPocket.getPocketSaving())
                 .pocketHistoryTitle("기부")
@@ -111,6 +115,7 @@ public class PocketService {
                 .donate(dto.getDonate())
                 .build();
 
+        pocketHistoryRepository.save(pocketHistory);
         donateHistoryRepository.save(donateHistory);
     }
 
@@ -138,7 +143,6 @@ public class PocketService {
 
         PocketHistoryType type = (PocketHistoryType) resultMap.get("type");
 
-
         // pocketHistory 생성
         PocketHistory pocketHistory = PocketHistory.builder()
                 .memberSeq(memberSeq)
@@ -148,10 +152,8 @@ public class PocketService {
                 .pocketHistoryTitle(resultMap.get("title").toString())
                 .build();
         // 내역 생성
-        createTypeHistory(dto.getPocketHistoryType(), dto.getReceiptSeq(), pocketHistory);
-
-
         pocketHistoryRepository.save(pocketHistory);
+        createTypeHistory(dto.getPocketHistoryType(), dto.getReceiptSeq(), pocketHistory);
     }
 
     /**

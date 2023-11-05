@@ -37,7 +37,7 @@ public class Namecard extends BaseEntity {
     private String namecardFax;
     private String namecardWebsite;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "namecard")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sendNamecard")
     private List<Exchange> exchanges = new ArrayList<>();
 
 

@@ -1,6 +1,6 @@
 package com.ssok.namecard.domain.api.dto.response;
 
-import com.ssok.namecard.domain.mongo.document.NamecardMain.NamecardMongo;
+import com.ssok.namecard.domain.mongo.document.NamecardMainDoc.NamecardDoc;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,15 +21,15 @@ public record NamecardResponse(
     String exchangeNote,
     LocalDate date
 ) {
-    public NamecardResponse(NamecardMongo namecardMongo){
-        this(namecardMongo.getNamecardMongoSeq(), namecardMongo.getMemberSeq(), namecardMongo.getNamecardName(), namecardMongo.getNamecardImage(), namecardMongo.getNamecardEmail(), namecardMongo.getNamecardCompany(),
-            namecardMongo.getNamecardJob(), namecardMongo.getNamecardAddress(), namecardMongo.getNamecardPhone(),
-            namecardMongo.getNamecardFax(), namecardMongo.getNamecardWebsite(), namecardMongo.isFavorite(),
-            namecardMongo.getExchangeNote(), namecardMongo.getDate());
+    public NamecardResponse(NamecardDoc namecardDoc){
+        this(namecardDoc.getNamecardDocSeq(), namecardDoc.getMemberSeq(), namecardDoc.getNamecardName(), namecardDoc.getNamecardImage(), namecardDoc.getNamecardEmail(), namecardDoc.getNamecardCompany(),
+            namecardDoc.getNamecardJob(), namecardDoc.getNamecardAddress(), namecardDoc.getNamecardPhone(),
+            namecardDoc.getNamecardFax(), namecardDoc.getNamecardWebsite(), namecardDoc.isFavorite(),
+            namecardDoc.getExchangeNote(), namecardDoc.getDate());
     }
 
-    public static List<NamecardResponse> toNamecardResponses(List<NamecardMongo> namecardMongos){
-        return namecardMongos.stream()
+    public static List<NamecardResponse> toNamecardResponses(List<NamecardDoc> namecardDocs){
+        return namecardDocs.stream()
                         .map(n -> new NamecardResponse(n))
                         .collect(
                             Collectors.toList());

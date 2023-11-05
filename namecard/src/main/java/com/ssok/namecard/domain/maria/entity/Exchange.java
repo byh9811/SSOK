@@ -24,14 +24,17 @@ public class Exchange extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exchangeSeq;
 
-    private Long memberSeq;
+    @ManyToOne
+    @JoinColumn(name = "namecard_send_seq")
+    private Namecard sendNamecard;
 
     @ManyToOne
-    @JoinColumn(name = "namecard_seq")
-    private Namecard namecard;
+    @JoinColumn(name = "namecard_receive_seq")
+    private Namecard receiveNamecard;
 
     private Double exchangeLatitude;
     private Double exchangeLongitude;
-    private String exchangeNote;
-    private Boolean exchangeIsFavorite;
+
+    private String exchangeNote = "";
+    private Boolean exchangeIsFavorite = false;
 }

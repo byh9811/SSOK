@@ -1,6 +1,5 @@
 package com.ssok.namecard.domain.mongo.document;
 
-import com.ssok.namecard.domain.maria.entity.Exchange;
 import com.ssok.namecard.domain.maria.entity.Namecard;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,17 +19,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NamecardMain {
+public class NamecardMainDoc {
 
     @Id
-    private Long namecardMainSeq;  //내 명함 id
+    private Long namecardMainDocSeq;  //내 명함 id
     private Long memberSeq;
     private String namecardImg;
-    private List<NamecardMongo> favorites = new ArrayList<>();
-    private List<NamecardMongo> namecards = new ArrayList<>();
+    private List<NamecardDoc> favorites = new ArrayList<>();
+    private List<NamecardDoc> namecards = new ArrayList<>();
 
-    public void addNamecardMongo(NamecardMongo namecardMongo) {
-        this.namecards.add(namecardMongo);
+    public void addNamecardDoc(NamecardDoc namecardDoc) {
+        this.namecards.add(namecardDoc);
     }
 
 
@@ -39,8 +38,8 @@ public class NamecardMain {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @ToString
-    public static class NamecardMongo{
-        private Long namecardMongoSeq;              //명함 식별자
+    public static class NamecardDoc{
+        private Long namecardDocSeq;              //명함 식별자
         private Long memberSeq;          //회원 식별자
         private String namecardName;    //회원 이름
         private String namecardImage;   //명함 이미지
@@ -55,10 +54,10 @@ public class NamecardMain {
         private String exchangeNote;
         private LocalDate date;            //명함교환 날짜
 
-        public static NamecardMongo from(Namecard namecardA) {
+        public static NamecardDoc from(Namecard namecardA) {
 
-            return NamecardMongo.builder()
-                                .namecardMongoSeq(namecardA.getNamecardSeq())
+            return NamecardDoc.builder()
+                                .namecardDocSeq(namecardA.getNamecardSeq())
                                 .memberSeq(namecardA.getMemberSeq())
                                 .namecardName(namecardA.getNamecardName())
                                 .namecardImage(namecardA.getNamecardImage())
@@ -72,19 +71,19 @@ public class NamecardMain {
                                 .build();
         }
 
-        public void addExchangeDate(Exchange exchange) {
-            this.date = exchange.getCreateDate().toLocalDate();
+        public void addExchangeDate(LocalDate localDate) {
+            this.date = localDate;
         }
     }
 
-    public static NamecardMain from(String uploadUrl, Long memberSeq, Long namecardSeq) {
+    public static NamecardMainDoc from(Namecard namecard) {
 
-        return NamecardMain.builder()
+        return NamecardMainDoc.builder()
                            .favorites(new ArrayList<>())
-                           .namecardImg(uploadUrl)
-                           .memberSeq(memberSeq)
+                           .namecardImg(namecard.getNamecardImage())
+                           .memberSeq(namecard.getMemberSeq())
                            .namecards(new ArrayList<>())
-                           .namecardMainSeq(namecardSeq)
+                           .namecardMainDocSeq(namecard.getNamecardSeq())
                            .build();
     }
 

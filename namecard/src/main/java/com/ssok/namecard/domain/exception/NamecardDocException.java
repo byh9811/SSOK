@@ -3,10 +3,10 @@ package com.ssok.namecard.domain.exception;
 import com.ssok.namecard.global.exception.BaseException;
 import com.ssok.namecard.global.exception.ErrorCode;
 
-public class NamecardMongoException extends BaseException {
+public class NamecardDocException extends BaseException {
 
 
-    public NamecardMongoException(ErrorCode errorCode) {
+    public NamecardDocException(ErrorCode errorCode) {
         super(errorCode);
     }
 }

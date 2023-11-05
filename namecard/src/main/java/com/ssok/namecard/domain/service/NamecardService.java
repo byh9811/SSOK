@@ -11,7 +11,8 @@ import com.ssok.namecard.domain.maria.repository.NamecardRepository;
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.exception.ErrorCode;
 import com.ssok.namecard.global.service.GCSService;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,14 +31,14 @@ public class NamecardService {
     private final NamecardEventHandler namecardEventHandler;
     private final MemberServiceClient memberServiceClient;
 
-    public Namecard findById(Long id){
-        return namecardRepository.findById(id)
+    public Namecard findBySeq(Long namecardSeq){
+        return namecardRepository.findByNamecardSeq(namecardSeq)
                                  .orElseThrow(
                                      () -> new NamecardException(ErrorCode.NAMECARD_NOT_FOUND)
                                  );
     }
 
-    public void createNamecard(NamecardCreateRequest namecardCreateRequest, String memberUuid, MultipartFile multipartFile) {
+    public Long createNamecard(NamecardCreateRequest namecardCreateRequest, String memberUuid, MultipartFile multipartFile) {
 
         if (multipartFile == null) {
             throw new NamecardException(ErrorCode.NAMECARD_BAD_REQUEST);
@@ -48,40 +49,55 @@ public class NamecardService {
         Namecard namecard = Namecard.from(namecardCreateRequest, memberSeq, uploadUrl);
         Namecard savedNamecard = namecardRepository.save(namecard);
 
-        namecardEventHandler.createNamecard(uploadUrl, memberSeq, savedNamecard.getNamecardSeq());
+        //몽고디비 용
+        namecardEventHandler.createNamecard(savedNamecard);
+        
+        return savedNamecard.getNamecardSeq();
     }
 
     public void exchangeSingle(ExchangeSingleRequest exchangeSingleRequest) {
 
-        /* 명함 교환 했었는지 여부 */
-        Long memberBSeq = exchangeSingleRequest.memberBSeq();
-        Namecard namecardA = findById(exchangeSingleRequest.namecardASeq());
-        Namecard namecardB = findById(exchangeSingleRequest.namecardASeq());
-        Optional<Exchange> byNamecardSeqAndMemberSeq = exchangeRepository.findByNamecard_NamecardSeqAndMemberSeq(
-            namecardA.getNamecardSeq(), memberBSeq);
-        if(byNamecardSeqAndMemberSeq != null){
-            Exchange exchangeA = Exchange.builder()
-                                         .exchangeLatitude(exchangeSingleRequest.lat())
-                                         .exchangeLongitude(exchangeSingleRequest.lon())
-                                         .exchangeNote("")
-                                         .exchangeIsFavorite(false)
-                                         .memberSeq(exchangeSingleRequest.memberASeq())
-                                         .namecard(namecardB).build();
-            /* B가 A명함 받음 */
-            Exchange exchangeB = Exchange.builder()
-                                         .exchangeLatitude(exchangeSingleRequest.lat())
-                                         .exchangeLongitude(exchangeSingleRequest.lon())
-                                         .exchangeNote("")
-                                         .exchangeIsFavorite(false)
-                                         .memberSeq(exchangeSingleRequest.memberBSeq())
-                                         .namecard(namecardA).build();
-            exchangeRepository.save(exchangeA);
-            exchangeRepository.save(exchangeB);
+        /* A명함 조회 */
+        Namecard namecardA = findBySeq(exchangeSingleRequest.namecardASeq());
 
-            namecardEventHandler.exchangeNamecard(namecardA, namecardB, exchangeA, exchangeB);
-        } else{
-            throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
-        }
+        /* B명함 조회 */
+        Namecard namecardB = findBySeq(exchangeSingleRequest.namecardBSeq());
 
+        /* 명함을 교환했다면 x */
+        List<Exchange> betweenTwoNamecards = exchangeRepository.findAllExchangesBetweenTwoNamecards(namecardA, namecardB);
+        if(!betweenTwoNamecards.isEmpty()) throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
+
+        /* 명함을 교환하지 않았다면 교환 */
+        List<Exchange> exchangeList = makeExchanges(namecardA, namecardB, exchangeSingleRequest.lat(), exchangeSingleRequest.lon());
+        exchangeRepository.saveAll(exchangeList);
+        namecardEventHandler.exchangeNamecard(namecardA, namecardB, exchangeList);
+    }
+
+    private List<Exchange> makeExchanges(Namecard namecardA, Namecard namecardB, Double lat,
+        Double lon) {
+
+        List<Exchange> exchangeList = new ArrayList<>();
+        Exchange exchangeAtoB = makeExchange(lat, lon, namecardA, namecardB);
+        Exchange exchangeBtoA = makeExchange(lat, lon, namecardB, namecardA);
+        exchangeList.add(exchangeAtoB);
+        exchangeList.add(exchangeBtoA);
+        return exchangeList;
+    }
+
+    private Exchange makeExchange(Double lat, Double lon, Namecard namecardA, Namecard namecardB) {
+        return Exchange.builder()
+                       .exchangeLatitude(lat)
+                       .exchangeLongitude(lon)
+                       .sendNamecard(namecardA)
+                       .receiveNamecard(namecardB)
+                       .build();
+    }
+
+    public void createMemo(String memberUuid, Long namecardSeq) {
+//        Long memberSeq =  memberServiceClient.getMemberSeq(memberUuid).getResponse();
+//        Namecard myNamecard = namecardRepository.findAllByMemberSeqOrderByDesc(); //내가 가진 명함 중 가장 최신에 만든 것
+//        exchangeRepository.findBySendNamecardIdAndReceiveNamecardId(myNamecard.getNamecardSeq())
+//
+//        List<Namecard> namecardList = namecardRepository.findAllByMemberSeq();
     }
 }

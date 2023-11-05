@@ -3,8 +3,6 @@ package com.ssok.namecard.domain.api.dto.request;
 import javax.validation.constraints.NotNull;
 
 public record ExchangeSingleRequest(
-    @NotNull Long memberASeq,
-    @NotNull Long memberBSeq,
     @NotNull Long namecardASeq,
     @NotNull Long namecardBSeq,
     @NotNull Double lat,

@@ -6,6 +6,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NamecardRepository extends JpaRepository<Namecard, Long> {
-    Optional<Namecard> findById(Long id);
+    Optional<Namecard> findByNamecardSeq(Long seq);
 
 }

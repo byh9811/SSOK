@@ -3,6 +3,8 @@ package com.ssok.namecard.domain.api;
 import static com.ssok.namecard.global.api.ApiResponse.OK;
 
 import com.ssok.namecard.client.MemberServiceClient;
+import com.ssok.namecard.client.request.MemberUuidRequest;
+import com.ssok.namecard.client.response.MemberSeqResponse;
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
 import com.ssok.namecard.domain.api.dto.response.NamecardMainResponse;
 import com.ssok.namecard.domain.mongo.document.NamecardMain;
@@ -86,7 +88,8 @@ public class NamecardController {
 
 
     @GetMapping("/member")
-    public ApiResponse<Long> getMemberSeq(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestHeader(name = "MEMBER-UUID") String uuid){
+        MemberUuidRequest memberUuid = new MemberUuidRequest(uuid);
         return memberServiceClient.getMemberSeq(memberUuid);
     }
 

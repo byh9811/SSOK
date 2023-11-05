@@ -53,6 +53,10 @@ public class MemberApi {
         MemberAccountResponse memberAccountResponse = memberService.getAccount(MemberAccountDto.of(memberAccountRequest));
         return OK(memberAccountResponse);
     }
+
+
+
+
     //인증번호 발송
     @PostMapping("/sms/send")
     public ApiResponse<SmsResponse> sendSms(@RequestBody MessageRequest messageRequest) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {

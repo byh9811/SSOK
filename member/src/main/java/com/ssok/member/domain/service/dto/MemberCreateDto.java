@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -34,6 +35,8 @@ public class MemberCreateDto {
                 .memberPassword(this.password)
                 .memberName(this.name)
                 .memberPhone(this.phone)
+                .memberCi(UUID.randomUUID().toString())
+                .memberCiCreateDate(LocalDateTime.now())
                 .memberUuid(UUID.randomUUID().toString())
                 .build();
     }

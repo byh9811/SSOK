@@ -11,6 +11,7 @@ import com.ssok.member.domain.api.dto.response.SmsResponse;
 import com.ssok.member.domain.service.MemberQService;
 import com.ssok.member.domain.service.MemberService;
 import com.ssok.member.domain.service.SmsService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -40,12 +41,12 @@ public class MemberApi {
         return "spring-cloud-service 호출!";
     }
     //회원 Seq 조회
-    @PostMapping("/member/seq")
-    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody MemberSeqRequest memberSeqRequest){
-        System.out.println(memberSeqRequest.getMemberUuid()+"zzzz");
-        log.info(memberSeqRequest.getMemberUuid());
-        MemberSeqResponse memberSeqResponse = memberService.getUuid(MemberUuidDto.of(memberSeqRequest));
-        return OK(memberSeqResponse);
+    @GetMapping("/member/seq")
+    public ApiResponse<Long> getMemberSeq(@RequestParam (name = "uuid")String memberUuid){
+        System.out.println(memberUuid);
+        log.info(memberUuid);
+        MemberSeqResponse memberSeqResponse = memberService.getUuid(memberUuid);
+        return OK(memberSeqResponse.getMemberSeq());
     }
 //    @PostMapping("/member/seq")
 //    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody String memberUuid){
@@ -61,6 +62,7 @@ public class MemberApi {
         return OK(memberAccountResponse);
     }
 
+    //여
 
 
 

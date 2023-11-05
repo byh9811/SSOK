@@ -31,8 +31,8 @@ public class MemberService {
             return true;
         return false;
     }
-    public MemberSeqResponse getUuid(MemberUuidDto memberUUIDDto){
-        Member member = memberRepository.findMemberByMemberUuid(memberUUIDDto.getUuid()).orElseThrow();
+    public MemberSeqResponse getUuid(String memberUuid){
+        Member member = memberRepository.findMemberByMemberUuid(memberUuid).orElseThrow();
         return MemberSeqResponse.builder()
                 .memberSeq(member.getMemberSeq())
                 .build();

@@ -3,12 +3,14 @@ package com.ssok.mydata.global.openfeign.transaction.dto.request;
 import com.ssok.mydata.domain.pos.api.dto.inner.InnerPaymentItem;
 import com.ssok.mydata.domain.pos.entity.Payment;
 import com.ssok.mydata.domain.pos.entity.PaymentItem;
+import com.ssok.mydata.global.openfeign.transaction.dto.inner.InnerCreateReceiptRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -35,7 +37,7 @@ public class CreateReceiptRequest {
 
     private LocalDateTime transactionDatetime;
 
-    private List<PaymentItem> paymentItemList; // 구매 품목 리스트
+    private List<InnerCreateReceiptRequest> paymentItemList; // 구매 품목 리스트
 
     public static CreateReceiptRequest fromEntity(String cardNum, Payment payment, List<PaymentItem> paymentItemList) {
         return CreateReceiptRequest.builder()
@@ -49,7 +51,7 @@ public class CreateReceiptRequest {
                 .shopNumber(payment.getPaymentBusinessNumber())
                 .receiptNumber(payment.getPaymentReceiptNumber())
                 .transactionDatetime(payment.getPaymentTransactionDatetime())
-                .paymentItemList(paymentItemList)
+                .paymentItemList(paymentItemList.stream().map(InnerCreateReceiptRequest::from).collect(Collectors.toList()))
                 .build();
     }
 

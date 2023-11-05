@@ -24,6 +24,10 @@ public class PaymentItem {
     @ManyToOne(fetch = FetchType.LAZY)
     private Payment payment;
 
+    @JoinColumn(name = "item_seq")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Item item;
+
     private String paymentItemName;
 
     private Long paymentItemPrice;

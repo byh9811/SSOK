@@ -1,17 +1,16 @@
 package com.ssok.mydata.domain.card.api.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssok.mydata.domain.pos.entity.Item;
 import com.ssok.mydata.domain.pos.entity.Payment;
 import com.ssok.mydata.global.enumerate.CardType;
 import com.ssok.mydata.global.enumerate.CardTypeConverter;
 import com.ssok.mydata.global.enumerate.TransactionType;
 import com.ssok.mydata.global.util.DummyUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -19,6 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
+@Builder
 public class PayRequest {
 
         private String cardId; // 결제 카드 Id
@@ -43,19 +43,4 @@ public class PayRequest {
 
         private String shopNumber; // 사업자 등록 번호
 
-        public Payment toEntity(String paymentApprovedNum, LocalDateTime paymentTransactionDatetime) {
-                return Payment.builder()
-                        .paymentCardNum(cardNum)
-                        .paymentCardType(CardType.valueOf(cardType))
-                        .paymentCardCompany(cardCompany)
-                        .paymentAmount(amount)
-                        .paymentType(TransactionType.valueOf(cardType))
-                        .paymentInstallPeriod(installPeriod)
-                        .paymentBusinessNumber(shopNumber)
-                        .paymentStoreName(shopName)
-                        .paymentApprovedNum(paymentApprovedNum)
-                        .paymentTransactionDatetime(paymentTransactionDatetime)
-                        .paymentReceiptNumber(DummyUtils.createReceiptNumber(paymentApprovedNum))
-                        .build();
-        }
 }

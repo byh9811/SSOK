@@ -3,6 +3,7 @@ package com.ssok.mydata.global.util;
 import com.ssok.mydata.global.enumerate.*;
 import org.springframework.stereotype.Component;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -139,6 +140,32 @@ public class DummyUtils {
      */
     public Shop getShop() {
         return Shop.valueOf(random.nextInt(10));
+    }
+
+    /**
+     * 카드 승인번호 8자리를 랜덤으로 생성한다.
+     *
+     * @return 카드거래 승인번호
+     */
+    public static String createApprovedNum() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(8);
+
+        for (int i = 0; i < 8; i++) {
+            sb.append(random.nextInt(10));
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * 영수증 번호를 생성한다.
+     * 형식: POS-XXXXXXXX
+     *
+     * @return 카드거래 승인번호
+     */
+    public static String createReceiptNumber(String approveNum) {
+        return "POS-" + approveNum;
     }
 
 }

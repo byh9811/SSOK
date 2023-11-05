@@ -65,7 +65,7 @@ public class AuthService {
         accountRepository.save(account);
     }
 
-    public void registerCard(CardRequest cardRequest) {
+    public String registerCard(CardRequest cardRequest) {
         String userCi = cardRequest.getUser_ci();
         Auth auth = getAuth(userCi);
 
@@ -75,7 +75,7 @@ public class AuthService {
 
         if (auth.getRegisteredCard()) {
             log.warn("이미 이 회원에 대해 카드 데이터를 생성했습니다!!");
-            return;
+            return null;
         }
 
         // 인증 정보 저장
@@ -122,6 +122,8 @@ public class AuthService {
                 }
             }
         }
+
+        return card.getCardId();
     }
 
     private Auth getAuth(String userCi) {

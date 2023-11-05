@@ -61,14 +61,14 @@ public class AuthApi {
     }
 
     @PostMapping("/register/card")
-    public ResponseEntity<Void> registerCard(
+    public ResponseEntity<String> registerCard(
             @RequestBody CardRequest cardRequest
     ) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("x-api-tran-id", "1234567890M00000000000001");
-        authService.registerCard(cardRequest);
+        String cardId = authService.registerCard(cardRequest);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(cardId, HttpStatus.OK);
     }
 
 }

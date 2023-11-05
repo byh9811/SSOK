@@ -2,18 +2,15 @@ package com.ssok.base.domain.service;
 
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
 import com.ssok.base.domain.api.dto.response.PocketResponse;
-import com.ssok.base.domain.maria.entity.Pocket;
-import com.ssok.base.domain.maria.entity.PocketHistory;
-import com.ssok.base.domain.maria.entity.PocketHistoryType;
-import com.ssok.base.domain.maria.repository.PocketHistoryRepository;
-import com.ssok.base.domain.maria.repository.PocketRepository;
+import com.ssok.base.domain.maria.entity.*;
+import com.ssok.base.domain.maria.repository.*;
 import com.ssok.base.domain.mongo.document.Domain;
 import com.ssok.base.domain.mongo.repository.DomainMongoRepository;
 import com.ssok.base.domain.service.dto.DomainDto;
+import com.ssok.base.domain.service.dto.DonatePocketHistoryDto;
 import com.ssok.base.domain.service.dto.PocketHistoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.el.parser.BooleanNode;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +29,9 @@ public class PocketService {
     private final PocketRepository pocketRepository;
     private final DomainMongoRepository domainMongoRepository;
     private final PocketHistoryRepository pocketHistoryRepository;
-
+    private final CarbonHistoryRepository carbonHistoryRepository;
+    private final DonateHistoryRepository donateHistoryRepository;
+    private final ChangeHistoryRepository changeHistoryRepository;
     public DomainJoinResponse createDomain(DomainDto domainDto) {
 //        return pocketRepository.fin
         DomainJoinResponse domainJoinResponse = new DomainJoinResponse(domainDto.nickname(), domainDto.age());
@@ -81,6 +80,42 @@ public class PocketService {
     }
 
     /**
+     * @author 홍진식
+     *
+     * 기부내역 생성 메서드
+     *
+     * @param dto
+     */
+
+    public void createDonationPocketHistory(DonatePocketHistoryDto dto){
+        Pocket findPocket = pocketRepository.findById(dto.getMemberSeq()).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
+
+
+        PocketHistoryType type = PocketHistoryType.DONATION;
+
+        checkIsTransfer(dto.getPocketHistoryTransAmt(), findPocket);
+
+        findPocket.transferDonation(dto.getPocketHistoryTransAmt());
+
+        // pocketHistory 생성
+        PocketHistory pocketHistory = PocketHistory.builder()
+                .memberSeq(dto.getMemberSeq())
+                .pocketHistoryType(type)
+                .pocketHistoryTransAmt(dto.getPocketHistoryTransAmt())
+                .pocketHistoryResultAmt(findPocket.getPocketSaving())
+                .pocketHistoryTitle("기부")
+                .build();
+
+        DonateHistory donateHistory = DonateHistory.builder()
+                .pocketHistory(pocketHistory)
+                .donate(dto.getDonate())
+                .build();
+
+        donateHistoryRepository.save(donateHistory);
+    }
+
+
+    /**
      * PocketHistory 생성 메소드
      *
      * @param dto
@@ -107,12 +142,14 @@ public class PocketService {
         // pocketHistory 생성
         PocketHistory pocketHistory = PocketHistory.builder()
                 .memberSeq(memberSeq)
-                .receiptSeq(dto.getReceiptSeq())
                 .pocketHistoryType(type)
                 .pocketHistoryTransAmt(dto.getPocketHistoryTransAmt())
                 .pocketHistoryResultAmt(findPocket.getPocketSaving())
                 .pocketHistoryTitle(resultMap.get("title").toString())
                 .build();
+        // 내역 생성
+        createTypeHistory(dto.getPocketHistoryType(), dto.getReceiptSeq(), pocketHistory);
+
 
         pocketHistoryRepository.save(pocketHistory);
     }
@@ -128,6 +165,26 @@ public class PocketService {
     private Long isMemberExist(String memberUuid){
         return 1L;
     }
+
+
+    private void createTypeHistory(String type, Long receiptSeq, PocketHistory pocketHistory){
+        if(type.equals("CHANGE")){
+            ChangeHistory changeHistory = ChangeHistory.builder()
+                    .pocketHistory(pocketHistory)
+                    .receiptSeq(receiptSeq)
+                    .build();
+            changeHistoryRepository.save(changeHistory);
+        }
+        if(type.equals("CARBON")){
+            CarbonHistory carbonHistory = CarbonHistory.builder()
+                    .pocketHistory(pocketHistory)
+                    .receiptSeq(receiptSeq)
+                    .build();
+            carbonHistoryRepository.save(carbonHistory);
+        }
+
+    }
+
 
     /**
      * @author 홍진식
@@ -153,13 +210,13 @@ public class PocketService {
             resultMap.put("title", "탄소 중립포인트 적립");
             return resultMap;
         }
-        if(dto.getPocketHistoryType().equals("DONATION")){
-            checkIsTransfer(dto.getPocketHistoryTransAmt(), pocket);
-            pocket.transferDonation(dto.getPocketHistoryTransAmt());
-            resultMap.put("type",PocketHistoryType.DONATION);
-            resultMap.put("title", "기부");
-            return resultMap;
-        }
+//        if(dto.getPocketHistoryType().equals("DONATION")){
+//            checkIsTransfer(dto.getPocketHistoryTransAmt(), pocket);
+//            pocket.transferDonation(dto.getPocketHistoryTransAmt());
+//            resultMap.put("type",PocketHistoryType.DONATION);
+//            resultMap.put("title", "기부");
+//            return resultMap;
+//        }
         if(dto.getPocketHistoryType().equals("WITHDRAWAL")){
             checkIsTransfer(dto.getPocketHistoryTransAmt(), pocket);
             pocket.transferWithdrawal(dto.getPocketHistoryTransAmt());

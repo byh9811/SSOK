@@ -17,4 +17,6 @@ public interface NamecardRepository extends JpaRepository<Namecard, Long> {
 
     @Query("SELECT n.namecardImage FROM Namecard n WHERE n.memberSeq = :memberSeq ORDER BY n.createDate DESC")
     List<String> findAllNamecardImage(@Param("memberSeq") Long memberSeq);
+
+    List<Namecard> findAllByMemberSeq(Long memberSeq);
 }

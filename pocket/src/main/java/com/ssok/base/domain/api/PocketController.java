@@ -9,6 +9,7 @@ import com.ssok.base.domain.maria.entity.PocketHistory;
 import com.ssok.base.domain.service.PocketQueryService;
 import com.ssok.base.domain.service.PocketService;
 import com.ssok.base.global.api.ApiResponse;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -81,9 +82,13 @@ public class PocketController {
     }
 
     /**
-     * 포켓 머니 조회
+     * 포켓 머니 저축 금액 조회
      */
-
+    @GetMapping("/pocket/saving")
+    public ApiResponse<Long> getPocket(@RequestBody @RequestHeader String memberUuid){
+        Long pocketSaving = pocketQueryService.getPocketSaving(memberUuid);
+        return ApiResponse.OK(pocketSaving);
+    }
     /**
      * 포켓 조화
      */

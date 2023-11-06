@@ -188,8 +188,6 @@ public class PocketService {
     }
 
     /**
-     * @author 홍진식
-     *
      * Uuid로 member의 pk를 받거나, 유효한 멤버인지 확인하는 method
      *
      * @param memberUuid

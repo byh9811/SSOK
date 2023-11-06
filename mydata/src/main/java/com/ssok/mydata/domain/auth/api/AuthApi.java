@@ -23,13 +23,13 @@ public class AuthApi {
 
     private final AuthService authService;
 
-    @GetMapping("/authorize")
-    public ResponseEntity<AuthResponse> getAuthCode(
-            @RequestHeader("x-api-tran-id") String tranId,
-            @ModelAttribute AuthRequest authRequest)
-    {
-        return new ResponseEntity<>(new AuthResponse(), HttpStatus.OK);
-    }
+//    @GetMapping("/authorize")
+//    public ResponseEntity<AuthResponse> getAuthCode(
+//            @RequestHeader("x-api-tran-id") String tranId,
+//            @ModelAttribute AuthRequest authRequest)
+//    {
+//        return new ResponseEntity<>(new AuthResponse(), HttpStatus.OK);
+//    }
 
     @PostMapping("/token")
     public ResponseEntity<? extends TokenResponse> getAccessToken(

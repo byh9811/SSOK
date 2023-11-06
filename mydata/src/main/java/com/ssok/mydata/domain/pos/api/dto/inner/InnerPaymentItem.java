@@ -15,6 +15,6 @@ public class InnerPaymentItem {
 
     private Long itemSeq;
 
-    private Long paymentItemCnt;
+    private Long itemCnt;
 
 }

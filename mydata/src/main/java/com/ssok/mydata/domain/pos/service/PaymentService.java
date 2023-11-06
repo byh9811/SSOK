@@ -54,7 +54,7 @@ public class PaymentService {
                     .item(item)
                     .paymentItemName(item.getItemName())
                     .paymentItemPrice(item.getItemPrice())
-                    .paymentItemCnt(innerPaymentItem.getPaymentItemCnt())
+                    .paymentItemCnt(innerPaymentItem.getItemCnt())
                     .build();
 
             // 3. PaymentItem 객체 저장

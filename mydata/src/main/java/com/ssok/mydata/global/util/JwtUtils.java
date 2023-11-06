@@ -151,9 +151,11 @@ public class JwtUtils {
     }
 
     public Claims getClaimsAccessToken(String jwtToken) {
+        log.warn("getClaimsAccessToken1: {}", jwtToken);
+        log.warn("getClaimsAccessToken2: {}", jwtToken.substring(7));
         return Jwts.parserBuilder()
                 .setSigningKey(getAccessKey()).build()
-                .parseClaimsJws(jwtToken.substring(7))
+                .parseClaimsJws(jwtToken)
                 .getBody();
     }
 

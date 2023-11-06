@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class NamecardMapDoc {
 
     @Id
-    Long exchangeId;
+    Long exchangeSeq;
 
     Double lat;
 

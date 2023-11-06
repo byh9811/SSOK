@@ -54,18 +54,18 @@ public class NamecardEventHandler {
 
         /* B에게 보여질 명함 메인*/
         NamecardMainDoc namecardMainDocB = findByMemberSeq(namecardB.getMemberSeq());
-
+        log.info("1");
         NamecardDoc namecardDocA = NamecardDoc.from(namecardA);  //B 친구 명함 목록에 들어갈 A명함
         namecardDocA.addExchangeSeq(exchangeList.get(0).getExchangeSeq());
         NamecardDoc namecardDocB = NamecardDoc.from(namecardB); //A 친구 명함 목록에 들어갈 B명함
         namecardDocB.addExchangeSeq(exchangeList.get(1).getExchangeSeq());
-
+        log.info("2");
         namecardDocA.addExchangeDate(exchangeList.get(0).getCreateDate().toLocalDate());
         namecardDocB.addExchangeDate(exchangeList.get(1).getCreateDate().toLocalDate());
-
+        log.info("3");
         namecardMainDocA.addNamecardDoc(namecardDocB);
         namecardMainDocB.addNamecardDoc(namecardDocA);
-
+        log.info("4");
         namecardMainDocMongoRepository.save(namecardMainDocA);
         namecardMainDocMongoRepository.save(namecardMainDocB);
 

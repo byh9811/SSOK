@@ -80,10 +80,11 @@ public class NamecardService {
         /* 명함을 교환했다면 x */
         List<Exchange> betweenTwoNamecards = exchangeRepository.findAllExchangesBetweenTwoNamecards(namecardA, namecardB);
         if(!betweenTwoNamecards.isEmpty()) throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
-
+        log.info("교환 시작: {}, {}", namecardA, namecardB);
         /* 명함을 교환하지 않았다면 교환 */
         List<Exchange> exchangeList = makeExchanges(namecardA, namecardB, exchangeSingleRequest.lat(), exchangeSingleRequest.lon());
         exchangeRepository.saveAll(exchangeList);
+        log.info("MariaDB에는 저장 완료");
         namecardEventHandler.exchangeNamecard(namecardA, namecardB, exchangeList);
     }
 

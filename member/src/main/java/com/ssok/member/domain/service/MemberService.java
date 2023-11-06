@@ -31,7 +31,7 @@ public class MemberService {
             return true;
         return false;
     }
-    public MemberSeqResponse getUuid(String memberUuid){
+    public MemberSeqResponse getSeq(String memberUuid){
         Member member = memberRepository.findMemberByMemberUuid(memberUuid).orElseThrow();
         return MemberSeqResponse.builder()
                 .memberSeq(member.getMemberSeq())
@@ -82,9 +82,12 @@ public class MemberService {
         return member.isVerification();
     }
     public void save(MemberCreateDto memberCreateDto) {
-        Member member = memberCreateDto.toEntity();
-        memberRepository.save(member);
-//        authAccessUtil.addMydataAccessToken(member.getId());
+        String loginId = memberCreateDto.getLoginId();
+        Member findMember = memberRepository.findMemberByMemberId(loginId).orElse(null);
+        if(findMember==null){
+            Member member = memberCreateDto.toEntity();
+            memberRepository.save(member);
+        }
     }
 
     public TokenResponse login(MemberLoginDto memberLoginDto) {
@@ -100,7 +103,10 @@ public class MemberService {
                 .build();
     }
 
-
+    public String getUuid(String refreshToken) {
+        Member member = memberRepository.findMemberByMemberRefreshToken(refreshToken).orElse(null);
+        return member.getMemberUuid();
+    }
 
 
 //    public Member findById(Long id) {

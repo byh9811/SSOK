@@ -39,12 +39,19 @@ public class MemberApi {
         System.out.println("test");
         return "spring-cloud-service 호출!";
     }
+    //회원 UUID 조회
+    @GetMapping("/temp")
+    public ApiResponse<String> temp(@RequestParam(name="refresh-token") String refreshToken) {
+        String uuid = memberService.getUuid(refreshToken);
+        return OK(uuid);
+    }
+
     //회원 Seq 조회
     @GetMapping("/member/seq")
     public ApiResponse<Long> getMemberSeq(@RequestParam (name = "member-uuid")String memberUuid){
         System.out.println(memberUuid);
         log.info(memberUuid);
-        MemberSeqResponse memberSeqResponse = memberService.getUuid(memberUuid);
+        MemberSeqResponse memberSeqResponse = memberService.getSeq(memberUuid);
         return OK(memberSeqResponse.getMemberSeq());
     }
     // 연동 계좌번호 조회

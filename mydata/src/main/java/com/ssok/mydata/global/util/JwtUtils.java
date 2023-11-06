@@ -141,6 +141,9 @@ public class JwtUtils {
     public boolean validateToken(String jwtToken) {
         log.warn("validateToken1: {}", jwtToken);
         try {
+            log.warn("validateToken2: {}", new Date());
+            log.warn("validateToken3: {}", getClaimsAccessToken(jwtToken).getExpiration());
+            log.warn("validateToken4: {}", !getClaimsAccessToken(jwtToken).getExpiration().before(new Date()));
             return !getClaimsAccessToken(jwtToken).getExpiration().before(new Date());
         } catch (Exception e) {
             return false;

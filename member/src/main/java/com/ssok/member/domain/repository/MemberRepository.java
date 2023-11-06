@@ -12,4 +12,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findMemberByMemberUuid(String UUID);
 
     Optional<Member> findMemberByMemberSeq(Long memberSeq);
+
+    Optional<Member> findMemberByMemberRefreshToken(String refreshToken);
 }

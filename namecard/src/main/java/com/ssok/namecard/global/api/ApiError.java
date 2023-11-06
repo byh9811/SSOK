@@ -6,26 +6,25 @@ import org.springframework.http.HttpStatus;
 
 public class ApiError {
 
+    //에러 코드
+    private final String code;
+
     //에러 메시지
     private final String message;
     //에러 상태
-    private final int status;
+    private final HttpStatus status;
 
-    //에러 클래스와 상태
-    ApiError(Throwable throwable, HttpStatus status) {
-        this(throwable.getMessage(), status);
-    }
-    //에러 메시지와 상태|
-    ApiError(String message, HttpStatus status) {
+    ApiError(String code, String message, HttpStatus status){
+        this.code = code;
         this.message = message;
-        this.status = status.value();
+        this.status = status;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public int getStatus() {
+    public HttpStatus getStatus() {
         return status;
     }
 

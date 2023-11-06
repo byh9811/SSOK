@@ -39,7 +39,7 @@ public class NamecardController {
     public ApiResponse<Long> createNamecardRequest(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
         @RequestPart NamecardCreateRequest namecardCreateRequest,
-        @RequestPart(name = "image") MultipartFile multipartFile
+        @RequestPart(name = "image", required = false) MultipartFile multipartFile
     ){
         log.info("UUID: {}", memberUuid);
         Long namecardSeq = namecardService.createNamecard(namecardCreateRequest, memberUuid,

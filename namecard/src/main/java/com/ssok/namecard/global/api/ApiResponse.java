@@ -19,13 +19,8 @@ public class  ApiResponse<T> {
     public static <T> ApiResponse<T> OK(T response) {
         return new ApiResponse<>(true, response, null);
     }
-    //예외 객체와 상태
-    public static ApiResponse<?> ERROR(Throwable throwable, HttpStatus status) {
-        return new ApiResponse<>(false, null, new ApiError(throwable, status));
-    }
-    //예외 메시지와 상태
-    public static ApiResponse<?> ERROR(String errorMessage, HttpStatus status) {
-        return new ApiResponse<>(false, null, new ApiError(errorMessage, status));
+    public static ApiResponse<?> ERROR(String code, HttpStatus status, String message) {
+        return new ApiResponse<>(false, null, new ApiError(code, message, status));
     }
 
     //성공 여부

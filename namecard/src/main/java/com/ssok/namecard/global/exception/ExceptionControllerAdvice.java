@@ -13,7 +13,6 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(BaseException.class)
     ApiResponse<?> exceptionHandler(BaseException e){
         log.error("예외가 발생했습니다: {}", e.getMessage());
-        return ApiResponse.ERROR(e.getMessage(), e.getErrorCode()
-                                                  .getHttpStatus());
+        return ApiResponse.ERROR(e.getErrorCode().getCode(), e.getErrorCode().getHttpStatus(), e.getErrorCode().getMessage());
     }
 }

@@ -130,8 +130,8 @@ public class PocketService {
                 -> new IllegalArgumentException("조회용이 존재하지 않는다."));
         pocketMain.updatePocketMain(findPocket);
         // Mongo - create PocketDetail
-//        PocketDetail.fromPocketHistory()
-
+        PocketDetail pocketDetail = PocketDetail.fromPocketHistory(pocketHistory, null);
+        pocketDetailMongoRepository.save(pocketDetail);
 
     }
 

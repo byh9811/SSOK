@@ -1,5 +1,6 @@
 package com.ssok.base.domain.service;
 
+import com.ssok.base.domain.api.dto.request.DonateCreateRequest;
 import com.ssok.base.domain.maria.entity.Donate;
 import com.ssok.base.domain.maria.entity.DonateMember;
 import com.ssok.base.domain.maria.entity.DonateMemberKey;
@@ -16,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * @author 홍진식
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,7 +31,23 @@ public class DonateService {
     private final PocketService pocketService;
 
     /**
-     * @author 홍진식
+     * donate 생성 메서드
+     *
+     * @param request
+     */
+    public Long createDonate(DonateCreateRequest request) {
+        Donate donate = Donate.builder()
+                .donateTotalDonation(0L)
+                .donateTotalDonator(0)
+                .donateState(true)
+                .donateTitle(request.getDonateTitle())
+                .donate_image(request.getDonateImage())
+                .build();
+        donateRepository.save(donate);
+        return donate.getDonateSeq();
+    }
+    /**
+     *
      *
      * 기부진행 로직
      *
@@ -78,8 +98,6 @@ public class DonateService {
     }
 
     /**
-     * @author 홍진식
-     *
      * DonateMember가 있는지 찾는 함수
      *
      * @return true : 존재 / false : 미존재
@@ -94,8 +112,6 @@ public class DonateService {
 
 
     /**
-     * @author 홍진식
-     *
      * Uuid로 member의 pk를 받거나, 유효한 멤버인지 확인하는 method
      *
      * @param memberUuid

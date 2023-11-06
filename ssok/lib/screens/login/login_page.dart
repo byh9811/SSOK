@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,6 +13,23 @@ class LoginPage extends StatefulWidget {
 
 
 class _LoginPageState extends State<LoginPage> {
+
+
+  void fetchTodos() async {
+    final response = await http.post(Uri.parse('https://gateway.ssok.site/api/member-service/member/login'),headers:{'content-type':'application/json', 'accept':'application/json'}, body: jsonEncode({"loginId":"test", "password":"test"}));
+    print(json.decode(response.body));
+    // if (response.statusCode == 200) {
+    //   // ignore: void_checks
+    //   print(jsonDecode(response.body));
+    // } else {
+    //   throw Exception('Failed to load album');
+    // }
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -75,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: screenHeight * 0.06),
               ElevatedButton(
                   onPressed: () {
-
+                    fetchTodos();
                     Navigator.of(context).pushReplacementNamed('/main');
                   },
                   child: Text("로그인")),

@@ -49,6 +49,7 @@ public class NamecardQueryService {
 
     public NamecardDetailDocResponse getNamecardDetailDoc(Long exchangeSeq, String memberUuid) {
         NamecardDetailDoc namecardDetailDoc = findByExchangeSeq(exchangeSeq);
+
         return NamecardDetailDocResponse.from(namecardDetailDoc);
     }
 }

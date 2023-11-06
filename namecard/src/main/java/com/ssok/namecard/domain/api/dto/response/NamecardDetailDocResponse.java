@@ -24,6 +24,7 @@ public record NamecardDetailDocResponse(
     public static NamecardDetailDocResponse from(NamecardDetailDoc namecardDetailDoc) {
         return NamecardDetailDocResponse.builder()
                                         .exchangeSeq(namecardDetailDoc.getExchangeSeq())
+                                        .namecardSeq(namecardDetailDoc.getNamecardSeq())
                                         .namecardImage(namecardDetailDoc.getNamecardImage())
                                         .memberSeq(namecardDetailDoc.getMemberSeq())
                                         .namecardName(namecardDetailDoc.getNamecardName())

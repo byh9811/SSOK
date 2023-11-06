@@ -41,7 +41,7 @@ public class DonateService {
                 .donateTotalDonator(0)
                 .donateState(true)
                 .donateTitle(request.getDonateTitle())
-                .donate_image(request.getDonateImage())
+                .donateImage(request.getDonateImage())
                 .build();
         donateRepository.save(donate);
         return donate.getDonateSeq();

@@ -1,5 +1,6 @@
 package com.ssok.base.domain.mongo.document;
 
+import com.ssok.base.domain.maria.entity.Donate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,19 +20,32 @@ public class DonateMain {
     private Integer donateTotalDonator;
     private Boolean donateState;
     private String donateTitle;
-    private String donate_image;
+    private String donateImage;
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
 
     @Builder
-    public DonateMain(Long donateSeq, Long donateTotalDonation, Integer donateTotalDonator, Boolean donateState, String donateTitle, String donate_image, LocalDateTime createDate, LocalDateTime modifyDate) {
+    public DonateMain(Long donateSeq, Long donateTotalDonation, Integer donateTotalDonator, Boolean donateState, String donateTitle, String donateImage, LocalDateTime createDate, LocalDateTime modifyDate) {
         this.donateSeq = donateSeq;
         this.donateTotalDonation = donateTotalDonation;
         this.donateTotalDonator = donateTotalDonator;
         this.donateState = donateState;
         this.donateTitle = donateTitle;
-        this.donate_image = donate_image;
+        this.donateImage = donateImage;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
+    }
+
+    static public DonateMain fromDonate(Donate donate){
+        return DonateMain.builder()
+                .donateSeq(donate.getDonateSeq())
+                .donateTotalDonation(donate.getDonateTotalDonation())
+                .donateTotalDonator(donate.getDonateTotalDonator())
+                .donateState(donate.getDonateState())
+                .donateTitle(donate.getDonateTitle())
+                .donateImage(donate.getDonate_image())
+                .createDate(donate.getCreateDate())
+                .modifyDate(donate.getModifyDate())
+                .build();
     }
 }

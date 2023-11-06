@@ -39,7 +39,7 @@ public class NamecardController {
     public ApiResponse<Long> createNamecardRequest(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
         @RequestPart NamecardCreateRequest namecardCreateRequest,
-        @RequestPart(name = "image", value = "image") MultipartFile multipartFile
+        @RequestPart(name = "image") MultipartFile multipartFile
     ){
         log.info("UUID: {}", memberUuid);
         Long namecardSeq = namecardService.createNamecard(namecardCreateRequest, memberUuid,
@@ -88,7 +88,7 @@ public class NamecardController {
     @GetMapping("/{exchangeSeq}")
     public ApiResponse<NamecardDetailDocResponse> getNamecardDetailDoc(
         @PathVariable Long exchangeSeq,
-        @RequestHeader String memberUuid)
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid)
     {
         NamecardDetailDocResponse namecardDetailDocResponse = namecardQueryService.getNamecardDetailDoc(exchangeSeq, memberUuid);
         log.info("명함 상세 body 로그: {}", namecardDetailDocResponse);
@@ -98,7 +98,7 @@ public class NamecardController {
     /** 명함지도 조회 */
     @GetMapping("/map")
     public ApiResponse<List<NamecardMapResponse>> getNamecardByMap(
-        @RequestHeader String memberUuid
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid
     ){
         List<NamecardMapResponse> namecardMapResponses = namecardService.getNamecardMapList(memberUuid);
         return OK(namecardMapResponses);
@@ -106,7 +106,7 @@ public class NamecardController {
 
 
     /** 명함 타임라인 조회 */
-//    publicsdewf
+
 
 
     /** 명함 메모 조회 */

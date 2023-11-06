@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "transaction", url = "http://receipt.ssok.site/api/receipt-service/receipt", configuration = OpenFeignConfig.class)
 public interface ReceiptClient {
 
-    @PostMapping("/receipt")
+    @PostMapping
     ApiResult<Void> saveNewTransaction(
             @RequestHeader("ACCESS-TOKEN") String token,
             @RequestBody CreateReceiptRequest request);

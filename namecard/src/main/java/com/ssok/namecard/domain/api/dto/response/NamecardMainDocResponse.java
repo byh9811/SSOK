@@ -9,12 +9,12 @@ public record NamecardMainDocResponse(
     Long namecardSeq,  //내 명함 id
     Long memberSeq,
     String namecardImg,
-    List<NamecardResponse>favorites,
+    List<NamecardResponse> favorites,
     List<NamecardResponse> namecards
 ) {
 
     public NamecardMainDocResponse(NamecardMainDoc namecardMainDoc) {
-        this(namecardMainDoc.getNamecardMainDocSeq(), namecardMainDoc.getMemberSeq(), namecardMainDoc.getNamecardImg(),
+        this(namecardMainDoc.getNamecardSeq(), namecardMainDoc.getMemberSeq(), namecardMainDoc.getNamecardImg(),
             NamecardResponse.toNamecardResponses(namecardMainDoc.getFavorites()),
             NamecardResponse.toNamecardResponses(namecardMainDoc.getNamecards()));
     }

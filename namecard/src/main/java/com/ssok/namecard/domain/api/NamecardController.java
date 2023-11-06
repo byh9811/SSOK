@@ -3,12 +3,14 @@ package com.ssok.namecard.domain.api;
 import static com.ssok.namecard.global.api.ApiResponse.OK;
 
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
+import com.ssok.namecard.domain.api.dto.response.NamecardDetailDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMainDocResponse;
-import com.ssok.namecard.domain.mongo.document.NamecardMainDoc;
+import com.ssok.namecard.domain.api.dto.response.NamecardMapResponse;
 import com.ssok.namecard.domain.service.NamecardQueryService;
 import com.ssok.namecard.domain.service.NamecardService;
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.api.ApiResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,18 +58,16 @@ public class NamecardController {
         return OK("명함 교환 완료");
     }
 
-    /** 명함 메모 작성 */
-    @PostMapping("/memo/{namecardSeq}")
-    public ApiResponse<String> createMemo(
+    /** 명함 메모 작성 (변경도 동일 api)*/
+    @PostMapping("/memo/{exchangeSeq}")
+    public ApiResponse<String> editMemo(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
-        @PathVariable Long namecardSeq
+        @PathVariable Long exchangeSeq,
+        @RequestBody String content
     ){
-        namecardService.createMemo(memberUuid, namecardSeq);
+        namecardService.editMemo(memberUuid, exchangeSeq, content);
         return OK("메모 등록 완료");
     }
-
-
-
 
 
 
@@ -76,24 +76,38 @@ public class NamecardController {
     public ApiResponse<NamecardMainDocResponse> getNamecardMainDoc(
         @RequestHeader String memberUuid
     ){
-        NamecardMainDoc namecardMainDoc = namecardQueryService.getNamecardMainDoc(memberUuid);
-        log.info("컨트롤러 메인페이지 로그: {}", namecardMainDoc);
-        NamecardMainDocResponse namecardMainDocResponse = new NamecardMainDocResponse(namecardMainDoc);
+        NamecardMainDocResponse namecardMainDocResponse = namecardQueryService.getNamecardMainDoc(memberUuid);
+        log.info("메인페이지 body 로그: {}", namecardMainDocResponse);
         return OK(namecardMainDocResponse);
     }
 
 
-    /** 명함 상세 조회 */
-    @GetMapping("/{namecardSeq}")
-    public ApiResponse<?> getNamecardDetailDoc(@PathVariable Long namecardSeq){
-        return OK(null);
+    /**
+     * 명함 상세 조회
+     */
+    @GetMapping("/{exchangeSeq}")
+    public ApiResponse<NamecardDetailDocResponse> getNamecardDetailDoc(
+        @PathVariable Long exchangeSeq,
+        @RequestHeader String memberUuid)
+    {
+        NamecardDetailDocResponse namecardDetailDocResponse = namecardQueryService.getNamecardDetailDoc(exchangeSeq, memberUuid);
+        log.info("명함 상세 body 로그: {}", namecardDetailDocResponse);
+        return OK(namecardDetailDocResponse);
     }
 
-    /** 명함 지도 조회 */
-
+    /** 명함지도 조회 */
+    @GetMapping("/map")
+    public ApiResponse<List<NamecardMapResponse>> getNamecardByMap(
+        @RequestHeader String memberUuid
+    ){
+        List<NamecardMapResponse> namecardMapResponses = namecardService.getNamecardMapList(memberUuid);
+        return OK(namecardMapResponses);
+    }
 
 
     /** 명함 타임라인 조회 */
+//    publicsdewf
+
 
     /** 명함 메모 조회 */
 

@@ -37,4 +37,8 @@ public class Exchange extends BaseEntity {
 
     private String exchangeNote = "";
     private Boolean exchangeIsFavorite = false;
+
+    public void editMemo(String content) {
+        this.exchangeNote = content;
+    }
 }

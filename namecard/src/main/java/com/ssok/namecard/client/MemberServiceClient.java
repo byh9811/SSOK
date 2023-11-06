@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface MemberServiceClient {
 
     @GetMapping(value = "/member/seq")
-    ApiResponse<Long> getMemberSeq(@RequestParam("uuid") String uuid);
+    ApiResponse<Long> getMemberSeq(@RequestParam("member-uuid") String uuid);
 
 //    @GetMapping(produces = "application/json", value = "/member/seq")
 //    ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody MemberUuidRequest memberUuid);

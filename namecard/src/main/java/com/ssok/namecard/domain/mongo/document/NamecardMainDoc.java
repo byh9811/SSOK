@@ -22,8 +22,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class NamecardMainDoc {
 
     @Id
-    private Long namecardMainDocSeq;  //내 명함 id
     private Long memberSeq;
+    private Long namecardSeq;  //내 명함 id
     private String namecardImg;
     private List<NamecardDoc> favorites = new ArrayList<>();
     private List<NamecardDoc> namecards = new ArrayList<>();
@@ -39,10 +39,11 @@ public class NamecardMainDoc {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @ToString
     public static class NamecardDoc{
-        private Long namecardDocSeq;              //명함 식별자
+        private Long exchangeSeq;        //교환 식별자
+        private Long namecardDocSeq;     //명함 식별자
         private Long memberSeq;          //회원 식별자
-        private String namecardName;    //회원 이름
-        private String namecardImage;   //명함 이미지
+        private String namecardName;     //회원 이름
+        private String namecardImage;    //명함 이미지
         private String namecardEmail;
         private String namecardCompany;
         private String namecardJob;
@@ -74,6 +75,10 @@ public class NamecardMainDoc {
         public void addExchangeDate(LocalDate localDate) {
             this.date = localDate;
         }
+
+        public void addExchangeSeq(Long exchangeSeq) {
+            this.exchangeSeq = exchangeSeq;
+        }
     }
 
     public static NamecardMainDoc from(Namecard namecard) {
@@ -83,7 +88,7 @@ public class NamecardMainDoc {
                            .namecardImg(namecard.getNamecardImage())
                            .memberSeq(namecard.getMemberSeq())
                            .namecards(new ArrayList<>())
-                           .namecardMainDocSeq(namecard.getNamecardSeq())
+                           .namecardSeq(namecard.getNamecardSeq())
                            .build();
     }
 

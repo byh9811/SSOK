@@ -95,7 +95,7 @@ public class AuthService {
                 .issueDate(cardRequest.getIssue_date())
                 .build();
 
-        cardRepository.save(card);
+        card = cardRepository.save(card);
 
         // 15% 확률로 카드 내역 생성
         for (int i = 60; i > 0; i--) {

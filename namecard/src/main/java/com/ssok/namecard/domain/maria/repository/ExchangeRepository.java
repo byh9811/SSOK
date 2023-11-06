@@ -14,7 +14,7 @@ public interface ExchangeRepository extends JpaRepository<Exchange, Long> {
     List<Exchange> findAllExchangesBetweenTwoNamecards(@Param("namecardA") Namecard namecardA, @Param("namecardB") Namecard namecardB);
 
 
-    Optional<Exchange> findBySendNamecardSeqAndReceiveNamecardSeq(Long namecardSeq, Long targetNamecardSeq);
+    Optional<Exchange> findBySendNamecardNamecardSeqAndReceiveNamecardNamecardSeq(Long namecardSeq, Long targetNamecardSeq);
 
     Optional<Exchange> findByExchangeSeq(Long exchangeSeq);
 }

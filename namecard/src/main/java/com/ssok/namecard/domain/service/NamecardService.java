@@ -46,8 +46,8 @@ public class NamecardService {
                                  );
     }
 
-    public Exchange findBySendNamecardSeqAndReceiveNamecardSeq(Long sendNamecardId, Long receiveNamecardId) {
-        return exchangeRepository.findBySendNamecardSeqAndReceiveNamecardSeq(sendNamecardId,
+    public Exchange findBySendNamecardNamecardSeqAndReceiveNamecardNamecardSeq(Long sendNamecardId, Long receiveNamecardId) {
+        return exchangeRepository.findBySendNamecardNamecardSeqAndReceiveNamecardNamecardSeq(sendNamecardId,
                               receiveNamecardId)
                           .orElseThrow(
                               () -> new ExchangeException(ErrorCode.EXCHANGE_NOT_FOUND)

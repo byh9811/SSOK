@@ -6,9 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface NamecardMemoDocMongoRepository extends MongoRepository<NamecardMemoDoc, Long> {
 
-    Optional<NamecardMemoDoc> findByMemberSeq(Long memberSeq);
-
-    Optional<NamecardMemoDoc> findByMemberSeqAndExchangeSeq(Long memberSeq, Long exchangeSeq);
-
     Optional<NamecardMemoDoc> findByExchangeSeq(Long exchangeSeq);
 }

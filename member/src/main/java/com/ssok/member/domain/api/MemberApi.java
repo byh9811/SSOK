@@ -41,7 +41,7 @@ public class MemberApi {
     }
     //회원 Seq 조회
     @GetMapping("/member/seq")
-    public ApiResponse<Long> getMemberSeq(@RequestParam (name = "uuid")String memberUuid){
+    public ApiResponse<Long> getMemberSeq(@RequestParam (name = "member-uuid")String memberUuid){
         System.out.println(memberUuid);
         log.info(memberUuid);
         MemberSeqResponse memberSeqResponse = memberService.getUuid(memberUuid);

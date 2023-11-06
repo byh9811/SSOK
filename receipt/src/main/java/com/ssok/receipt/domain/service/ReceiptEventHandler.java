@@ -1,8 +1,10 @@
 package com.ssok.receipt.domain.service;
 
-import com.ssok.receipt.domain.mongo.document.Receipt;
-import com.ssok.receipt.domain.mongo.repository.ReceiptMongoRepository;
-import com.ssok.receipt.domain.service.dto.ReceiptCreateDto;
+import com.ssok.receipt.domain.mongo.document.ReceiptDetailDocument;
+import com.ssok.receipt.domain.mongo.document.ReceiptListDocument;
+import com.ssok.receipt.domain.mongo.repository.ReceiptDetailDocumentRepository;
+import com.ssok.receipt.domain.mongo.repository.ReceiptListDocumentRepository;
+import com.ssok.receipt.domain.service.dto.ReceiptCreateServiceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -10,15 +12,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ReceiptEventHandler {
 
-    private final ReceiptMongoRepository mongoRepository;
+    private final ReceiptListDocumentRepository receiptListDocumentRepository;
+    private final ReceiptDetailDocumentRepository receiptDetailDocumentRepository;
 
-    public void createReceipt(ReceiptCreateDto receiptCreateDto) {
-        Receipt receipt = Receipt.builder()
-                .name(receiptCreateDto.nickname())
-                .age(receiptCreateDto.age())
-                .build();
-
-        mongoRepository.save(receipt);
+    public void createReceipt(ReceiptCreateServiceDto receiptCreateServiceDto) {
+        ReceiptDetailDocument receiptDetailDocument = receiptDetailDocumentRepository.save(ReceiptDetailDocument.fromCreateDto(receiptCreateServiceDto));
+        ReceiptListDocument createDto = receiptListDocumentRepository.save(ReceiptListDocument.fromCreateDto(receiptDetailDocument.getReceiptDetailDocumentSeq(), receiptCreateServiceDto));
     }
 
 }

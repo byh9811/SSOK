@@ -11,11 +11,14 @@ import java.io.Serializable;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(ChangeHistory.class)
-public class ChangeHistory implements Serializable {
-    @Id
+public class ChangeHistory{
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "change_history_seq")
+    private Long changeHistorySeq;
+
     private Long receiptSeq;
-    @Id @OneToOne
+
+    @OneToOne
     @JoinColumn(name = "pocket_history_seq")
     private PocketHistory pocketHistory;
 

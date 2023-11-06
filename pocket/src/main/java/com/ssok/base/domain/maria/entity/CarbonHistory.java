@@ -11,13 +11,17 @@ import java.io.Serializable;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(CarbonHistory.class)
-public class CarbonHistory implements Serializable {
-    @Id
+//@IdClass(CarbonHistoryKey.class)
+public class CarbonHistory {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "carbon_history_seq")
+    private Long carbonHistorySeq;
+
     private Long receiptSeq;
-    @Id @OneToOne
+
+    @OneToOne
     @JoinColumn(name = "pocket_history_seq")
-    PocketHistory pocketHistory;
+    private PocketHistory pocketHistory;
 
     @Builder
     public CarbonHistory(Long receiptSeq, PocketHistory pocketHistory) {

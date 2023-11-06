@@ -1,11 +1,13 @@
 package com.ssok.receipt.domain.api;
 
 import com.ssok.receipt.domain.api.dto.request.ReceiptCreateRequest;
-import com.ssok.receipt.domain.api.dto.response.ReceiptCreateResponse;
+import com.ssok.receipt.domain.api.dto.request.ReceiptQueryRequest;
+import com.ssok.receipt.domain.api.dto.response.ReceiptDetailQueryResponse;
+import com.ssok.receipt.domain.api.dto.response.ReceiptListQueryResponse;
 import com.ssok.receipt.domain.service.ReceiptQueryService;
 import com.ssok.receipt.domain.service.ReceiptService;
-import com.ssok.receipt.domain.service.dto.ReceiptCreateDto;
-import com.ssok.receipt.domain.service.dto.ReceiptQueryDto;
+import com.ssok.receipt.domain.service.dto.ReceiptCreateServiceDto;
+import com.ssok.receipt.domain.service.dto.ReceiptListQueryDto;
 import com.ssok.receipt.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,26 +18,34 @@ import static com.ssok.receipt.global.api.ApiResponse.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/receipt-service")
+@RequestMapping("/api/receipt-service/receipt")
 public class ReceiptController {
 
     private final ReceiptService receiptService;
     private final ReceiptQueryService receiptQueryService;
 
     @PostMapping
-    public ApiResponse<ReceiptCreateResponse> createReceipt(
+    public ApiResponse<Void> createReceipt(
             @RequestBody ReceiptCreateRequest receiptCreateRequest
     ) {
-        receiptService.createReceipt(ReceiptCreateDto.fromRequest(receiptCreateRequest));
-        return OK(new ReceiptCreateResponse("dummy", 20));
+        receiptService.createReceipt(ReceiptCreateServiceDto.fromRequest(receiptCreateRequest));
+        return OK(null);
     }
 
-    @GetMapping
-    public ApiResponse<List<ReceiptCreateResponse>> getReceiptList(
-            @RequestBody ReceiptCreateRequest receiptCreateRequest
+    @GetMapping("/list")
+    public ApiResponse<List<ReceiptListQueryResponse>> getReceiptList(
+            @ModelAttribute ReceiptQueryRequest request
     ) {
-        List<ReceiptCreateResponse> receiptList = receiptQueryService.getReceiptList(ReceiptQueryDto.fromRequest(receiptCreateRequest));
+        List<ReceiptListQueryResponse> receiptList = receiptQueryService.getReceiptList(ReceiptListQueryDto.fromRequest(request));
         return OK(receiptList);
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<ReceiptDetailQueryResponse> getReceiptDetail(
+            @PathVariable("id") String id
+    ) {
+        ReceiptDetailQueryResponse receiptDetail = receiptQueryService.getReceiptDetail(id);
+        return OK(receiptDetail);
     }
 
 }

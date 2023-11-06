@@ -27,6 +27,7 @@ public class BankAccessUtil {
     private String orgCode = "ssok";
 
     public AccountList getAccount(String mydataAccessToken) {
+        log.warn("{}", mydataAccessToken);
         AccountListResponse accountListResponse = bankClient.getAccountList(
                         mydataAccessToken,
                         getTranId(),

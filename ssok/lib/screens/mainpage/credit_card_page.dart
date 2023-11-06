@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ssok/screens/identification/service_aggreement_page.dart';
+import 'package:ssok/screens/test.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/register_button.dart';
 
@@ -33,7 +35,18 @@ class _IdPageState extends State<CreditCardPage> {
                 height: screenHeight * 0.06,
                 width: screenWidth * 0.7,
                 child: registerButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ServiceAggreementPage(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/creditcard/create');
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
               )
             ],

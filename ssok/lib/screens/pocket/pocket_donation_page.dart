@@ -199,6 +199,5 @@ class _EndedDonationListState extends State<EndedDonationList> {
         SizedBox(height: screenHeight * 0.04),
       ],
     );
-    ;
   }
 }

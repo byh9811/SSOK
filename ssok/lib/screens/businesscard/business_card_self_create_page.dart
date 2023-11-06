@@ -8,14 +8,16 @@ import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_right.d
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_up.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
 
-class CardSelfCreatePage extends StatefulWidget {
-  const CardSelfCreatePage({super.key});
+class BusinessCardSelfCreatePage extends StatefulWidget {
+  const BusinessCardSelfCreatePage({super.key});
 
   @override
-  State<CardSelfCreatePage> createState() => _CardSelfCreatePageState();
+  State<BusinessCardSelfCreatePage> createState() =>
+      _BusinessCardSelfCreatePageState();
 }
 
-class _CardSelfCreatePageState extends State<CardSelfCreatePage> {
+class _BusinessCardSelfCreatePageState
+    extends State<BusinessCardSelfCreatePage> {
   int currentOffsetIndex = -1;
   String name = "";
   String registeredName = "";
@@ -71,7 +73,7 @@ class _CardSelfCreatePageState extends State<CardSelfCreatePage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -87,16 +89,6 @@ class _CardSelfCreatePageState extends State<CardSelfCreatePage> {
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.notifications_none,
-                color: Color(0xFF676767),
-                size: 30.0,
-              ),
-              onPressed: () {},
-            )
-          ],
           iconTheme: IconThemeData(
             color: Colors.black, // 원하는 색상으로 변경
           ),
@@ -683,7 +675,6 @@ class _BusinessCardTextState extends State<BusinessCardText> {
                           widget.updateValue(newValue);
                         });
                       },
-
                       onSubmitted: (text) {}, // Enter를 누를 때 실행되는 함수
                       decoration: InputDecoration(
                         hintText: widget.hintContent,

@@ -30,7 +30,7 @@ public class CardService {
 //            throw new RuntimeException("당신의 카드가 아닙니다.");
 //        }
 
-        Card card = cardRepository.findByCardId(payRequest.getCardId()).get();
+        Card card = cardRepository.findByCardNum(payRequest.getCardNum()).get();
         String approvedNum = DummyUtils.createApprovedNum();
         CardHistory cardHistory = CardHistory.builder()
                 .card(card)

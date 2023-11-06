@@ -16,6 +16,5 @@ public interface ReceiptClient {
 
     @PostMapping
     ApiResult<Void> saveNewTransaction(
-            @RequestHeader("ACCESS-TOKEN") String token,
             @RequestBody CreateReceiptRequest request);
 }

@@ -2,6 +2,8 @@ package com.ssok.mydata.domain.pos.service;
 
 import com.ssok.mydata.domain.card.api.dto.request.PayRequest;
 import com.ssok.mydata.domain.card.api.dto.response.PayResponse;
+import com.ssok.mydata.domain.card.entity.Card;
+import com.ssok.mydata.domain.card.repository.CardRepository;
 import com.ssok.mydata.domain.card.service.CardService;
 import com.ssok.mydata.domain.pos.api.dto.inner.InnerPaymentItem;
 import com.ssok.mydata.domain.pos.api.dto.request.PosPayRequest;
@@ -32,15 +34,17 @@ public class PaymentService {
     private final ItemRepository itemRepository;
     private final ReceiptClient receiptClient;
     private final CardService cardService;
+    private final CardRepository cardRepository;
 
     public void pay(PosPayRequest posPayRequest) {
         PayRequest payRequest = posPayRequest.toPayRequest();
 
         // 카드 서버로 결제 수행
         PayResponse response = cardService.pay(payRequest);
+        Card card = cardRepository.findByCardNum(payRequest.getCardNum()).get();
 
         // 포스 서버에 결제 내역 저장
-        Payment payment = paymentRepository.save(posPayRequest.toPayment(response.getApprovedNum(), response.getApprovedDtime()));
+        Payment payment = paymentRepository.save(posPayRequest.toPayment(card.getCardCompany(), response.getApprovedNum(), response.getApprovedDtime()));
 
         List<PaymentItem> paymentItemList = new ArrayList<>();
         List<InnerPaymentItem> receivedItemList = posPayRequest.getPaymentItemList();
@@ -66,7 +70,7 @@ public class PaymentService {
 
         // 쏙 영수증 서버로 결제 내역 송신
         CreateReceiptRequest createReceiptRequest = CreateReceiptRequest.fromEntity(payRequest.getCardNum(), payment, paymentItemList);
-        receiptClient.saveNewTransaction(posPayRequest.getAccessToken(), createReceiptRequest);
+        receiptClient.saveNewTransaction(createReceiptRequest);
     }
 
 }

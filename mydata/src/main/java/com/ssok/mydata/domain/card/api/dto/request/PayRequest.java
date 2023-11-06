@@ -21,15 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 public class PayRequest {
 
-        private String cardId; // 결제 카드 Id
-
         private String cardNum; // 결제 카드 번호
-
-        private String cardCompany; // 결제 카드 번호
-
-        private String cardExpMonth; // 결제 카드 유효 월
-
-        private String cardExpYear; // 결제 카드 유효 년
 
         private String cardType; // 결제 유형
 

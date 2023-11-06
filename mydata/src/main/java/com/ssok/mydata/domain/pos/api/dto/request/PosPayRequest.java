@@ -19,17 +19,7 @@ import java.util.List;
 @Getter
 public class PosPayRequest {
 
-        private String accessToken; // 쏙 접근 토큰
-
-        private String cardId; // 결제 카드 Id
-
         private String cardNum; // 결제 카드 번호
-
-        private String cardCompany; // 결제 카드 회사
-
-        private String cardExpMonth; // 결제 카드 유효 월
-
-        private String cardExpYear; // 결제 카드 유효 년
 
         private String cardType; // 결제 유형
 
@@ -47,11 +37,7 @@ public class PosPayRequest {
 
         public PayRequest toPayRequest() {
                 return PayRequest.builder()
-                        .cardId(cardId)
                         .cardNum(cardNum)
-                        .cardCompany(cardCompany)
-                        .cardExpMonth(cardExpMonth)
-                        .cardExpYear(cardExpYear)
                         .cardType(cardType)
                         .amount(amount)
                         .type(type)
@@ -61,7 +47,7 @@ public class PosPayRequest {
                         .build();
         }
 
-        public Payment toPayment(String paymentApprovedNum, LocalDateTime paymentTransactionDatetime) {
+        public Payment toPayment(String cardCompany, String paymentApprovedNum, LocalDateTime paymentTransactionDatetime) {
                 return Payment.builder()
                         .paymentCardNum(cardNum)
                         .paymentCardType(CardType.fromCode(cardType))

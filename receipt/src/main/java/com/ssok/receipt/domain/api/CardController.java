@@ -1,5 +1,6 @@
 package com.ssok.receipt.domain.api;
 
+import com.ssok.receipt.domain.api.dto.response.CardAdminQueryResponse;
 import com.ssok.receipt.domain.api.dto.response.CardQueryResponse;
 import com.ssok.receipt.domain.maria.entity.Card;
 import com.ssok.receipt.domain.maria.repository.CardRepository;
@@ -39,11 +40,11 @@ public class CardController {
     }
 
     @GetMapping("/admin/{member_seq}")
-    public ApiResponse<Card> getCardByAdmin(
+    public ApiResponse<CardAdminQueryResponse> getCardByAdmin(
             @PathVariable("member_seq") Long memberSeq
     ) {
         Card card = cardRepository.findByMemberSeq(memberSeq).get();
-        return OK(card);
+        return OK(CardAdminQueryResponse.from(card));
     }
 
 }

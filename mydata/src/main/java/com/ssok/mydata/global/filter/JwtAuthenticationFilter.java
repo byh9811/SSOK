@@ -20,9 +20,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtUtils jwtUtils;
 
     private String resolveToken(HttpServletRequest request) {
-        log.warn("{}", request);
+        log.warn("resolveToken1: {}", request);
         String accessToken = request.getHeader("Authorization");
-        log.warn("{}", accessToken);
+        log.warn("resolveToken2: {}", accessToken);
         if (accessToken != null && jwtUtils.validateToken(accessToken)) {
             return accessToken;
         }
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         try {
             if(token!=null){
                 Authentication authentication = jwtUtils.getAuthentication(token);
-                log.warn("{}", token);
+                log.warn("doFilter1: {}", token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             chain.doFilter(request, response);

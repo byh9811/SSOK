@@ -139,7 +139,7 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String jwtToken) {
-        log.warn("{}", jwtToken);
+        log.warn("validateToken1: {}", jwtToken);
         try {
             return !getClaimsAccessToken(jwtToken).getExpiration().before(new Date());
         } catch (Exception e) {
@@ -157,7 +157,7 @@ public class JwtUtils {
     public Authentication getAuthentication(String accessToken) {
         //토큰 복호화
         Claims claims = getClaimsAccessToken(accessToken);
-
+        log.warn("getAuthentication1: {}", claims.get("user-ci"));
         if (claims.get("user-ci") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }

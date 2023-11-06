@@ -64,10 +64,10 @@ public class PosPayRequest {
         public Payment toPayment(String paymentApprovedNum, LocalDateTime paymentTransactionDatetime) {
                 return Payment.builder()
                         .paymentCardNum(cardNum)
-                        .paymentCardType(CardType.valueOf(cardType))
+                        .paymentCardType(CardType.fromCode(cardType))
                         .paymentCardCompany(cardCompany)
                         .paymentAmount(amount)
-                        .paymentType(TransactionType.valueOf(cardType))
+                        .paymentType(TransactionType.fromCode(type))
                         .paymentInstallPeriod(installPeriod)
                         .paymentBusinessNumber(shopNumber)
                         .paymentStoreName(shopName)

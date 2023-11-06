@@ -1,12 +1,16 @@
 package com.ssok.receipt.domain.api;
 
 import com.ssok.receipt.domain.api.dto.response.CardQueryResponse;
+import com.ssok.receipt.domain.maria.entity.Card;
+import com.ssok.receipt.domain.maria.repository.CardRepository;
 import com.ssok.receipt.domain.service.CardQueryService;
 import com.ssok.receipt.domain.service.CardService;
 import com.ssok.receipt.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import static com.ssok.receipt.global.api.ApiResponse.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,13 +20,14 @@ public class CardController {
 
     private final CardService cardService;
     private final CardQueryService cardQueryService;
+    private final CardRepository cardRepository;
 
     @PostMapping
     public ApiResponse<Void> createCard(
             @RequestHeader("MEMBER-UUID") String memberUUID
     ) {
         cardService.createCard(memberUUID);
-        return ApiResponse.OK(null);
+        return OK(null);
     }
 
     @GetMapping
@@ -30,6 +35,15 @@ public class CardController {
             @RequestHeader("MEMBER-UUID") String memberUUID
     ) {
         CardQueryResponse card = cardQueryService.getCard(memberUUID);
-        return ApiResponse.OK(card);
+        return OK(card);
     }
+
+    @GetMapping("/admin/{member_seq}")
+    public ApiResponse<Card> getCardByAdmin(
+            @PathVariable("member_seq") Long memberSeq
+    ) {
+        Card card = cardRepository.findByMemberSeq(memberSeq).get();
+        return OK(card);
+    }
+
 }

@@ -25,10 +25,10 @@ public class CardService {
     private final CardRepository cardRepository;
     private final CardHistoryRepository cardHistoryRepository;
 
-    public PayResponse pay(String memberCi, PayRequest payRequest) {
-        if (!cardRepository.existsByMemberCi(memberCi)) {
-            throw new RuntimeException("당신의 카드가 아닙니다.");
-        }
+    public PayResponse pay(PayRequest payRequest) {
+//        if (!cardRepository.existsByMemberCi(memberCi)) {
+//            throw new RuntimeException("당신의 카드가 아닙니다.");
+//        }
 
         Card card = cardRepository.findByCardId(payRequest.getCardId()).get();
         String approvedNum = DummyUtils.createApprovedNum();

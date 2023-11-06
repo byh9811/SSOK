@@ -33,11 +33,11 @@ public class PaymentService {
     private final ReceiptClient receiptClient;
     private final CardService cardService;
 
-    public void pay(String memberCi, PosPayRequest posPayRequest) {
+    public void pay(PosPayRequest posPayRequest) {
         PayRequest payRequest = posPayRequest.toPayRequest();
 
         // 카드 서버로 결제 수행
-        PayResponse response = cardService.pay(memberCi, payRequest);
+        PayResponse response = cardService.pay(payRequest);
 
         // 포스 서버에 결제 내역 저장
         Payment payment = paymentRepository.save(posPayRequest.toPayment(response.getApprovedNum(), response.getApprovedDtime()));

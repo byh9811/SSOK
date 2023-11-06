@@ -22,11 +22,10 @@ public class PaymentApi {
 
     @PostMapping
     public ResponseEntity<PosPayResponse> pay(
-            @AuthenticationPrincipal User user,
             @RequestBody PosPayRequest posPayRequest
     )
     {
-        paymentService.pay(user.getUsername(), posPayRequest);
+        paymentService.pay(posPayRequest);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 

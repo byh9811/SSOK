@@ -3,6 +3,8 @@ package com.ssok.base.domain.api;
 import com.ssok.base.domain.api.dto.request.DomainJoinRequest;
 import com.ssok.base.domain.api.dto.request.PocketHistoryRequest;
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
+import com.ssok.base.domain.api.dto.response.PocketDetailAllResponse;
+import com.ssok.base.domain.api.dto.response.PocketDetailResponses;
 import com.ssok.base.domain.api.dto.response.PocketResponse;
 import com.ssok.base.domain.maria.entity.Pocket;
 import com.ssok.base.domain.maria.entity.PocketHistory;
@@ -13,6 +15,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.YearMonth;
+import java.util.Map;
 
 import static com.ssok.base.global.api.ApiResponse.OK;
 
@@ -83,19 +88,34 @@ public class PocketController {
 
     /**
      * 포켓 머니 저축 금액 조회
+     * @param memberUuid
+     * @return PocketSaving : 보유 저축 금액
      */
     @GetMapping("/pocket/saving")
-    public ApiResponse<Long> getPocket(@RequestBody @RequestHeader String memberUuid){
+    public ApiResponse<Long> getPocketSaving(@RequestBody @RequestHeader String memberUuid){
         Long pocketSaving = pocketQueryService.getPocketSaving(memberUuid);
         return ApiResponse.OK(pocketSaving);
     }
-    /**
-     * 포켓 조화
-     */
-
 
     /**
-     * 포켓 상세 조회
+     * 포켓 조회
+     *
+     * @param memberUuid
+     * @return PocketResponse : 누적 금액, 누적 기부 금액, 누적 탄소중립포인트, 누적 잔금 저축 금액
      */
+    @GetMapping("/pocket")
+    public ApiResponse<PocketResponse> getPocket(@RequestHeader String memberUuid){
+        PocketResponse response = pocketQueryService.getPocket(memberUuid);
+        return ApiResponse.OK(response);
+    }
+
+    /**
+     * 포켓 전체 상세 조회
+     */
+    @GetMapping("/pocket/detail")
+    public ApiResponse<PocketDetailAllResponse> getPocketDetailAll(@RequestHeader String memberUuid){
+        PocketDetailAllResponse response = pocketQueryService.getPocketDetailAll(memberUuid);
+        return ApiResponse.OK(response);
+    }
 
 }

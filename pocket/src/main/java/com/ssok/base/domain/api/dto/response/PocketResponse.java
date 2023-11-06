@@ -1,6 +1,7 @@
 package com.ssok.base.domain.api.dto.response;
 
 import com.ssok.base.domain.maria.entity.Pocket;
+import com.ssok.base.domain.mongo.document.PocketMain;
 import lombok.Builder;
 import lombok.Data;
 
@@ -32,6 +33,15 @@ public class PocketResponse {
                 .pocketTotalDonate(pocket.getPocketTotalDonate())
                 .pocketTotalPoint(pocket.getPocketTotalPoint())
                 .pocketTotalChange(pocket.getPocketTotalChange())
+                .build();
+    }
+
+    public static PocketResponse fromPocketMain(PocketMain pocketMain){
+        return PocketResponse.builder()
+                .pocketSaving(pocketMain.getPocketSaving())
+                .pocketTotalDonate(pocketMain.getPocketTotalDonate())
+                .pocketTotalPoint(pocketMain.getPocketTotalPoint())
+                .pocketTotalChange(pocketMain.getPocketTotalChange())
                 .build();
     }
 }

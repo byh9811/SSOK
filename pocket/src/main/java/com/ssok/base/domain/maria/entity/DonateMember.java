@@ -16,17 +16,17 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(DonateMemberKey.class)
+//@IdClass(DonateMemberKey.class)
 public class DonateMember extends BaseEntity {
 
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "donate_member_seq")
-//    private Long donateMemberSeq;
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "donate_member_seq")
+    private Long donateMemberSeq;
+//    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "donate_seq")
     private Donate donate;
-    @Id
+//    @Id
     private Long memberSeq;
 
     // 누적 기부 금액

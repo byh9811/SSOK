@@ -23,6 +23,7 @@ public class DonateController {
 
     @PostMapping("/donate")
     public ApiResponse<?> doDonate(@RequestHeader String memberUuid, @RequestBody DonateRequest request){
+        log.info("들어왔습니다..");
         donateService.doDonate(request.toDto(memberUuid));
         return ApiResponse.OK(null);
     }

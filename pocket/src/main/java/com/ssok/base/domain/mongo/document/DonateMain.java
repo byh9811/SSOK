@@ -43,9 +43,15 @@ public class DonateMain {
                 .donateTotalDonator(donate.getDonateTotalDonator())
                 .donateState(donate.getDonateState())
                 .donateTitle(donate.getDonateTitle())
-                .donateImage(donate.getDonate_image())
+                .donateImage(donate.getDonateImage())
                 .createDate(donate.getCreateDate())
                 .modifyDate(donate.getModifyDate())
                 .build();
+    }
+
+    public void updateDonateMain(Donate donate) {
+        this.donateTotalDonation = donate.getDonateTotalDonation();
+        this.donateTotalDonator = donate.getDonateTotalDonator();
+        this.modifyDate = donate.getModifyDate();
     }
 }

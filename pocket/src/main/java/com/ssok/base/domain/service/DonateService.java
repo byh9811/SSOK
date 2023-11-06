@@ -8,6 +8,8 @@ import com.ssok.base.domain.maria.entity.Pocket;
 import com.ssok.base.domain.maria.repository.DonateMemberRepository;
 import com.ssok.base.domain.maria.repository.DonateRepository;
 import com.ssok.base.domain.maria.repository.PocketRepository;
+import com.ssok.base.domain.mongo.document.DonateMain;
+import com.ssok.base.domain.mongo.repository.DonateMainMongoRepository;
 import com.ssok.base.domain.service.dto.DonateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ public class DonateService {
     private final DonateRepository donateRepository;
     private final PocketRepository pocketRepository;
     private final PocketService pocketService;
+    private final DonateMainMongoRepository donateMainMongoRepository;
 
     /**
      * donate 생성 메서드
@@ -44,11 +47,12 @@ public class DonateService {
                 .donateImage(request.getDonateImage())
                 .build();
         donateRepository.save(donate);
+        log.debug("donateSeq 다" + donate.getDonateSeq());
+        DonateMain donateMain = DonateMain.fromDonate(donate);
+        donateMainMongoRepository.save(donateMain);
         return donate.getDonateSeq();
     }
     /**
-     *
-     *
      * 기부진행 로직
      *
      * 예외처리
@@ -59,15 +63,11 @@ public class DonateService {
     public void doDonate(DonateDto dto) {
         // memberUuid로 pk 뽑기 / 없으면 에러처리
         Long memberSeq = isMemberExist(dto.getMemberUuid());
-
         Donate donate = donateRepository.findById(dto.getDonateSeq()).orElseThrow(() -> new NoSuchElementException("기부가 존재하지 않습니다"));
         if(!donate.getDonateState()){
             throw new IllegalArgumentException("종료된 기부입니다.");
         }
-        Optional<DonateMember> findDonateMember = donateMemberRepository.findById(DonateMemberKey.builder()
-                .donate(donate)
-                .memberSeq(memberSeq)
-                .build());
+        Optional<DonateMember> findDonateMember = donateMemberRepository.findByDonateAndMemberSeq(donate, memberSeq);
 
         Boolean isDonateMemberExist = isDonateMemberExist(findDonateMember);
 
@@ -81,6 +81,7 @@ public class DonateService {
                     .totalDonateAmt(0L)
                     .build();
         }
+        log.debug(String.valueOf(donateMember.getMemberSeq()));
 
         // pocket history 생성 -> 금액 검사 모두 진행
         pocketService.createDonationPocketHistory(dto.toDto(memberSeq, donate));
@@ -95,6 +96,9 @@ public class DonateService {
         if(!isDonateMemberExist){
             donateMemberRepository.save(donateMember);
         }
+        DonateMain donateMain = donateMainMongoRepository.findById(dto.getDonateSeq()).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 기부입니다."));
+        donateMain.updateDonateMain(donate);
+        donateMainMongoRepository.save(donateMain);
     }
 
     /**

@@ -129,6 +129,7 @@ public class PocketService {
         PocketMain pocketMain = pocketMainMongoRepository.findById(findPocket.getMemberSeq()).orElseThrow(()
                 -> new IllegalArgumentException("조회용이 존재하지 않는다."));
         pocketMain.updatePocketMain(findPocket);
+        pocketMainMongoRepository.save(pocketMain);
         // Mongo - create PocketDetail
         PocketDetail pocketDetail = PocketDetail.fromPocketHistory(pocketHistory, null);
         pocketDetailMongoRepository.save(pocketDetail);

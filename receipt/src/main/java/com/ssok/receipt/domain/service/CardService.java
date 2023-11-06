@@ -51,15 +51,19 @@ public class CardService {
                 .memberSeq(memberSeq)
                 .mydataAccessToken(mydataAccessToken)
                 .build();
-        memberClient.createMemberAccessToken(tokenFeignRequest);
+        String response = memberClient.createMemberAccessToken(tokenFeignRequest).getResponse();
+        log.warn("{}", mydataAccessToken);
+        log.warn("{}", response);
 
         // 5. 계좌 등록
         AccountList account = bankAccessUtil.getAccount(mydataAccessToken);
+        log.warn("{}", account.getAccountNum());
         MydataAccountFeignRequest accountFeignRequest = MydataAccountFeignRequest.builder()
                 .memberSeq(memberSeq)
                 .memberAccountNum(account.getAccountNum())
                 .build();
-        memberClient.createMemberAccount(accountFeignRequest);
+        String response1 = memberClient.createMemberAccount(accountFeignRequest).getResponse();
+        log.warn("{}", response1);
 
         // 6. 연동 카드에 생성한 카드 등록
         Card card = Card.builder()

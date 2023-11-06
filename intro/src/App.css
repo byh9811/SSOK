@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Jua:400');
+
 .App {
   text-align: center;
 }
@@ -7,33 +9,55 @@ body {
   padding: 0;
   width: 100%;
   height: 100vh;
-  padding-top: 20rem;
+  font-family: Jua;
+}
+
+.mainText {
+  position: absolute;
+  margin-left: 33%;
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+.google{
+  width:200px;
+}
+.logoImg{
+  width: 500px;
+}
+.description{
+  font-weight: 800;
+  font-size: 35px;
 }
 
 .satellites {
-  border: 4px solid black;
   animation: rotate-axis 10s linear infinite;
   transform-style: preserve-3d;
   display: flex;
   justify-content: center;
+  margin-top: 50px;
+}
+
+button{
+  font-size: 20px;
+  font-weight: 800;
+  border-radius: 10px;
+  font-family: Jua;
 }
 
 @keyframes rotate-axis {
   from {
-      transform: rotateZ(350deg) perspective(800px) rotateY(0deg);
+      transform: rotateZ(360deg) perspective(800px) rotateY(0deg);
   }
   to {
-      transform: rotateZ(350deg) perspective(800px) rotateY(360deg);
+      transform: rotateZ(360deg) perspective(800px) rotateY(360deg);
   }
 }
 
 .satellite {
   position: absolute;
   width: 100px;
-  transform: rotateY(calc(var(--i) * 1deg)) translateZ(500px);
+  transform: rotateY(calc(var(--i) * 1deg)) translateZ(450px) translateY(110px);
 }
-
-
 
 
 .flip-outer {

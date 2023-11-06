@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "transaction", url = "http://receipt.ssok.site/api/receipt-service/receipt", configuration = OpenFeignConfig.class)
+@FeignClient(name = "transaction", url = "https://receipt.ssok.site/api/receipt-service/receipt", configuration = OpenFeignConfig.class)
 public interface ReceiptClient {
 
     @PostMapping

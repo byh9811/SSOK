@@ -2,6 +2,7 @@ package com.ssok.mydata.global.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class JwtUtils {
 
     @Value("${jwt.access.key}")
@@ -137,6 +139,7 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String jwtToken) {
+        log.warn("{}", jwtToken);
         try {
             return !getClaimsAccessToken(jwtToken).getExpiration().before(new Date());
         } catch (Exception e) {

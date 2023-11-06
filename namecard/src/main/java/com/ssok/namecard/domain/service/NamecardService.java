@@ -104,6 +104,8 @@ public class NamecardService {
         return Exchange.builder()
                        .exchangeLatitude(lat)
                        .exchangeLongitude(lon)
+                       .exchangeNote("")
+                       .exchangeIsFavorite(false)
                        .sendNamecard(namecardA)
                        .receiveNamecard(namecardB)
                        .build();

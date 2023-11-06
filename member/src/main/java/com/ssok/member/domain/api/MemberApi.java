@@ -11,7 +11,6 @@ import com.ssok.member.domain.api.dto.response.SmsResponse;
 import com.ssok.member.domain.service.MemberQService;
 import com.ssok.member.domain.service.MemberService;
 import com.ssok.member.domain.service.SmsService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -48,6 +47,55 @@ public class MemberApi {
         MemberSeqResponse memberSeqResponse = memberService.getUuid(memberUuid);
         return OK(memberSeqResponse.getMemberSeq());
     }
+    // 연동 계좌번호 조회
+    @GetMapping("/member/account")
+    public ApiResponse<String> getMemberAccount(@RequestParam (name = "member-seq")Long memberSeq){
+        MemberAccountResponse memberAccountResponse = memberService.getAccount(memberSeq);
+        return OK(memberAccountResponse.getMemberAccountNum());
+    }
+    // 연동 계좌번호 변경
+    @PostMapping("/member/account")
+    public ApiResponse<String> editMemberAccount(@RequestBody MemberAccountUpdateRequest memberAccountUpdateRequest){
+        MemberAccountResponse memberAccountResponse = memberService.editAccountNum(MemberAccountUpdateDto.of(memberAccountUpdateRequest));
+        return OK(memberAccountResponse.getMemberAccountNum());
+    }
+    //마이데이터 접근 토큰 조회
+    @GetMapping("/member/mydata")
+    public ApiResponse<String> getMydataAccessToken(@RequestParam (name = "member-seq")Long memberSeq){
+        String memberMydataAccessToken = memberService.getMydataAccessToken(memberSeq);
+        return OK(memberMydataAccessToken);
+    }
+    //마이데이터 접근 토큰 변경
+    @PostMapping("/member/mydata")
+    public ApiResponse<String> editMydataAccessToken(@RequestBody MemberMydataAccessTokenUpdateRequest memberMydataAccessTokenUpdateRequest){
+        String memberMydataAccessToken = memberService.editMydataAccessToken(MemberMydataAccessTokenUpdateDto.of(memberMydataAccessTokenUpdateRequest));
+        return OK(memberMydataAccessToken);
+    }
+    //잔금 저금 여부 조회
+    @GetMapping("/member/saving")
+    public ApiResponse<Boolean> getSaving(@RequestParam (name = "member-seq")Long memberSeq){
+        Boolean isSaving =memberService.getSaving(memberSeq);
+        return OK(isSaving);
+    }
+    //잔금 저금 여부 변경
+    @PostMapping("/member/saving")
+    public ApiResponse<Boolean> editSaving(@RequestParam (name = "member-seq")Long memberSeq){
+        Boolean saving = memberService.editSaving(memberSeq);
+        return OK(saving);
+    }
+    //신분 인증 여부 조회
+    @GetMapping("/member/verification")
+    public ApiResponse<Boolean> getIsVerification(@RequestParam (name = "member-seq")Long memberSeq){
+        Boolean verification = memberService.getVerification(memberSeq);
+        return OK(verification);
+    }
+    //신분 인증 여부 변경
+    @PostMapping("/member/verification")
+    public ApiResponse<Boolean> editIsVerification(@RequestParam (name = "member-seq")Long memberSeq){
+        Boolean verification = memberService.editVerification(memberSeq);
+        return OK(verification);
+    }
+
 //    @PostMapping("/member/seq")
 //    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody String memberUuid){
 //        System.out.println("memberUuid");
@@ -55,16 +103,6 @@ public class MemberApi {
 //        MemberSeqResponse memberSeqResponse = memberService.getUuid(memberUuid);
 //        return OK(memberSeqResponse);
 //    }
-    // 연동 계좌번호 조회
-    @PostMapping("/member/account")
-    public ApiResponse<MemberAccountResponse> getMemberAccount(@RequestBody MemberAccountRequest memberAccountRequest){
-        MemberAccountResponse memberAccountResponse = memberService.getAccount(MemberAccountDto.of(memberAccountRequest));
-        return OK(memberAccountResponse);
-    }
-
-    //여
-
-
 
     //인증번호 발송
     @PostMapping("/sms/send")

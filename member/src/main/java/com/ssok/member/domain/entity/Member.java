@@ -51,18 +51,34 @@ public class Member extends BaseEntity {
     private String memberAccountNum;
 
     @Column(name="member_is_saving",nullable = false)
-    private boolean memberIsSaving;
+    private boolean saving;
 
     @Column(name="member_is_verification",nullable = false)
-    private boolean memberIsVerification;
+    private boolean verification;
 
     @Column(name="member_is_deleted",nullable = false)
-    private boolean memberIsDeleted;
+    private boolean deleted;
 
     @Column(name="member_refresh_token")
     private String memberRefreshToken;
 
     public void updateRefreshToken(String refreshToken){
         this.memberRefreshToken = refreshToken;
+    }
+
+    public void updateAccountNum(String memberAccountNum) {
+        this.memberAccountNum = memberAccountNum;
+    }
+
+    public void updateMydataAccessToken(String memberMydataAccessToken) {
+        this.memberMydataAccessToken=memberMydataAccessToken;
+    }
+
+    public void changeSaving() {
+        this.saving = !this.saving;
+    }
+
+    public void changeVerification() {
+        this.verification = !this.verification;
     }
 }

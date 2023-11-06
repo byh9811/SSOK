@@ -93,7 +93,7 @@ public class NamecardEventHandler {
         NamecardMemoDoc namecardMemoDocB = new NamecardMemoDoc(exchangeList.get(1).getExchangeSeq(), "");
 
         namecardMemoDocMongoRepository.save(namecardMemoDocA);
-        namecardMemoDocMongoRepository.save(namecardMemoDocA);
+        namecardMemoDocMongoRepository.save(namecardMemoDocB);
     }
 
     public void editMemo(Long memberSeq, Exchange exchange, String content) {

@@ -6,10 +6,13 @@ import com.ssok.receipt.domain.maria.repository.CardCompanyRepository;
 import com.ssok.receipt.domain.maria.repository.CardRepository;
 import com.ssok.receipt.global.enumerate.BankName;
 import com.ssok.receipt.global.openfeign.member.MemberClient;
-import com.ssok.receipt.global.openfeign.mydata.AuthAccessUtil;
-import com.ssok.receipt.global.openfeign.mydata.AuthClient;
-import com.ssok.receipt.global.openfeign.mydata.dto.request.CardCreateFeignRequest;
-import com.ssok.receipt.global.openfeign.mydata.dto.request.MydataAccessTokenFeignRequest;
+import com.ssok.receipt.global.openfeign.member.dto.request.MydataAccountFeignRequest;
+import com.ssok.receipt.global.openfeign.mydata.auth.AuthAccessUtil;
+import com.ssok.receipt.global.openfeign.mydata.auth.AuthClient;
+import com.ssok.receipt.global.openfeign.mydata.auth.dto.request.CardCreateFeignRequest;
+import com.ssok.receipt.global.openfeign.member.dto.request.MydataAccessTokenFeignRequest;
+import com.ssok.receipt.global.openfeign.mydata.bank.BankAccessUtil;
+import com.ssok.receipt.global.openfeign.mydata.bank.dto.inner.AccountList;
 import com.ssok.receipt.global.util.DummyUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ public class CardService {
     private final CardCompanyRepository cardCompanyRepository;
     private final AuthClient authClient;
     private final AuthAccessUtil authAccessUtil;
+    private final BankAccessUtil bankAccessUtil;
     private final MemberClient memberClient;
 
     public void createCard(String memberUUID) {
@@ -49,9 +53,15 @@ public class CardService {
                 .build();
         memberClient.createMemberAccessToken(tokenFeignRequest);
 
-        //
+        // 5. 계좌 등록
+        AccountList account = bankAccessUtil.getAccount(mydataAccessToken);
+        MydataAccountFeignRequest accountFeignRequest = MydataAccountFeignRequest.builder()
+                .memberSeq(memberSeq)
+                .memberAccountNum(account.getAccountNum())
+                .build();
+        memberClient.createMemberAccount(accountFeignRequest);
 
-        // 5. 연동 카드에 생성한 카드 등록
+        // 6. 연동 카드에 생성한 카드 등록
         Card card = Card.builder()
                 .company(company)
                 .memberSeq(memberSeq)
@@ -61,7 +71,6 @@ public class CardService {
                 .cardExpMonth("11")
                 .cardExpYear("28")
                 .build();
-
         cardRepository.save(card);
     }
 

@@ -1,4 +1,4 @@
-package com.ssok.receipt.global.openfeign.mydata.dto.request;
+package com.ssok.receipt.global.openfeign.mydata.auth.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

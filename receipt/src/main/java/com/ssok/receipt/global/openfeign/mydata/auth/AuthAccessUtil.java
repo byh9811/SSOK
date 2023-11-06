@@ -1,8 +1,7 @@
-package com.ssok.receipt.global.openfeign.mydata;
+package com.ssok.receipt.global.openfeign.mydata.auth;
 
-import com.ssok.receipt.global.openfeign.mydata.dto.request.TokenRequest;
-import com.ssok.receipt.global.openfeign.mydata.dto.response.TokenResponse;
-
+import com.ssok.receipt.global.openfeign.mydata.auth.dto.request.TokenRequest;
+import com.ssok.receipt.global.openfeign.mydata.auth.dto.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,12 +31,6 @@ public class AuthAccessUtil {
         }
 
         return tokenResponse.getAccess_token();
-    }
-
-    public void addMydataAccessToken(Long memberId) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("user_ci", Long.toString(memberId));
-        authClient.registerAuth(map);
     }
 
     private String getApiType() {

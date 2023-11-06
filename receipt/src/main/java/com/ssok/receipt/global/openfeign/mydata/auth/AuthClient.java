@@ -1,9 +1,9 @@
-package com.ssok.receipt.global.openfeign.mydata;
+package com.ssok.receipt.global.openfeign.mydata.auth;
 
 import com.ssok.receipt.global.config.OpenFeignConfig;
-import com.ssok.receipt.global.openfeign.mydata.dto.request.CardCreateFeignRequest;
-import com.ssok.receipt.global.openfeign.mydata.dto.request.TokenRequest;
-import com.ssok.receipt.global.openfeign.mydata.dto.response.TokenResponse;
+import com.ssok.receipt.global.openfeign.mydata.auth.dto.request.CardCreateFeignRequest;
+import com.ssok.receipt.global.openfeign.mydata.auth.dto.request.TokenRequest;
+import com.ssok.receipt.global.openfeign.mydata.auth.dto.response.TokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

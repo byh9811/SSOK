@@ -2,13 +2,14 @@ package com.ssok.member.domain.api.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Builder
-public class MemberAccountRequest {
+public class MemberMydataAccessTokenUpdateRequest {
     private Long memberSeq;
+    private String memberMydataAccessToken;
 }

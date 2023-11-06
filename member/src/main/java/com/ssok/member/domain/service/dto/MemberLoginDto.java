@@ -1,15 +1,12 @@
 package com.ssok.member.domain.service.dto;
 
 import com.ssok.member.domain.api.dto.request.MemberLoginRequest;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
 @Data
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MemberLoginDto {
     private String loginId;

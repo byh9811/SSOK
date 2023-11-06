@@ -5,10 +5,10 @@ import com.ssok.member.domain.api.dto.response.MemberSeqResponse;
 import com.ssok.member.domain.api.dto.response.TokenResponse;
 import com.ssok.member.domain.entity.Member;
 import com.ssok.member.domain.repository.MemberRepository;
-import com.ssok.member.domain.service.dto.MemberAccountDto;
+import com.ssok.member.domain.service.dto.MemberAccountUpdateDto;
 import com.ssok.member.domain.service.dto.MemberCreateDto;
 import com.ssok.member.domain.service.dto.MemberLoginDto;
-import com.ssok.member.domain.service.dto.MemberUuidDto;
+import com.ssok.member.domain.service.dto.MemberMydataAccessTokenUpdateDto;
 import com.ssok.member.domain.token.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,17 +37,49 @@ public class MemberService {
                 .memberSeq(member.getMemberSeq())
                 .build();
     }
-//public MemberSeqResponse getUuid(String memberUuid){
-//    Member member = memberRepository.findMemberByMemberUuid(memberUuid).orElseThrow();
-//    return MemberSeqResponse.builder()
-//            .memberSeq(member.getMemberSeq())
-//            .build();
-//}
-    public MemberAccountResponse getAccount(MemberAccountDto memberAccountDto) {
-        Member member = memberRepository.findMemberByMemberSeq(memberAccountDto.getMemberSeq()).orElseThrow();
+
+    public MemberAccountResponse getAccount(Long memberSeq) {
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
         return MemberAccountResponse.builder()
                 .memberAccountNum(member.getMemberAccountNum())
                 .build();
+    }
+    public MemberAccountResponse editAccountNum(MemberAccountUpdateDto memberAccountUpdateDto){
+        Long memberSeq = memberAccountUpdateDto.getMemberSeq();
+        String memberAccountNum = memberAccountUpdateDto.getMemberAccountNum();
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
+        member.updateAccountNum(memberAccountNum);
+        return MemberAccountResponse.builder().memberAccountNum(memberAccountNum).build();
+    }
+    public String getMydataAccessToken(Long memberSeq) {
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
+        String memberMydataAccessToken = member.getMemberMydataAccessToken();
+        return memberMydataAccessToken;
+    }
+    public String editMydataAccessToken(MemberMydataAccessTokenUpdateDto memberMydataAccessTokenUpdateDto){
+        Long memberSeq = memberMydataAccessTokenUpdateDto.getMemberSeq();
+        String memberMydataAccessToken = memberMydataAccessTokenUpdateDto.getMemberMydataAccessToken();
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
+        member.updateMydataAccessToken(memberMydataAccessToken);
+        return member.getMemberMydataAccessToken();
+    }
+    public Boolean getSaving(Long memberSeq) {
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
+        return member.isSaving();
+    }
+    public Boolean editSaving(Long memberSeq) {
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
+        member.changeSaving();
+        return member.isSaving();
+    }
+    public Boolean getVerification(Long memberSeq) {
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
+        return member.isVerification();
+    }
+    public Boolean editVerification(Long memberSeq) {
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
+        member.changeVerification();
+        return member.isVerification();
     }
     public void save(MemberCreateDto memberCreateDto) {
         Member member = memberCreateDto.toEntity();

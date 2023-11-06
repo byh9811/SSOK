@@ -65,20 +65,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
-    public String resolveAccessToken(HttpServletRequest request) {
-        return request.getHeader("ACCESS-TOKEN");
-    }
-
-    public String resolveRefreshToken(HttpServletRequest request) {
-        return request.getHeader("REFRESH-TOKEN");
-    }
-
-    //Refresh 토큰의 DB상의 인덱스 번호를 해시로 받음
-    public Long resolveRefreshIndexToken(HttpServletRequest request) {
-        return Long.parseLong(request.getHeader("REFRESH-TOKEN-INDEX"));
-    }
-
     public Claims getClaimsFormToken(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
@@ -150,20 +136,5 @@ public class JwtTokenProvider {
             return false;
         }
     }
-
-//    public Authentication getAuthentication(String accessToken) {
-//        //토큰 복호화
-//        Claims claims = getClaimsFormToken(accessToken);
-//
-//        if (claims.get("userId") == null) {
-//            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-//        }
-//        Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(claims.get("userId").toString().split(","))
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
-//        UserDetails principal = new User(claims.get("userId").toString(), "", authorities);
-//        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-//    }
 }
 

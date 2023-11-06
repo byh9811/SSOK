@@ -1,10 +1,14 @@
 package com.ssok.base.domain.api.dto.response;
 
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.YearMonth;
 import java.util.Map;
 
+@Data
+@NoArgsConstructor
 public class PocketDetailAllResponse {
     private Map<YearMonth, PocketDetailResponses> pocketDetailMap;
     private Long pocketSaving;

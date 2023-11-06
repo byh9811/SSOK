@@ -108,6 +108,12 @@ public class MemberApi {
         String memberCi = memberService.getCi(memberSeq);
         return OK(memberCi);
     }
+    //회원 이름 조회
+    @GetMapping("/member/name")
+    public ApiResponse<String> getName(@RequestParam (name = "member-seq")Long memberSeq){
+        String memberName = memberService.getName(memberSeq);
+        return OK(memberName);
+    }
 //    @PostMapping("/member/seq")
 //    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody String memberUuid){
 //        System.out.println("memberUuid");

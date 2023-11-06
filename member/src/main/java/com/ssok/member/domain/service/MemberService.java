@@ -114,6 +114,11 @@ public class MemberService {
 
     }
 
+    public String getName(Long memberSeq) {
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElse(null);
+        return member.getMemberName();
+    }
+
 
 //    public Member findById(Long id) {
 //        return memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());

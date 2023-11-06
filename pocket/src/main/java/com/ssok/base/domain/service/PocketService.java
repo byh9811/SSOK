@@ -5,7 +5,11 @@ import com.ssok.base.domain.api.dto.response.PocketResponse;
 import com.ssok.base.domain.maria.entity.*;
 import com.ssok.base.domain.maria.repository.*;
 import com.ssok.base.domain.mongo.document.Domain;
+import com.ssok.base.domain.mongo.document.PocketDetail;
+import com.ssok.base.domain.mongo.document.PocketMain;
 import com.ssok.base.domain.mongo.repository.DomainMongoRepository;
+import com.ssok.base.domain.mongo.repository.PocketDetailMongoRepository;
+import com.ssok.base.domain.mongo.repository.PocketMainMongoRepository;
 import com.ssok.base.domain.service.dto.DomainDto;
 import com.ssok.base.domain.service.dto.DonatePocketHistoryDto;
 import com.ssok.base.domain.service.dto.PocketHistoryDto;
@@ -32,6 +36,8 @@ public class PocketService {
     private final CarbonHistoryRepository carbonHistoryRepository;
     private final DonateHistoryRepository donateHistoryRepository;
     private final ChangeHistoryRepository changeHistoryRepository;
+    private final PocketDetailMongoRepository pocketDetailMongoRepository;
+    private final PocketMainMongoRepository pocketMainMongoRepository;
     public DomainJoinResponse createDomain(DomainDto domainDto) {
 //        return pocketRepository.fin
         DomainJoinResponse domainJoinResponse = new DomainJoinResponse(domainDto.nickname(), domainDto.age());
@@ -72,8 +78,10 @@ public class PocketService {
 
         pocketRepository.save(pocket);
 
-        // Pocket 도메인 저장
-        //domainMongoRepository.createPocket(pocket);
+        // 조회용 db 추가
+        // Main에 추가
+        PocketMain pocketMain = PocketMain.fromPocket(pocket);
+        pocketMainMongoRepository.save(pocketMain);
 
         return PocketResponse.of(pocket);
 
@@ -117,6 +125,14 @@ public class PocketService {
 
         pocketHistoryRepository.save(pocketHistory);
         donateHistoryRepository.save(donateHistory);
+        // Mongo - Update PocketMain
+        PocketMain pocketMain = pocketMainMongoRepository.findById(findPocket.getMemberSeq()).orElseThrow(()
+                -> new IllegalArgumentException("조회용이 존재하지 않는다."));
+        pocketMain.updatePocketMain(findPocket);
+        // Mongo - create PocketDetail
+//        PocketDetail.fromPocketHistory()
+
+
     }
 
 
@@ -154,6 +170,20 @@ public class PocketService {
         // 내역 생성
         pocketHistoryRepository.save(pocketHistory);
         createTypeHistory(dto.getPocketHistoryType(), dto.getReceiptSeq(), pocketHistory);
+
+        // Mongo
+        PocketMain pocketMain = pocketMainMongoRepository.findById(findPocket.getMemberSeq()).orElseThrow(()
+                -> new IllegalArgumentException("조회용이 존재하지 않는다."));
+
+        // Mongo - update PocketDetail
+        log.info(String.valueOf(findPocket.getPocketSaving()));
+        pocketMain.updatePocketMain(findPocket);
+        pocketMainMongoRepository.save(pocketMain);
+
+        // Mongo - create PocketDetail
+        PocketDetail pocketDetail = PocketDetail.fromPocketHistory(pocketHistory, dto.getReceiptSeq());
+        pocketDetailMongoRepository.save(pocketDetail);
+
     }
 
     /**

@@ -92,8 +92,8 @@ public class JwtUtils {
     private Claims createClaims(boolean isAccessToken, String userCi) {
         Claims claims = Jwts.claims();
 
-        claims.setIssuer("Bank");
-        claims.setAudience("Taesan");
+        claims.setIssuer("MYDATA");
+        claims.setAudience("SSOK");
         claims.setId(UUID.randomUUID().toString());
         claims.setExpiration(new Date(new Date().getTime() + (isAccessToken ? accessTokenValid : refreshTokenValid)));
         claims.put("scope", setScope());

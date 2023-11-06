@@ -13,7 +13,7 @@ function App() {
         </div>
         <br></br>
         <div>
-          <a href=""><img className="google" src="googleplay.png"></img></a>
+          <a href="" onClick={popUp}><img className="google" src="googleplay.png"></img></a>
         </div>
         <div className='buttonWrapper'>
           {/* <button onClick={popUp} >어플 설치하기</button> */}

@@ -6,6 +6,8 @@ import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
 import com.ssok.namecard.domain.api.dto.response.NamecardDetailDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMainDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMapResponse;
+import com.ssok.namecard.domain.api.dto.response.NamecardResponse;
+import com.ssok.namecard.domain.api.dto.response.NamecardSearchResponse;
 import com.ssok.namecard.domain.service.NamecardQueryService;
 import com.ssok.namecard.domain.service.NamecardService;
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
@@ -104,14 +106,41 @@ public class NamecardController {
         return OK(namecardMapResponses);
     }
 
+    /** 즐겨 찾기 - 성공 후 교환 Seq을 반환함 */
+    @PostMapping("/like")
+    public ApiResponse<Long> likeNamecard(
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid,
+        @RequestBody Long exchangeSeq
+    ) {
+        Long likedNamecardId = namecardService.likeNamecard(memberUuid, exchangeSeq);
+        return  OK(likedNamecardId);
+    }
+
 
     /** 명함 타임라인 조회 */
-
-
+    @GetMapping("/timeline/{exchangeSeq}")
+    public ApiResponse<List<String>> getNamecardTimeline(
+        @PathVariable Long exchangeSeq
+    ){
+        List<String> timeline = namecardService.getNamecardTimeline(exchangeSeq);
+        return OK(timeline);
+    }
 
     /** 명함 메모 조회 */
+    @GetMapping("/memo/{exchangeSeq}")
+    public ApiResponse<String> getNamecardMemo(
+        @PathVariable Long exchangeSeq
+    ){
+        String memo = namecardService.getNamecardMemo(exchangeSeq);
+        return OK(memo);
+    }
 
 
+    /** 명함 이름 검색 */
+    @GetMapping("/search")
+    public ApiResponse<List<NamecardSearchResponse>> getNamecardSearch(){
+
+    }
 
 
 }

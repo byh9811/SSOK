@@ -110,9 +110,12 @@ public class NamecardEventHandler {
         namecardMemoDocMongoRepository.save(namecardMemoDoc);
 
         /* todo - 목록에 메모 여부 최신화 */
-        NamecardMainDoc namecardMainDocA = findByNamecardSeq(memberSeq);
+//        NamecardMainDoc findNamecardMainDoc = findByMemberSeq(memberSeq);
 
+    }
 
+    //todo - 즐겨찾기 최신화
+    public void updateFavorite(Long memberSeq, Exchange exchange) {
 
     }
 }

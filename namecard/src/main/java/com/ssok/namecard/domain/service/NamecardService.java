@@ -130,4 +130,37 @@ public class NamecardService {
                            )
                            .collect(Collectors.toList());
     }
+
+    public Long likeNamecard(String memberUuid, Long exchangeSeq) {
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+
+        //mariadb
+        Exchange exchange = exchangeRepository.findByExchangeSeq(exchangeSeq)
+                                              .orElseThrow(
+                                                  () -> new ExchangeException(
+                                                      ErrorCode.EXCHANGE_NOT_FOUND)
+                                              );
+        exchange.updateFavorite();
+
+        //mongo todo - 즐겨 찾기 표시 및 조회 시 favorite 리스트에 넣어주기
+        namecardEventHandler.updateFavorite(memberSeq, exchange);
+        return exchangeSeq;
+    }
+
+    public List<String> getNamecardTimeline(Long exchangeSeq) {
+        Exchange exchange = exchangeRepository.findByExchangeSeq(exchangeSeq)
+                                              .orElseThrow(
+                                                  () -> new ExchangeException(ErrorCode.EXCHANGE_NOT_FOUND));
+        Long memberSeq = exchange.getReceiveNamecard().getMemberSeq();
+        log.info("회원 식별키: {}", memberSeq);
+        List<String> findNamecardImageList = namecardRepository.findAllNamecardImage(memberSeq);
+        return findNamecardImageList;
+    }
+
+    public String getNamecardMemo(Long exchangeSeq) {
+        Exchange exchange = exchangeRepository.findByExchangeSeq(exchangeSeq)
+                                              .orElseThrow(
+                                                  () -> new ExchangeException(ErrorCode.EXCHANGE_NOT_FOUND));
+        return exchange.getExchangeNote();
+    }
 }

@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 @Builder
 public record MydataAccessTokenFeignRequest(
         Long memberSeq,
-        String mydataAccessToken
+        String memberMydataAccessToken
 ) {
 }

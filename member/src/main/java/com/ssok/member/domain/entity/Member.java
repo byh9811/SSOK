@@ -44,7 +44,7 @@ public class Member extends BaseEntity {
     @Column(name="member_ci_create_date")
     private LocalDateTime memberCiCreateDate;
 
-    @Column(name="member_mydata_access_token")
+    @Column(name="member_mydata_access_token", length = 512)
     private String memberMydataAccessToken;
 
     @Column(name="member_account_num")
@@ -59,7 +59,7 @@ public class Member extends BaseEntity {
     @Column(name="member_is_deleted",nullable = false)
     private boolean deleted;
 
-    @Column(name="member_refresh_token")
+    @Column(name="member_refresh_token", length = 512)
     private String memberRefreshToken;
 
     public void updateRefreshToken(String refreshToken){

@@ -1,11 +1,8 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:ssok/widgets/businesscards/childrens/modal_type_button.dart';
 
-class BusinessCreateModal extends StatelessWidget {
-  const BusinessCreateModal({super.key});
+class BusinessTransferModal extends StatelessWidget {
+  const BusinessTransferModal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class BusinessCreateModal extends StatelessWidget {
           ),
           SizedBox(height: screenHeight * 0.01),
           Text(
-            "내 명함 등록",
+            "교환",
             style: TextStyle(
               color: Color(0xFF656363),
               fontSize: 24,
@@ -42,33 +39,21 @@ class BusinessCreateModal extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ModalTypeButton(
-                title: "촬영",
-                icon: Icons.photo_camera,
-                ontap: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed('/businesscard/camera/create');
-                },
+                title: "NFC",
+                icon: Icons.nfc,
+                ontap: () {},
               ),
               ModalTypeButton(
-                title: "파일 업로드",
-                icon: Icons.cloud_upload,
-                ontap: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-
-                  if (result != null) {
-                    File file = File(result.files.single.path!);
-                  } else {
-                    // User canceled the picker
-                  }
-                },
+                title: "Bluetooth",
+                icon: Icons.bluetooth_searching,
+                ontap: () {},
               ),
               ModalTypeButton(
-                title: "직접 생성",
-                icon: Icons.palette,
+                title: "Link",
+                icon: Icons.share,
                 ontap: () {
                   Navigator.of(context)
-                      .pushReplacementNamed('/businesscard/self/create');
+                      .pushReplacementNamed('/card/self/create');
                 },
               ),
             ],

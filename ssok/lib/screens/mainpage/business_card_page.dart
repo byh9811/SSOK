@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ssok/widgets/businesscards/not_registered_business_card.dart';
+// import 'package:ssok/widgets/businesscards/not_registered_business_card.dart';
 import 'package:ssok/widgets/businesscards/registered_business_card.dart';
 
 class BusinessCardPage extends StatefulWidget {

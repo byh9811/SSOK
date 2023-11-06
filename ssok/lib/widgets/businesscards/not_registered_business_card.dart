@@ -37,15 +37,16 @@ class _NotRegisteredBusinessCardState extends State<NotRegisteredBusinessCard> {
                 child: registerButton(
                   onPressed: () {
                     showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                              ),
-                              child: BusinessCreateModal());
-                        });
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: BusinessCreateModal());
+                      },
+                    );
                   },
                 ),
               )

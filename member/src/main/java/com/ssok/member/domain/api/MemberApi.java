@@ -102,7 +102,12 @@ public class MemberApi {
         Boolean verification = memberService.editVerification(memberSeq);
         return OK(verification);
     }
-
+    //회원 CI 조회
+    @GetMapping("/member/ci")
+    public ApiResponse<String> getCi(@RequestParam (name = "member-seq")Long memberSeq){
+        String memberCi = memberService.getCi(memberSeq);
+        return OK(memberCi);
+    }
 //    @PostMapping("/member/seq")
 //    public ApiResponse<MemberSeqResponse> getMemberSeq(@RequestBody String memberUuid){
 //        System.out.println("memberUuid");

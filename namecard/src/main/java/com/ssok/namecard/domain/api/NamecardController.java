@@ -74,7 +74,7 @@ public class NamecardController {
     /** 명함 목록 조회 - 메인 */
     @GetMapping("/")
     public ApiResponse<NamecardMainDocResponse> getNamecardMainDoc(
-        @RequestHeader String memberUuid
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid
     ){
         NamecardMainDocResponse namecardMainDocResponse = namecardQueryService.getNamecardMainDoc(memberUuid);
         log.info("메인페이지 body 로그: {}", namecardMainDocResponse);

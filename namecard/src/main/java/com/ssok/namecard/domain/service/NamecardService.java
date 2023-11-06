@@ -126,7 +126,10 @@ public class NamecardService {
 
     public List<NamecardMapResponse> getNamecardMapList(String memberUuid) {
         Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
-        List<Exchange> exchangeList = findByMemberSeq(memberSeq).getExchanges();
+        List<Namecard> namecardList = namecardRepository.findAllByMemberSeq(memberSeq);
+        List<Exchange> exchangeList = namecardList.stream() // Stream<Namecard> 생성
+                                                  .flatMap(namecard -> namecard.getExchanges().stream()) // Stream<List<Exchange>>를 Stream<Exchange>로 평탄화
+                                                  .collect(Collectors.toList()); // 평탄화된 Stream<Exchange>를 List<Exchange>로 수집
         return exchangeList.stream()
                            .map(
                                e -> new NamecardMapResponse(e)

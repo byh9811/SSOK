@@ -4,6 +4,7 @@ import 'package:ssok/screens/id/drive_id_create_page.dart';
 import 'package:ssok/screens/id/id_create_page.dart';
 
 import 'package:ssok/screens/login/login_page.dart';
+import 'package:ssok/screens/login/signin_page.dart';
 import 'package:ssok/screens/main_page.dart';
 import 'package:ssok/screens/pocket/pocket_account_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_page.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
+        '/signin':(context)=>SigninPage(),
         '/main': (context) => MainPage(),
         '/card/self/create': (context) => CardSelfCreatePage(),
         '/id/create': (context) => IdCreatePage(),

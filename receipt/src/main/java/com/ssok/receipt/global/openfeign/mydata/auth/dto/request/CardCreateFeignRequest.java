@@ -1,4 +1,4 @@
-package com.ssok.receipt.global.openfeign.mydata.dto.request;
+package com.ssok.receipt.global.openfeign.mydata.auth.dto.request;
 
 import com.ssok.receipt.global.util.DummyUtils;
 import lombok.Builder;

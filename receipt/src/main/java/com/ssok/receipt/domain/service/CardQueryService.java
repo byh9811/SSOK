@@ -2,14 +2,8 @@ package com.ssok.receipt.domain.service;
 
 import com.ssok.receipt.domain.api.dto.response.CardQueryResponse;
 import com.ssok.receipt.domain.maria.entity.Card;
-import com.ssok.receipt.domain.maria.entity.CardCompany;
 import com.ssok.receipt.domain.maria.repository.CardRepository;
-import com.ssok.receipt.global.enumerate.BankName;
 import com.ssok.receipt.global.openfeign.member.MemberClient;
-import com.ssok.receipt.global.openfeign.mydata.CardClient;
-import com.ssok.receipt.global.openfeign.mydata.dto.request.CardCreateFeignRequest;
-import com.ssok.receipt.global.openfeign.mydata.dto.response.CardCreateFeignResponse;
-import com.ssok.receipt.global.util.DummyUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

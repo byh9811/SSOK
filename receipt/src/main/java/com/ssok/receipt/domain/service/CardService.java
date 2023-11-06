@@ -34,11 +34,11 @@ public class CardService {
         int randInt = DummyUtils.getRandInt(5);
         CardCompany company = new CardCompany(randInt, BankName.valueOf(randInt).name());
         CardCreateFeignRequest request = CardCreateFeignRequest.from(memberCi, company.getCardCompanyName());
-        CardCreateFeignResponse registerCard = cardClient.registerCard(request).getBody();
+        String cardId = cardClient.registerCard(request).getBody();
         Card card = Card.builder()
                 .company(company)
                 .memberSeq(memberSeq)
-                .cardId(registerCard.cardId())
+                .cardId(cardId)
                 .cardNum(request.card_num())
                 .cardName(request.card_name())
                 .cardExpMonth("11")

@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface CardClient {
 
     @PostMapping("/register/card")
-    ResponseEntity<CardCreateFeignResponse> registerCard(
+    ResponseEntity<String> registerCard(
             @RequestBody CardCreateFeignRequest request);
 }

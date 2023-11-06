@@ -1,9 +1,12 @@
 package com.ssok.receipt.global.openfeign.member;
 
 import com.ssok.receipt.global.api.ApiResponse;
+import com.ssok.receipt.global.openfeign.mydata.dto.request.MydataAccessTokenFeignRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
@@ -18,5 +21,9 @@ public interface MemberClient {
 
     @GetMapping(value = "/member/name")
     ApiResponse<String> getMemberName(@RequestParam("member-seq") Long memberSeq);
+
+    @PostMapping(value = "/member/mydata")
+    ApiResponse<String> createMemberAccessToken(
+            @RequestBody MydataAccessTokenFeignRequest request);
 
 }

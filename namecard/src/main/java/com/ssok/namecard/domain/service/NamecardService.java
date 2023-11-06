@@ -3,6 +3,7 @@ package com.ssok.namecard.domain.service;
 import com.ssok.namecard.client.MemberServiceClient;
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
 import com.ssok.namecard.domain.api.dto.response.NamecardMapResponse;
+import com.ssok.namecard.domain.api.dto.response.NamecardSearchResponse;
 import com.ssok.namecard.domain.exception.ExchangeException;
 import com.ssok.namecard.domain.exception.NamecardException;
 import com.ssok.namecard.domain.maria.entity.Exchange;
@@ -162,5 +163,14 @@ public class NamecardService {
                                               .orElseThrow(
                                                   () -> new ExchangeException(ErrorCode.EXCHANGE_NOT_FOUND));
         return exchange.getExchangeNote();
+    }
+
+    public List<NamecardSearchResponse> getNamecardSearch(String memberUuid, String name) {
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+        List<Exchange> exchangeList = exchangeRepository.findAllByMemberSeq(memberSeq);
+        List<NamecardSearchResponse> searchResponseList = NamecardSearchResponse.from(exchangeList).stream()
+                                                                                .filter(response -> response.name().contains(name))
+                                                                                .collect(Collectors.toList());;
+        return searchResponseList;
     }
 }

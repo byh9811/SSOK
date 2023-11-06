@@ -6,7 +6,6 @@ import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
 import com.ssok.namecard.domain.api.dto.response.NamecardDetailDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMainDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMapResponse;
-import com.ssok.namecard.domain.api.dto.response.NamecardResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardSearchResponse;
 import com.ssok.namecard.domain.service.NamecardQueryService;
 import com.ssok.namecard.domain.service.NamecardService;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -138,8 +138,12 @@ public class NamecardController {
 
     /** 명함 이름 검색 */
     @GetMapping("/search")
-    public ApiResponse<List<NamecardSearchResponse>> getNamecardSearch(){
-
+    public ApiResponse<List<NamecardSearchResponse>> getNamecardSearch(
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid,
+        @RequestParam String name
+    ){
+        List<NamecardSearchResponse> searchResponseList = namecardService.getNamecardSearch(memberUuid, name);
+        return OK(searchResponseList);
     }
 
 

@@ -49,7 +49,7 @@ public class CardService {
         String mydataAccessToken = authAccessUtil.getMydataAccessToken(memberCi);
         MydataAccessTokenFeignRequest tokenFeignRequest = MydataAccessTokenFeignRequest.builder()
                 .memberSeq(memberSeq)
-                .mydataAccessToken(mydataAccessToken)
+                .memberMydataAccessToken(mydataAccessToken)
                 .build();
         String response = memberClient.createMemberAccessToken(tokenFeignRequest).getResponse();
         log.warn("{}", mydataAccessToken);

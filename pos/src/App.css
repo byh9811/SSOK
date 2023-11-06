@@ -1,38 +1,112 @@
-.App {
+@import url('https://fonts.googleapis.com/css?family=Jua:400');
+
+/* 전체 */
+.App{
+  padding: 40px;
+  font-family: Jua;
+}
+.totalWrapper{
+  border: solid 1px black;
+  border-radius: 20px;
+  overflow: hidden;
+}
+/* 헤더 */
+.headerWrapper{
+  background-color: rgb(236, 236, 236);
+  padding: 5px;
+  height: 5vh;
+  border-bottom: solid 1px black;
+}
+.header{
+  display: flex;
+}
+.header .headerImg{
+  width: 80px;
+}
+.header .posName{
+  font-weight: 800;
+  font-size: 23px;
+}
+/* 컨텐츠 레퍼 */
+.contentWrapper{
+  height: 80vh;
+  display: flex;
+}
+/* 왼쪽 */
+.contentWrapper .leftContentWrapper{
+  height: 100%;
+  width: 70%;
+  border-right: 1px solid grey;
+}
+.itemListWrapper{
+  height: auto;
+  min-height: 85%;
+  /* 푸터 높이 */
+  border-bottom: 1px solid black;
+}
+
+.itemWrapper{
+  border: solid 1px black;
+  border-radius: 10px;
+}
+
+
+
+.paymentWrapper{
+  background-color: rgb(243, 243, 243);
+  /* 푸터 높이 */
+  height: 15%;
+  position : relative;
+  display: flex;
+}
+.paymentWrapper .payWrapper{
+  width: 65%;
+  margin: auto 0;
+}
+
+.paymentWrapper .payWrapper .card{
+  margin: 5px;
+  font-size: 40px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.paymentWrapper .payWrapper .card .cardNum{
+  width: 100px;
+  height: 35px;
+  margin: 0 6px;
+  vertical-align: middle;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.paymentWrapper .total{
+  width: 20%;
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
+  text-align: center;
+  display: inline;
+  align-content: center;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.paymentWrapper .total .totalTitle{
+  font-size: 35px;
+  width: 100%;
+  height: 40%;
+  border-bottom: 1px solid black;
+}
+.paymentWrapper .total .totalMoney{
+  font-size: 30px;
+  width: 100%;
+  height: 60%;
+  padding: 10px 0;
+}
+.payBtn{
+  width: 10%;
+  font-size: 60px;
+  text-align: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin: auto;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* 오른쪽 */
+.contentWrapper .rightContentWrapper{
+  background-color: rgb(165, 255, 165);
+  height: 100%;
+  width: 30%;
 }

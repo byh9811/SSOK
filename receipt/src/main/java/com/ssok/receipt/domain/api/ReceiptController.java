@@ -34,9 +34,9 @@ public class ReceiptController {
 
     @GetMapping("/list")
     public ApiResponse<List<ReceiptListQueryResponse>> getReceiptList(
-            @ModelAttribute ReceiptQueryRequest request
+            @RequestHeader String memberUUID
     ) {
-        List<ReceiptListQueryResponse> receiptList = receiptQueryService.getReceiptList(ReceiptListQueryDto.fromRequest(request));
+        List<ReceiptListQueryResponse> receiptList = receiptQueryService.getReceiptList(memberUUID);
         return OK(receiptList);
     }
 

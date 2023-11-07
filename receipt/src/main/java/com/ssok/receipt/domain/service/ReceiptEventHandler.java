@@ -15,9 +15,9 @@ public class ReceiptEventHandler {
     private final ReceiptListDocumentRepository receiptListDocumentRepository;
     private final ReceiptDetailDocumentRepository receiptDetailDocumentRepository;
 
-    public void createReceipt(ReceiptCreateServiceDto receiptCreateServiceDto) {
+    public void createReceipt(Long memberSeq, ReceiptCreateServiceDto receiptCreateServiceDto) {
         ReceiptDetailDocument receiptDetailDocument = receiptDetailDocumentRepository.save(ReceiptDetailDocument.fromCreateDto(receiptCreateServiceDto));
-        ReceiptListDocument createDto = receiptListDocumentRepository.save(ReceiptListDocument.fromCreateDto(receiptDetailDocument.getReceiptDetailDocumentSeq(), receiptCreateServiceDto));
+        ReceiptListDocument createDto = receiptListDocumentRepository.save(ReceiptListDocument.fromCreateDto(receiptDetailDocument.getReceiptDetailDocumentSeq(), memberSeq, receiptCreateServiceDto));
     }
 
 }

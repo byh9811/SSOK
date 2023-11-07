@@ -89,7 +89,7 @@ public class ReceiptService {
 
         purchaseItemRepository.saveAll(purchaseItemList);
         receiptRepository.save(receipt);
-        eventHandler.createReceipt(receiptCreateServiceDto);
+        eventHandler.createReceipt(memberSeq, receiptCreateServiceDto);
     }
 
 }

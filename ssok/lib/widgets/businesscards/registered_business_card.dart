@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/dto/business_card_data.dart';
+import 'package:ssok/main.dart';
 import 'package:ssok/widgets/modals/business_transfer_modal.dart';
 import 'package:ssok/http/http.dart';
 
@@ -19,7 +20,8 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   String myImage = "";
 
   void bringBusinessCardList() async {
-    final response = await apiService.getRequest('namecard-service/');
+    final response = await apiService.getRequest(
+        'namecard-service/', TokenManager().accessToken);
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       businessCardData = BusinessCardData.fromJson(jsonData['response']);
@@ -34,6 +36,8 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   @override
   void initState() {
     super.initState();
+    businessCardData =
+        BusinessCardData(namecardSeq: 0, namecardImg: "", namecards: []);
     bringBusinessCardList();
   }
 

@@ -10,14 +10,6 @@ class BusinessCardData {
   });
 
   factory BusinessCardData.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      // 'json'이 null일 경우 초기화나 기본값을 반환
-      return BusinessCardData(
-        namecardSeq: 0,
-        namecardImg: "",
-        namecards: [],
-      );
-    }
     List<Namecard> namecards = List<Namecard>.from(
         (json['namecards'] as List).map((item) => Namecard.fromJson(item)));
 

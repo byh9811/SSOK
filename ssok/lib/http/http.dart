@@ -3,26 +3,28 @@ import 'dart:convert';
 
 class ApiService {
   String baseUrl = "https://gateway.ssok.site/api";
-  Map<String, String> headers = {
-    'content-type': 'application/json',
-    'accept': 'application/json',
-    'ACCESS-TOKEN':
-        "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJVVUlEIjoiYWU4OTUyMDAtYTA1ZC00MTNkLWJmMGQtMDQ5OGFjZjc0MTJjIiwiaWF0IjoxNjk5MzM4ODEyLCJleHAiOjE2OTkzNDI0MTJ9.MzX3OtwwX1OqyEIAm0BBKoRyY8RBncZgRaHaAxprk0Q",
-  };
 
-  Future<http.Response> getRequest(String endpoint) async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/$endpoint'), headers: headers);
+  Future<http.Response> getRequest(String endpoint, String? accessToken) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/$endpoint'),
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'ACCESS-TOKEN': accessToken ?? ""
+      },
+    );
     return response;
   }
 
   Future<http.Response> postRequest(
-    String endpoint,
-    Map<String, String> data,
-  ) async {
+      String endpoint, Map<String, String> data, String? accessToken) async {
     final response = await http.post(
       Uri.parse('$baseUrl/$endpoint'),
-      headers: headers,
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'ACCESS-TOKEN': accessToken ?? ""
+      },
       body: jsonEncode(data),
     );
     return response;

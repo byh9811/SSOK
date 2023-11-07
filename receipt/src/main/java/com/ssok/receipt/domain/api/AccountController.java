@@ -1,5 +1,6 @@
 package com.ssok.receipt.domain.api;
 
+import com.ssok.receipt.domain.api.dto.request.TransferCreateRequest;
 import com.ssok.receipt.domain.api.dto.response.AccountInfoResponse;
 import com.ssok.receipt.domain.api.dto.response.CardAdminQueryResponse;
 import com.ssok.receipt.domain.api.dto.response.CardQueryResponse;
@@ -28,6 +29,13 @@ public class AccountController {
             @RequestHeader("MEMBER-UUID") String memberUUID
     ) {
         return OK(accountQueryService.getAccountInfo(memberUUID));
+    }
+
+    @PostMapping("/transfer")
+    public ApiResponse<Long> transfer(
+            @RequestBody TransferCreateRequest request
+    ) {
+        return OK(accountQueryService.transfer(request.memberSeq(), request.amt()));
     }
 
 }

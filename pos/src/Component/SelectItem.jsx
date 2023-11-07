@@ -1,13 +1,19 @@
 import React from 'react'
 
-const SelectItem = () => {
+const SelectItem = ({item, removeItem}) => {
+
+function delItem(){
+  removeItem(item);
+}
+
   return (
-    <div className='SelectItemWrapper'>
-      <div>
-        선택된 상품명
+    <div className='selectItemWrapper'>
+      <div className="itemInfo">
+        <div className='selectItemName'>{item.itemName}</div>
+        <div className='selectItemCnt'>{item.itemCnt}</div>
+        <div className='selectItemPrice'>{item.itemPrice}</div>
+        <div className='rmBtn'><button onClick={delItem}>취소</button></div>
       </div>
-      <div>수량</div>
-      <div>가격</div>
     </div>
   )
 }

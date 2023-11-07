@@ -1,24 +1,83 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 
-const Payment = () => {
+const Payment = ({totalMoney, selectItem, removeAll}) => {
+
+    const [first, setFirst] = useState("");
+    const [second, setSecond] = useState("");
+    const [third, setThird] = useState("");
+    const [fourth, setFouth] = useState("");
+    const [paymentItemList, setPaymentItemList] = useState([]);
+
+    useEffect(() => {
+
+        let array = [];
+        for(let i=0; i<selectItem.length; i++){
+            const itemSeq = selectItem[i].itemSeq;
+            const itemCnt = selectItem[i].itemCnt;
+            let item ={
+                "itemSeq":itemSeq,
+                "itemCnt":itemCnt
+            }
+            array=[...array,item];
+        }
+        console.log(array);
+        setPaymentItemList(array);
+
+      }, [selectItem])
+
+
+    function onChangeFirst(e){
+        setFirst(e.target.value)
+    }
+    function onChangeSecond(e){
+        setSecond(e.target.value)
+    }
+    function onChangeThird(e){
+        setThird(e.target.value)
+    }
+    function onChangeFourth(e){
+        setFouth(e.target.value)
+    }
+
+
+    async function buy(){
+        const cardNum = first+'-'+second+'-'+third+'-'+fourth;
+
+        await axios.post('https://k9c107.p.ssafy.io/pos/payment-service/payment', {
+            "cardNum": cardNum,
+            "cardType": "01",
+            "amount": totalMoney,
+            "type": "01",
+            "installPeriod": "0",
+            "shopName": "엔젤리너스",
+            "shopNumber": "123-45-67890",
+            "paymentItemList":paymentItemList
+        }).then((response)=>{
+          console.log(response.data);
+          removeAll();
+          setPaymentItemList([]);
+        });
+    }
+
   return (
     <div className='paymentWrapper'>
         <div className='payWrapper'>
             <div className='card'>
                 <span>
                 <span>카드번호 : </span>
-                <input className='cardNum'></input>-
-                <input className='cardNum'></input>-
-                <input className='cardNum'></input>-
-                <input className='cardNum'></input>
+                <input className='cardNum' value={first} onChange={onChangeFirst} maxLength='4'></input>-
+                <input className='cardNum'value={second} onChange={onChangeSecond} maxLength='4'></input>-
+                <input className='cardNum'value={third} onChange={onChangeThird} maxLength='4'></input>-
+                <input className='cardNum'value={fourth} onChange={onChangeFourth} maxLength='4'></input>
                 </span>
             </div>          
         </div>
         <div className='total'>
                 <div className='totalTitle'>총 금액</div>
-                <div className='totalMoney'>10000</div>
+                <div className='totalMoney'>{totalMoney}</div>
             </div>  
-        <div className='payBtn'>
+        <div className='payBtn' onClick={buy}>
             결제
         </div>
 

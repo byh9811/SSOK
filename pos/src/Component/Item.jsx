@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const Item = () => {
+const Item = ({item, addItem}) => {
+
+  const [first, setfirst] = useState(item)
+
+  function addNewItem(){
+    alert(item.itemName);
+    addItem({"itemSeq":item.itemSeq,"itemName":item.itemName, "itemPrice":item.itemPrice,"itemTotalPrice":item.itemPrice, "itemCnt":1})
+  }
+
   return (
-    <div className='itemWrapper'>
-      <div>
-        <div>상품 이름</div>
-        <div>상품 제조사</div>
-        <div>상품 가격</div>
+    <div className='itemWrapper' onClick={addNewItem}>
+      <div className='itemInfoWrapper'>
+        <div className='itemName'>{first.itemName}</div>
+        <div className='itemPrice'>{first.itemPrice}원</div>
       </div>
     </div>
   )

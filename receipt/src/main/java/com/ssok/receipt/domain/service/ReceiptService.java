@@ -48,7 +48,7 @@ public class ReceiptService {
             for (EcoItem carbonNeutralItem : carbonNeutralItemList) {
                 if (carbonNeutralItem.getEcoItemName().equals(innerPaymentItem.itemName())) {      // 이름으로 비교
                     isCNI = true;
-                    earnedCNP += innerPaymentItem.itemPrice();
+                    earnedCNP += carbonNeutralItem.getEcoItemPoint();
                     break;
                 }
             }

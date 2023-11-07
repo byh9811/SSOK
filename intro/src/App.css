@@ -5,6 +5,7 @@
 }
 
 body {
+  background-color: rgb(208, 235, 255);
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -28,6 +29,7 @@ body {
 .description{
   font-weight: 800;
   font-size: 35px;
+  color: rgb(0, 0, 0);
 }
 
 .satellites {

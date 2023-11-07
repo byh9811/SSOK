@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @Configuration
 //@Profile({"local"})
 @Slf4j
-public class setDummyUtil {
+public class initUtils {
 
     private boolean setDummy = true;        // true 일때 더미 데이터 삽입
 

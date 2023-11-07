@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Slf4j
 public class InitUtils {
 
-    private boolean setDummy = true;        // true 일때 더미 데이터 삽입
+    private final boolean setDummy = true;        // true 일때 더미 데이터 삽입
 
     @Bean
     CommandLineRunner init(

@@ -72,18 +72,15 @@ public class BankAccessUtil {
         return accountDetailResponse.getDetailList().get(0);
     }
 
-//    // 태산 적금통에서 내 계좌로 이체시 이 로직 사용 (적금통 해지)
-//    public void transfer(Member member) {
-//        Tikkle tikkle = tikkleRepository.findByMemberId(member.getId()).get();
-//        TransferRequest transferRequest = createTransferRequest(member, money);
-//        bankClient.transfer(member.getMydataAccessToken(), transferRequest);
-//    }
-//
-//    // 내 계좌에서 적금통으로 금액 이동시 이 로직 사용
-//    public void charge(Member member, Long money) {
-//        ChargeRequest chargeRequest = createChargeRequest(member, money);
-//        bankClient.charge(member.getMydataAccessToken(), chargeRequest);
-//    }
+    public void transfer(String mdToken, String accNum, Long amt) {
+        TransferRequest transferRequest = createTransferRequest(accNum, amt);
+        bankClient.transfer(mdToken, transferRequest);
+    }
+
+    public void pay(String mdToken, String accNum, Long amt) {
+        ChargeRequest chargeRequest = createChargeRequest(accNum, amt);
+        bankClient.charge(mdToken, chargeRequest);
+    }
 
     private String getApiType() {
         return "user-search";
@@ -122,18 +119,18 @@ public class BankAccessUtil {
                 .build();
     }
 
-//    private TransferRequest createTransferRequest(Member member, Long money) {
-//        return TransferRequest.builder()
-//                .receiverAccNum(member.getAccountNum())
-//                .transAmt(money)
-//                .build();
-//    }
-//
-//    private ChargeRequest createChargeRequest(Member member, Long money) {
-//        return ChargeRequest.builder()
-//                .senderAccNum(member.getAccountNum())
-//                .transAmt(money)
-//                .build();
-//    }
+    private TransferRequest createTransferRequest(String accNum, Long amt) {
+        return TransferRequest.builder()
+                .receiverAccNum(accNum)
+                .transAmt(amt)
+                .build();
+    }
+
+    private ChargeRequest createChargeRequest(String accNum, Long money) {
+        return ChargeRequest.builder()
+                .senderAccNum(accNum)
+                .transAmt(money)
+                .build();
+    }
 
 }

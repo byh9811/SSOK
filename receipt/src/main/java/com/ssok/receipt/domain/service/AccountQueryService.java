@@ -61,4 +61,15 @@ public class AccountQueryService {
                 .build();
     }
 
+    public Long transfer(Long memberSeq, Long amt) {
+        // 1. 계좌 번호 가져오기
+        String accountNum = memberClient.getMemberAccount(memberSeq).getResponse();
+
+        // 2. 마이데이터 토큰 가져오기
+        String mdToken = memberClient.getMemberMyDataToken(memberSeq).getResponse();
+
+        bankAccessUtil.transfer(mdToken, accountNum, amt);
+        return amt;
+    }
+
 }

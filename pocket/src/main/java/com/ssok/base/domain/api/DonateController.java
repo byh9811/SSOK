@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/donate-service")
+@RequestMapping("/api/pocket-service")
 public class DonateController {
     // Donate 생성
     private final DonateService donateService;

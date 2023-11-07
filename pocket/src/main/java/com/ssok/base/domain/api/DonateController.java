@@ -15,25 +15,25 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/pocket-service")
+@RequestMapping("/api/pocket-service/donate")
 public class DonateController {
     // Donate 생성
     private final DonateService donateService;
     private final DonateQueryService donateQueryService;
 
-    @PostMapping()
+    @PostMapping("/init")
     public ApiResponse<Long> createDonate(@RequestHeader(name = "MEMBER-UUID") String memberUuid, @RequestBody DonateCreateRequest request){
         return ApiResponse.OK(donateService.createDonate(request));
     }
 
-    @PostMapping("/donate")
+    @PostMapping()
     public ApiResponse<?> doDonate(@RequestHeader(name = "MEMBER-UUID") String memberUuid, @RequestBody DonateRequest request){
         log.info("들어왔습니다..");
         donateService.doDonate(request.toDto(memberUuid));
         return ApiResponse.OK(null);
     }
 
-    @GetMapping("/donate")
+    @GetMapping()
     public ApiResponse<List<DonatesResponse>> getDonates(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
 
         List<DonatesResponse> response = donateQueryService.getDonates(memberUuid);

@@ -139,11 +139,7 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String jwtToken) {
-        log.warn("validateToken1: {}", jwtToken);
         try {
-            log.warn("validateToken2: {}", new Date());
-            log.warn("validateToken3: {}", getClaimsAccessToken(jwtToken).getExpiration());
-            log.warn("validateToken4: {}", !getClaimsAccessToken(jwtToken).getExpiration().before(new Date()));
             return !getClaimsAccessToken(jwtToken).getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
@@ -151,8 +147,6 @@ public class JwtUtils {
     }
 
     public Claims getClaimsAccessToken(String jwtToken) {
-        log.warn("getClaimsAccessToken1: {}", jwtToken);
-        log.warn("getClaimsAccessToken2: {}", jwtToken.substring(7));
         return Jwts.parserBuilder()
                 .setSigningKey(getAccessKey()).build()
                 .parseClaimsJws(jwtToken)
@@ -162,7 +156,6 @@ public class JwtUtils {
     public Authentication getAuthentication(String accessToken) {
         //토큰 복호화
         Claims claims = getClaimsAccessToken(accessToken);
-        log.warn("getAuthentication1: {}", claims.get("user-ci"));
         if (claims.get("user-ci") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }

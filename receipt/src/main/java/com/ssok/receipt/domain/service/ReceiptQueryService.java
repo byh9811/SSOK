@@ -6,6 +6,7 @@ import com.ssok.receipt.domain.mongo.document.ReceiptListDocument;
 import com.ssok.receipt.domain.mongo.repository.ReceiptDetailDocumentRepository;
 import com.ssok.receipt.domain.mongo.repository.ReceiptListDocumentRepository;
 import com.ssok.receipt.domain.service.dto.ReceiptListQueryDto;
+import com.ssok.receipt.global.openfeign.member.MemberClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,13 @@ public class ReceiptQueryService {
 
     private final ReceiptListDocumentRepository receiptListDocumentRepository;
     private final ReceiptDetailDocumentRepository receiptDetailDocumentRepository;
+    private final MemberClient memberClient;
 
-    public List<ReceiptListQueryResponse> getReceiptList(ReceiptListQueryDto dto) {
-        YearMonth yearMonth = YearMonth.of(dto.year(), dto.month());
-        LocalDateTime startOfMonth = yearMonth.atDay(1).atStartOfDay();
-        LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59, 59, 999999999);
+    public List<ReceiptListQueryResponse> getReceiptList(String memberUUID) {
+        Long memberSeq = memberClient.getMemberSeq(memberUUID).getResponse();
+        List<ReceiptListDocument> receiptDocumentList = receiptListDocumentRepository.findAllByMemberSeq(memberSeq);
 
-        List<ReceiptListDocument> allByApprovedDate = receiptListDocumentRepository.findAllByApprovedDate(startOfMonth, endOfMonth);
-        return allByApprovedDate.stream().map(ReceiptListQueryResponse::from).collect(Collectors.toList());
+        return receiptDocumentList.stream().map(ReceiptListQueryResponse::from).collect(Collectors.toList());
     }
 
     public ReceiptDetailQueryResponse getReceiptDetail(String receiptDetailId) {

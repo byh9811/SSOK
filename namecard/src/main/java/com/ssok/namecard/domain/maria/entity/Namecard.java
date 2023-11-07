@@ -58,4 +58,6 @@ public class Namecard extends BaseEntity {
                        .namecardWebsite(namecardCreateRequest.namecardWebsite())
                        .build();
     }
+
+
 }

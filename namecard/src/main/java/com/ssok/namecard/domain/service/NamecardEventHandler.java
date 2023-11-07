@@ -128,6 +128,12 @@ public class NamecardEventHandler {
 
     //todo - 즐겨찾기 최신화
     public void updateFavorite(Long memberSeq, Exchange exchange) {
-
+        NamecardMainDoc namecardMainDoc = findByMemberSeq(exchange.getExchangeSeq());
+        Namecard receiveNamecard = exchange.getReceiveNamecard();
+        List<NamecardDoc> favorites = namecardMainDoc.getFavorites();
+        //namecard -> namecardDoc
+        NamecardDoc namecardDoc = NamecardDoc.from(receiveNamecard);
+        favorites.add(namecardDoc);
+        namecardMainDocMongoRepository.save(namecardMainDoc);
     }
 }

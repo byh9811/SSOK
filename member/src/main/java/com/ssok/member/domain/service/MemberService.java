@@ -31,18 +31,30 @@ public class MemberService {
             return true;
         return false;
     }
-    public MemberSeqResponse getSeq(String memberUuid){
-        Member member = memberRepository.findMemberByMemberUuid(memberUuid).orElseThrow();
-        return MemberSeqResponse.builder()
-                .memberSeq(member.getMemberSeq())
-                .build();
+    public Long getSeq(String memberUuid){
+        Member member = memberRepository.findMemberByMemberUuid(memberUuid).orElse(null);
+
+        if(member==null){
+            return null;
+        }else{
+            return member.getMemberSeq();
+        }
+
+//        return MemberSeqResponse.builder()
+//                .memberSeq(member.getMemberSeq())
+//                .build();
     }
 
-    public MemberAccountResponse getAccount(Long memberSeq) {
-        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
-        return MemberAccountResponse.builder()
-                .memberAccountNum(member.getMemberAccountNum())
-                .build();
+    public String getAccount(Long memberSeq) {
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElse(null);
+        if(member==null){
+            return null;
+        }else{
+            return member.getMemberAccountNum();
+        }
+//        return MemberAccountResponse.builder()
+//                .memberAccountNum(member.getMemberAccountNum())
+//                .build();
     }
     public MemberAccountResponse editAccountNum(MemberAccountUpdateDto memberAccountUpdateDto){
         Long memberSeq = memberAccountUpdateDto.getMemberSeq();
@@ -52,7 +64,9 @@ public class MemberService {
         return MemberAccountResponse.builder().memberAccountNum(memberAccountNum).build();
     }
     public String getMydataAccessToken(Long memberSeq) {
-        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElseThrow();
+        Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElse(null);
+        if(member==null)
+            return null;
         String memberMydataAccessToken = member.getMemberMydataAccessToken();
         return memberMydataAccessToken;
     }

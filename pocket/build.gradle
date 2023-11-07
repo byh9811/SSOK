@@ -43,6 +43,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.8'
 
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -65,7 +66,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
-	// MSA
+	// eureka client
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 }
 

@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:math';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_down.dart';
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_left.dart';
@@ -45,6 +47,7 @@ class _BusinessCardSelfCreatePageState
     false,
     false
   ];
+  var globalKey = GlobalKey();
 
   void isCheckedChange() {
     int temp = currentOffsetIndex;
@@ -64,6 +67,23 @@ class _BusinessCardSelfCreatePageState
       currentOffsetIndex = -1;
     });
   }
+
+  // void _capture() async {
+  //   print("START CAPTURE");
+  //   var renderObject = globalKey.currentContext();
+  //   if (renderObject is RenderRepaintBoundary) {
+  //     var boundary = renderObject;
+  //     ui.Image image = await boundary.toImage();
+  //     final directory = (await getApplicationDocumentsDirectory()).path;
+  //     ByteData byteData =
+  //         await image.toByteData(format: ui.ImageByteFormat.png);
+  //     Uint8List pngBytes = byteData.buffer.asUint8List();
+  //     print(pngBytes);
+  //     File imgFile = new File('$directory/screenshot.png');
+  //     imgFile.writeAsBytes(pngBytes);
+  //     print("FINISH CAPTURE ${imgFile.path}");
+  //   }
+  // }
 
   void isCheckedFocus(int num) {
     setState(() {
@@ -114,6 +134,7 @@ class _BusinessCardSelfCreatePageState
                   email: registeredEmail,
                   website: registeredWebsite,
                   currentOffsetIndex: currentOffsetIndex,
+                  globalKey: globalKey,
                 ),
                 SingleChildScrollView(
                     child: Column(
@@ -323,6 +344,7 @@ class BusinessCardBox extends StatefulWidget {
     required this.fax,
     required this.email,
     required this.website,
+    required this.globalKey,
   }) : super(key: key);
 
   final int currentOffsetIndex;
@@ -335,6 +357,7 @@ class BusinessCardBox extends StatefulWidget {
   final String fax;
   final String email;
   final String website;
+  final GlobalKey globalKey;
 
   @override
   State<BusinessCardBox> createState() => _BusinessCardBoxState();
@@ -369,6 +392,7 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
     List<String> titleList = [
       "이름",
       "직책(업무)",
@@ -391,86 +415,89 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                 size: 38,
               ),
             ),
-            Stack(
-              children: [
-                Container(
-                  width: screenWidth * 0.65,
-                  height: screenHeight * 0.18,
-                  color: Colors.amber,
-                ),
-                DraggableText(
-                  name: widget.name,
-                  offset: offsets[0],
-                  onPositionChanged: (newOffset) {
-                    setState(() {
-                      offsets[0] = newOffset;
-                    });
-                  },
-                ),
-                DraggableText(
-                  name: widget.job,
-                  offset: offsets[1],
-                  onPositionChanged: (newOffset) {
-                    setState(() {
-                      offsets[1] = newOffset;
-                    });
-                  },
-                ),
-                DraggableText(
-                  name: widget.company,
-                  offset: offsets[2],
-                  onPositionChanged: (newOffset) {
-                    setState(() {
-                      offsets[2] = newOffset;
-                    });
-                  },
-                ),
-                DraggableText(
-                  name: widget.address,
-                  offset: offsets[3],
-                  onPositionChanged: (newOffset) {
-                    setState(() {
-                      offsets[3] = newOffset;
-                    });
-                  },
-                ),
-                DraggableText(
-                  name: widget.phone,
-                  offset: offsets[4],
-                  onPositionChanged: (newOffset) {
-                    setState(() {
-                      offsets[4] = newOffset;
-                    });
-                  },
-                ),
-                DraggableText(
-                  name: widget.fax,
-                  offset: offsets[5],
-                  onPositionChanged: (newOffset) {
-                    setState(() {
-                      offsets[5] = newOffset;
-                    });
-                  },
-                ),
-                DraggableText(
-                  name: widget.email,
-                  offset: offsets[6],
-                  onPositionChanged: (newOffset) {
-                    setState(() {
-                      offsets[6] = newOffset;
-                    });
-                  },
-                ),
-                DraggableText(
-                  name: widget.website,
-                  offset: offsets[7],
-                  onPositionChanged: (newOffset) {
-                    setState(() {
-                      offsets[7] = newOffset;
-                    });
-                  },
-                ),
-              ],
+            RepaintBoundary(
+              key: widget.globalKey,
+              child: Stack(
+                children: [
+                  Container(
+                    width: screenWidth * 0.65,
+                    height: screenHeight * 0.18,
+                    color: Colors.amber,
+                  ),
+                  DraggableText(
+                    name: widget.name,
+                    offset: offsets[0],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[0] = newOffset;
+                      });
+                    },
+                  ),
+                  DraggableText(
+                    name: widget.job,
+                    offset: offsets[1],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[1] = newOffset;
+                      });
+                    },
+                  ),
+                  DraggableText(
+                    name: widget.company,
+                    offset: offsets[2],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[2] = newOffset;
+                      });
+                    },
+                  ),
+                  DraggableText(
+                    name: widget.address,
+                    offset: offsets[3],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[3] = newOffset;
+                      });
+                    },
+                  ),
+                  DraggableText(
+                    name: widget.phone,
+                    offset: offsets[4],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[4] = newOffset;
+                      });
+                    },
+                  ),
+                  DraggableText(
+                    name: widget.fax,
+                    offset: offsets[5],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[5] = newOffset;
+                      });
+                    },
+                  ),
+                  DraggableText(
+                    name: widget.email,
+                    offset: offsets[6],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[6] = newOffset;
+                      });
+                    },
+                  ),
+                  DraggableText(
+                    name: widget.website,
+                    offset: offsets[7],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[7] = newOffset;
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
             IconButton(
               onPressed: () {},

@@ -14,6 +14,7 @@ import 'package:ssok/screens/main_page.dart';
 import 'package:ssok/screens/pocket/pocket_account_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_send_page.dart';
+import 'package:ssok/screens/pocket/pocket_history_list.dart';
 import 'package:ssok/screens/pocket/pocket_pocket_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_transfer_page.dart';
 import 'package:ssok/screens/receipt/receipt_list_detail_page.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         '/receipt/detail': (context) => ReceiptListDetailPage(),
         '/pocket/account/create': (context) => PocketAccountCreatePage(),
         '/pocket/pocket/create': (context) => PocketPocketCreatePage(),
+        '/pocket/history/list': (context) => PocketHistoryList(),
         '/pocket/donation': (context) => PocketDonationPage(),
         '/pocket/donation/send': (context) => PocketDonationSendPage(),
         '/pocket/transfer': (context) => PocketTransferPage(),

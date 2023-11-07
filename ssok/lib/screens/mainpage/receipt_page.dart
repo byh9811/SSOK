@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ssok/widgets/receipts/receipt_list.dart';
+import 'package:ssok/widgets/receipts/receipt_history_list.dart';
 
 class ReceiptPage extends StatefulWidget {
   const ReceiptPage({Key? key}) : super(key: key);
@@ -14,10 +14,10 @@ class _IdPageState extends State<ReceiptPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        SizedBox(height: screenHeight * 0.05),
+        SizedBox(height: screenHeight * 0.02),
         introText(),
-        SizedBox(height: screenHeight * 0.04),
-        ReceiptList(),
+        SizedBox(height: screenHeight * 0.03),
+        ReceiptHistoryList(),
       ],
     );
   }

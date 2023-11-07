@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage> {
       ),
       body: navPages.elementAt(currentIndex),
       bottomNavigationBar: SizedBox(
-        height: screenHeight * 0.07,
+        height: 60.0,
         child: BottomNavigationBar(
           currentIndex: currentIndex, // 현재 보여주는 탭
           onTap: (newIndex) {
@@ -79,7 +79,7 @@ class _MainPageState extends State<MainPage> {
           items: [
             BottomNavigationBarItem(
                 icon: Padding(
-                  padding: const EdgeInsets.all(2.5),
+                  padding: EdgeInsets.only(),
                   child: Icon(
                     Icons.assignment_ind,
                     size: 23,
@@ -88,8 +88,7 @@ class _MainPageState extends State<MainPage> {
                 label: "신분증"), // index 0
             BottomNavigationBarItem(
                 icon: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 2.5, bottom: 3.2, left: 2.5, right: 2.5),
+                  padding: const EdgeInsets.only(),
                   child: Icon(
                     Icons.badge,
                     size: 24,
@@ -98,7 +97,7 @@ class _MainPageState extends State<MainPage> {
                 label: "명함"), // index 1
             BottomNavigationBarItem(
                 icon: Padding(
-                  padding: const EdgeInsets.all(2.5),
+                  padding: const EdgeInsets.only(),
                   child: Icon(
                     Icons.credit_card,
                     size: 24,
@@ -107,7 +106,7 @@ class _MainPageState extends State<MainPage> {
                 label: "카드"), // index 2
             BottomNavigationBarItem(
                 icon: Padding(
-                  padding: const EdgeInsets.all(2.0),
+                  padding: const EdgeInsets.only(),
                   child: Icon(
                     Icons.receipt_long,
                     size: 24,
@@ -116,7 +115,7 @@ class _MainPageState extends State<MainPage> {
                 label: "영수증"), // index 3
             BottomNavigationBarItem(
                 icon: Padding(
-                  padding: const EdgeInsets.all(2.5),
+                  padding: const EdgeInsets.only(),
                   child: Icon(
                     Icons.monetization_on,
                     size: 24,

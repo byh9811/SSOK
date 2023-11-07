@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ReceiptList extends StatefulWidget {
-  const ReceiptList({super.key});
+class ReceiptHistoryList extends StatefulWidget {
+  const ReceiptHistoryList({super.key});
 
   @override
-  State<ReceiptList> createState() => _ReceiptListState();
+  State<ReceiptHistoryList> createState() => _ReceiptHistoryListState();
 }
 
-class _ReceiptListState extends State<ReceiptList> {
+class _ReceiptHistoryListState extends State<ReceiptHistoryList> {
   int selectedMonth = DateTime.now().month;
   int selectedYear = DateTime.now().year;
   List<Map<String, dynamic>> receiptList = [

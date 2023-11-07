@@ -19,7 +19,7 @@ class _IdPageState extends State<IDPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        SizedBox(height: screenHeight * 0.04),
+        SizedBox(height: screenHeight * 0.03),
         Row(
           children: [
             introText(),

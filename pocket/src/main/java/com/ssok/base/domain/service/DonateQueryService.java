@@ -1,11 +1,14 @@
 package com.ssok.base.domain.service;
 
+import com.ssok.base.client.config.MemberServiceClient;
 import com.ssok.base.domain.api.dto.response.DonatesResponse;
 import com.ssok.base.domain.maria.repository.DonateMemberRepository;
 import com.ssok.base.domain.mongo.document.DonateMain;
 import com.ssok.base.domain.mongo.document.DonateMemberDoc;
 import com.ssok.base.domain.mongo.repository.DonateMainMongoRepository;
 import com.ssok.base.domain.mongo.repository.DonateMemberDocMongoRepository;
+import com.ssok.base.global.exception.CustomException;
+import com.ssok.base.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -25,6 +28,7 @@ public class DonateQueryService {
     private final DonateMainMongoRepository donateMainMongoRepository;
     private final DonateMemberRepository donateMemberRepository;
     private final DonateMemberDocMongoRepository donateMemberDocMongoRepository;
+    private final MemberServiceClient memberServiceClient;
 
 
     public List<DonatesResponse> getDonates(String memberUuid) {
@@ -56,6 +60,10 @@ public class DonateQueryService {
 
 
     private Long isMemberExist(String memberUuid){
-        return 1L;
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+        if(memberSeq == null){
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        return memberSeq;
     }
 }

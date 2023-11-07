@@ -1,5 +1,6 @@
 package com.ssok.base.domain.service;
 
+import com.ssok.base.client.config.MemberServiceClient;
 import com.ssok.base.domain.api.dto.response.*;
 import com.ssok.base.domain.maria.entity.PocketHistoryType;
 import com.ssok.base.domain.mongo.document.PocketDetail;
@@ -8,6 +9,8 @@ import com.ssok.base.domain.mongo.repository.DomainMongoRepository;
 import com.ssok.base.domain.mongo.repository.PocketDetailMongoRepository;
 import com.ssok.base.domain.mongo.repository.PocketMainMongoRepository;
 import com.ssok.base.domain.service.dto.DomainDto;
+import com.ssok.base.global.exception.CustomException;
+import com.ssok.base.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ public class PocketQueryService {
 
     private final PocketMainMongoRepository pocketMainMongoRepository;
     private final PocketDetailMongoRepository pocketDetailMongoRepository;
+    private final MemberServiceClient memberServiceClient;
     public DomainJoinResponse getDomain(DomainDto domainDto) {
         DomainJoinResponse domainJoinResponse = new DomainJoinResponse(domainDto.nickname(), domainDto.age());
         return domainJoinResponse;
@@ -62,7 +66,11 @@ public class PocketQueryService {
      * @return memberSeq
      */
     private Long isMemberExist(String memberUuid){
-        return 1L;
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+        if(memberSeq == null){
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        return memberSeq;
     }
 
     public PocketDetailAllResponse getPocketDetail(String memberUuid, int detailType) {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "pocket-service", url = "https://pocket.ssok.site/api/pocket-service")
 public interface PocketClient {
 
-    @PostMapping(value = "/pocket/history")
+    @PostMapping(value = "/pocket/pos/history")
     ApiResponse<String> createPocketHistory(
             @RequestBody PocketHistoryCreateRequest request);
 

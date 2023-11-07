@@ -22,19 +22,20 @@ public class DonateController {
     private final DonateQueryService donateQueryService;
 
     @PostMapping()
-    public ApiResponse<Long> createDonate(@RequestHeader String memberUuid, @RequestBody DonateCreateRequest request){
+    public ApiResponse<Long> createDonate(@RequestHeader(name = "MEMBER-UUID") String memberUuid, @RequestBody DonateCreateRequest request){
         return ApiResponse.OK(donateService.createDonate(request));
     }
 
     @PostMapping("/donate")
-    public ApiResponse<?> doDonate(@RequestHeader String memberUuid, @RequestBody DonateRequest request){
+    public ApiResponse<?> doDonate(@RequestHeader(name = "MEMBER-UUID") String memberUuid, @RequestBody DonateRequest request){
         log.info("들어왔습니다..");
         donateService.doDonate(request.toDto(memberUuid));
         return ApiResponse.OK(null);
     }
 
     @GetMapping("/donate")
-    public ApiResponse<List<DonatesResponse>> getDonates(@RequestHeader String memberUuid){
+    public ApiResponse<List<DonatesResponse>> getDonates(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+
         List<DonatesResponse> response = donateQueryService.getDonates(memberUuid);
         return ApiResponse.OK(response);
     }

@@ -1,5 +1,6 @@
 package com.ssok.base.domain.service;
 
+import com.ssok.base.client.config.MemberServiceClient;
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
 import com.ssok.base.domain.api.dto.response.PocketResponse;
 import com.ssok.base.domain.maria.entity.*;
@@ -14,6 +15,8 @@ import com.ssok.base.domain.service.dto.DomainDto;
 import com.ssok.base.domain.service.dto.DonatePocketHistoryDto;
 import com.ssok.base.domain.service.dto.PocketHistoryAppDto;
 import com.ssok.base.domain.service.dto.PocketHistoryDto;
+import com.ssok.base.global.exception.CustomException;
+import com.ssok.base.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -39,6 +42,7 @@ public class PocketService {
     private final ChangeHistoryRepository changeHistoryRepository;
     private final PocketDetailMongoRepository pocketDetailMongoRepository;
     private final PocketMainMongoRepository pocketMainMongoRepository;
+    private final MemberServiceClient memberServiceClient;
     public DomainJoinResponse createDomain(DomainDto domainDto) {
 //        return pocketRepository.fin
         DomainJoinResponse domainJoinResponse = new DomainJoinResponse(domainDto.nickname(), domainDto.age());
@@ -239,7 +243,11 @@ public class PocketService {
      * @return memberSeq
      */
     private Long isMemberExist(String memberUuid){
-        return 1L;
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+        if(memberSeq == null){
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+        return memberSeq;
     }
 
 
@@ -297,6 +305,8 @@ public class PocketService {
             checkIsTransfer(dto.getPocketHistoryTransAmt(), pocket);
             pocket.transferWithdrawal(dto.getPocketHistoryTransAmt());
             // TODO: 2023-11-03 @홍진식 : 계좌 변경 요청 추가 필요
+
+
             resultMap.put("type",PocketHistoryType.WITHDRAWAL);
             resultMap.put("title", "출금");
             return resultMap;

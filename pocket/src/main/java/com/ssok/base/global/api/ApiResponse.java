@@ -1,13 +1,16 @@
 package com.ssok.base.global.api;
 
 
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.http.HttpStatus;
 
+
 public class  ApiResponse<T> {
     private final boolean success;
     private final T response;
+
     private final ApiError error;
     private ApiResponse(boolean success, T response, ApiError error) {
         this.success = success;
@@ -17,6 +20,7 @@ public class  ApiResponse<T> {
 
     //정상일떄
     public static <T> ApiResponse<T> OK(T response) {
+
         return new ApiResponse<>(true, response, null);
     }
     //예외 객체와 상태

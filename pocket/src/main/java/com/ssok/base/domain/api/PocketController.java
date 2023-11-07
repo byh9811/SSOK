@@ -64,12 +64,9 @@ public class PocketController {
      * @return PocketResponse
      */
     @PostMapping("/pocket")
-    public ApiResponse<PocketResponse> createPocket(@RequestHeader String memberUuid){
+    public ApiResponse<PocketResponse> createPocket(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
         // 연동 계좌번호 확인 필요
         // 이미 등록되어 있는지 확인 필요
-
-        // 헤더에서 Uuid 뽑기
-        memberUuid = null;
         PocketResponse response = pocketService.createPocket(memberUuid);
         return OK(response);
     }
@@ -82,7 +79,7 @@ public class PocketController {
      * @return
      */
     @PostMapping("/pocket/history")
-    public ApiResponse<?> createPocketHistory(@RequestBody PocketHistoryRequest request, @RequestHeader String memberUuid){
+    public ApiResponse<?> createPocketHistory(@RequestHeader(name = "MEMBER-UUID") String memberUuid, @RequestBody PocketHistoryRequest request){
         pocketService.createPocketHistory(request.toDto(memberUuid));
         return OK(null);
     }

@@ -9,7 +9,9 @@ import com.ssok.base.domain.maria.repository.DonateMemberRepository;
 import com.ssok.base.domain.maria.repository.DonateRepository;
 import com.ssok.base.domain.maria.repository.PocketRepository;
 import com.ssok.base.domain.mongo.document.DonateMain;
+import com.ssok.base.domain.mongo.document.DonateMemberDoc;
 import com.ssok.base.domain.mongo.repository.DonateMainMongoRepository;
+import com.ssok.base.domain.mongo.repository.DonateMemberDocMongoRepository;
 import com.ssok.base.domain.service.dto.DonateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class DonateService {
     private final PocketRepository pocketRepository;
     private final PocketService pocketService;
     private final DonateMainMongoRepository donateMainMongoRepository;
+    private final DonateMemberDocMongoRepository donateMemberDocMongoRepository;
 
     /**
      * donate 생성 메서드
@@ -96,6 +99,26 @@ public class DonateService {
         if(!isDonateMemberExist){
             donateMemberRepository.save(donateMember);
         }
+        // mongo
+
+        DonateMemberDoc donateMemberDoc;
+        if(!isDonateMemberExist){
+            donateMemberDoc = DonateMemberDoc.builder()
+                    .donateSeq(donate.getDonateSeq())
+                    .memberSeq(memberSeq)
+                    .totalDonateAmt(0L)
+                    .build();
+            log.warn("존재하지않습니다. 들어왔습니다.");
+        }else{
+            donateMemberDoc = donateMemberDocMongoRepository.findByDonateSeqAndMemberSeq(
+                    donate.getDonateSeq(), memberSeq
+            );
+            log.warn("존재합니다.  ");
+        }
+        donateMemberDoc.updateAmt(dto.getDonateAmt());
+        donateMemberDocMongoRepository.save(donateMemberDoc);
+        // TODO: 2023-11-07 여기서에러남
+
         DonateMain donateMain = donateMainMongoRepository.findById(dto.getDonateSeq()).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 기부입니다."));
         donateMain.updateDonateMain(donate);
         donateMainMongoRepository.save(donateMain);

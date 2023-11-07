@@ -45,6 +45,7 @@ dependencies:
   url_launcher: ^6.2.1
   flutter_credit_card_ui: ^0.0.4
   u_credit_card: ^1.1.0
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

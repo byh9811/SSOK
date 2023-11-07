@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/identification/service_aggreement_page.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/register_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IDPage extends StatefulWidget {
   const IDPage({Key? key}) : super(key: key);
@@ -13,6 +15,17 @@ class IDPage extends StatefulWidget {
 
 class _IdPageState extends State<IDPage> {
   final String assetName = '';
+  late final SharedPreferences prefs;
+  String? accessToken;
+
+  @override
+  void initState() {
+    super.initState();
+    accessToken = TokenManager().accessToken;
+    print("받았다");
+    print(accessToken);
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

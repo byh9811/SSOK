@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/businesscard/business_card_camera_create_page.dart';
 import 'package:ssok/screens/businesscard/business_card_detail_page.dart';
 import 'package:ssok/screens/businesscard/business_card_map_page.dart';
@@ -20,6 +21,7 @@ import 'package:ssok/screens/pocket/pocket_pocket_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_transfer_page.dart';
 import 'package:ssok/screens/receipt/receipt_list_detail_page.dart';
 
+TokenManager tokenManager = TokenManager();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -28,6 +30,7 @@ void main() async {
       onAuthFailed: (error) {
         print('Auth failed: $error');
       });
+  await tokenManager.initialize();
   runApp(const MyApp());
 }
 
@@ -41,7 +44,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
-        '/signin':(context)=>SigninPage(),
+        '/signin': (context) => SigninPage(),
         '/main': (context) => MainPage(),
         '/id/create': (context) => IdCreatePage(),
         '/drive/id/create': (context) => DriveIdCreatePage(),

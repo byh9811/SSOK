@@ -7,12 +7,11 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class ItemListResponse {
 
-    @JsonProperty("item_list")
     List<InnerItemListResponse> itemList;
 
 }

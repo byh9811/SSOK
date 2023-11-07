@@ -36,10 +36,11 @@ class _LoginPageState extends State<LoginPage> {
     
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-
       await tokenManager.setAccessToken(jsonData["response"]["accessToken"]);
+      await tokenManager.setRefreshToken(jsonData["response"]["refreshToken"]);
       print("넣었다");
       print(jsonData["response"]["accessToken"]);
+      print(jsonData["response"]["refreshToken"]);
       Navigator.of(context).pushReplacementNamed('/main');
     } else {
       throw Exception('Failed to load album');

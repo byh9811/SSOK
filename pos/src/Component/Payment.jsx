@@ -28,21 +28,39 @@ const Payment = ({totalMoney, selectItem, removeAll}) => {
 
 
     function onChangeFirst(e){
+        const value = Number(e.target.value);
+        if (Number.isNaN(value)) return; 
         setFirst(e.target.value)
     }
     function onChangeSecond(e){
+        const value = Number(e.target.value);
+        if (Number.isNaN(value)) return; 
         setSecond(e.target.value)
     }
     function onChangeThird(e){
+        const value = Number(e.target.value);
+        if (Number.isNaN(value)) return; 
         setThird(e.target.value)
     }
     function onChangeFourth(e){
+        const value = Number(e.target.value);
+        if (Number.isNaN(value)) return; 
         setFouth(e.target.value)
     }
 
 
     async function buy(){
         const cardNum = first+'-'+second+'-'+third+'-'+fourth;
+
+        if(first.length!=4 ||second.length!=4 ||third.length!=4 ||fourth.length!=4){
+            alert("카드번호를 정확히 입력해주세요");
+            return;
+        }
+
+        if(totalMoney==0){
+            alert("물품을 선택해주세요");
+            return;
+        }
 
         await axios.post('https://k9c107.p.ssafy.io/pos/payment-service/payment', {
             "cardNum": cardNum,
@@ -66,7 +84,7 @@ const Payment = ({totalMoney, selectItem, removeAll}) => {
             <div className='card'>
                 <span>
                 <span>카드번호 : </span>
-                <input className='cardNum' value={first} onChange={onChangeFirst} maxLength='4'></input>-
+                <input className='cardNum' maxLength={4} value={first} onChange={onChangeFirst}></input>-
                 <input className='cardNum'value={second} onChange={onChangeSecond} maxLength='4'></input>-
                 <input className='cardNum'value={third} onChange={onChangeThird} maxLength='4'></input>-
                 <input className='cardNum'value={fourth} onChange={onChangeFourth} maxLength='4'></input>

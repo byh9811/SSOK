@@ -8,7 +8,7 @@ function delItem(){
 
   return (
     <div className='selectItemWrapper'>
-      <div className="itemInfo">
+      <div className="selectItemInfo">
         <div className='selectItemName'>{item.itemName}</div>
         <div className='selectItemCnt'>{item.itemCnt}</div>
         <div className='selectItemPrice'>{item.itemPrice}</div>

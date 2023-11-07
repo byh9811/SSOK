@@ -5,7 +5,6 @@ const Item = ({item, addItem}) => {
   const [first, setfirst] = useState(item)
 
   function addNewItem(){
-    alert(item.itemName);
     addItem({"itemSeq":item.itemSeq,"itemName":item.itemName, "itemPrice":item.itemPrice,"itemTotalPrice":item.itemPrice, "itemCnt":1})
   }
 

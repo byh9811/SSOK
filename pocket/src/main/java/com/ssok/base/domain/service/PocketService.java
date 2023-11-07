@@ -12,6 +12,7 @@ import com.ssok.base.domain.mongo.repository.PocketDetailMongoRepository;
 import com.ssok.base.domain.mongo.repository.PocketMainMongoRepository;
 import com.ssok.base.domain.service.dto.DomainDto;
 import com.ssok.base.domain.service.dto.DonatePocketHistoryDto;
+import com.ssok.base.domain.service.dto.PocketHistoryAppDto;
 import com.ssok.base.domain.service.dto.PocketHistoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -136,18 +137,10 @@ public class PocketService {
     }
 
 
-    /**
-     * PocketHistory 생성 메소드
-     *
-     * @param dto
-     */
 
-    public void createPocketHistory(PocketHistoryDto dto) {
-        // memberUuid로 pk 뽑기 / 없으면 에러처리
-        Long memberSeq = isMemberExist(dto.getMemberUuid());
-
+    public void createPocketHistory(PocketHistoryDto dto){
         // pocket 존재 여부
-        Pocket findPocket = pocketRepository.findById(memberSeq).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
+        Pocket findPocket = pocketRepository.findById(dto.getMemberSeq()).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
 
         // 금액이 양수인지 검사
         if(dto.getPocketHistoryTransAmt() <= 0){
@@ -161,7 +154,7 @@ public class PocketService {
 
         // pocketHistory 생성
         PocketHistory pocketHistory = PocketHistory.builder()
-                .memberSeq(memberSeq)
+                .memberSeq(dto.getMemberSeq())
                 .pocketHistoryType(type)
                 .pocketHistoryTransAmt(dto.getPocketHistoryTransAmt())
                 .pocketHistoryResultAmt(findPocket.getPocketSaving())
@@ -183,6 +176,59 @@ public class PocketService {
         // Mongo - create PocketDetail
         PocketDetail pocketDetail = PocketDetail.fromPocketHistory(pocketHistory, dto.getReceiptSeq());
         pocketDetailMongoRepository.save(pocketDetail);
+
+    }
+
+
+    /**
+     * PocketHistory 생성 메소드
+     *
+     * @param dto
+     */
+
+    public void createPocketHistory(PocketHistoryAppDto dto) {
+        // memberUuid로 pk 뽑기 / 없으면 에러처리
+        Long memberSeq = isMemberExist(dto.getMemberUuid());
+
+        createPocketHistory(PocketHistoryDto.fromPocketHistoryAppDto(dto, memberSeq));
+
+//        // pocket 존재 여부
+//        Pocket findPocket = pocketRepository.findById(memberSeq).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
+//
+//        // 금액이 양수인지 검사
+//        if(dto.getPocketHistoryTransAmt() <= 0){
+//            throw new IllegalArgumentException("이동 금액은 0원 이상이여야 합니다.");
+//        }
+//
+//        // pocket 내역 변경
+//        Map<String, Object> resultMap = transferByHistoryType(dto, findPocket);
+//
+//        PocketHistoryType type = (PocketHistoryType) resultMap.get("type");
+//
+//        // pocketHistory 생성
+//        PocketHistory pocketHistory = PocketHistory.builder()
+//                .memberSeq(memberSeq)
+//                .pocketHistoryType(type)
+//                .pocketHistoryTransAmt(dto.getPocketHistoryTransAmt())
+//                .pocketHistoryResultAmt(findPocket.getPocketSaving())
+//                .pocketHistoryTitle(resultMap.get("title").toString())
+//                .build();
+//        // 내역 생성
+//        pocketHistoryRepository.save(pocketHistory);
+//        createTypeHistory(dto.getPocketHistoryType(), dto.getReceiptSeq(), pocketHistory);
+//
+//        // Mongo
+//        PocketMain pocketMain = pocketMainMongoRepository.findById(findPocket.getMemberSeq()).orElseThrow(()
+//                -> new IllegalArgumentException("조회용이 존재하지 않는다."));
+//
+//        // Mongo - update PocketDetail
+//        log.info(String.valueOf(findPocket.getPocketSaving()));
+//        pocketMain.updatePocketMain(findPocket);
+//        pocketMainMongoRepository.save(pocketMain);
+//
+//        // Mongo - create PocketDetail
+//        PocketDetail pocketDetail = PocketDetail.fromPocketHistory(pocketHistory, dto.getReceiptSeq());
+//        pocketDetailMongoRepository.save(pocketDetail);
 
     }
 

@@ -1,6 +1,7 @@
 package com.ssok.base.domain.api;
 
 import com.ssok.base.domain.api.dto.request.DomainJoinRequest;
+import com.ssok.base.domain.api.dto.request.PocketHistoryPosRequest;
 import com.ssok.base.domain.api.dto.request.PocketHistoryRequest;
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
 import com.ssok.base.domain.api.dto.response.PocketDetailAllResponse;
@@ -58,7 +59,6 @@ public class PocketController {
     }
 
     /**
-     * @autor 홍진식
      *
      * @param memberUuid 헤더로부터 얻은 Uuid
      * @return PocketResponse
@@ -75,7 +75,8 @@ public class PocketController {
     }
 
     /**
-     * @autor 홍진식
+     * 내역을 생성하는 메서드
+     *
      * @param request 요청 정보
      * @param memberUuid 헤더로부터 얻은 Uuid
      * @return
@@ -85,6 +86,20 @@ public class PocketController {
         pocketService.createPocketHistory(request.toDto(memberUuid));
         return OK(null);
     }
+
+    /**
+     * 내역을 생성하는 메서드
+     *
+     * @param request 요청 정보
+     * @return
+     */
+    @PostMapping("/pocket/pos/history")
+    public ApiResponse<?> createPocketHistoryFromPos(@RequestBody PocketHistoryPosRequest request){
+        pocketService.createPocketHistory(request.toDto());
+        return OK(null);
+    }
+
+
 
     /**
      * 포켓 머니 저축 금액 조회
@@ -109,8 +124,12 @@ public class PocketController {
         return ApiResponse.OK(response);
     }
 
+
     /**
-     * 포켓 전체 상세 조회
+     * 포켓 상세 조회
+     * @param memberUuid
+     * @param detailType 0 : 전체 / 1 : 입금 / 2 : 출금
+     * @return
      */
     @GetMapping("/pocket/detail")
     public ApiResponse<PocketDetailAllResponse> getPocketDetailAll(@RequestHeader String memberUuid, @RequestParam int detailType){

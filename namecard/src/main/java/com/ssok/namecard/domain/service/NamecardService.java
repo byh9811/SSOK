@@ -159,7 +159,9 @@ public class NamecardService {
                                                   () -> new ExchangeException(ErrorCode.EXCHANGE_NOT_FOUND));
         Long memberSeq = exchange.getReceiveNamecard().getMemberSeq();
         log.info("회원 식별키: {}", memberSeq);
-        List<String> findNamecardImageList = namecardRepository.findAllNamecardImage(memberSeq);
+        List<String> findNamecardImageList = namecardRepository.findAllByMemberSeq(memberSeq)
+            .stream()
+            .map(namecard -> namecard.getNamecardImage()).collect(Collectors.toList());
         return findNamecardImageList;
     }
 

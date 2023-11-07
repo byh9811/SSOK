@@ -77,10 +77,10 @@ public class BankAccessUtil {
         bankClient.transfer(mdToken, transferRequest);
     }
 
-//    public void charge(Member member, Long money) {
-//        ChargeRequest chargeRequest = createChargeRequest(member, money);
-//        bankClient.charge(member.getMydataAccessToken(), chargeRequest);
-//    }
+    public void pay(String mdToken, String accNum, Long amt) {
+        ChargeRequest chargeRequest = createChargeRequest(accNum, amt);
+        bankClient.charge(mdToken, chargeRequest);
+    }
 
     private String getApiType() {
         return "user-search";
@@ -125,12 +125,12 @@ public class BankAccessUtil {
                 .transAmt(amt)
                 .build();
     }
-//
-//    private ChargeRequest createChargeRequest(Member member, Long money) {
-//        return ChargeRequest.builder()
-//                .senderAccNum(member.getAccountNum())
-//                .transAmt(money)
-//                .build();
-//    }
+
+    private ChargeRequest createChargeRequest(String accNum, Long money) {
+        return ChargeRequest.builder()
+                .senderAccNum(accNum)
+                .transAmt(money)
+                .build();
+    }
 
 }

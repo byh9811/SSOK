@@ -62,6 +62,8 @@ public class ReceiptService {
         String mdToken = memberClient.getMemberMyDataToken(memberSeq).getResponse();
         String account = memberClient.getMemberAccount(memberSeq).getResponse();
 
+        receipt = receiptRepository.save(receipt);
+
         // 탄소 중립 포인트 적립 요청
         if (earnedCNP > 0) {
             PocketHistoryCreateRequest request = PocketHistoryCreateRequest.builder()
@@ -88,7 +90,6 @@ public class ReceiptService {
         }
 
         purchaseItemRepository.saveAll(purchaseItemList);
-        receiptRepository.save(receipt);
         eventHandler.createReceipt(memberSeq, receiptCreateServiceDto);
     }
 

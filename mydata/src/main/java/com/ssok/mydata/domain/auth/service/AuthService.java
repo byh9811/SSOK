@@ -11,6 +11,7 @@ import com.ssok.mydata.domain.card.entity.CardHistory;
 import com.ssok.mydata.domain.card.repository.CardHistoryRepository;
 import com.ssok.mydata.domain.card.repository.CardRepository;
 import com.ssok.mydata.global.enumerate.Shop;
+import com.ssok.mydata.global.error.AlreadyExistException;
 import com.ssok.mydata.global.util.DummyUtils;
 import com.ssok.mydata.global.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class AuthService {
 
         if (auth.getRegisteredAccount()) {
             log.warn("이미 이 회원에 대해 계좌 데이터를 생성했습니다!!");
-            return;
+            throw new AlreadyExistException(AuthService.class);
         }
 
         // 인증 정보 저장
@@ -75,7 +76,7 @@ public class AuthService {
 
         if (auth.getRegisteredCard()) {
             log.warn("이미 이 회원에 대해 카드 데이터를 생성했습니다!!");
-            return null;
+            throw new AlreadyExistException(AuthService.class);
         }
 
         // 인증 정보 저장

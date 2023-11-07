@@ -20,6 +20,7 @@ public class Card {
     @Column(name = "card_id", unique = true)
     private String cardId;
 
+    @Column(unique = true)
     private String memberCi;
 
     private Long accountId;

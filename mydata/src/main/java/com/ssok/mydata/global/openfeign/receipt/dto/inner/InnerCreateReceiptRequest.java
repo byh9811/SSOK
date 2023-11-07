@@ -1,4 +1,4 @@
-package com.ssok.mydata.global.openfeign.transaction.dto.inner;
+package com.ssok.mydata.global.openfeign.receipt.dto.inner;
 
 import com.ssok.mydata.domain.pos.entity.PaymentItem;
 import lombok.AllArgsConstructor;

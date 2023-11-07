@@ -1,9 +1,8 @@
-package com.ssok.mydata.global.openfeign.transaction.dto.request;
+package com.ssok.mydata.global.openfeign.receipt.dto.request;
 
-import com.ssok.mydata.domain.pos.api.dto.inner.InnerPaymentItem;
 import com.ssok.mydata.domain.pos.entity.Payment;
 import com.ssok.mydata.domain.pos.entity.PaymentItem;
-import com.ssok.mydata.global.openfeign.transaction.dto.inner.InnerCreateReceiptRequest;
+import com.ssok.mydata.global.openfeign.receipt.dto.inner.InnerCreateReceiptRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

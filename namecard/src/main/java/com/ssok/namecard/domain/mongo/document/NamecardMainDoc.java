@@ -80,6 +80,8 @@ public class NamecardMainDoc {
         public void addExchangeSeq(Long exchangeSeq) {
             this.exchangeSeq = exchangeSeq;
         }
+
+        public void update(String memo){this.exchangeNote = memo;}
     }
 
     public static NamecardMainDoc from(Namecard namecard) {

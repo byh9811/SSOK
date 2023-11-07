@@ -109,8 +109,20 @@ public class NamecardEventHandler {
         log.info("변경 후 메모: {}", namecardMemoDoc.getMemo());
         namecardMemoDocMongoRepository.save(namecardMemoDoc);
 
-        /* todo - 목록에 메모 여부 최신화 */
-//        NamecardMainDoc findNamecardMainDoc = findByMemberSeq(memberSeq);
+        /* todo - 목록에 메모 최신화 */
+        NamecardMainDoc findNamecardMainDoc = findByMemberSeq(memberSeq);
+        List<NamecardDoc> namecards = findNamecardMainDoc.getNamecards();
+
+        //NamecardDoc의 exchangeSeq가 exchange.exchangeSeq인 것을 찾고 해당 NamecardDoc의 exchangeNote를 업데이트 함.(namecard.update(content);)
+        for (NamecardDoc namecard : namecards) {
+            if (namecard.getExchangeSeq().equals(exchange.getExchangeSeq())) {
+                log.info("변경 전 교환 노트: {}", namecard.getExchangeNote());
+                namecard.update(content);
+                log.info("변경 후 교환 노트: {}", namecard.getExchangeNote());
+                namecardMainDocMongoRepository.save(findNamecardMainDoc);
+                break;
+            }
+        }
 
     }
 

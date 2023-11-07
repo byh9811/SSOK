@@ -10,4 +10,5 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     Optional<Card> findByMemberSeq(Long memberSeq);
 
+    Optional<Card> findByCardNum(String cardNum);
 }

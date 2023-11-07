@@ -37,12 +37,15 @@ public class PurchaseItem extends BaseEntity {
 
     private Long purchaseItemPrice;
 
-    public static PurchaseItem from(Receipt receipt, InnerPaymentItem item) {
+    private boolean isCarbonNeutral;
+
+    public static PurchaseItem from(Receipt receipt, InnerPaymentItem item, boolean isCarbonNeutral) {
         return PurchaseItem.builder()
                 .receipt(receipt)
                 .purchaseItemName(item.itemName())
                 .purchaseItemCnt(item.itemCnt())
                 .purchaseItemPrice(item.itemPrice())
+                .isCarbonNeutral(isCarbonNeutral)
                 .build();
     }
 }

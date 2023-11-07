@@ -26,7 +26,7 @@ public record CardAdminQueryResponse(
                 .company(card.getCompany().getCardCompanyName())
                 .cardNum(card.getCardNum())
                 .cardExpMonth(card.getCardExpMonth())
-                .cardExpYear(builder().cardExpYear)
+                .cardExpYear(card.getCardExpYear())
                 .build();
     }
 

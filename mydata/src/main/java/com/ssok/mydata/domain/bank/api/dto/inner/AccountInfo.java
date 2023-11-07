@@ -3,8 +3,9 @@ package com.ssok.mydata.domain.bank.api.dto.inner;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class AccountInfo {
@@ -23,10 +24,10 @@ public class AccountInfo {
         private String holderName;
 
         @JsonProperty("issue_date")
-        private Date issueDate;
+        private LocalDateTime issueDate;
 
         @JsonProperty("exp_date")
-        private Date expDate;
+        private LocalDateTime expDate;
 
         @JsonProperty("commit_amt")
         private Double commitAmt;
@@ -35,7 +36,7 @@ public class AccountInfo {
         private Double monthlyPaidInAmt;
 
         @Builder
-        public AccountInfo(String bank, String savingMethod, String holderName, Date issueDate) {
+        public AccountInfo(String bank, String savingMethod, String holderName, LocalDateTime issueDate) {
                 this.bank = bank;
                 this.savingMethod = savingMethod;
                 this.holderName = holderName;

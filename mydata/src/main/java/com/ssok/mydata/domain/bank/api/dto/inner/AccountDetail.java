@@ -3,6 +3,7 @@ package com.ssok.mydata.domain.bank.api.dto.inner;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class AccountDetail {

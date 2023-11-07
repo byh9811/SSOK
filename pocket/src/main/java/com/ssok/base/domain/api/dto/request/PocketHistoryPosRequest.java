@@ -3,8 +3,10 @@ package com.ssok.base.domain.api.dto.request;
 import com.ssok.base.domain.service.dto.PocketHistoryDto;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PocketHistoryPosRequest {
 
     private Long memberSeq;

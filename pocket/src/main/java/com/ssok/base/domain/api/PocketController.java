@@ -104,7 +104,7 @@ public class PocketController {
      * @return PocketSaving : 보유 저축 금액
      */
     @GetMapping("/pocket/saving")
-    public ApiResponse<Long> getPocketSaving(@RequestHeader String memberUuid){
+    public ApiResponse<Long> getPocketSaving(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
         Long pocketSaving = pocketQueryService.getPocketSaving(memberUuid);
         return ApiResponse.OK(pocketSaving);
     }
@@ -116,7 +116,7 @@ public class PocketController {
      * @return PocketResponse : 누적 금액, 누적 기부 금액, 누적 탄소중립포인트, 누적 잔금 저축 금액
      */
     @GetMapping("/pocket")
-    public ApiResponse<PocketResponse> getPocket(@RequestHeader String memberUuid){
+    public ApiResponse<PocketResponse> getPocket(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
         PocketResponse response = pocketQueryService.getPocket(memberUuid);
         return ApiResponse.OK(response);
     }
@@ -129,7 +129,7 @@ public class PocketController {
      * @return
      */
     @GetMapping("/pocket/detail")
-    public ApiResponse<PocketDetailAllResponse> getPocketDetailAll(@RequestHeader String memberUuid, @RequestParam int detailType){
+    public ApiResponse<PocketDetailAllResponse> getPocketDetailAll(@RequestHeader(name = "MEMBER-UUID") String memberUuid, @RequestParam int detailType){
         log.info(String.valueOf(detailType));
         PocketDetailAllResponse response = pocketQueryService.getPocketDetail(memberUuid, detailType);
         return ApiResponse.OK(response);

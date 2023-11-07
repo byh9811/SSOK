@@ -86,8 +86,11 @@ public enum ErrorCode {
 
     USER_FORBIDDEN_ERROR(HttpStatus.FORBIDDEN, "해당 요청의 접근권한이 없습니다."),
 
-    POST_SCOPE_ERROR(HttpStatus.BAD_REQUEST, "게시글 범위가 유효하지 않습니다." );
+    POST_SCOPE_ERROR(HttpStatus.BAD_REQUEST, "게시글 범위가 유효하지 않습니다." ),
 
+    POCKET_DUPLICATE(HttpStatus.BAD_REQUEST, "이미 포켓이 존재합니다."),
+
+    MEMBER_ACCOUNT_NOT_FOUNT(HttpStatus.NOT_FOUND, "등록된 계좌가 없습니다.");
 
     private final HttpStatus status;
     private final String message;

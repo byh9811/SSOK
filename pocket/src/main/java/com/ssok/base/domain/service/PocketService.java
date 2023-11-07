@@ -68,9 +68,15 @@ public class PocketService {
         // memberUuid로 pk 뽑기 / 없으면 에러처리
         Long memberSeq = isMemberExist(memberUuid);
 
+        // memberSeq로 계좌 연동했는지 check
+        String memberAccount = memberServiceClient.getMemberAccount(memberSeq).getResponse();
+        if(memberAccount == null){
+            throw new CustomException(ErrorCode.MEMBER_ACCOUNT_NOT_FOUNT);
+        }
+
         Optional<Pocket> findPocket = pocketRepository.findById(memberSeq);
         if(findPocket.isPresent()){
-            throw new DuplicateKeyException("중복된 값 입니다."); // http 에러 코드 같이 보내는거로 수정
+            throw new CustomException(ErrorCode.POCKET_DUPLICATE); // http 에러 코드 같이 보내는거로 수정
         }
 
         Pocket pocket = Pocket.builder()

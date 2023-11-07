@@ -76,10 +76,10 @@ public class NamecardEventHandler {
         /** 상세 페이지 업데이트 */
 
         //memberB가 A를 보는 상세페이지
-        NamecardDetailDoc namecardDetailDocB = NamecardDetailDoc.from(namecardA, exchangeList.get(0));
+        NamecardDetailDoc namecardDetailDocB = NamecardDetailDoc.from(namecardA, exchangeList.get(1));
 
         //memberA가 B를 보는 상세페이지
-        NamecardDetailDoc namecardDetailDocA = NamecardDetailDoc.from(namecardB, exchangeList.get(1));
+        NamecardDetailDoc namecardDetailDocA = NamecardDetailDoc.from(namecardB, exchangeList.get(0));
 
         namecardDetailDocMongoRepository.save(namecardDetailDocA);
         namecardDetailDocMongoRepository.save(namecardDetailDocB);

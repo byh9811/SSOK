@@ -39,6 +39,7 @@ public class NamecardMainDoc {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @ToString
     public static class NamecardDoc{
+        @Id
         private Long exchangeSeq;        //교환 식별자
         private Long namecardDocSeq;     //명함 식별자
         private Long memberSeq;          //회원 식별자

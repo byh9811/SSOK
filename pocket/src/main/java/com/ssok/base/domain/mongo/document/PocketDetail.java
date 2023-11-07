@@ -19,6 +19,8 @@ public class PocketDetail {
     @Id
     private Long pocketHistorySeq;
 
+    private Long memberSeq;
+
     private Long pocketHistoryTransAmt;
 
     private Long pocketHistoryResultAmt;
@@ -34,8 +36,9 @@ public class PocketDetail {
     private LocalDateTime modifyDate;
 
     @Builder
-    public PocketDetail(Long pocketHistorySeq, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle, PocketHistoryType pocketHistoryType, Long receiptSeq, LocalDateTime createDate, LocalDateTime modifyDate) {
+    public PocketDetail(Long pocketHistorySeq, Long memberSeq, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle, PocketHistoryType pocketHistoryType, Long receiptSeq, LocalDateTime createDate, LocalDateTime modifyDate) {
         this.pocketHistorySeq = pocketHistorySeq;
+        this.memberSeq = memberSeq;
         this.pocketHistoryTransAmt = pocketHistoryTransAmt;
         this.pocketHistoryResultAmt = pocketHistoryResultAmt;
         this.pocketHistoryTitle = pocketHistoryTitle;
@@ -48,6 +51,7 @@ public class PocketDetail {
     static public PocketDetail fromPocketHistory(PocketHistory pocketHistory, Long receiptSeq){
         return PocketDetail.builder()
                 .pocketHistorySeq(pocketHistory.getPocketHistorySeq())
+                .memberSeq(pocketHistory.getMemberSeq())
                 .pocketHistoryTransAmt(pocketHistory.getPocketHistoryTransAmt())
                 .pocketHistoryResultAmt(pocketHistory.getPocketHistoryResultAmt())
                 .pocketHistoryTitle(pocketHistory.getPocketHistoryTitle())

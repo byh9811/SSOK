@@ -83,17 +83,17 @@ public class PocketQueryService {
         List<PocketDetail> pocketDetailList = new ArrayList<>();
         List<PocketHistoryType> types = new ArrayList<>();
         if(detailType == 0){ // 전체
-            pocketDetailList = pocketDetailMongoRepository.findAll();
+            pocketDetailList = pocketDetailMongoRepository.findAllByMemberSeqOrderByCreateDateDesc(memberSeq);
         }
         else if(detailType == 1){ // 입금
             types.add(PocketHistoryType.CHANGE);
             types.add(PocketHistoryType.CARBON);
-            pocketDetailList = pocketDetailMongoRepository.findByPocketHistoryTypeIn(types);
+            pocketDetailList = pocketDetailMongoRepository.findAllByMemberSeqAndPocketHistoryTypeInOrderByCreateDateDesc(memberSeq, types);
         }
         else if(detailType == 2){ //
             types.add(PocketHistoryType.DONATION);
             types.add(PocketHistoryType.WITHDRAWAL);
-            pocketDetailList = pocketDetailMongoRepository.findByPocketHistoryTypeIn(types);
+            pocketDetailList = pocketDetailMongoRepository.findAllByMemberSeqAndPocketHistoryTypeInOrderByCreateDateDesc(memberSeq, types);
         }else{
             throw new IllegalArgumentException("정확한 상세조회 구분을 입력해주세요");
         }

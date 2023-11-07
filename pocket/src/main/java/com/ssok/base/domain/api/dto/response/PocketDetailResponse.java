@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class PocketDetailResponse {
     private Long pocketHistoryResultAmt;
     private Long receiptSeq;
     private String pocketHistoryTitle;
-    private LocalDateTime createTime;
+    private String createTime;
 
     @Builder
     public PocketDetailResponse(Long pocketHistorySeq, PocketHistoryType pocketHistoryType, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, Long receiptSeq, String pocketHistoryTitle, LocalDateTime createTime) {
@@ -30,7 +31,7 @@ public class PocketDetailResponse {
         this.pocketHistoryResultAmt = pocketHistoryResultAmt;
         this.receiptSeq = receiptSeq;
         this.pocketHistoryTitle = pocketHistoryTitle;
-        this.createTime = createTime;
+        this.createTime = createTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     }
 
     static public PocketDetailResponse fromPocketDetail(PocketDetail pocketDetail){

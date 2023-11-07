@@ -58,18 +58,19 @@ public class NamecardMainDoc {
         public static NamecardDoc from(Namecard namecardA) {
 
             return NamecardDoc.builder()
-                                .namecardDocSeq(namecardA.getNamecardSeq())
-                                .memberSeq(namecardA.getMemberSeq())
-                                .namecardName(namecardA.getNamecardName())
-                                .namecardImage(namecardA.getNamecardImage())
-                                .namecardEmail(namecardA.getNamecardEmail())
-                                .namecardCompany(namecardA.getNamecardCompany())
-                                .namecardJob(namecardA.getNamecardJob())
-                                .namecardAddress(namecardA.getNamecardAddress())
-                                .namecardPhone(namecardA.getNamecardPhone())
-                                .namecardFax(namecardA.getNamecardFax())
-                                .namecardWebsite(namecardA.getNamecardWebsite())
-                                .build();
+                              .namecardDocSeq(namecardA.getNamecardSeq())
+                              .memberSeq(namecardA.getMemberSeq())
+                              .namecardName(namecardA.getNamecardName())
+                              .namecardImage(namecardA.getNamecardImage())
+                              .namecardEmail(namecardA.getNamecardEmail())
+                              .namecardCompany(namecardA.getNamecardCompany())
+                              .namecardJob(namecardA.getNamecardJob())
+                              .exchangeNote("")
+                              .namecardAddress(namecardA.getNamecardAddress())
+                              .namecardPhone(namecardA.getNamecardPhone())
+                              .namecardFax(namecardA.getNamecardFax())
+                              .namecardWebsite(namecardA.getNamecardWebsite())
+                              .build();
         }
 
         public void addExchangeDate(LocalDate localDate) {

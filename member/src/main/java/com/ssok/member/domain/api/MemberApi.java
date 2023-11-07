@@ -51,14 +51,14 @@ public class MemberApi {
     public ApiResponse<Long> getMemberSeq(@RequestParam (name = "member-uuid")String memberUuid){
         System.out.println(memberUuid);
         log.info(memberUuid);
-        MemberSeqResponse memberSeqResponse = memberService.getSeq(memberUuid);
-        return OK(memberSeqResponse.getMemberSeq());
+        Long memberSeq = memberService.getSeq(memberUuid);
+        return OK(memberSeq);
     }
     // 연동 계좌번호 조회
     @GetMapping("/member/account")
     public ApiResponse<String> getMemberAccount(@RequestParam (name = "member-seq")Long memberSeq){
-        MemberAccountResponse memberAccountResponse = memberService.getAccount(memberSeq);
-        return OK(memberAccountResponse.getMemberAccountNum());
+        String memberAccount = memberService.getAccount(memberSeq);
+        return OK(memberAccount);
     }
     // 연동 계좌번호 변경
     @PostMapping("/member/account")

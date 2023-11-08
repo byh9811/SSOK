@@ -2,11 +2,9 @@ package com.ssok.idcard.domain.api;
 
 import com.ssok.idcard.domain.api.request.LicenseCreateRequest;
 import com.ssok.idcard.domain.api.request.RegistrationCardCreateRequest;
-import com.ssok.idcard.domain.api.response.LicenseCreateResponse;
 import com.ssok.idcard.domain.api.response.LicenseGetResponse;
-import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
+import com.ssok.idcard.domain.api.response.RecognizedLicenseResponse;
 import com.ssok.idcard.domain.api.response.RegistrationGetResponse;
-import com.ssok.idcard.domain.dao.entity.RegistrationCard;
 import com.ssok.idcard.domain.service.AnalysisService;
 import com.ssok.idcard.domain.service.IdcardService;
 import com.ssok.idcard.domain.service.MemberServiceClient;
@@ -17,9 +15,6 @@ import com.ssok.idcard.domain.service.dto.RegistrationGetDto;
 import com.ssok.idcard.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -84,10 +79,18 @@ public class IdcardController {
     }
 
     @PostMapping("/scan/registration")
-    public ApiResponse<RecognizedRegistrationCardResponse> ocrReceipt(
+    public ApiResponse<RecognizedLicenseResponse> ocrRegistration(
             @RequestPart(value="img") MultipartFile file
     ) {
-        RecognizedRegistrationCardResponse result = analysisService.analysis(file);
+        RecognizedLicenseResponse result = analysisService.analysisIdcard(file);
+        return OK(result);
+    }
+
+    @PostMapping("/scan/license")
+    public ApiResponse<RecognizedLicenseResponse> ocrLicense(
+            @RequestPart(value="img") MultipartFile file
+    ) {
+        RecognizedLicenseResponse result = analysisService.analysisLicense(file);
         return OK(result);
     }
 

@@ -1,6 +1,6 @@
 package com.ssok.idcard.domain.service;
 
-import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
+import com.ssok.idcard.domain.api.response.RecognizedLicenseResponse;
 import com.ssok.idcard.global.openfeign.naver.AnalysisClient;
 import com.ssok.idcard.global.openfeign.naver.dto.response.LicenseOcrResponse;
 import com.ssok.idcard.global.util.FileUtil;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -23,10 +22,15 @@ public class AnalysisService {
     private final AnalysisClient analysisClient;
     private final FileUtil fileUtil;
 
-    public RecognizedRegistrationCardResponse analysis(MultipartFile file) {
-        LicenseOcrResponse ocrDto = doOCR(file);
-        return RecognizedRegistrationCardResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getDl());
+    public RecognizedLicenseResponse analysisLicense(MultipartFile file) {
+        LicenseOcrResponse ocrDto = licenseOCR(file);
+        return RecognizedLicenseResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getDl());
     }
+
+//    public RecognizedLicenseResponse analysisIdcard(MultipartFile file) {
+//        LicenseOcrResponse ocrDto = idcardOCR(file);
+//        return RecognizedLicenseResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getDl());
+//    }
 
     private String getMessage(MultipartFile file) {
         if (file.isEmpty()) {
@@ -36,13 +40,19 @@ public class AnalysisService {
         return "{\"version\": \"V2\",\"requestId\": \"" + UUID.randomUUID() +
                 "\",\"timestamp\": " + System.currentTimeMillis() +
                 ",\"images\": [{ \"format\": \"" + fileUtil.extractExt(file.getOriginalFilename()) +
+                // images.data가 있어야 될거 같은데 ?
                 "\", \"name\": \"" + file.getOriginalFilename() +
                 "\" }]}";
     }
 
-    private LicenseOcrResponse doOCR(MultipartFile file) {
+    private LicenseOcrResponse licenseOCR(MultipartFile file) {
         String message = getMessage(file);
-        return analysisClient.analyzeIdcard(ocrKey, message, file).get();
+        return analysisClient.analyzeLicense(ocrKey, message, file).get();
     }
+
+//    private LicenseOcrResponse idcardOCR(MultipartFile file) {
+//        String message = getMessage(file);
+//        return analysisClient.analyzeIdcard(ocrKey, message, file).get();
+//    }
 
 }

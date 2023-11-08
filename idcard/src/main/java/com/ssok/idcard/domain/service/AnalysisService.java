@@ -1,7 +1,9 @@
 package com.ssok.idcard.domain.service;
 
 import com.ssok.idcard.domain.api.response.RecognizedLicenseResponse;
+import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
 import com.ssok.idcard.global.openfeign.naver.AnalysisClient;
+import com.ssok.idcard.global.openfeign.naver.dto.response.RegistrationCardOcrResponse;
 import com.ssok.idcard.global.openfeign.naver.dto.response.LicenseOcrResponse;
 import com.ssok.idcard.global.util.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +29,10 @@ public class AnalysisService {
         return RecognizedLicenseResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getDl());
     }
 
-//    public RecognizedLicenseResponse analysisIdcard(MultipartFile file) {
-//        LicenseOcrResponse ocrDto = idcardOCR(file);
-//        return RecognizedLicenseResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getDl());
-//    }
+    public RecognizedRegistrationCardResponse analysisRegistration(MultipartFile file) {
+        RegistrationCardOcrResponse ocrDto = registrationCardOCR(file);
+        return RecognizedRegistrationCardResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getIc());
+    }
 
     private String getMessage(MultipartFile file) {
         if (file.isEmpty()) {
@@ -50,9 +52,9 @@ public class AnalysisService {
         return analysisClient.analyzeLicense(ocrKey, message, file).get();
     }
 
-//    private LicenseOcrResponse idcardOCR(MultipartFile file) {
-//        String message = getMessage(file);
-//        return analysisClient.analyzeIdcard(ocrKey, message, file).get();
-//    }
+    private RegistrationCardOcrResponse registrationCardOCR(MultipartFile file) {
+        String message = getMessage(file);
+        return analysisClient.analyzeIdcard(ocrKey, message, file).get();
+    }
 
 }

@@ -1,7 +1,7 @@
 package com.ssok.idcard.global.openfeign.naver;
 
 import com.ssok.idcard.global.config.OpenFeignConfig;
-import com.ssok.idcard.global.openfeign.naver.dto.response.IdcardOcrResponse;
+import com.ssok.idcard.global.openfeign.naver.dto.response.RegistrationCardOcrResponse;
 import com.ssok.idcard.global.openfeign.naver.dto.response.LicenseOcrResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ public interface AnalysisClient {
             @RequestPart(value = "file") MultipartFile file);
 
     @PostMapping(value="", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    Optional<IdcardOcrResponse> analyzeIdcard(
+    Optional<RegistrationCardOcrResponse> analyzeIdcard(
             @RequestHeader("X-OCR-SECRET") String key,
             @RequestPart(value = "message") String message,
             @RequestPart(value = "file") MultipartFile file);

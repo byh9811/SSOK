@@ -4,6 +4,7 @@ import com.ssok.idcard.domain.api.request.LicenseCreateRequest;
 import com.ssok.idcard.domain.api.request.RegistrationCardCreateRequest;
 import com.ssok.idcard.domain.api.response.LicenseGetResponse;
 import com.ssok.idcard.domain.api.response.RecognizedLicenseResponse;
+import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
 import com.ssok.idcard.domain.api.response.RegistrationGetResponse;
 import com.ssok.idcard.domain.service.AnalysisService;
 import com.ssok.idcard.domain.service.IdcardService;
@@ -79,10 +80,10 @@ public class IdcardController {
     }
 
     @PostMapping("/scan/registration")
-    public ApiResponse<RecognizedLicenseResponse> ocrRegistration(
+    public ApiResponse<RecognizedRegistrationCardResponse> ocrRegistration(
             @RequestPart(value="img") MultipartFile file
     ) {
-        RecognizedLicenseResponse result = analysisService.analysisIdcard(file);
+        RecognizedRegistrationCardResponse result = analysisService.analysisRegistration(file);
         return OK(result);
     }
 

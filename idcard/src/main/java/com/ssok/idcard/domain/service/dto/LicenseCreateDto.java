@@ -16,8 +16,7 @@ public record LicenseCreateDto(
         String licenseCondition,
         String licenseCode,
         LocalDate licenseIssueDate,
-        String licenseAuthority,
-        String licenseImage
+        String licenseAuthority
 ) {
 
     public static LicenseCreateDto fromRequest(Long memberSeq, LicenseCreateRequest request) {
@@ -33,8 +32,7 @@ public record LicenseCreateDto(
                 request.licenseCondition(),
                 request.licenseCode(),
                 request.licenseIssueDate(),
-                request.licenseAuthority(),
-                request.licenseImage()
+                request.licenseAuthority()
         );
     }
 }

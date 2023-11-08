@@ -30,16 +30,17 @@ public class IdcardController {
 
     private final IdcardService idcardService;
     private final AnalysisService analysisService;
-
     private final MemberServiceClient memberServiceClient;
 
     @PostMapping("/license")
     public ApiResponse<Void> createLicense(
-            @RequestHeader("MEMBER-UUID") String memberUUID, @RequestBody LicenseCreateRequest licenseCreateRequest)
-    {
+            @RequestHeader("MEMBER-UUID") String memberUUID,
+            @RequestPart LicenseCreateRequest licenseCreateRequest,
+            @RequestPart(name = "image") MultipartFile multipartFile
+    ) {
         log.info("entered createLicense");
         Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
-        idcardService.createLicense(LicenseCreateDto.fromRequest(memberSeq, licenseCreateRequest));
+        idcardService.createLicense(LicenseCreateDto.fromRequest(memberSeq, licenseCreateRequest), multipartFile);
         return OK(null);
     }
 
@@ -71,10 +72,13 @@ public class IdcardController {
 
     @PostMapping("/registration")
     public ApiResponse<Void> createRegistrationCard(
-            @RequestHeader("MEMBER-UUID") String memberUUID, @RequestBody RegistrationCardCreateRequest request)
+            @RequestHeader("MEMBER-UUID") String memberUUID,
+            @RequestPart RegistrationCardCreateRequest request,
+            @RequestPart(name = "image") MultipartFile multipartFile
+            )
     {
         Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
-        idcardService.createRegistrationCard(RegistrationCreateDto.fromRequest(memberSeq, request));
+        idcardService.createRegistrationCard(RegistrationCreateDto.fromRequest(memberSeq, request), multipartFile);
 
         return OK(null);
     }

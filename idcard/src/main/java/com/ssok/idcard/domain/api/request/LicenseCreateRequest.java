@@ -1,9 +1,6 @@
 package com.ssok.idcard.domain.api.request;
 
-import com.ssok.idcard.domain.api.response.LicenseCreateResponse;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record LicenseCreateRequest(
         String licenseName,
@@ -16,8 +13,7 @@ public record LicenseCreateRequest(
         String licenseCondition,
         String licenseCode,
         LocalDate licenseIssueDate,
-        String licenseAuthority,
-        String licenseImage
+        String licenseAuthority
 ) {
     public static LicenseCreateRequest of(
             String licenseName,
@@ -30,8 +26,7 @@ public record LicenseCreateRequest(
             String licenseCondition,
             String licenseCode,
             LocalDate licenseIssueDate,
-            String licenseAuthority,
-            String licenseImage
+            String licenseAuthority
     ){
         return new LicenseCreateRequest(
                 licenseName,
@@ -44,8 +39,7 @@ public record LicenseCreateRequest(
                 licenseCondition,
                 licenseCode,
                 licenseIssueDate,
-                licenseAuthority,
-                licenseImage);
+                licenseAuthority);
     }
 
 }

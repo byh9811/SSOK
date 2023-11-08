@@ -10,8 +10,7 @@ public record RegistrationCreateDto(
         String registrationCardPersonalNumber,
         String registrationCardAddress,
         LocalDate registrationCardIssueDate,
-        String registrationCardAuthority,
-        String registrationCardImage
+        String registrationCardAuthority
 ) {
     public static RegistrationCreateDto fromRequest(Long memberSeq, RegistrationCardCreateRequest request) {
         return new RegistrationCreateDto(
@@ -20,8 +19,7 @@ public record RegistrationCreateDto(
                 request.registrationCardPersonalNumber(),
                 request.registrationCardAddress(),
                 request.registrationCardIssueDate(),
-                request.registrationCardAuthority(),
-                request.registrationCardImage()
+                request.registrationCardAuthority()
         );
     }
 }

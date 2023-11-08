@@ -7,7 +7,6 @@ public record RegistrationCardCreateRequest(
         String registrationCardPersonalNumber,
         String registrationCardAddress,
         LocalDate registrationCardIssueDate,
-        String registrationCardAuthority,
-        String registrationCardImage
+        String registrationCardAuthority
 ) {
 }

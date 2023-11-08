@@ -1,6 +1,8 @@
 package com.ssok.base.domain.service;
 
 import com.ssok.base.client.config.MemberServiceClient;
+import com.ssok.base.client.config.ReceiptServiceClient;
+import com.ssok.base.client.config.req.AccountTransferRequest;
 import com.ssok.base.domain.api.dto.response.DomainJoinResponse;
 import com.ssok.base.domain.api.dto.response.PocketResponse;
 import com.ssok.base.domain.maria.entity.*;
@@ -43,6 +45,7 @@ public class PocketService {
     private final PocketDetailMongoRepository pocketDetailMongoRepository;
     private final PocketMainMongoRepository pocketMainMongoRepository;
     private final MemberServiceClient memberServiceClient;
+    private final ReceiptServiceClient receiptServiceClient;
     public DomainJoinResponse createDomain(DomainDto domainDto) {
 //        return pocketRepository.fin
         DomainJoinResponse domainJoinResponse = new DomainJoinResponse(domainDto.nickname(), domainDto.age());
@@ -311,8 +314,7 @@ public class PocketService {
             checkIsTransfer(dto.getPocketHistoryTransAmt(), pocket);
             pocket.transferWithdrawal(dto.getPocketHistoryTransAmt());
             // TODO: 2023-11-03 @홍진식 : 계좌 변경 요청 추가 필요
-
-
+            receiptServiceClient.accountTransfer(AccountTransferRequest.fromHistory(dto));
             resultMap.put("type",PocketHistoryType.WITHDRAWAL);
             resultMap.put("title", "출금");
             return resultMap;

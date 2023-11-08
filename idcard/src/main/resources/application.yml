@@ -7,5 +7,5 @@ spring:
       profile: local
       label: idcard
 
-#encrypt:
-#  key: ${ssh-encrypt-key}
+encrypt:
+  key: ${ssh-encrypt-key}

@@ -4,8 +4,10 @@ import com.ssok.idcard.domain.api.request.LicenseCreateRequest;
 import com.ssok.idcard.domain.api.request.RegistrationCardCreateRequest;
 import com.ssok.idcard.domain.api.response.LicenseCreateResponse;
 import com.ssok.idcard.domain.api.response.LicenseGetResponse;
+import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
 import com.ssok.idcard.domain.api.response.RegistrationGetResponse;
 import com.ssok.idcard.domain.dao.entity.RegistrationCard;
+import com.ssok.idcard.domain.service.AnalysisService;
 import com.ssok.idcard.domain.service.IdcardService;
 import com.ssok.idcard.domain.service.MemberServiceClient;
 import com.ssok.idcard.domain.service.dto.LicenseCreateDto;
@@ -19,6 +21,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import static com.ssok.idcard.global.api.ApiResponse.OK;
 
 // @RequestHeader("MEMBER-UUID") String memberUUID
 @RestController
@@ -28,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class IdcardController {
 
     private final IdcardService idcardService;
+    private final AnalysisService analysisService;
 
     private final MemberServiceClient memberServiceClient;
 
@@ -38,7 +44,7 @@ public class IdcardController {
         log.info("entered createLicense");
         Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
         idcardService.createLicense(LicenseCreateDto.fromRequest(memberSeq, licenseCreateRequest));
-        return ApiResponse.OK(null);
+        return OK(null);
     }
 
     @GetMapping("/license")
@@ -49,7 +55,7 @@ public class IdcardController {
         LicenseGetDto licenseGetDto = idcardService.getLicense(memberSeq);
         LicenseGetResponse licenseGetResponse = licenseGetDto.of(licenseGetDto);
 
-        return ApiResponse.OK(licenseGetResponse);
+        return OK(licenseGetResponse);
     }
 
     @GetMapping("/registration")
@@ -64,19 +70,25 @@ public class IdcardController {
 
         RegistrationGetResponse registrationGetResponse = registrationGetDto.of(registrationGetDto);
 
-        return ApiResponse.OK(registrationGetResponse);
+        return OK(registrationGetResponse);
     }
 
     @PostMapping("/registration")
     public ApiResponse<Void> createRegistrationCard(
             @RequestHeader("MEMBER-UUID") String memberUUID, @RequestBody RegistrationCardCreateRequest request)
     {
-        log.info("entered controller createRegistrationCard method");
-        log.info("requestbody ->");
-        log.info(request.toString());
         Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
         idcardService.createRegistrationCard(RegistrationCreateDto.fromRequest(memberSeq, request));
 
-        return ApiResponse.OK(null);
+        return OK(null);
     }
+
+    @PostMapping("/scan/registration")
+    public ApiResponse<RecognizedRegistrationCardResponse> ocrReceipt(
+            @RequestPart(value="img") MultipartFile file
+    ) {
+        RecognizedRegistrationCardResponse result = analysisService.analysis(file);
+        return OK(result);
+    }
+
 }

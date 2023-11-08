@@ -9,6 +9,7 @@ import com.ssok.idcard.domain.service.dto.LicenseCreateDto;
 import com.ssok.idcard.domain.service.dto.LicenseGetDto;
 import com.ssok.idcard.domain.service.dto.RegistrationCreateDto;
 import com.ssok.idcard.domain.service.dto.RegistrationGetDto;
+import com.ssok.idcard.global.util.GCSUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,10 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ public class IdcardService {
 
     private final LicenseRepository licenseRepository;
     private final RegistrationCardRepository registrationCardRepository;
+    private final GCSUtil gcsUtil;
 
     public void createLicense(LicenseCreateDto licenseCreateDto) {
         License license = License.builder().
@@ -69,7 +75,7 @@ public class IdcardService {
         return registrationGetDto;
     }
 
-    public void createRegistrationCard(RegistrationCreateDto registrationCreateDto){
+    public void createRegistrationCard(RegistrationCreateDto registrationCreateDto) {
         RegistrationCard registrationCard = RegistrationCard.builder().
                 memberSeq(registrationCreateDto.memberSeq()).
                 registrationCardName(registrationCreateDto.registrationCardName()).

@@ -14,6 +14,7 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
   Widget build(BuildContext context) {
     // double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -41,9 +42,10 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
               SizedBox(height: screenHeight * 0.05),
               HowMuchText(
                 title: "얼마를 기부할까요?",
-                subTitle: "서울환경연합",
-                imgUrl: 'assets/money.png',
-                pocketSaving:0
+                subTitle: args['donateTitle'],
+                imgUrl: args['donateImage'],
+                pocketSaving:args["pocketSaving"],
+                urlType: "network",
               ),
               Divider(height: screenHeight * 0.025),
               EnterAmount(buttonTitle: "기부"),

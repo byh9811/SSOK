@@ -75,6 +75,7 @@ class _PocketTransferPageState extends State<PocketTransferPage> {
                 title: "내 통장에 얼마를 이체할까요?",
                 imgUrl: 'assets/account.png',
                 pocketSaving: pocketSaving,
+                urlType: "asset",
               ),
               Divider(height: screenHeight * 0.025),
               EnterAmount(buttonTitle: "이체"),

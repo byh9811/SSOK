@@ -8,6 +8,7 @@ import 'package:ssok/screens/businesscard/business_card_my_page.dart';
 import 'package:ssok/screens/businesscard/business_card_self_create_page.dart';
 import 'package:ssok/screens/creditcard/credit_card_create_page.dart';
 import 'package:ssok/screens/creditcard/test.dart';
+import 'package:ssok/screens/creditcard/test2.dart';
 import 'package:ssok/screens/id/drive_id_create_page.dart';
 import 'package:ssok/screens/id/id_create_page.dart';
 
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
         '/pocket/donation': (context) => PocketDonationPage(),
         '/pocket/donation/send': (context) => PocketDonationSendPage(),
         '/pocket/transfer': (context) => PocketTransferPage(),
-        '/test': (context) => Test(),
+        '/test': (context) => Test2(),
       },
     );
   }

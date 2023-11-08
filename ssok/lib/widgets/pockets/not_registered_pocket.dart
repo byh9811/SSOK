@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/identification/service_aggreement_page.dart';
+import 'package:ssok/http/http.dart';
 
 class NotRegisteredPocket extends StatefulWidget {
   const NotRegisteredPocket({Key? key}) : super(key: key);
@@ -9,6 +11,15 @@ class NotRegisteredPocket extends StatefulWidget {
 }
 
 class _NotRegisteredPocketState extends State<NotRegisteredPocket> {
+  ApiService apiService = ApiService();
+  void makeAccount() async {
+    final response = await apiService.postRequest('receipt-service/card',{}, TokenManager().accessToken);
+    if (response.statusCode == 200) {
+      print(response.body);
+      Navigator.of(context).pushReplacementNamed('/pocket/account/create');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -169,8 +180,7 @@ class _NotRegisteredPocketState extends State<NotRegisteredPocket> {
                   MaterialPageRoute(
                     builder: (context) => ServiceAggreementPage(
                       onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/pocket/account/create');
+                        makeAccount();
                       },
                     ),
                   ),

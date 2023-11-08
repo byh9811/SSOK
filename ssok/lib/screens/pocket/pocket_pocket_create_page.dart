@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
 
 class PocketPocketCreatePage extends StatefulWidget {
@@ -9,6 +13,28 @@ class PocketPocketCreatePage extends StatefulWidget {
 }
 
 class _PocketPocketCreatePageState extends State<PocketPocketCreatePage> {
+  ApiService apiService = ApiService();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    createPocket();
+  }
+
+  void createPocket()async{
+    final response = await apiService.postRequest('pocket-service/pocket',{}, TokenManager().accessToken);
+    print("pocket 생성");
+    print(response.body);
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      print(jsonData);
+    } else {
+      throw Exception('Failed to load');
+    }
+}
+
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -25,7 +51,7 @@ class _PocketPocketCreatePageState extends State<PocketPocketCreatePage> {
             MainButton(
               title: "메인으로",
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pushReplacementNamed('/main');
               },
             ),
           ],

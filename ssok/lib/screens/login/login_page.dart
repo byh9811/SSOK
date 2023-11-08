@@ -13,6 +13,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late TokenManager tokenManager;
+  TextEditingController idController = TextEditingController(); // Controller for ID TextField
+  TextEditingController passwordController = TextEditingController(); // Controller for Password TextField
+
   @override
   void initState() {
     super.initState();
@@ -20,19 +23,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void fetchTodos() async {
+    String id = idController.text; // Get the entered ID
+    String password = passwordController.text; // Get the entered password
+    
     final response = await http.post(
         Uri.parse('https://gateway.ssok.site/api/member-service/member/login'),
         headers: {
           'content-type': 'application/json',
           'accept': 'application/json'
         },
-        body: jsonEncode({"loginId": "test92", "password": "test92"}));
+        body: jsonEncode({"loginId": id, "password": password})); // Use the entered ID and password
+    
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-
       await tokenManager.setAccessToken(jsonData["response"]["accessToken"]);
+      await tokenManager.setRefreshToken(jsonData["response"]["refreshToken"]);
       print("넣었다");
       print(jsonData["response"]["accessToken"]);
+      print(jsonData["response"]["refreshToken"]);
       Navigator.of(context).pushReplacementNamed('/main');
     } else {
       throw Exception('Failed to load album');
@@ -60,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                 children: [
                   TextField(
+                    controller: idController, // Use the ID controller
                     decoration: InputDecoration(
                         labelText: 'ID',
                         hintText: "아이디를 입력하세요",
@@ -79,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: screenHeight * 0.03),
                   TextField(
+                    controller: passwordController, // Use the password controller
                     decoration: InputDecoration(
                         labelText: 'PW',
                         hintText: " 입력하세요",

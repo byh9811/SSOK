@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 
 class MyAccount extends StatefulWidget {
   const MyAccount({super.key});
@@ -7,7 +11,54 @@ class MyAccount extends StatefulWidget {
   State<MyAccount> createState() => _MyAccountState();
 }
 
+class AccountData {
+  final String name;
+  final String balance;
+  final String bank;
+  final String accNum;
+
+  AccountData({
+    required this.name,
+    required this.balance,
+    required this.bank,
+    required this.accNum
+  });
+
+  factory AccountData.fromJson(Map<String, dynamic> json) {
+    print(json);
+    return AccountData(
+      name: json['name'].toString(),
+      balance: json['balance'].toString(),
+      bank: json['bank'].toString(),
+      accNum: json['accNum'].toString()
+    );
+  }
+}
+
 class _MyAccountState extends State<MyAccount> {
+  ApiService apiService = ApiService();
+  late AccountData accountData;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAccountInfo();
+  }
+
+  void getAccountInfo() async{
+    final response = await apiService.getRequest('receipt-service/account',TokenManager().accessToken);
+    print("계좌 정보조회");
+    print(jsonDecode(utf8.decode(response.bodyBytes)));
+    if (response.statusCode == 200) {
+      setState(() {
+        accountData = AccountData.fromJson(jsonDecode(utf8.decode(response.bodyBytes))['response']);
+      }); 
+    }else{
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -34,7 +85,7 @@ class _MyAccountState extends State<MyAccount> {
                   ),
                 ),
                 SizedBox(
-                  height: screenHeight * 0.09,
+                  height: screenHeight * 0.11,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -42,7 +93,7 @@ class _MyAccountState extends State<MyAccount> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          "홍길동의 통장",
+                          accountData.name+"님의 통장",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -52,7 +103,17 @@ class _MyAccountState extends State<MyAccount> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          "25,000원",
+                          accountData.balance,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Text(
+                          accountData.bank +": "+accountData.accNum,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,

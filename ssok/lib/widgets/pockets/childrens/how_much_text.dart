@@ -6,16 +6,21 @@ class HowMuchText extends StatefulWidget {
     required this.title,
     this.subTitle,
     required this.imgUrl,
-  }) : super(key: key);
+    required this.pocketSaving,
+   }) : super(key: key);
 
   final String title;
   final String? subTitle;
   final String imgUrl;
+  final int pocketSaving;
   @override
   State<HowMuchText> createState() => _HowMuchTextState();
 }
 
 class _HowMuchTextState extends State<HowMuchText> {
+
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -59,7 +64,7 @@ class _HowMuchTextState extends State<HowMuchText> {
           child: Align(
             alignment: Alignment.centerRight,
             child: Text(
-              "보유 포켓머니 : 500원",
+              "보유 포켓머니 : ${widget.pocketSaving}원",
               style: TextStyle(
                 fontSize: 17,
               ),

@@ -1,4 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
 
 class EnterAmount extends StatefulWidget {
@@ -11,7 +15,28 @@ class EnterAmount extends StatefulWidget {
   State<EnterAmount> createState() => _EnterAmountState();
 }
 
+
 class _EnterAmountState extends State<EnterAmount> {
+  ApiService apiService = ApiService();
+
+  int withDrawMoney = 0;
+
+  void sendMoneyToMyAccount()async{
+    final response = await apiService.postRequest('pocket-service/pocket/history',{"receiptSeq":"null","pocketHistoryType":"WITHDRAWAL","pocketHistoryTransAmt":withDrawMoney.toString()},TokenManager().accessToken);
+    print(response.body);
+    if (response.statusCode == 200) {
+      print(response.body);
+      Navigator.of(context).pushReplacementNamed('/main');
+    }
+  }
+
+  void changeMoney(int money){
+    setState(() {
+      withDrawMoney = money;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -26,7 +51,7 @@ class _EnterAmountState extends State<EnterAmount> {
               Expanded(
                 child: TextField(
                   autofocus: true,
-                  onChanged: (text) {}, // 텍스트 변경시 실행되는 함수
+                  onChanged: (text) {changeMoney(int.parse(text));}, // 텍스트 변경시 실행되는 함수
                   onSubmitted: (text) {}, // Enter를 누를 때 실행되는 함수
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
@@ -50,7 +75,7 @@ class _EnterAmountState extends State<EnterAmount> {
         SizedBox(height: screenHeight * 0.08),
         MainButton(
           title: widget.buttonTitle,
-          onPressed: () {},
+          onPressed: () {sendMoneyToMyAccount();}
         )
       ],
     );

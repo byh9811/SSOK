@@ -43,6 +43,7 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
                 title: "얼마를 기부할까요?",
                 subTitle: "서울환경연합",
                 imgUrl: 'assets/money.png',
+                pocketSaving:0
               ),
               Divider(height: screenHeight * 0.025),
               EnterAmount(buttonTitle: "기부"),

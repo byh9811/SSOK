@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
+import 'package:ssok/widgets/pockets/childrens/my_account.dart';
 
 class PocketAccountCreatePage extends StatefulWidget {
   const PocketAccountCreatePage({super.key});
@@ -56,7 +57,13 @@ class _PocketAccountCreatePageState extends State<PocketAccountCreatePage> {
               ),
             ),
             selectText(),
-            MainButton(title: "선택", onPressed: () {})
+            MyAccount(),
+            SizedBox(
+              height: screenHeight * 0.05,
+            ),
+            MainButton(title: "다음단계로", onPressed: () {
+            Navigator.of(context).pushReplacementNamed('/main'); //포켓페이지로 이동해야댐
+            })
           ],
         ),
       ),
@@ -105,6 +112,30 @@ class _PocketAccountCreatePageState extends State<PocketAccountCreatePage> {
   }
 
   Widget selectText() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: EdgeInsets.only(left: screenWidth * 0.1),
+      child: Row(
+        children: [
+          Text(
+            "생성 계좌",
+            style: TextStyle(
+              fontSize: 22,
+              color: Color(0xFF00ADEF),
+            ),
+          ),
+          Text(
+            "가 연동되었습니다.",
+            style: TextStyle(
+              color: Color(0xFF00496F),
+              fontSize: 22,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget selectText1() {
     double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.only(left: screenWidth * 0.1),

@@ -13,10 +13,6 @@ class PocketPage extends StatefulWidget {
   State<PocketPage> createState() => _PocketPageState();
 }
 
-
-
-
-
 class _PocketPageState extends State<PocketPage> {
   ApiService apiService = ApiService();
   String? uuid;
@@ -77,13 +73,14 @@ void getAccountStatus()async{
 void getPocket()async{
     final response = await apiService.getRequest('pocket-service/pocket', TokenManager().accessToken);
     print("포켓가져옴");
-    print(response.body);
+    print(jsonDecode(utf8.decode(response.bodyBytes)));
     if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       setState(() {
         pocketMoney = jsonData['response']['pocketSaving'];
       });
     } else {
+          print(jsonDecode(utf8.decode(response.bodyBytes))['error']['message']);
       throw Exception('Failed to load');
     }
 }

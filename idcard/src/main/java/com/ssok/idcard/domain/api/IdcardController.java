@@ -2,10 +2,11 @@ package com.ssok.idcard.domain.api;
 
 import com.ssok.idcard.domain.api.request.LicenseCreateRequest;
 import com.ssok.idcard.domain.api.request.RegistrationCardCreateRequest;
-import com.ssok.idcard.domain.api.response.LicenseCreateResponse;
 import com.ssok.idcard.domain.api.response.LicenseGetResponse;
+import com.ssok.idcard.domain.api.response.RecognizedLicenseResponse;
+import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
 import com.ssok.idcard.domain.api.response.RegistrationGetResponse;
-import com.ssok.idcard.domain.dao.entity.RegistrationCard;
+import com.ssok.idcard.domain.service.AnalysisService;
 import com.ssok.idcard.domain.service.IdcardService;
 import com.ssok.idcard.domain.service.MemberServiceClient;
 import com.ssok.idcard.domain.service.dto.LicenseCreateDto;
@@ -15,10 +16,10 @@ import com.ssok.idcard.domain.service.dto.RegistrationGetDto;
 import com.ssok.idcard.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import static com.ssok.idcard.global.api.ApiResponse.OK;
 
 // @RequestHeader("MEMBER-UUID") String memberUUID
 @RestController
@@ -28,17 +29,19 @@ import org.springframework.web.bind.annotation.*;
 public class IdcardController {
 
     private final IdcardService idcardService;
-
+    private final AnalysisService analysisService;
     private final MemberServiceClient memberServiceClient;
 
     @PostMapping("/license")
     public ApiResponse<Void> createLicense(
-            @RequestHeader("MEMBER-UUID") String memberUUID, @RequestBody LicenseCreateRequest licenseCreateRequest)
-    {
+            @RequestHeader("MEMBER-UUID") String memberUUID,
+            @RequestPart LicenseCreateRequest licenseCreateRequest,
+            @RequestPart(name = "image") MultipartFile multipartFile
+    ) {
         log.info("entered createLicense");
         Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
-        idcardService.createLicense(LicenseCreateDto.fromRequest(memberSeq, licenseCreateRequest));
-        return ApiResponse.OK(null);
+        idcardService.createLicense(LicenseCreateDto.fromRequest(memberSeq, licenseCreateRequest), multipartFile);
+        return OK(null);
     }
 
     @GetMapping("/license")
@@ -49,7 +52,7 @@ public class IdcardController {
         LicenseGetDto licenseGetDto = idcardService.getLicense(memberSeq);
         LicenseGetResponse licenseGetResponse = licenseGetDto.of(licenseGetDto);
 
-        return ApiResponse.OK(licenseGetResponse);
+        return OK(licenseGetResponse);
     }
 
     @GetMapping("/registration")
@@ -64,19 +67,36 @@ public class IdcardController {
 
         RegistrationGetResponse registrationGetResponse = registrationGetDto.of(registrationGetDto);
 
-        return ApiResponse.OK(registrationGetResponse);
+        return OK(registrationGetResponse);
     }
 
     @PostMapping("/registration")
     public ApiResponse<Void> createRegistrationCard(
-            @RequestHeader("MEMBER-UUID") String memberUUID, @RequestBody RegistrationCardCreateRequest request)
+            @RequestHeader("MEMBER-UUID") String memberUUID,
+            @RequestPart RegistrationCardCreateRequest request,
+            @RequestPart(name = "image") MultipartFile multipartFile
+            )
     {
-        log.info("entered controller createRegistrationCard method");
-        log.info("requestbody ->");
-        log.info(request.toString());
         Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
-        idcardService.createRegistrationCard(RegistrationCreateDto.fromRequest(memberSeq, request));
+        idcardService.createRegistrationCard(RegistrationCreateDto.fromRequest(memberSeq, request), multipartFile);
 
-        return ApiResponse.OK(null);
+        return OK(null);
     }
+
+    @PostMapping("/scan/registration")
+    public ApiResponse<RecognizedRegistrationCardResponse> ocrRegistration(
+            @RequestPart(value="img") MultipartFile file
+    ) {
+        RecognizedRegistrationCardResponse result = analysisService.analysisRegistration(file);
+        return OK(result);
+    }
+
+    @PostMapping("/scan/license")
+    public ApiResponse<RecognizedLicenseResponse> ocrLicense(
+            @RequestPart(value="img") MultipartFile file
+    ) {
+        RecognizedLicenseResponse result = analysisService.analysisLicense(file);
+        return OK(result);
+    }
+
 }

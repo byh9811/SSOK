@@ -9,6 +9,7 @@ import com.ssok.idcard.domain.service.dto.LicenseCreateDto;
 import com.ssok.idcard.domain.service.dto.LicenseGetDto;
 import com.ssok.idcard.domain.service.dto.RegistrationCreateDto;
 import com.ssok.idcard.domain.service.dto.RegistrationGetDto;
+import com.ssok.idcard.global.util.GCSUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,10 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +29,11 @@ public class IdcardService {
 
     private final LicenseRepository licenseRepository;
     private final RegistrationCardRepository registrationCardRepository;
+    private final GCSUtil gcsUtil;
 
-    public void createLicense(LicenseCreateDto licenseCreateDto) {
+    public void createLicense(LicenseCreateDto licenseCreateDto, MultipartFile multipartFile) {
+        String uploadUrl = gcsUtil.uploadFile(multipartFile);
+
         License license = License.builder().
                 memberSeq(licenseCreateDto.memberSeq()).
                 licenseName(licenseCreateDto.licenseName()).
@@ -39,7 +47,7 @@ public class IdcardService {
                 licenseCode(licenseCreateDto.licenseCode()).
                 licenseIssueDate(licenseCreateDto.licenseIssueDate()).
                 licenseAuthority(licenseCreateDto.licenseAuthority()).
-                licenseImage(licenseCreateDto.licenseImage()).
+                licenseImage(uploadUrl).
                 build();
 
         licenseRepository.save(license);
@@ -58,7 +66,6 @@ public class IdcardService {
         return licenseGetDto;
     }
 
-
     public RegistrationGetDto getRegistration(Long memberSeq) {
         log.info("entered service getRegistration method");
 
@@ -69,7 +76,9 @@ public class IdcardService {
         return registrationGetDto;
     }
 
-    public void createRegistrationCard(RegistrationCreateDto registrationCreateDto){
+    public void createRegistrationCard(RegistrationCreateDto registrationCreateDto, MultipartFile multipartFile) {
+        String uploadUrl = gcsUtil.uploadFile(multipartFile);
+
         RegistrationCard registrationCard = RegistrationCard.builder().
                 memberSeq(registrationCreateDto.memberSeq()).
                 registrationCardName(registrationCreateDto.registrationCardName()).
@@ -77,11 +86,10 @@ public class IdcardService {
                 registrationCardPersonalNumber(registrationCreateDto.registrationCardPersonalNumber()).
                 registrationCardIssueDate(registrationCreateDto.registrationCardIssueDate()).
                 registrationCardAuthority(registrationCreateDto.registrationCardAuthority()).
-                registrationCardImage(registrationCreateDto.registrationCardImage()).
+                registrationCardImage(uploadUrl).
                 build();
 
         registrationCardRepository.save(registrationCard);
     }
-
 
 }

@@ -11,4 +11,6 @@ import java.util.Optional;
 
 public interface ReceiptDetailDocumentRepository extends MongoRepository<ReceiptDetailDocument, String> {
 
+    Optional<ReceiptDetailDocument> findByApprovedNum(String approvedNum);
+
 }

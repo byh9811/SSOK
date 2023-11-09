@@ -25,22 +25,6 @@ public class CardAccessUtil {
 
     private String orgCode = "ssok";
 
-    public List<CardTransactionList> getCardTransactionList(String mydataAccessToken, CardList card) {
-        CardTransactionListResponse cardTransactionListResponse = cardClient.getCardTransactionList(
-                        mydataAccessToken,
-                        getTranId(),
-                        getApiType(),
-                        card.getCardId(),
-                        createCardTransactionListRequest())
-                .getBody();
-
-        if (cardTransactionListResponse == null) {
-            throw new RuntimeException("카드 결제 정보를 찾을 수 없습니다!!");
-        }
-
-        return cardTransactionListResponse.getApprovedList();
-    }
-
     public List<CardList> getCardList(String mydataAccessToken) {
         CardListResponse cardListResponse = cardClient.getCardList(
                         mydataAccessToken,

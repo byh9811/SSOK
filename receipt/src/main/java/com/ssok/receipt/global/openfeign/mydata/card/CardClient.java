@@ -36,7 +36,7 @@ public interface CardClient {
             @RequestHeader("Authorization") String token,
             @RequestHeader("x-api-tran-id") String tranId,
             @RequestHeader("x-api-type") String type,
-            @PathVariable("card_id") long cardId,
+            @PathVariable("card_id") String cardId,
             @SpringQueryMap CardTransactionListRequest cardTransactionListRequest);
 
 }

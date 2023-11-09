@@ -66,7 +66,7 @@ public class GCSUtil {
             throw new NamecardException(ErrorCode.GCS_EXCEPTION);
         }
 
-        String filePath = "https://storage.googleapis.com/" + bucketName + "/idcard/" + fileName;
+        String filePath = "https://storage.googleapis.com/" + bucketName + "/" + fileName;
         log.info("File uploaded to: " + filePath);
         return filePath;
 

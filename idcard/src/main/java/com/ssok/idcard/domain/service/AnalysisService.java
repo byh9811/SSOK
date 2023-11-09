@@ -1,8 +1,10 @@
 package com.ssok.idcard.domain.service;
 
 import com.ssok.idcard.domain.api.response.RecognizedLicenseResponse;
+import com.ssok.idcard.domain.api.response.RecognizedNameCardResponse;
 import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
 import com.ssok.idcard.global.openfeign.naver.AnalysisClient;
+import com.ssok.idcard.global.openfeign.naver.dto.response.NameCardOcrResponse;
 import com.ssok.idcard.global.openfeign.naver.dto.response.RegistrationCardOcrResponse;
 import com.ssok.idcard.global.openfeign.naver.dto.response.LicenseOcrResponse;
 import com.ssok.idcard.global.util.FileUtil;
@@ -34,6 +36,11 @@ public class AnalysisService {
         return RecognizedRegistrationCardResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getIc());
     }
 
+    public RecognizedNameCardResponse analysisNameCard(MultipartFile file) {
+        NameCardOcrResponse ocrDto = nameCardOCR(file);
+        return RecognizedNameCardResponse.from(ocrDto.getImages().get(0).getNameCard().getResult());
+    }
+
     private String getMessage(MultipartFile file) {
         if (file.isEmpty()) {
             throw new RuntimeException("파일이 없습니다.");
@@ -55,6 +62,10 @@ public class AnalysisService {
     private RegistrationCardOcrResponse registrationCardOCR(MultipartFile file) {
         String message = getMessage(file);
         return analysisClient.analyzeIdcard(ocrKey, message, file).get();
+    }
+    private NameCardOcrResponse nameCardOCR(MultipartFile file) {
+        String message = getMessage(file);
+        return analysisClient.analyzeNameCard(ocrKey, message, file).get();
     }
 
 }

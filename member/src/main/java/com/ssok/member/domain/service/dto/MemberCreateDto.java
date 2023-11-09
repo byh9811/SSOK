@@ -20,6 +20,7 @@ public class MemberCreateDto {
     private String password; //비밀번호
     private String name;//이름
     private String phone; //전화번호
+    private String simplePassword;
 
     public static MemberCreateDto of(MemberCreateRequest memberCreateRequest){
         return MemberCreateDto.builder()
@@ -27,6 +28,7 @@ public class MemberCreateDto {
                 .password(memberCreateRequest.getPassword())
                 .name(memberCreateRequest.getName())
                 .phone(memberCreateRequest.getPhone())
+                .simplePassword(memberCreateRequest.getSimplePassword())
                 .build();
     }
     public Member toEntity() {
@@ -38,6 +40,7 @@ public class MemberCreateDto {
                 .memberCi(UUID.randomUUID().toString())
                 .memberCiCreateDate(LocalDateTime.now())
                 .memberUuid(UUID.randomUUID().toString())
+                .memberSimplePassword(this.simplePassword)
                 .build();
     }
 }

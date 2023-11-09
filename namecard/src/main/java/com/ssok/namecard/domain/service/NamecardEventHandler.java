@@ -13,6 +13,7 @@ import com.ssok.namecard.domain.mongo.repository.NamecardMainDocMongoRepository;
 import com.ssok.namecard.domain.mongo.repository.NamecardMemoDocMongoRepository;
 import com.ssok.namecard.global.exception.ErrorCode;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -126,14 +127,22 @@ public class NamecardEventHandler {
 
     }
 
-    //todo - 즐겨찾기 최신화
     public void updateFavorite(Long memberSeq, Exchange exchange) {
         NamecardMainDoc namecardMainDoc = findByMemberSeq(exchange.getExchangeSeq());
         Namecard receiveNamecard = exchange.getReceiveNamecard();
         List<NamecardDoc> favorites = namecardMainDoc.getFavorites();
         //namecard -> namecardDoc
         NamecardDoc namecardDoc = NamecardDoc.from(receiveNamecard);
-        favorites.add(namecardDoc);
+        Optional<NamecardDoc> existingFavorite = favorites.stream()
+                                                          .filter(fav -> fav.getExchangeSeq()
+                                                                            .equals(
+                                                                                namecardDoc.getExchangeSeq()))
+                                                          .findFirst();
+        if (existingFavorite.isPresent()) {
+            favorites.remove(existingFavorite.get());
+        } else {
+            favorites.add(namecardDoc);
+        }
         namecardMainDocMongoRepository.save(namecardMainDoc);
     }
 }

@@ -54,9 +54,10 @@ public class NamecardController {
      */
     @PostMapping("/exchange/single")
     public ApiResponse<String> exchangeNamecards(
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid,
         @RequestBody ExchangeSingleRequest exchangeSingleRequest
     ){
-        namecardService.exchangeSingle(exchangeSingleRequest);
+        namecardService.exchangeSingle(memberUuid, exchangeSingleRequest);
         return OK("명함 교환 완료");
     }
 

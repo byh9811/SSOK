@@ -71,34 +71,38 @@ public class NamecardService {
         return savedNamecard.getNamecardSeq();
     }
 
-    public void exchangeSingle(ExchangeSingleRequest exchangeSingleRequest) {
+    public void exchangeSingle(String memberUuid, ExchangeSingleRequest exchangeSingleRequest) {
         /* A명함 조회 */
         Namecard namecardA = findBySeq(exchangeSingleRequest.namecardASeq());
 
         /* B명함 조회 */
         Namecard namecardB = findBySeq(exchangeSingleRequest.namecardBSeq());
 
+        /* 로그인 한 사람이 명함 요청의 주체인지 검증 */
+        isValid(memberUuid, namecardA);
+
         /* 명함을 교환했다면 x */
-        List<Exchange> betweenTwoNamecards = exchangeRepository.findAllExchangesBetweenTwoNamecards(namecardA, namecardB);
-        if(!betweenTwoNamecards.isEmpty()) throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
-        log.info("교환 시작: {}, {}", namecardA, namecardB);
+        isDuplicated(namecardA, namecardB);
+
         /* 명함을 교환하지 않았다면 교환 */
-//        List<Exchange> exchangeList = makeExchanges(namecardA, namecardB, exchangeSingleRequest.lat(), exchangeSingleRequest.lon());
+        log.info("교환 시작: {}, {}", namecardA, namecardB);
         Exchange exchange = makeExchange(exchangeSingleRequest.lat(), exchangeSingleRequest.lon(), namecardA, namecardB);
         exchangeRepository.save(exchange);
-        log.info("주체A (B의 명함받음) MariaDB에는 저장 완료");
+        log.info("주체A (B의 명함받음) MariaDB에 저장 완료");
         namecardEventHandler.exchangeNamecard(namecardA, namecardB, exchange);
     }
 
-    private List<Exchange> makeExchanges(Namecard namecardA, Namecard namecardB, Double lat,
-        Double lon) {
+    private void isDuplicated(Namecard namecardA, Namecard namecardB) {
+        List<Exchange> betweenTwoNamecards = exchangeRepository.findAllExchangesBetweenTwoNamecards(
+            namecardA, namecardB);
+        if(!betweenTwoNamecards.isEmpty()) throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
+    }
 
-        List<Exchange> exchangeList = new ArrayList<>();
-        Exchange exchangeAtoB = makeExchange(lat, lon, namecardA, namecardB);
-        Exchange exchangeBtoA = makeExchange(lat, lon, namecardB, namecardA);
-        exchangeList.add(exchangeAtoB);
-        exchangeList.add(exchangeBtoA);
-        return exchangeList;
+    private void isValid(String memberUuid, Namecard namecardA) {
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+        if(namecardA.getMemberSeq() != memberSeq){
+            throw new ExchangeException(ErrorCode.EXCHANGE_BAD_REQUEST);
+        }
     }
 
     private Exchange makeExchange(Double lat, Double lon, Namecard namecardA, Namecard namecardB) {
@@ -150,7 +154,7 @@ public class NamecardService {
         exchange.updateFavorite();
 
         //mongo todo - 즐겨 찾기 표시 및 조회 시 favorite 리스트에 넣어주기
-        namecardEventHandler.updateFavorite(memberSeq, exchange);
+        namecardEventHandler.updateFavorite(exchange);
         return exchangeSeq;
     }
 

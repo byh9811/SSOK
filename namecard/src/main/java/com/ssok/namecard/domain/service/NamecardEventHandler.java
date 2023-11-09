@@ -100,7 +100,7 @@ public class NamecardEventHandler {
 
     }
 
-    public void updateFavorite(Long memberSeq, Exchange exchange) {
+    public void updateFavorite(Exchange exchange) {
         NamecardMainDoc namecardMainDoc = findByMemberSeq(exchange.getExchangeSeq());
         Namecard receiveNamecard = exchange.getReceiveNamecard();
         List<NamecardDoc> favorites = namecardMainDoc.getFavorites();

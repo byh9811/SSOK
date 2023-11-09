@@ -83,10 +83,11 @@ public class NamecardService {
         if(!betweenTwoNamecards.isEmpty()) throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
         log.info("교환 시작: {}, {}", namecardA, namecardB);
         /* 명함을 교환하지 않았다면 교환 */
-        List<Exchange> exchangeList = makeExchanges(namecardA, namecardB, exchangeSingleRequest.lat(), exchangeSingleRequest.lon());
-        exchangeRepository.saveAll(exchangeList);
-        log.info("MariaDB에는 저장 완료");
-        namecardEventHandler.exchangeNamecard(namecardA, namecardB, exchangeList);
+//        List<Exchange> exchangeList = makeExchanges(namecardA, namecardB, exchangeSingleRequest.lat(), exchangeSingleRequest.lon());
+        Exchange exchange = makeExchange(exchangeSingleRequest.lat(), exchangeSingleRequest.lon(), namecardA, namecardB);
+        exchangeRepository.save(exchange);
+        log.info("주체A (B의 명함받음) MariaDB에는 저장 완료");
+        namecardEventHandler.exchangeNamecard(namecardA, namecardB, exchange);
     }
 
     private List<Exchange> makeExchanges(Namecard namecardA, Namecard namecardB, Double lat,

@@ -46,55 +46,28 @@ public class NamecardEventHandler {
         namecardMainDocMongoRepository.save(namecardMainDoc);
     }
 
-    public void exchangeNamecard(Namecard namecardA, Namecard namecardB, List<Exchange> exchangeList) {
+    public void exchangeNamecard(Namecard namecardA, Namecard namecardB, Exchange exchange) {
 
         /** 메인페이지 업데이트 */
-
         /* A에게 보여질 명함 메인*/
         NamecardMainDoc namecardMainDocA = findByMemberSeq(namecardA.getMemberSeq());
-
-        /* B에게 보여질 명함 메인*/
-        NamecardMainDoc namecardMainDocB = findByMemberSeq(namecardB.getMemberSeq());
-        log.info("1");
-        NamecardDoc namecardDocA = NamecardDoc.from(namecardA);  //B 친구 명함 목록에 들어갈 A명함
-        namecardDocA.addExchangeSeq(exchangeList.get(0).getExchangeSeq());
         NamecardDoc namecardDocB = NamecardDoc.from(namecardB); //A 친구 명함 목록에 들어갈 B명함
-        namecardDocB.addExchangeSeq(exchangeList.get(1).getExchangeSeq());
-        log.info("2");
-        namecardDocA.addExchangeDate(exchangeList.get(0).getCreateDate().toLocalDate());
-        namecardDocB.addExchangeDate(exchangeList.get(1).getCreateDate().toLocalDate());
-        log.info("3");
+        namecardDocB.addExchangeSeq(exchange.getExchangeSeq());
+        namecardDocB.addExchangeDate(exchange.getCreateDate().toLocalDate());
         namecardMainDocA.addNamecardDoc(namecardDocB);
-        namecardMainDocB.addNamecardDoc(namecardDocA);
-        log.info("4");
         namecardMainDocMongoRepository.save(namecardMainDocA);
-        namecardMainDocMongoRepository.save(namecardMainDocB);
-
         log.info("A의 명함 메인: {}", namecardMainDocA);
-        log.info("B의 명함 메인: {}", namecardMainDocB);
-        
-        
+
+
         /** 상세 페이지 업데이트 */
-
-        //memberB가 A를 보는 상세페이지
-        NamecardDetailDoc namecardDetailDocB = NamecardDetailDoc.from(namecardA, exchangeList.get(1));
-
         //memberA가 B를 보는 상세페이지
-        NamecardDetailDoc namecardDetailDocA = NamecardDetailDoc.from(namecardB, exchangeList.get(0));
-
+        NamecardDetailDoc namecardDetailDocA = NamecardDetailDoc.from(namecardB, exchange);
         namecardDetailDocMongoRepository.save(namecardDetailDocA);
-        namecardDetailDocMongoRepository.save(namecardDetailDocB);
 
         /** 명함 메모 초기화 */
-
         // A가 보는 B명함 메모 초기화
-        NamecardMemoDoc namecardMemoDocA = new NamecardMemoDoc(exchangeList.get(0).getExchangeSeq(), "");
-
-        // B가 보는 A명함 메모 초기화
-        NamecardMemoDoc namecardMemoDocB = new NamecardMemoDoc(exchangeList.get(1).getExchangeSeq(), "");
-
+        NamecardMemoDoc namecardMemoDocA = new NamecardMemoDoc(exchange.getExchangeSeq(), "");
         namecardMemoDocMongoRepository.save(namecardMemoDocA);
-        namecardMemoDocMongoRepository.save(namecardMemoDocB);
     }
 
     public void editMemo(Long memberSeq, Exchange exchange, String content) {
@@ -110,7 +83,7 @@ public class NamecardEventHandler {
         log.info("변경 후 메모: {}", namecardMemoDoc.getMemo());
         namecardMemoDocMongoRepository.save(namecardMemoDoc);
 
-        /* todo - 목록에 메모 최신화 */
+        /* 목록에 메모 최신화 */
         NamecardMainDoc findNamecardMainDoc = findByMemberSeq(memberSeq);
         List<NamecardDoc> namecards = findNamecardMainDoc.getNamecards();
 

@@ -145,4 +145,5 @@ public class NamecardController {
         List<NamecardSearchResponse> searchResponseList = namecardService.getNamecardSearch(memberUuid, name);
         return OK(searchResponseList);
     }
+
 }

@@ -1,14 +1,12 @@
 package com.ssok.idcard.domain.service;
 
 import com.ssok.idcard.domain.api.response.LicenseGetResponse;
+import com.ssok.idcard.domain.api.response.SummaryIdcardGetResponse;
 import com.ssok.idcard.domain.dao.entity.License;
 import com.ssok.idcard.domain.dao.entity.RegistrationCard;
 import com.ssok.idcard.domain.dao.repository.LicenseRepository;
 import com.ssok.idcard.domain.dao.repository.RegistrationCardRepository;
-import com.ssok.idcard.domain.service.dto.LicenseCreateDto;
-import com.ssok.idcard.domain.service.dto.LicenseGetDto;
-import com.ssok.idcard.domain.service.dto.RegistrationCreateDto;
-import com.ssok.idcard.domain.service.dto.RegistrationGetDto;
+import com.ssok.idcard.domain.service.dto.*;
 import com.ssok.idcard.global.util.GCSUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,22 +56,19 @@ public class IdcardService {
 
         License license = licenseRepository.findByMemberSeq(memberSeq);
 
-        log.info("license value =======");
-        log.info(license.toString());
-        LicenseGetDto licenseGetDto = license.of(license);
-        log.info(licenseGetDto.toString());
+        if(license == null) return null;
 
-        return licenseGetDto;
+        return license.of(license);
     }
 
     public RegistrationGetDto getRegistration(Long memberSeq) {
         log.info("entered service getRegistration method");
 
         RegistrationCard registrationCard = registrationCardRepository.findByMemberSeq(memberSeq);
+        log.info("registrationCard.toString:");
 
-        RegistrationGetDto registrationGetDto = registrationCard.of(registrationCard);
-        log.info(registrationGetDto.toString());
-        return registrationGetDto;
+        if(registrationCard == null) return null;
+        else return registrationCard.of(registrationCard);
     }
 
     public void createRegistrationCard(RegistrationCreateDto registrationCreateDto, MultipartFile multipartFile) {
@@ -92,4 +87,13 @@ public class IdcardService {
         registrationCardRepository.save(registrationCard);
     }
 
+    public SummaryIdcardGetResponse getSummaryIdcard(Long memberSeq) {
+        RegistrationCard registrationCard = registrationCardRepository.findByMemberSeq(memberSeq);
+        License license = licenseRepository.findByMemberSeq(memberSeq);
+
+        SummaryRegistrationCardDto summaryRegistrationCardDto = SummaryRegistrationCardDto.from(registrationCard);
+        SummaryLicenseDto summaryLicenseDto = SummaryLicenseDto.from(license);
+
+        return new SummaryIdcardGetResponse(summaryRegistrationCardDto, summaryLicenseDto);
+    }
 }

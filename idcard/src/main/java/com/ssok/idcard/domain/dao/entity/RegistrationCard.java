@@ -48,6 +48,9 @@ public class RegistrationCard extends BaseEntity implements Serializable {
     private String registrationCardImage;
 
     public RegistrationGetDto of(RegistrationCard registrationCard) {
+
+        if(registrationCard == null) return null;
+
         return new RegistrationGetDto(
                 registrationCard.registrationCardName,
                 registrationCard.registrationCardPersonalNumber,

@@ -46,9 +46,8 @@ public class IdcardController {
 
         Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
         LicenseGetDto licenseGetDto = idcardService.getLicense(memberSeq);
-        LicenseGetResponse licenseGetResponse = licenseGetDto.of(licenseGetDto);
-
-        return OK(licenseGetResponse);
+        if(licenseGetDto == null) return OK(null);
+        return OK(licenseGetDto.of(licenseGetDto));
     }
 
     @GetMapping("/registration")
@@ -61,9 +60,8 @@ public class IdcardController {
 
         RegistrationGetDto registrationGetDto = idcardService.getRegistration(memberSeq);
 
-        RegistrationGetResponse registrationGetResponse = registrationGetDto.of(registrationGetDto);
-
-        return OK(registrationGetResponse);
+        if(registrationGetDto == null) return OK(null);
+        else return OK(registrationGetDto.of(registrationGetDto));
     }
 
     @PostMapping("/registration")
@@ -101,6 +99,18 @@ public class IdcardController {
     ) {
         RecognizedNameCardResponse result = analysisService.analysisNameCard(file);
         return OK(result);
+    }
+
+    @GetMapping("/summary/idcard")
+    public ApiResponse<SummaryIdcardGetResponse> getSummaryIdcard(
+            @RequestHeader("MEMBER-UUID") String memberUUID
+    ){
+
+        log.debug("controller entered method getSummaryIdcard");
+        Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
+        SummaryIdcardGetResponse summaryIdcardGetResponse = idcardService.getSummaryIdcard(memberSeq);
+
+        return OK(summaryIdcardGetResponse);
     }
 
 }

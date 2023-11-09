@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/pockets/childrens/my_pocket.dart';
 import 'dart:convert';
 
@@ -87,142 +89,195 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
   int selectedMonth = DateTime.now().month;
   int selectedYear = DateTime.now().year;
 
-  final Map<String, Object?> jsonString = {
-    "success": true,
-    "response": {
-      "pocketDetailMap": {
-        "2023-11": {
-          "pocketDetailResponses": [
-            {
-              "pocketHistorySeq": 1,
-              "pocketHistoryType": "CARBON",
-              "pocketHistoryTransAmt": 1500,
-              "pocketHistoryResultAmt": 1500,
-              "receiptSeq": 1,
-              "pocketHistoryTitle": "탄소 중립포인트 적립",
-              "createTime": "2023-11-06T20:14:43.785"
-            },
-            {
-              "pocketHistorySeq": 2,
-              "pocketHistoryType": "DONATION",
-              "pocketHistoryTransAmt": 500,
-              "pocketHistoryResultAmt": 1000,
-              "receiptSeq": null,
-              "pocketHistoryTitle": "기부",
-              "createTime": "2023-11-06T20:14:53.972"
-            },
-            {
-              "pocketHistorySeq": 3,
-              "pocketHistoryType": "DONATION",
-              "pocketHistoryTransAmt": 500,
-              "pocketHistoryResultAmt": 500,
-              "receiptSeq": null,
-              "pocketHistoryTitle": "기부",
-              "createTime": "2023-11-06T20:14:55.062"
-            },
-            {
-              "pocketHistorySeq": 4,
-              "pocketHistoryType": "DONATION",
-              "pocketHistoryTransAmt": 500,
-              "pocketHistoryResultAmt": 0,
-              "receiptSeq": null,
-              "pocketHistoryTitle": "기부",
-              "createTime": "2023-11-06T20:14:56.085"
-            },
-            {
-              "pocketHistorySeq": 5,
-              "pocketHistoryType": "CARBON",
-              "pocketHistoryTransAmt": 100,
-              "pocketHistoryResultAmt": 100,
-              "receiptSeq": 1,
-              "pocketHistoryTitle": "탄소 중립포인트 적립",
-              "createTime": "2023-11-06T20:15:50.727"
-            },
-            {
-              "pocketHistorySeq": 6,
-              "pocketHistoryType": "CARBON",
-              "pocketHistoryTransAmt": 100,
-              "pocketHistoryResultAmt": 200,
-              "receiptSeq": 1,
-              "pocketHistoryTitle": "탄소 중립포인트 적립",
-              "createTime": "2023-11-06T20:16:23.472"
-            },
-            {
-              "pocketHistorySeq": 7,
-              "pocketHistoryType": "CARBON",
-              "pocketHistoryTransAmt": 200,
-              "pocketHistoryResultAmt": 400,
-              "receiptSeq": 1,
-              "pocketHistoryTitle": "탄소 중립포인트 적립",
-              "createTime": "2023-11-06T20:16:58.877"
-            },
-            {
-              "pocketHistorySeq": 8,
-              "pocketHistoryType": "CARBON",
-              "pocketHistoryTransAmt": 300,
-              "pocketHistoryResultAmt": 700,
-              "receiptSeq": 1,
-              "pocketHistoryTitle": "탄소 중립포인트 적립",
-              "createTime": "2023-11-04T20:17:01.952"
-            },
-            {
-              "pocketHistorySeq": 9,
-              "pocketHistoryType": "CARBON",
-              "pocketHistoryTransAmt": 100,
-              "pocketHistoryResultAmt": 800,
-              "receiptSeq": 1,
-              "pocketHistoryTitle": "탄소 중립포인트 적립",
-              "createTime": "2023-11-06T20:17:04.673"
-            }
-          ],
-          "totalHistory": 9,
-          "deposit": 2300,
-          "withdrawal": 1500
-        },
-        "2023-08": {
-          "pocketDetailResponses": [
-            {
-              "pocketHistorySeq": 10,
-              "pocketHistoryType": "CARBON",
-              "pocketHistoryTransAmt": 100,
-              "pocketHistoryResultAmt": 900,
-              "receiptSeq": 1,
-              "pocketHistoryTitle": "탄소 중립포인트 적립",
-              "createTime": "2023-08-04T20:17:05.149"
-            }
-          ],
-          "totalHistory": 1,
-          "deposit": 100,
-          "withdrawal": 0
-        },
-        "2023-10": {
-          "pocketDetailResponses": [
-            {
-              "pocketHistorySeq": 11,
-              "pocketHistoryType": "CARBON",
-              "pocketHistoryTransAmt": 100,
-              "pocketHistoryResultAmt": 1000,
-              "receiptSeq": 1,
-              "pocketHistoryTitle": "탄소 중립포인트 적립",
-              "createTime": "2023-10-05T20:17:05.784"
-            }
-          ],
-          "totalHistory": 1,
-          "deposit": 100,
-          "withdrawal": 0
-        }
-      },
-      "pocketSaving": 0
-    },
-    "error": null
-  }; // JSON 데이터 문자열
+  ApiService apiService = ApiService();
+  late Map<String, Object?> jsonString={};
+  // Map<String, Object?> jsonString = {
+  //   "success": true,
+  //   "response": {
+  //     "pocketDetailMap": {
+  //       "2023-11": {
+  //         "pocketDetailResponses": [
+  //           {
+  //             "pocketHistorySeq": 1,
+  //             "pocketHistoryType": "CARBON",
+  //             "pocketHistoryTransAmt": 1500,
+  //             "pocketHistoryResultAmt": 1500,
+  //             "receiptSeq": 1,
+  //             "pocketHistoryTitle": "탄소 중립포인트 적립",
+  //             "createTime": "2023-11-06T20:14:43.785"
+  //           },
+  //           {
+  //             "pocketHistorySeq": 2,
+  //             "pocketHistoryType": "DONATION",
+  //             "pocketHistoryTransAmt": 500,
+  //             "pocketHistoryResultAmt": 1000,
+  //             "receiptSeq": null,
+  //             "pocketHistoryTitle": "기부",
+  //             "createTime": "2023-11-06T20:14:53.972"
+  //           },
+  //           {
+  //             "pocketHistorySeq": 3,
+  //             "pocketHistoryType": "DONATION",
+  //             "pocketHistoryTransAmt": 500,
+  //             "pocketHistoryResultAmt": 500,
+  //             "receiptSeq": null,
+  //             "pocketHistoryTitle": "기부",
+  //             "createTime": "2023-11-06T20:14:55.062"
+  //           },
+  //           {
+  //             "pocketHistorySeq": 4,
+  //             "pocketHistoryType": "DONATION",
+  //             "pocketHistoryTransAmt": 500,
+  //             "pocketHistoryResultAmt": 0,
+  //             "receiptSeq": null,
+  //             "pocketHistoryTitle": "기부",
+  //             "createTime": "2023-11-06T20:14:56.085"
+  //           },
+  //           {
+  //             "pocketHistorySeq": 5,
+  //             "pocketHistoryType": "CARBON",
+  //             "pocketHistoryTransAmt": 100,
+  //             "pocketHistoryResultAmt": 100,
+  //             "receiptSeq": 1,
+  //             "pocketHistoryTitle": "탄소 중립포인트 적립",
+  //             "createTime": "2023-11-06T20:15:50.727"
+  //           },
+  //           {
+  //             "pocketHistorySeq": 6,
+  //             "pocketHistoryType": "CARBON",
+  //             "pocketHistoryTransAmt": 100,
+  //             "pocketHistoryResultAmt": 200,
+  //             "receiptSeq": 1,
+  //             "pocketHistoryTitle": "탄소 중립포인트 적립",
+  //             "createTime": "2023-11-06T20:16:23.472"
+  //           },
+  //           {
+  //             "pocketHistorySeq": 7,
+  //             "pocketHistoryType": "CARBON",
+  //             "pocketHistoryTransAmt": 200,
+  //             "pocketHistoryResultAmt": 400,
+  //             "receiptSeq": 1,
+  //             "pocketHistoryTitle": "탄소 중립포인트 적립",
+  //             "createTime": "2023-11-06T20:16:58.877"
+  //           },
+  //           {
+  //             "pocketHistorySeq": 8,
+  //             "pocketHistoryType": "CARBON",
+  //             "pocketHistoryTransAmt": 300,
+  //             "pocketHistoryResultAmt": 700,
+  //             "receiptSeq": 1,
+  //             "pocketHistoryTitle": "탄소 중립포인트 적립",
+  //             "createTime": "2023-11-04T20:17:01.952"
+  //           },
+  //           {
+  //             "pocketHistorySeq": 9,
+  //             "pocketHistoryType": "CARBON",
+  //             "pocketHistoryTransAmt": 100,
+  //             "pocketHistoryResultAmt": 800,
+  //             "receiptSeq": 1,
+  //             "pocketHistoryTitle": "탄소 중립포인트 적립",
+  //             "createTime": "2023-11-06T20:17:04.673"
+  //           }
+  //         ],
+  //         "totalHistory": 9,
+  //         "deposit": 2300,
+  //         "withdrawal": 1500
+  //       },
+  //       "2023-08": {
+  //         "pocketDetailResponses": [
+  //           {
+  //             "pocketHistorySeq": 10,
+  //             "pocketHistoryType": "CARBON",
+  //             "pocketHistoryTransAmt": 100,
+  //             "pocketHistoryResultAmt": 900,
+  //             "receiptSeq": 1,
+  //             "pocketHistoryTitle": "탄소 중립포인트 적립",
+  //             "createTime": "2023-08-04T20:17:05.149"
+  //           }
+  //         ],
+  //         "totalHistory": 1,
+  //         "deposit": 100,
+  //         "withdrawal": 0
+  //       },
+  //       "2023-10": {
+  //         "pocketDetailResponses": [
+  //           {
+  //             "pocketHistorySeq": 11,
+  //             "pocketHistoryType": "CARBON",
+  //             "pocketHistoryTransAmt": 100,
+  //             "pocketHistoryResultAmt": 1000,
+  //             "receiptSeq": 1,
+  //             "pocketHistoryTitle": "탄소 중립포인트 적립",
+  //             "createTime": "2023-10-05T20:17:05.784"
+  //           }
+  //         ],
+  //         "totalHistory": 1,
+  //         "deposit": 100,
+  //         "withdrawal": 0
+  //       }
+  //     },
+  //     "pocketSaving": 0
+  //   },
+  //   "error": null
+  // }; // JSON 데이터 문자열
   late List<PocketHistory> pocketHistories;
 
   @override
   void initState() {
     super.initState();
+    getPocketHistory();
     pocketHistories = parsePocketHistory(jsonString);
   }
+
+void getPocketHistory()async{
+    final response = await apiService.getRequest('pocket-service/pocket/detail?detailType=0', TokenManager().accessToken);
+    print("포켓 전체 내역 가져옴");
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    // print(jsonData['response']);
+    if (response.statusCode == 200) {
+      setState(() {
+        jsonString = jsonData;
+        pocketHistories = parsePocketHistory(jsonString);
+      });
+      print("zz");
+      print(jsonString);
+    } else {
+      throw Exception('Failed to load');
+    }
+}
+
+void getDepositHistory()async{
+    final response = await apiService.getRequest('pocket-service/pocket/detail?detailType=1', TokenManager().accessToken);
+    print("포켓 입금 내역 가져옴");
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    // print(jsonData['response']);
+    if (response.statusCode == 200) {
+      setState(() {
+        jsonString = jsonData;
+        pocketHistories = parsePocketHistory(jsonString);
+      });
+      print("zz");
+      print(jsonString);
+    } else {
+      throw Exception('Failed to load');
+    }
+}
+void getWithdrawHistory()async{
+    final response = await apiService.getRequest('pocket-service/pocket/detail?detailType=2', TokenManager().accessToken);
+    print("포켓 출금 내역 가져옴");
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    // print(jsonData['response']);
+    if (response.statusCode == 200) {
+      setState(() {
+        jsonString = jsonData;
+        pocketHistories = parsePocketHistory(jsonString);
+      });
+      print("zz");
+      print(jsonString);
+    } else {
+      throw Exception('Failed to load');
+    }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -389,7 +444,9 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
                       Row(
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              getPocketHistory();
+                            },
                             style: TextButton.styleFrom(
                               minimumSize: Size.zero,
                             ),
@@ -401,7 +458,9 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              getDepositHistory();
+                            },
                             style: TextButton.styleFrom(
                               minimumSize: Size.zero,
                             ),
@@ -416,7 +475,9 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
                             style: TextButton.styleFrom(
                               minimumSize: Size.zero,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              getWithdrawHistory();
+                            },
                             child: Text(
                               "출금",
                               style: TextStyle(

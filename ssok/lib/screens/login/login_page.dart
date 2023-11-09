@@ -89,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: screenHeight * 0.03),
                   TextField(
                     controller: passwordController, // Use the password controller
+                    obscureText: true, // 비밀번호 안보이도록 하는 것
                     decoration: InputDecoration(
                         labelText: 'PW',
                         hintText: " 입력하세요",

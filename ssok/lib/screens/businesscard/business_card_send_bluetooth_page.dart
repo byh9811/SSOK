@@ -102,6 +102,7 @@ class _BusinessCardSendBlueToothPageState
   }
 
   void transfer(int namecardASeq, int namecardBSeq) async {
+    print("전송 시작!!!");
     final response = await apiService.postRequest(
         'namecard-service/exchange/single',
         {
@@ -111,9 +112,13 @@ class _BusinessCardSendBlueToothPageState
           "lon": "126.8102029"
         },
         TokenManager().accessToken);
+    print("전송 끝!!!");
+    print(jsonDecode(utf8.decode(response.bodyBytes)));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
+      print("전송 성공!!!");
     } else {
+      print("전송 실패!!!");
       throw Exception('Failed to load');
     }
   }
@@ -231,8 +236,10 @@ class _BusinessCardSendBlueToothPageState
                             payload.bytes!); // 바이트 데이터를 문자열로 반환
                         showSnackbar("$endid: $str");
                         int seq = int.parse(str);
-                        print("seq :: $seq");
-                        // transfer(namecardSeq, seq);
+                        print(
+                            "namecardSeqA :  $namecardSeq , namecardSeqB : $seq");
+
+                        transfer(namecardSeq, seq);
                       }
                     },
                     // onPayloadTransferUpdate: (endid, payloadTransferUpdate) {

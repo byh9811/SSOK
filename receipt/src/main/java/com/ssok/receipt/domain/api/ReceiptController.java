@@ -37,7 +37,7 @@ public class ReceiptController {
 
     @GetMapping("/list")
     public ApiResponse<Map<YearMonth, ReceiptListQueryResponses>> getReceiptList(
-            @RequestHeader String memberUUID
+            @RequestHeader("MEMBER-UUID") String memberUUID
     ) {
         Map<YearMonth, ReceiptListQueryResponses> receiptList = receiptQueryService.getReceiptList(memberUUID);
         return OK(receiptList);

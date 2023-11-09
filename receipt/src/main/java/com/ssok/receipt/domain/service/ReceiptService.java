@@ -84,7 +84,8 @@ public class ReceiptService {
         remain = (remain != 0) ? 1000 - remain : 0;
         long balance = (long) bankAccessUtil.getAccountDetail(mdToken, account).getBalanceAmt();
 
-        if (memberClient.getMemberSaving(memberSeq).getResponse() && remain > 0 && balance >= remain) {     // 잔금 적립 기능 활성화 여부 && 잔금 발생 여부 && 통장 잔액 존재 여부
+        // 잔금 적립 기능 활성화 여부 && 잔금 발생 여부 && 통장 잔액 존재 여부
+        if (memberClient.getMemberSaving(memberSeq).getResponse() && remain > 0 && balance >= remain) {
             bankAccessUtil.pay(mdToken, account, remain);
             PocketHistoryCreateRequest request = PocketHistoryCreateRequest.builder()
                     .memberSeq(memberSeq)

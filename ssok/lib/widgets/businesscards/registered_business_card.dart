@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/dto/business_card_data.dart';
-import 'package:ssok/main.dart';
 import 'package:ssok/widgets/modals/business_transfer_modal.dart';
 import 'package:ssok/http/http.dart';
 
@@ -18,6 +17,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   ApiService apiService = ApiService();
   late BusinessCardData businessCardData;
   String myImage = "";
+  late int myNamecardSeq;
 
   void bringBusinessCardList() async {
     final response = await apiService.getRequest(
@@ -27,6 +27,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
       businessCardData = BusinessCardData.fromJson(jsonData['response']);
       setState(() {
         myImage = businessCardData.namecardImg;
+        myNamecardSeq = businessCardData.namecardSeq;
       });
     } else {
       throw Exception('Failed to load');
@@ -45,7 +46,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MyBusinessCard(myImage: myImage),
+        MyBusinessCard(myImage: myImage, myNamecardSeq: myNamecardSeq),
         BusinessCardList(businessCardData: businessCardData),
       ],
     );
@@ -56,8 +57,10 @@ class MyBusinessCard extends StatelessWidget {
   const MyBusinessCard({
     Key? key,
     required this.myImage,
+    required this.myNamecardSeq,
   }) : super(key: key);
   final String myImage;
+  final int myNamecardSeq;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +97,8 @@ class MyBusinessCard extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
-                          child: BusinessTransferModal(),
+                          child:
+                              BusinessTransferModal(namecardSeq: myNamecardSeq),
                         );
                       },
                     );

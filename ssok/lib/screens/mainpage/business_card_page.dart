@@ -12,7 +12,7 @@ class BusinessCardPage extends StatefulWidget {
 class _BusinessCardPageState extends State<BusinessCardPage> {
   @override
   Widget build(BuildContext context) {
-    return NotRegisteredBusinessCard();
-    // return RegisteredBusinessCard();
+    // return NotRegisteredBusinessCard();
+    return RegisteredBusinessCard();
   }
 }

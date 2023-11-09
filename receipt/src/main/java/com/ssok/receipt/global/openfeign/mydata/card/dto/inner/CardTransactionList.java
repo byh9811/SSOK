@@ -3,10 +3,8 @@ package com.ssok.receipt.global.openfeign.mydata.card.dto.inner;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +17,7 @@ public class CardTransactionList {
         private String approvedNum;
 
         @JsonProperty("approved_dtime")
-        private Date approvedDtime;
+        private LocalDateTime approvedDtime;
 
         @JsonProperty("status")
         private String status;
@@ -28,7 +26,7 @@ public class CardTransactionList {
         private String payType;
 
         @JsonProperty("trans_dtime")
-        private Date transDtime;
+        private LocalDateTime transDtime;
 
         @JsonProperty("merchant_name")
         private String merchantName;

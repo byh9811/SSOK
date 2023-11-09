@@ -23,19 +23,19 @@ class ReceiptListDetailPage extends StatelessWidget {
           color: Colors.black, // 원하는 색상으로 변경
         ),
       ),
-      body: ReceiptDedail(),
+      body: ReceiptDetail(),
     );
   }
 }
 
-class ReceiptDedail extends StatefulWidget {
-  const ReceiptDedail({super.key});
+class ReceiptDetail extends StatefulWidget {
+  const ReceiptDetail({super.key});
 
   @override
-  State<ReceiptDedail> createState() => _ReceiptDedailState();
+  State<ReceiptDetail> createState() => _ReceiptDetailState();
 }
 
-class _ReceiptDedailState extends State<ReceiptDedail> {
+class _ReceiptDetailState extends State<ReceiptDetail> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;

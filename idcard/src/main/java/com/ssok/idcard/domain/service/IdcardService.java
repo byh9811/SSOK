@@ -56,12 +56,9 @@ public class IdcardService {
 
         License license = licenseRepository.findByMemberSeq(memberSeq);
 
-        log.info("license value =======");
-        log.info(license.toString());
-        LicenseGetDto licenseGetDto = license.of(license);
-        log.info(licenseGetDto.toString());
+        if(license == null) return null;
 
-        return licenseGetDto;
+        return license.of(license);
     }
 
     public RegistrationGetDto getRegistration(Long memberSeq) {

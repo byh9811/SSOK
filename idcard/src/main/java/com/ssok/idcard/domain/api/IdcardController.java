@@ -46,9 +46,8 @@ public class IdcardController {
 
         Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
         LicenseGetDto licenseGetDto = idcardService.getLicense(memberSeq);
-        LicenseGetResponse licenseGetResponse = licenseGetDto.of(licenseGetDto);
-
-        return OK(licenseGetResponse);
+        if(licenseGetDto == null) return OK(null);
+        return OK(licenseGetDto.of(licenseGetDto));
     }
 
     @GetMapping("/registration")

@@ -8,6 +8,7 @@ import 'package:ssok/screens/businesscard/business_card_my_page.dart';
 import 'package:ssok/screens/businesscard/business_card_self_create_page.dart';
 import 'package:ssok/screens/businesscard/business_card_transfer_bluetooth_page.dart';
 import 'package:ssok/screens/creditcard/credit_card_create_page.dart';
+import 'package:ssok/screens/creditcard/credit_card_history_list_page.dart';
 import 'package:ssok/screens/creditcard/test.dart';
 import 'package:ssok/screens/creditcard/test2.dart';
 import 'package:ssok/screens/id/drive_id_create_page.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         '/businesscard/transfer/bluetooth': (context) =>
             BusinessCardTransferBluetoothPage(),
         '/creditcard/create': (context) => CreditCardCreatePage(),
+        '/creditcard/history/list': (context) => CreditCardHistoryListPage(),
         '/receipt/detail': (context) => ReceiptListDetailPage(),
         '/pocket/account/create': (context) => PocketAccountCreatePage(),
         '/pocket/pocket/create': (context) => PocketPocketCreatePage(),

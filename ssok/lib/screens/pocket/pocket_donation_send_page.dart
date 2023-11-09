@@ -48,7 +48,7 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
                 urlType: "network",
               ),
               Divider(height: screenHeight * 0.025),
-              EnterAmount(buttonTitle: "기부"),
+              EnterAmount(buttonTitle: "기부",donateSeq: args["donateSeq"]),
             ],
           ),
         ),

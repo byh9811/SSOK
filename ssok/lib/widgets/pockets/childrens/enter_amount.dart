@@ -9,8 +9,11 @@ class EnterAmount extends StatefulWidget {
   const EnterAmount({
     Key? key,
     required this.buttonTitle,
+    required this.donateSeq
   }) : super(key: key);
   final String buttonTitle;
+  final int donateSeq;
+
   @override
   State<EnterAmount> createState() => _EnterAmountState();
 }
@@ -20,6 +23,15 @@ class _EnterAmountState extends State<EnterAmount> {
   ApiService apiService = ApiService();
 
   int withDrawMoney = 0;
+
+  void sendMoneyToDonate()async{
+    final response = await apiService.postRequest('pocket-service/donate',{"donateSeq":widget.donateSeq.toString(),"donateAmt":withDrawMoney.toString()},TokenManager().accessToken);
+    print(response.body);
+    if (response.statusCode == 200) {
+      print(response.body);
+      Navigator.of(context).pushReplacementNamed('/main');
+    }
+  }
 
   void sendMoneyToMyAccount()async{
     final response = await apiService.postRequest('pocket-service/pocket/history',{"receiptSeq":"null","pocketHistoryType":"WITHDRAWAL","pocketHistoryTransAmt":withDrawMoney.toString()},TokenManager().accessToken);
@@ -75,7 +87,13 @@ class _EnterAmountState extends State<EnterAmount> {
         SizedBox(height: screenHeight * 0.08),
         MainButton(
           title: widget.buttonTitle,
-          onPressed: () {sendMoneyToMyAccount();}
+          onPressed: () {
+            if(widget.donateSeq==0){
+              sendMoneyToMyAccount();
+            }else{
+              sendMoneyToDonate();
+            }
+          }
         )
       ],
     );

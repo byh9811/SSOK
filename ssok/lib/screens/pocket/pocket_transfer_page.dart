@@ -78,7 +78,7 @@ class _PocketTransferPageState extends State<PocketTransferPage> {
                 urlType: "asset",
               ),
               Divider(height: screenHeight * 0.025),
-              EnterAmount(buttonTitle: "이체"),
+              EnterAmount(buttonTitle: "이체",donateSeq: 0),
             ],
           ),
         ),

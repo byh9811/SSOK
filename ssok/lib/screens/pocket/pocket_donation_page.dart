@@ -97,7 +97,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
           padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.05, vertical: 10.0),
           child: Text(
-            "진행중인 기부목록"+args.toString(),
+            "진행중인 기부목록",
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w400,

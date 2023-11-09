@@ -57,7 +57,7 @@ class _BusinessCardTransferBluetoothPageState
       });
       Future.delayed(const Duration(milliseconds: 10000), () async {
         await Nearby().stopAdvertising();
-        pointClear();
+        // pointClear();
         setState(() {
           advertising = false;
         });
@@ -72,7 +72,7 @@ class _BusinessCardTransferBluetoothPageState
       String myNamecardSeqString = myNamecardSeq.toString();
 
       showSnackbar(
-          " ${value.endpointName} $myNamecardSeqString 에게 명함을 보내요 ~~ , id: $key");
+          " ${value.endpointName} $myNamecardSeqString이 ~에게 명함을 보내요 ~~ , id: $key");
       Nearby().sendBytesPayload(
           key, Uint8List.fromList(myNamecardSeqString.codeUnits));
     });

@@ -23,7 +23,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
     final response = await apiService.getRequest(
         'namecard-service/', TokenManager().accessToken);
     if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       businessCardData = BusinessCardData.fromJson(jsonData['response']);
       setState(() {
         myImage = businessCardData.namecardImg;

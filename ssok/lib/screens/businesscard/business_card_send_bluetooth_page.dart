@@ -230,26 +230,32 @@ class _BusinessCardSendBlueToothPageState
                         String str = String.fromCharCodes(
                             payload.bytes!); // 바이트 데이터를 문자열로 반환
                         showSnackbar("$endid: $str");
+                        int seq = int.parse(str);
+                        print("seq :: $seq");
+                        // transfer(namecardSeq, seq);
                       }
                     },
-                    onPayloadTransferUpdate: (endid, payloadTransferUpdate) {
-                      if (payloadTransferUpdate
-                              .status == // 상태 == IN_PROGRESS인 경우 전송 중인 데이터 양 등을 업데이트
-                          PayloadStatus.IN_PROGRESS) {
-                        print(payloadTransferUpdate.bytesTransferred);
-                      } else if (payloadTransferUpdate.status ==
-                          PayloadStatus.FAILURE) {
-                        // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
-                        print("failed");
-                        showSnackbar("$endid: FAILED to transfer file");
-                      } else if (payloadTransferUpdate
-                              .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
-                          PayloadStatus.SUCCESS) {
-                        transfer(namecardSeq, payloadTransferUpdate.totalBytes);
-                        showSnackbar(
-                            "$endid  ${payloadTransferUpdate.totalBytes} 명함 보내기에 성공했어요! 너도 보낼래?");
-                      }
-                    },
+                    // onPayloadTransferUpdate: (endid, payloadTransferUpdate) {
+                    //   if (payloadTransferUpdate
+                    //           .status == // 상태 == IN_PROGRESS인 경우 전송 중인 데이터 양 등을 업데이트
+                    //       PayloadStatus.IN_PROGRESS) {
+                    //     print(
+                    //         "${payloadTransferUpdate.bytesTransferred} 여긴가??");
+                    //   } else if (payloadTransferUpdate.status ==
+                    //       PayloadStatus.FAILURE) {
+                    //     // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
+                    //     print("failed");
+                    //     showSnackbar("$endid: FAILED to transfer file");
+                    //   } else if (payloadTransferUpdate
+                    //           .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
+                    //       PayloadStatus.SUCCESS) {
+                    //     // transfer(namecardSeq, payloadTransferUpdate.totalBytes);
+                    //     print("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ");
+                    //     print(payloadTransferUpdate.totalBytes);
+                    //     showSnackbar(
+                    //         "$endid  ${payloadTransferUpdate.totalBytes} 명함 받기에 성공했어요! 너도 보낼래?");
+                    //   }
+                    // },
                   );
                 },
               ),

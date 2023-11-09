@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ExchangeRepository extends JpaRepository<Exchange, Long> {
 
-    @Query("SELECT e FROM Exchange e WHERE (e.sendNamecard = :namecardA AND e.receiveNamecard = :namecardB) OR (e.sendNamecard = :namecardB AND e.receiveNamecard = :namecardA)")
+    @Query("SELECT e FROM Exchange e WHERE (e.sendNamecard = :namecardA AND e.receiveNamecard = :namecardB)")
     List<Exchange> findAllExchangesBetweenTwoNamecards(@Param("namecardA") Namecard namecardA, @Param("namecardB") Namecard namecardB);
 
 

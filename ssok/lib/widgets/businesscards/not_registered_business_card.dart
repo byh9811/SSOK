@@ -40,11 +40,11 @@ class _NotRegisteredBusinessCardState extends State<NotRegisteredBusinessCard> {
                       context: context,
                       builder: (context) {
                         return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
-                            child: BusinessCreateModal());
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                          ),
+                          child: BusinessCreateModal(),
+                        );
                       },
                     );
                   },

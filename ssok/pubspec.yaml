@@ -46,6 +46,9 @@ dependencies:
   flutter_credit_card_ui: ^0.0.4
   u_credit_card: ^1.1.0
   shared_preferences: ^2.2.2
+  shake: ^2.2.0
+  local_auth: ^2.1.7
+  nfc_manager: ^3.3.0
 
 dev_dependencies:
   flutter_test:

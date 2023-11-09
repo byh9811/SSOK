@@ -46,7 +46,10 @@ class BusinessTransferModal extends StatelessWidget {
               ModalTypeButton(
                 title: "Bluetooth",
                 icon: Icons.bluetooth_searching,
-                ontap: () {},
+                ontap: () {
+                  Navigator.of(context)
+                      .pushNamed('/businesscard/transfer/bluetooth');
+                },
               ),
               ModalTypeButton(
                 title: "Link",

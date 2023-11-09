@@ -6,8 +6,10 @@ import 'package:ssok/screens/businesscard/business_card_detail_page.dart';
 import 'package:ssok/screens/businesscard/business_card_map_page.dart';
 import 'package:ssok/screens/businesscard/business_card_my_page.dart';
 import 'package:ssok/screens/businesscard/business_card_self_create_page.dart';
+import 'package:ssok/screens/businesscard/business_card_transfer_bluetooth_page.dart';
 import 'package:ssok/screens/creditcard/credit_card_create_page.dart';
 import 'package:ssok/screens/creditcard/test.dart';
+import 'package:ssok/screens/creditcard/test2.dart';
 import 'package:ssok/screens/id/drive_id_create_page.dart';
 import 'package:ssok/screens/id/id_create_page.dart';
 
@@ -57,6 +59,8 @@ class MyApp extends StatelessWidget {
         '/businesscard/camera/create': (context) =>
             BusinessCardCameraCreatePage(),
         '/businesscard/map': (context) => BusinessCardMapPage(),
+        '/businesscard/transfer/bluetooth': (context) =>
+            BusinessCardTransferBluetoothPage(),
         '/creditcard/create': (context) => CreditCardCreatePage(),
         '/receipt/detail': (context) => ReceiptListDetailPage(),
         '/pocket/account/create': (context) => PocketAccountCreatePage(),
@@ -65,7 +69,7 @@ class MyApp extends StatelessWidget {
         '/pocket/donation': (context) => PocketDonationPage(),
         '/pocket/donation/send': (context) => PocketDonationSendPage(),
         '/pocket/transfer': (context) => PocketTransferPage(),
-        '/test': (context) => Test(),
+        '/test': (context) => Test2(),
       },
     );
   }

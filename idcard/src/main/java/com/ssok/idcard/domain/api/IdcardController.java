@@ -2,10 +2,7 @@ package com.ssok.idcard.domain.api;
 
 import com.ssok.idcard.domain.api.request.LicenseCreateRequest;
 import com.ssok.idcard.domain.api.request.RegistrationCardCreateRequest;
-import com.ssok.idcard.domain.api.response.LicenseGetResponse;
-import com.ssok.idcard.domain.api.response.RecognizedLicenseResponse;
-import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
-import com.ssok.idcard.domain.api.response.RegistrationGetResponse;
+import com.ssok.idcard.domain.api.response.*;
 import com.ssok.idcard.domain.service.AnalysisService;
 import com.ssok.idcard.domain.service.IdcardService;
 import com.ssok.idcard.domain.service.MemberServiceClient;
@@ -21,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static com.ssok.idcard.global.api.ApiResponse.OK;
 
-// @RequestHeader("MEMBER-UUID") String memberUUID
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/idcard-service")
@@ -96,6 +92,14 @@ public class IdcardController {
             @RequestPart(value="img") MultipartFile file
     ) {
         RecognizedLicenseResponse result = analysisService.analysisLicense(file);
+        return OK(result);
+    }
+
+    @PostMapping("/scan/namecard")
+    public ApiResponse<RecognizedNameCardResponse> ocrNameCard(
+            @RequestPart(value="img") MultipartFile file
+    ) {
+        RecognizedNameCardResponse result = analysisService.analysisNameCard(file);
         return OK(result);
     }
 

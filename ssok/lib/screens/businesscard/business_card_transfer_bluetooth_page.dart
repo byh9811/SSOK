@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:nearby_connections/nearby_connections.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class BusinessCardTransferBluetoothPage extends StatefulWidget {
   const BusinessCardTransferBluetoothPage({super.key});
@@ -25,6 +26,109 @@ class _BusinessCardTransferBluetoothPageState
   @override
   void initState() {
     super.initState();
+    [
+      Permission.bluetooth,
+      Permission.bluetoothAdvertise,
+      Permission.bluetoothConnect,
+      Permission.bluetoothScan
+    ].request();
+  }
+
+  void advertisingStart() async {
+    try {
+      bool a = await Nearby().startAdvertising(
+        userName,
+        strategy,
+        onConnectionInitiated: onConnectionInit,
+        onConnectionResult: (id, status) {
+          showSnackbar(status);
+        },
+        onDisconnected: (id) {
+          showSnackbar(
+              "Disconnected: ${endpointMap[id]!.endpointName}, id $id");
+          setState(() {
+            endpointMap.remove(id);
+          });
+        },
+      );
+      showSnackbar("어필: $a");
+      setState(() {
+        advertising = true;
+      });
+      Future.delayed(const Duration(milliseconds: 2000), () async {
+        await Nearby().stopAdvertising();
+        setState(() {
+          advertising = false;
+        });
+      });
+    } catch (exception) {
+      showSnackbar(exception);
+    }
+  }
+
+  void scanningStart() async {
+    try {
+      bool a = await Nearby().startDiscovery(
+        userName,
+        strategy,
+        onEndpointFound: (id, name, serviceId) {
+          // show sheet automatically to request connection
+          showModalBottomSheet(
+            context: context,
+            builder: (builder) {
+              return Center(
+                child: Column(
+                  children: <Widget>[
+                    Text("id: $id"),
+                    Text("Name: $name"),
+                    Text("ServiceId: $serviceId"),
+                    ElevatedButton(
+                      child: const Text("Request Connection"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Nearby().requestConnection(
+                          userName,
+                          id,
+                          onConnectionInitiated: (id, info) {
+                            onConnectionInit(id, info);
+                          },
+                          onConnectionResult: (id, status) {
+                            showSnackbar(status);
+                          },
+                          onDisconnected: (id) {
+                            setState(() {
+                              endpointMap.remove(id);
+                            });
+                            showSnackbar(
+                                "Disconnected from: ${endpointMap[id]!.endpointName}, id $id");
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+        onEndpointLost: (id) {
+          showSnackbar(
+              "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
+        },
+      );
+      showSnackbar("DISCOVERING: $a");
+      setState(() {
+        scanning = true;
+      });
+    } catch (e) {
+      showSnackbar(e);
+    }
+    Future.delayed(const Duration(milliseconds: 4000), () async {
+      await Nearby().stopDiscovery();
+      setState(() {
+        scanning = false;
+      });
+    });
   }
 
   @override
@@ -79,36 +183,9 @@ class _BusinessCardTransferBluetoothPageState
           ),
           SizedBox(height: screenHeight * 0.01),
           ElevatedButton(
-            onPressed: () async {
-              try {
-                bool a = await Nearby().startAdvertising(
-                  userName,
-                  strategy,
-                  onConnectionInitiated: onConnectionInit,
-                  onConnectionResult: (id, status) {
-                    showSnackbar(status);
-                  },
-                  onDisconnected: (id) {
-                    showSnackbar(
-                        "Disconnected: ${endpointMap[id]!.endpointName}, id $id");
-                    setState(() {
-                      endpointMap.remove(id);
-                    });
-                  },
-                );
-                showSnackbar("ADVERTISING: $a");
-                setState(() {
-                  advertising = true;
-                });
-                Future.delayed(const Duration(milliseconds: 2000), () async {
-                  await Nearby().stopAdvertising();
-                  setState(() {
-                    advertising = false;
-                  });
-                });
-              } catch (exception) {
-                showSnackbar(exception);
-              }
+            onPressed: () {
+              advertisingStart();
+              scanningStart();
             },
             child: Text(advertising ? "어필 중" : "어필시작"),
           ),
@@ -116,69 +193,8 @@ class _BusinessCardTransferBluetoothPageState
             height: screenHeight * 0.02,
           ),
           ElevatedButton(
-            onPressed: () async {
-              try {
-                bool a = await Nearby().startDiscovery(
-                  userName,
-                  strategy,
-                  onEndpointFound: (id, name, serviceId) {
-                    // show sheet automatically to request connection
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (builder) {
-                        return Center(
-                          child: Column(
-                            children: <Widget>[
-                              Text("id: $id"),
-                              Text("Name: $name"),
-                              Text("ServiceId: $serviceId"),
-                              ElevatedButton(
-                                child: const Text("Request Connection"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  Nearby().requestConnection(
-                                    userName,
-                                    id,
-                                    onConnectionInitiated: (id, info) {
-                                      onConnectionInit(id, info);
-                                    },
-                                    onConnectionResult: (id, status) {
-                                      showSnackbar(status);
-                                    },
-                                    onDisconnected: (id) {
-                                      setState(() {
-                                        endpointMap.remove(id);
-                                      });
-                                      showSnackbar(
-                                          "Disconnected from: ${endpointMap[id]!.endpointName}, id $id");
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  onEndpointLost: (id) {
-                    showSnackbar(
-                        "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
-                  },
-                );
-                showSnackbar("DISCOVERING: $a");
-                setState(() {
-                  scanning = true;
-                });
-              } catch (e) {
-                showSnackbar(e);
-              }
-              Future.delayed(const Duration(milliseconds: 4000), () async {
-                await Nearby().stopDiscovery();
-                setState(() {
-                  scanning = false;
-                });
-              });
+            onPressed: () {
+              scanningStart();
             },
             child: Text(scanning ? "스캔 중" : "스캔 시작"),
           ),

@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         '/pocket/donation': (context) => PocketDonationPage(),
         '/pocket/donation/send': (context) => PocketDonationSendPage(),
         '/pocket/transfer': (context) => PocketTransferPage(),
-        '/test': (context) => Test2(),
+        '/test': (context) => Test(),
       },
     );
   }

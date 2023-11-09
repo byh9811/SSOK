@@ -49,6 +49,11 @@ dependencies:
   shake: ^2.2.0
   local_auth: ^2.1.7
   nfc_manager: ^3.3.0
+  flutter_nfc_kit: ^3.4.1
+  flutter_blue: ^0.8.0
+  nearby_connections: ^4.0.1
+  image_picker: ^1.0.4
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:

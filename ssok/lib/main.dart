@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
         '/businesscard/send/bluetooth': (context) =>
             BusinessCardSendBluetoothPage(),
         '/businesscard/receive/bluetooth': (context) =>
-            BusinessCardReceiveBlueToothPage(),
+            BusinessCardReceiveBluetoothPage(),
         '/creditcard/create': (context) => CreditCardCreatePage(),
         '/creditcard/history/list': (context) => CreditCardHistoryListPage(),
         '/receipt/detail': (context) => ReceiptListDetailPage(),

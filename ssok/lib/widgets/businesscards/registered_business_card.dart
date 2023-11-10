@@ -25,6 +25,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       businessCardData = BusinessCardData.fromJson(jsonData['response']);
+
       setState(() {
         myImage = businessCardData.namecardImg;
         myNamecardSeq = businessCardData.namecardSeq;

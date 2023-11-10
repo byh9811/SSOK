@@ -19,16 +19,16 @@ class Endpoint {
   Endpoint({required this.id, required this.name, required this.serviceId});
 }
 
-class BusinessCardReceiveBlueToothPage extends StatefulWidget {
-  const BusinessCardReceiveBlueToothPage({super.key});
+class BusinessCardReceiveBluetoothPage extends StatefulWidget {
+  const BusinessCardReceiveBluetoothPage({super.key});
 
   @override
-  State<BusinessCardReceiveBlueToothPage> createState() =>
-      _BusinessCardReceiveBlueToothPageState();
+  State<BusinessCardReceiveBluetoothPage> createState() =>
+      _BusinessCardReceiveBluetoothPageState();
 }
 
-class _BusinessCardReceiveBlueToothPageState
-    extends State<BusinessCardReceiveBlueToothPage>
+class _BusinessCardReceiveBluetoothPageState
+    extends State<BusinessCardReceiveBluetoothPage>
     with SingleTickerProviderStateMixin {
   ApiService apiService = ApiService();
   final String userName = Random().nextInt(10000).toString();
@@ -39,7 +39,9 @@ class _BusinessCardReceiveBlueToothPageState
   bool advertising = false;
   bool scanning = false;
   late int namecardSeq;
-  List<Endpoint> discoveredEndpoints = [];
+  List<Endpoint> discoveredEndpoints = [
+    Endpoint(id: "1", name: "나종현", serviceId: "hoho")
+  ];
 
   // void showDiscoveredEndpoints(BuildContext context) {
   //   double screenHeight = MediaQuery.of(context).size.height;
@@ -95,13 +97,18 @@ class _BusinessCardReceiveBlueToothPageState
         onEndpointFound: (id, name, serviceId) {
           // show sheet automatically to request connection
           // Create an Endpoint object
-          Endpoint endpoint =
-              Endpoint(id: id, name: name, serviceId: serviceId);
+          bool alreadyDiscovered =
+              discoveredEndpoints.any((endpoint) => endpoint.id == id);
 
-          // Add the endpoint to the list
-          setState(() {
-            discoveredEndpoints.add(endpoint);
-          });
+          if (!alreadyDiscovered) {
+            Endpoint endpoint =
+                Endpoint(id: id, name: name, serviceId: serviceId);
+
+            // Add the endpoint to the list
+            setState(() {
+              discoveredEndpoints.add(endpoint);
+            });
+          }
         },
         onEndpointLost: (id) {
           showSnackbar(
@@ -205,13 +212,13 @@ class _BusinessCardReceiveBlueToothPageState
           )
         ],
       ),
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: screenHeight * 0.04),
           RippleWave(
-            color: Colors.green,
+            color: Color(0xFF00ADEF),
             repeat: false,
             animationController: animationController,
             child: const Icon(
@@ -234,38 +241,43 @@ class _BusinessCardReceiveBlueToothPageState
             child: Text(scanning ? "스캔 중" : "스캔 시작"),
           ),
           SizedBox(
-            height: screenHeight * 0.025,
+            height: screenHeight * 0.07,
           ),
           Container(
-            height: screenHeight * 0.3,
+            height: screenHeight * 0.4,
             color: Colors.white,
             child: Column(
               children: discoveredEndpoints.map((endpoint) {
                 return ListTile(
-                  title: Text("${endpoint.name} 님 발견!",
+                  title: Text("${endpoint.name}님 발견!",
                       style: TextStyle(fontSize: 20)),
                   subtitle: Text("ID: ${endpoint.id}"),
-                  onTap: () {
-                    // Navigator.pop(context);
-                    // 선택한 디바이스에 대한 추가 동작 수행
-                    Nearby().requestConnection(
-                      userName,
-                      endpoint.id,
-                      onConnectionInitiated: (id, info) {
-                        onConnectionInit(id, info);
+                  trailing: ElevatedButton(
+                      onPressed: () {
+                        // Navigator.pop(context);
+                        // 선택한 디바이스에 대한 추가 동작 수행
+                        Nearby().requestConnection(
+                          userName,
+                          endpoint.id,
+                          onConnectionInitiated: (id, info) {
+                            onConnectionInit(id, info);
+                          },
+                          onConnectionResult: (id, status) {
+                            showSnackbar(status);
+                          },
+                          onDisconnected: (id) {
+                            setState(() {
+                              endpointMap.remove(id);
+                            });
+                            showSnackbar(
+                                "Disconnected from: ${endpoint.name}, id $id");
+                          },
+                        );
                       },
-                      onConnectionResult: (id, status) {
-                        showSnackbar(status);
-                      },
-                      onDisconnected: (id) {
-                        setState(() {
-                          endpointMap.remove(id);
-                        });
-                        showSnackbar(
-                            "Disconnected from: ${endpoint.name}, id $id");
-                      },
-                    );
-                  },
+                      child: Text(
+                        "명함 요청",
+                        style: TextStyle(fontSize: 15),
+                      )),
                 );
               }).toList(),
             ),

@@ -27,8 +27,16 @@ class TokenManager {
     await _prefs.setString('accessToken', token ?? '');
   }
 
-    Future<void> setRefreshToken(String? token) async {
+  Future<void> setRefreshToken(String? token) async {
     _refreshToken = token;
-    await _prefs.setString('retreshToken', token ?? '');
+    await _prefs.setString('refreshToken', token ?? '');
+  }
+
+  Future<void> logout() async {
+    _accessToken = null;
+    _refreshToken = null;
+    await _prefs.remove('accessToken');
+    await _prefs.remove('refreshToken');
+    print("logout");
   }
 }

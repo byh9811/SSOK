@@ -20,10 +20,11 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   bool _isAuthenticating = false;
   String _authorized = 'Not Authorized';
   bool authenticated = false;
+  bool _isNfc = false;
   ValueNotifier<dynamic> result = ValueNotifier(null);
   
 
-  Future<void> _authenticateWithBiometrics() async {
+  Future<void>                                                                                                                                                                                              _authenticateWithBiometrics() async {
     try {
       setState(() {
         _isAuthenticating = true;
@@ -40,6 +41,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
         print("지문 일치");
       } else {
         print("지문 불일치");
+        Navigator.of(context).pop();
       }
       setState(() {
         _isAuthenticating = false;
@@ -116,6 +118,10 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
           );
         throw "NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.";
       }else{
+        setState(() {
+          
+        _isNfc = true;
+        });
         print("good");
       }
     }
@@ -223,6 +229,7 @@ void _ndefWriteLock() {
   }
   
   void _ndefWrite() {
+    print("들어왔단.");
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       var ndef = Ndef.from(tag);
       if (ndef == null || !ndef.isWritable) {
@@ -326,15 +333,17 @@ void _ndefWriteLock() {
             height: screenHeight * 0.05,
           ),
           Text(
-            authenticated ? "결제 중" : "",
+            // authenticated ? "결제 중" : "",
+            _isNfc ? "결제 중" : "",
             style: TextStyle(color: Colors.white),
           ),
-          SizedBox(
+          SizedBox(                                                                                                    
             height: screenHeight * 0.01,
           ),
-          if (authenticated)
+          // if (authenticated)
+          if(_isNfc)
             CircularProgressIndicator(
-              valueColor:
+              valueColor: 
                   AlwaysStoppedAnimation<Color>(Colors.white), // 프로그레스 바 색상
             ),
         ],

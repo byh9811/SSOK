@@ -54,6 +54,7 @@ dependencies:
   nearby_connections: ^4.0.1
   image_picker: ^1.0.4
   permission_handler: ^11.0.1
+  ripple_wave:
 
 dev_dependencies:
   flutter_test:

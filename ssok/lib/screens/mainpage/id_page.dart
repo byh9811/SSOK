@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/identification/service_aggreement_page.dart';
 import 'package:ssok/widgets/content_box.dart';
@@ -13,17 +16,47 @@ class IDPage extends StatefulWidget {
   State<IDPage> createState() => _IdPageState();
 }
 
+
 class _IdPageState extends State<IDPage> {
-  final String assetName = '';
-  late final SharedPreferences prefs;
+  ApiService apiService = ApiService();
   String? accessToken;
+  bool isIdCardHave=false;
+  bool isLicenseHave=false;
 
   @override
   void initState() {
     super.initState();
-    accessToken = TokenManager().accessToken;
-    print("받았다");
-    print(accessToken);
+    getIdCardInfo();
+    getDriveLicenseInfo();
+  }
+
+  void getIdCardInfo()async{
+    final response = await apiService.getRequest("idcard-service/registration", TokenManager().accessToken);
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    print(jsonData);
+    if(response.statusCode == 200){
+      if(jsonData['response']==null){
+        print("신분증 없어영");
+        setState(() {
+          isIdCardHave=false;
+        });
+      }else{
+        print("신분증이 있어연");
+        setState(() {
+          isIdCardHave=true;
+        });
+      }
+    }
+  }
+  
+  void getDriveLicenseInfo()async{
+    final response = await apiService.getRequest("idcard-service/license", TokenManager().accessToken);
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    
+    print(jsonData);
+    if(response.statusCode == 200){
+
+    }    
   }
 
   @override
@@ -47,13 +80,47 @@ class _IdPageState extends State<IDPage> {
         ),
         SizedBox(height: screenHeight * 0.03),
         titleText(text: "주민등록증"),
+        isIdCardHave?
         contentBox(
           context,
           Column(
             children: [
               Expanded(
                 child: Text(
-                  "등록된 주민등록증이 없습니다",
+                  "등록된 주민등록증이 있습니다",
+                  style: TextStyle(color: Color(0xFF989898)),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.06,
+                width: screenWidth * 0.7,
+                child: registerButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ServiceAggreementPage(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/id/create');
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+          0.23,
+        )
+        :
+        contentBox(
+          context,
+          Column(
+            children: [
+              Expanded(
+                child: Text(
+                  "등록된 주민등록증이 없습니다 ㄹㅇ루",
                   style: TextStyle(color: Color(0xFF989898)),
                 ),
               ),
@@ -81,13 +148,47 @@ class _IdPageState extends State<IDPage> {
         ),
         SizedBox(height: screenHeight * 0.03),
         titleText(text: "운전면허증"),
+        isLicenseHave?
         contentBox(
           context,
           Column(
             children: [
               Expanded(
                 child: Text(
-                  "등록된 운전면허증이 없습니다",
+                  "등록된 운전면허증이 있습니다",
+                  style: TextStyle(color: Color(0xFF989898)),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.06,
+                width: screenWidth * 0.7,
+                child: registerButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ServiceAggreementPage(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/drive/id/create');
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+          0.23,
+        )
+        :
+        contentBox(
+          context,
+          Column(
+            children: [
+              Expanded(
+                child: Text(
+                  "등록된 운전면허증이 없습니다 ㄹㅇ루",
                   style: TextStyle(color: Color(0xFF989898)),
                 ),
               ),

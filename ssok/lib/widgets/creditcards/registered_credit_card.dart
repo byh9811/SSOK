@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shake/shake.dart';
+import 'package:ssok/screens/mainpage/credit_card_page.dart';
 import 'package:ssok/widgets/creditcards/childrens/my_credit_card.dart';
 import 'package:ssok/screens/creditcard/credit_card_payment_page.dart';
 
 class RegisteredCreditCard extends StatefulWidget {
-  const RegisteredCreditCard({super.key});
+  
+  final CreditCard creditCard;
+  const RegisteredCreditCard({required this.creditCard, Key? key}) : super(key: key);
 
   @override
   State<RegisteredCreditCard> createState() => _RegisteredCreditCardState();
@@ -36,13 +39,15 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
     return Column(
       children: [
         SizedBox(height: screenHeight * 0.15),
-        Text("카드"),
+        Text(widget.creditCard.cardName),
         SizedBox(height: screenHeight * 0.1),
         Container(
           color: Colors.amber,
           alignment: Alignment.center,
           child: MyCreditCard(
             vertical: true,
+            ownerName: widget.creditCard.ownerName,
+            cardNum: widget.creditCard.cardNum
           ),
         ),
         SizedBox(height: screenHeight * 0.12),
@@ -69,7 +74,15 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
                   child: Text("내역")),
             ),
           ],
-        )
+        ),
+        ElevatedButton(
+          onPressed: (){
+            Navigator.of(context).pushNamed('/creditcard/history/list',
+            arguments: {"ownerName":widget.creditCard.ownerName,"cardNum":widget.creditCard.cardNum}
+            );
+          }, 
+          child: Text("거래내역"),
+        ),
       ],
     );
   }

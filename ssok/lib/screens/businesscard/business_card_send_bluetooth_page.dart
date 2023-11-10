@@ -51,7 +51,7 @@ class _BusinessCardSendBluetoothPageState
           });
         },
       );
-      showSnackbar("어필: $a");
+      showSnackbar("어필 : $a");
       setState(() {
         advertising = true;
       });

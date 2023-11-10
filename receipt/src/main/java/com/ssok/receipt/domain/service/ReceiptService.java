@@ -96,7 +96,7 @@ public class ReceiptService {
             pocketClient.createPocketHistory(request);
         }
 
-        eventHandler.createReceipt(memberSeq, receiptCreateServiceDto);
+        eventHandler.createReceipt(card, memberSeq, receiptCreateServiceDto);
     }
 
 }

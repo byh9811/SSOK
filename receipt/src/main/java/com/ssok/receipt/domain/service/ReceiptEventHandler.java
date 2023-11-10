@@ -1,5 +1,6 @@
 package com.ssok.receipt.domain.service;
 
+import com.ssok.receipt.domain.maria.entity.Card;
 import com.ssok.receipt.domain.mongo.document.ReceiptDetailDocument;
 import com.ssok.receipt.domain.mongo.document.ReceiptListDocument;
 import com.ssok.receipt.domain.mongo.repository.ReceiptDetailDocumentRepository;
@@ -15,9 +16,9 @@ public class ReceiptEventHandler {
     private final ReceiptListDocumentRepository receiptListDocumentRepository;
     private final ReceiptDetailDocumentRepository receiptDetailDocumentRepository;
 
-    public void createReceipt(Long memberSeq, ReceiptCreateServiceDto receiptCreateServiceDto) {
-        ReceiptDetailDocument receiptDetailDocument = receiptDetailDocumentRepository.save(ReceiptDetailDocument.fromCreateDto(receiptCreateServiceDto));
-        ReceiptListDocument createDto = receiptListDocumentRepository.save(ReceiptListDocument.fromCreateDto(receiptDetailDocument.getReceiptDetailDocumentSeq(), memberSeq, receiptCreateServiceDto));
+    public void createReceipt(Card card, Long memberSeq, ReceiptCreateServiceDto receiptCreateServiceDto) {
+        ReceiptDetailDocument receiptDetailDocument = receiptDetailDocumentRepository.save(ReceiptDetailDocument.fromCreateDto(receiptCreateServiceDto, card));
+        receiptListDocumentRepository.save(ReceiptListDocument.fromCreateDto(receiptDetailDocument.getReceiptDetailDocumentSeq(), memberSeq, receiptCreateServiceDto));
     }
 
 }

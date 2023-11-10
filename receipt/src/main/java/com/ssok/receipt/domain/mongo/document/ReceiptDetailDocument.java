@@ -1,6 +1,8 @@
 package com.ssok.receipt.domain.mongo.document;
 
 import com.ssok.receipt.domain.api.dto.inner.InnerPaymentItem;
+import com.ssok.receipt.domain.maria.entity.Card;
+import com.ssok.receipt.domain.maria.entity.CardCompany;
 import com.ssok.receipt.domain.service.dto.ReceiptCreateServiceDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -29,12 +31,16 @@ public class ReceiptDetailDocument {
     private Long payAmt;
     private List<InnerPaymentItem> paymentItemList;
 
-    public static ReceiptDetailDocument fromCreateDto(ReceiptCreateServiceDto dto) {
+    public static ReceiptDetailDocument fromCreateDto(ReceiptCreateServiceDto dto, Card card) {
         return ReceiptDetailDocument.builder()
+                .cardCompany(card.getCompany().getCardCompanyName())
+                .cardNumberFirstSection(dto.receiptCardNum().substring(0, 4))
+                .cardType(dto.receiptCardType())
                 .shopName(dto.receiptStoreName())
                 .payAmt(dto.receiptAmount())
                 .approvedDate(dto.receiptTransactionDatetime())
                 .transactionType(dto.receiptType())
+                .approvedNum(dto.receiptApprovedNum())
                 .paymentItemList(dto.paymentItemList())
                 .build();
     }

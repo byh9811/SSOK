@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ssok/widgets/businesscards/childrens/modal_type_button.dart';
 
 class BusinessTransferModal extends StatelessWidget {
-  const BusinessTransferModal({super.key});
-
+  const BusinessTransferModal({
+    Key? key,
+    required this.namecardSeq,
+  }) : super(key: key);
+  final int namecardSeq;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -41,12 +44,20 @@ class BusinessTransferModal extends StatelessWidget {
               ModalTypeButton(
                 title: "NFC",
                 icon: Icons.nfc,
-                ontap: () {},
+                ontap: () {
+                  Navigator.of(context).pushNamed(
+                      '/businesscard/send/bluetooth',
+                      arguments: namecardSeq);
+                },
               ),
               ModalTypeButton(
                 title: "Bluetooth",
                 icon: Icons.bluetooth_searching,
-                ontap: () {},
+                ontap: () {
+                  Navigator.of(context).pushNamed(
+                      '/businesscard/transfer/bluetooth',
+                      arguments: namecardSeq);
+                },
               ),
               ModalTypeButton(
                 title: "Link",

@@ -5,16 +5,18 @@ import 'dart:math' as math;
 class MyCreditCard extends StatelessWidget {
   const MyCreditCard({
     Key? key,
-    required this.vertical,
+    required this.vertical, this.cardNum, this.ownerName,
   }) : super(key: key);
   final bool vertical;
+  final String? cardNum;
+  final String? ownerName;
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
       angle: vertical ? math.pi / 2 : 0,
       child: CreditCardUi(
-        cardHolderFullName: '홍길동',
-        cardNumber: '4123456781234567',
+        cardHolderFullName: '$ownerName',
+        cardNumber: '$cardNum',
         validFrom: '01/23',
         validThru: '01/28',
         topLeftColor: Colors.blue,

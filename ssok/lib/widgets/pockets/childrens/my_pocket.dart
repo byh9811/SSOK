@@ -124,7 +124,7 @@ class _MyPocketState extends State<MyPocket> {
                           TextButton(
                             onPressed: () {
                               Navigator.of(context)
-                                  .pushNamed('/pocket/donation');
+                                  .pushNamed('/pocket/donation',arguments: pocketSaving);
                             },
                             style: TextButton.styleFrom(
                               minimumSize: Size.zero,

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
 
 class PocketDonationPage extends StatefulWidget {
@@ -9,6 +13,8 @@ class PocketDonationPage extends StatefulWidget {
 }
 
 class _PocketDonationPageState extends State<PocketDonationPage> {
+
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -35,9 +41,9 @@ class _PocketDonationPageState extends State<PocketDonationPage> {
             SizedBox(height: screenHeight * 0.01),
             OutgoingDonationList(),
             SizedBox(height: screenHeight * 0.06),
-            Divider(height: 1),
-            SizedBox(height: screenHeight * 0.01),
-            EndedDonationList(),
+            // Divider(height: 1),
+            // SizedBox(height: screenHeight * 0.01),
+            // EndedDonationList(),
           ],
         ),
       ),
@@ -53,10 +59,37 @@ class OutgoingDonationList extends StatefulWidget {
 }
 
 class _OutgoingDonationListState extends State<OutgoingDonationList> {
+  
+  ApiService apiService = ApiService();
+  late List donateList;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDonateList();
+    donateList=[];
+  }
+
+  void getDonateList()async{
+        print("뭔데 이거");
+    final response = await apiService.getRequest('pocket-service/donate',TokenManager().accessToken);
+
+    if (response.statusCode == 200) {
+      print(jsonDecode(utf8.decode(response.bodyBytes))['response']);
+      setState(() {
+        donateList = jsonDecode(utf8.decode(response.bodyBytes))['response'];
+      });
+      print(donateList);
+      print(donateList[0]);
+      print(donateList[1]);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final args = ModalRoute.of(context)!.settings.arguments as int;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -71,86 +104,125 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
-          child: Container(
-            width: screenWidth,
-            height: screenHeight * 0.3,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              border: Border.all(
-                color: Color(0xFF787878), // 테두리 색상
-                width: 0.5, // 테두리 두께
+
+        // 여기에 넣기
+        ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: donateList.length,
+          itemBuilder: (context, index) {
+            var item = donateList[index];
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.08,
+                vertical: 10.0,
               ),
-            ),
-            child: Column(children: [
-              Container(
-                height: screenHeight * 0.2,
+              child: Container(
+                width: screenWidth,
+                height: screenHeight * 0.38,
                 decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25.0),
-                      topRight: Radius.circular(25.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  border: Border.all(
+                    color: Color(0xFF787878), // 테두리 색상
+                    width: 0.5, // 테두리 두께
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.03,
-                    vertical: screenHeight * 0.01),
-                child: Row(
+                child: Column(
                   children: [
-                    Text(
-                      "2023 3분기",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "서울환경연합",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF818181),
-                          ),
+                    // Container(
+                    //   height: screenHeight * 0.2,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.amber,
+                    //     borderRadius: BorderRadius.only(
+                    //       topLeft: Radius.circular(25.0),
+                    //       topRight: Radius.circular(25.0),
+                    //     ),
+                    //   ),
+                    // ),
+                    Container(
+                      height: screenHeight * 0.2,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(25.0),
+                          topRight: Radius.circular(25.0),
                         ),
                       ),
+                      child: Image.network(
+                        item['donateImage'], // 이미지 링크 필드로 변경
+                        fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 조절
+                      ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.03,
+                        vertical: screenHeight * 0.01,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            item['donateTitle'], // 원하는 필드로 변경
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "나의 기부 금액 : "+item['memberTotalDonateAmt'].toString(), // 원하는 필드로 변경
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF818181),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: screenWidth * 0.04,
+                        top: screenHeight * 0.01,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: screenWidth * 0.04),
+                            child: Text(
+                              "현재 누적 기부금", // 원하는 텍스트로 변경
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          Text(
+                            item['donateTotalDonation'].toString(), // 원하는 필드로 변경
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                    if(item['donateState'])
+                    MainButton(
+                        title: "기부하기",
+                        onPressed: () {
+                          print(item);
+                          item["pocketSaving"]=args;
+                          print(item);
+                          Navigator.of(context).pushNamed('/pocket/donation/send',arguments: item);
+                        },
+                      )
+
+                      ,
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: screenWidth * 0.04, top: screenHeight * 0.01),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: screenWidth * 0.04),
-                      child: Text(
-                        "현재 누적 기부금",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Text(
-                      " 400,000원",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ]),
-          ),
-        ),
-        SizedBox(height: screenHeight * 0.04),
-        MainButton(
-          title: "기부하기",
-          onPressed: () {
-            Navigator.of(context).pushNamed('/pocket/donation/send');
+            );
           },
         ),
+        
       ],
     );
   }

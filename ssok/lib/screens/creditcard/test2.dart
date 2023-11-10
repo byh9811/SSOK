@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 
 class Test2 extends StatefulWidget {
   const Test2({Key? key}) : super(key: key);
@@ -324,7 +322,7 @@ class _MyBodyState extends State<Body> {
               child: const Text("Send File Payload"),
               onPressed: () async {
                 PickedFile? file = null;
-                    // await ImagePicker().getImage(source: ImageSource.gallery);
+                // await ImagePicker().getImage(source: ImageSource.gallery);
 
                 if (file == null) return;
 

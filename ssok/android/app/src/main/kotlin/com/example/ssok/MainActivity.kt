@@ -1,4 +1,4 @@
-package com.example.ssok
+package com.ssafy.ssok
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

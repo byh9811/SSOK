@@ -55,8 +55,9 @@ class _BusinessCardTransferBluetoothPageState
       setState(() {
         advertising = true;
       });
-      Future.delayed(const Duration(milliseconds: 2000), () async {
+      Future.delayed(const Duration(milliseconds: 10000), () async {
         await Nearby().stopAdvertising();
+        // pointClear();
         setState(() {
           advertising = false;
         });
@@ -66,68 +67,87 @@ class _BusinessCardTransferBluetoothPageState
     }
   }
 
-  void scanningStart() async {
-    try {
-      bool a = await Nearby().startDiscovery(
-        userName,
-        strategy,
-        onEndpointFound: (id, name, serviceId) {
-          // show sheet automatically to request connection
-          showModalBottomSheet(
-            context: context,
-            builder: (builder) {
-              return Center(
-                child: Column(
-                  children: <Widget>[
-                    Text("id: $id"),
-                    Text("Name: $name"),
-                    Text("ServiceId: $serviceId"),
-                    ElevatedButton(
-                      child: const Text("Request Connection"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Nearby().requestConnection(
-                          userName,
-                          id,
-                          onConnectionInitiated: (id, info) {
-                            onConnectionInit(id, info);
-                          },
-                          onConnectionResult: (id, status) {
-                            showSnackbar(status);
-                          },
-                          onDisconnected: (id) {
-                            setState(() {
-                              endpointMap.remove(id);
-                            });
-                            showSnackbar(
-                                "Disconnected from: ${endpointMap[id]!.endpointName}, id $id");
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-        onEndpointLost: (id) {
-          showSnackbar(
-              "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
-        },
-      );
-      showSnackbar("DISCOVERING: $a");
-      setState(() {
-        scanning = true;
-      });
-    } catch (e) {
-      showSnackbar(e);
-    }
-    Future.delayed(const Duration(milliseconds: 4000), () async {
-      await Nearby().stopDiscovery();
-      setState(() {
-        scanning = false;
-      });
+  void sendBusinessCard(int myNamecardSeq) {
+    endpointMap.forEach((key, value) {
+      String myNamecardSeqString = myNamecardSeq.toString();
+
+      showSnackbar(
+          " ${value.endpointName} $myNamecardSeqString이 ~에게 명함을 보내요 ~~ , id: $key");
+      Nearby().sendBytesPayload(
+          key, Uint8List.fromList(myNamecardSeqString.codeUnits));
+    });
+  }
+
+  // void scanningStart() async {
+  //   try {
+  //     bool a = await Nearby().startDiscovery(
+  //       userName,
+  //       strategy,
+  //       onEndpointFound: (id, name, serviceId) {
+  //         // show sheet automatically to request connection
+  //         showModalBottomSheet(
+  //           context: context,
+  //           builder: (builder) {
+  //             return Center(
+  //               child: Column(
+  //                 children: <Widget>[
+  //                   Text("id: $id"),
+  //                   Text("Name: $name"),
+  //                   Text("ServiceId: $serviceId"),
+  //                   ElevatedButton(
+  //                     child: const Text("Request Connection"),
+  //                     onPressed: () {
+  //                       Navigator.pop(context);
+  //                       Nearby().requestConnection(
+  //                         userName,
+  //                         id,
+  //                         onConnectionInitiated: (id, info) {
+  //                           onConnectionInit(id, info);
+  //                         },
+  //                         onConnectionResult: (id, status) {
+  //                           showSnackbar(status);
+  //                         },
+  //                         onDisconnected: (id) {
+  //                           setState(() {
+  //                             endpointMap.remove(id);
+  //                           });
+  //                           showSnackbar(
+  //                               "Disconnected from: ${endpointMap[id]!.endpointName}, id $id");
+  //                         },
+  //                       );
+  //                     },
+  //                   ),
+  //                 ],
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       },
+  //       onEndpointLost: (id) {
+  //         showSnackbar(
+  //             "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
+  //       },
+  //     );
+  //     showSnackbar("DISCOVERING: $a");
+  //     setState(() {
+  //       scanning = true;
+  //     });
+  //   } catch (e) {
+  //     showSnackbar(e);
+  //   }
+  //   Future.delayed(const Duration(milliseconds: 10000), () async {
+  //     await Nearby().stopDiscovery();
+  //     pointClear();
+  //     setState(() {
+  //       scanning = false;
+  //     });
+  //   });
+  // }
+
+  void pointClear() async {
+    await Nearby().stopAllEndpoints();
+    setState(() {
+      endpointMap.clear();
     });
   }
 
@@ -135,6 +155,7 @@ class _BusinessCardTransferBluetoothPageState
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    int namecardSeq = ModalRoute.of(context)!.settings.arguments as int;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -178,39 +199,35 @@ class _BusinessCardTransferBluetoothPageState
               )),
           SizedBox(height: screenHeight * 0.04),
           Text(
-            "User Name: $userName",
+            "User Name: $namecardSeq",
             style: TextStyle(color: Colors.white),
           ),
           SizedBox(height: screenHeight * 0.01),
           ElevatedButton(
             onPressed: () {
+              pointClear();
               advertisingStart();
-              scanningStart();
+              // scanningStart();
             },
             child: Text(advertising ? "어필 중" : "어필시작"),
           ),
           SizedBox(
             height: screenHeight * 0.02,
           ),
-          ElevatedButton(
-            onPressed: () {
-              scanningStart();
-            },
-            child: Text(scanning ? "스캔 중" : "스캔 시작"),
-          ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     pointClear();
+          //     scanningStart();
+          //   },
+          //   child: Text(scanning ? "스캔 중" : "스캔 시작"),
+          // ),
           SizedBox(
             height: screenHeight * 0.025,
           ),
           ElevatedButton(
-            child: const Text("랜덤 숫자 보내기"),
+            child: const Text("명함 전송"),
             onPressed: () async {
-              endpointMap.forEach((key, value) {
-                String a = Random().nextInt(100).toString();
-
-                showSnackbar(
-                    " ${value.endpointName} 에게 $a 라는 데이터 보내요 ~~ , id: $key");
-                Nearby().sendBytesPayload(key, Uint8List.fromList(a.codeUnits));
-              });
+              sendBusinessCard(namecardSeq);
             },
           ),
         ],
@@ -223,15 +240,6 @@ class _BusinessCardTransferBluetoothPageState
       content: Text(a.toString()),
     ));
   }
-
-  // Future<bool> moveFile(String uri, String fileName) async {
-  //   String parentDir = (await getExternalStorageDirectory())!.absolute.path;
-  //   final b =
-  //       await Nearby().copyFileAndDeleteOriginal(uri, '$parentDir/$fileName');
-
-  //   showSnackbar("Moved file:$b");
-  //   return b;
-  // }
 
   void onConnectionInit(String id, ConnectionInfo info) {
     showModalBottomSheet(
@@ -260,29 +268,7 @@ class _BusinessCardTransferBluetoothPageState
                         String str = String.fromCharCodes(
                             payload.bytes!); // 바이트 데이터를 문자열로 반환
                         showSnackbar("$endid: $str");
-
-                        // if (str.contains(':')) {
-                        //   // used for file payload as file payload is mapped as
-                        //   // payloadId:filename
-                        //   int payloadId = int.parse(str.split(':')[0]);
-                        //   String fileName = (str.split(':')[1]);
-
-                        //   if (map.containsKey(payloadId)) {
-                        //     if (tempFileUri != null) {
-                        //       moveFile(tempFileUri!, fileName);
-                        //     } else {
-                        //       showSnackbar("File doesn't exist");
-                        //     }
-                        //   } else {
-                        //     //add to map if not already
-                        //     map[payloadId] = fileName;
-                        //   }
-                        // }
                       }
-                      // } else if (payload.type == PayloadType.FILE) {
-                      //   showSnackbar("$endid: File transfer started");
-                      //   tempFileUri = payload.uri;
-                      // }
                     },
                     onPayloadTransferUpdate: (endid, payloadTransferUpdate) {
                       if (payloadTransferUpdate
@@ -299,15 +285,6 @@ class _BusinessCardTransferBluetoothPageState
                           PayloadStatus.SUCCESS) {
                         showSnackbar(
                             "$endid success, total bytes = ${payloadTransferUpdate.totalBytes}");
-
-                        // if (map.containsKey(payloadTransferUpdate.id)) {
-                        //   //rename the file now
-                        //   String name = map[payloadTransferUpdate.id]!;
-                        //   moveFile(tempFileUri!, name);
-                        // } else {
-                        //   //bytes not received till yet
-                        //   map[payloadTransferUpdate.id] = "";
-                        // }
                       }
                     },
                   );

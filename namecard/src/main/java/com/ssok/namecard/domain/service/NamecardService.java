@@ -78,7 +78,7 @@ public class NamecardService {
         Namecard namecardB = findBySeq(exchangeSingleRequest.namecardBSeq());
 
         /* 로그인 한 사람이 명함 요청의 주체인지 검증 */
-        isValid(memberUuid, namecardA);
+//        isValid(memberUuid, namecardA);
 
         /* 명함을 교환했다면 x */
         isDuplicated(namecardA, namecardB);

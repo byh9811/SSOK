@@ -137,7 +137,9 @@ public class MemberService {
 
     public void logout(String memberId) {
         Member member = memberRepository.findMemberByMemberId(memberId).orElse(null);
-        member.deleteRefreshToken();
+        if(member!=null){
+            member.deleteRefreshToken();
+        }
     }
 
 

@@ -1,9 +1,86 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ssok/widgets/receipts/childrens/dotted_divider.dart';
+
+import '../../http/http.dart';
+import '../../http/token_manager.dart';
+
+class ReceiptDetailInfo {
+  final String cardCompany;
+  final String cardNumberFirstSection;
+  final String cardType;
+  final String approvedNum;
+  final String shopName;
+  final int payAmt;
+  final String approvedDate;
+  final String transactionType;
+  List<InnerPaymentItem> paymentItemList;
+  final int vat;
+  final int priceWithOutVat;
+
+  ReceiptDetailInfo({
+    required this.cardCompany,
+    required this.cardNumberFirstSection,
+    required this.cardType,
+    required this.approvedNum,
+    required this.shopName,
+    required this.payAmt,
+    required this.approvedDate,
+    required this.transactionType,
+    required this.paymentItemList,
+    required this.vat,
+    required this.priceWithOutVat
+  });
+}
+
+class InnerPaymentItem {
+  final String itemName;
+  final int itemPrice;
+  final int itemCnt;
+
+  InnerPaymentItem({
+    required this.itemName,
+    required this.itemPrice,
+    required this.itemCnt
+  });
+}
+
+ReceiptDetailInfo? parseReceiptDetail(Map<String, dynamic> jsonStr) {
+  final response = jsonStr['response'] as Map<String, dynamic>?;
+  print(response);
+  if (response != null) {
+    List<InnerPaymentItem> paymentItemList = (response['paymentItemList'] as List)
+        .map((item) => InnerPaymentItem(
+        itemName: item['itemName'],
+        itemPrice: item['itemPrice'],
+        itemCnt: item['itemCnt']
+    )).toList();
+
+    int vat = (response["payAmt"] / 10).toInt();
+
+    return
+      ReceiptDetailInfo(
+        cardCompany: response["cardCompany"],
+        cardNumberFirstSection: response["cardNumberFirstSection"],
+        cardType: response["cardType"],
+        approvedNum: response["approvedNum"],
+        shopName: response["shopName"],
+        payAmt: response["payAmt"],
+        approvedDate: response["approvedDate"],
+        transactionType: response["transactionType"],
+        paymentItemList: paymentItemList,
+        vat: vat,
+        priceWithOutVat: response["payAmt"] - vat
+      );
+  }
+
+  return null;
+}
 
 class ReceiptListDetailPage extends StatelessWidget {
   const ReceiptListDetailPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,10 +113,49 @@ class ReceiptDetail extends StatefulWidget {
 }
 
 class _ReceiptDetailState extends State<ReceiptDetail> {
+
+  ApiService apiService = ApiService();
+  late Map<String, Object?> jsonString = {};
+  late ReceiptDetailInfo? receiptDetail;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("왔다!");
+      getReceiptDetail();
+      // receiptDetail = parseReceiptDetail(jsonString)!;
+    });
+
+  }
+
+  void getReceiptDetail() async {
+    final args = ModalRoute.of(context)!.settings.arguments as String;
+    print(args);
+    final response = await apiService.getRequest(
+        'receipt-service/receipt/$args', TokenManager().accessToken);
+    print(response);
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 200) {
+      setState(() {
+        jsonString = jsonData;
+        receiptDetail = parseReceiptDetail(jsonString)!;
+      });
+    } else {
+      throw Exception('Failed to load');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (receiptDetail == null) {
+      return CircularProgressIndicator(); // 또는 다른 로딩 위젯
+    }
+
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    var numberFormat = NumberFormat('###,###,###,###');
+
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.07),
@@ -47,9 +163,9 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
           children: [
             SizedBox(height: screenHeight * 0.035),
             TitleByReceipt(
-              title: "CU을지로파인애비뉴점",
-              price: "2,000",
-              cardInfo: "신한 신용카드 (0188)",
+              title: receiptDetail!.shopName,
+              price: numberFormat.format(receiptDetail!.payAmt),
+              cardInfo: "${receiptDetail!.cardCompany} ${receiptDetail!.cardType} (${receiptDetail!.cardNumberFirstSection})",
             ),
             SizedBox(height: screenHeight * 0.015),
             Divider(
@@ -59,15 +175,15 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
             ),
             ContentByReceipt(
               title: "승인 일시",
-              content: "2019-06-11 17:41:00",
+              content: receiptDetail!.approvedDate,
             ),
             ContentByReceipt(
               title: "승인 번호",
-              content: "30720911",
+              content: receiptDetail!.approvedNum,
             ),
             ContentByReceipt(
               title: "거래 유형",
-              content: "승인",
+              content: receiptDetail!.transactionType,
             ),
             ContentByReceipt(
               title: "할부",
@@ -75,31 +191,30 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
             ),
             SizedBox(height: screenHeight * 0.026),
             DottedDivider(),
-            MenuByReceipt(
-              title: "삼각김밥",
-              amount: 1,
-              price: "1,300",
-            ),
-            MenuByReceipt(
-              title: "마이쮸",
-              amount: 1,
-              price: "700",
+            Column(
+              children: receiptDetail!.paymentItemList.map((item) {
+                return MenuByReceipt(
+                  title: item.itemName,
+                  amount: item.itemCnt,
+                  price: '${numberFormat.format(item.itemPrice)}원',
+                );
+              }).toList(),
             ),
             SizedBox(height: screenHeight * 0.026),
             DottedDivider(),
             ContentByReceipt(
               title: "공급가액",
-              content: "1,819원",
+              content: '${numberFormat.format(receiptDetail!.priceWithOutVat)}원',
             ),
             ContentByReceipt(
               title: "부가세",
-              content: "181원",
+              content: '${numberFormat.format(receiptDetail!.vat)}원',
             ),
             SizedBox(height: screenHeight * 0.026),
             DottedDivider(),
             ContentByReceipt(
               title: "가맹점명",
-              content: "CU을지로파인애비뉴점",
+              content: receiptDetail!.shopName,
             ),
           ],
         ),

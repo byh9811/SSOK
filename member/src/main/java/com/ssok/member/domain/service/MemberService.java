@@ -114,6 +114,8 @@ public class MemberService {
         return TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .memberName(member.getMemberName())
+                .loginId(member.getMemberId())
                 .build();
     }
 
@@ -131,6 +133,11 @@ public class MemberService {
     public String getName(Long memberSeq) {
         Member member = memberRepository.findMemberByMemberSeq(memberSeq).orElse(null);
         return member.getMemberName();
+    }
+
+    public void logout(String memberId) {
+        Member member = memberRepository.findMemberByMemberId(memberId).orElse(null);
+        member.deleteRefreshToken();
     }
 
 

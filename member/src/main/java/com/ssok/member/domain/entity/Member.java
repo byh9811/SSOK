@@ -84,4 +84,8 @@ public class Member extends BaseEntity {
     public void changeVerification() {
         this.verification = !this.verification;
     }
+
+    public void deleteRefreshToken() {
+        this.memberRefreshToken = null;
+    }
 }

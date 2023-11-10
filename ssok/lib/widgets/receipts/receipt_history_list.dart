@@ -283,8 +283,8 @@ class _ReceiptHistoryListState extends State<ReceiptHistoryList> {
                               onTap: () {
                                 Navigator.pushNamed(
                                   context,
-                                  '/receipt/$receiptDetailDocumentId',
-                                  arguments: detailData,
+                                  '/receipt/detail',
+                                  arguments: detailData.receiptDetailDocumentId,
                                 );
                               },
                               title: Text(shopName),

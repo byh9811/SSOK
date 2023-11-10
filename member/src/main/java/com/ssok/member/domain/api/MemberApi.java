@@ -196,7 +196,7 @@ public class MemberApi {
 //    }
 //
     @PostMapping("/logout")
-    public ApiResponse<Void> logout(HttpServletRequest httpServletRequest,@RequestParam (name = "member-id")String memberId ) {
+    public ApiResponse<Void> logout(HttpServletRequest httpServletRequest, @RequestBody String memberId ) {
         HttpSession session = httpServletRequest.getSession();
         session.invalidate();
 

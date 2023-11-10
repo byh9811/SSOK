@@ -4,6 +4,7 @@ import com.ssok.namecard.domain.maria.entity.Exchange;
 
 public record NamecardMapResponse(
     Long exchangeSeq,
+    String namecardName,
     String namecardImage,
     String namecardEmail,
     String namecardCompany,
@@ -18,7 +19,7 @@ public record NamecardMapResponse(
     Double lon
 ) {
     public NamecardMapResponse(Exchange exchange){
-        this(exchange.getExchangeSeq(), exchange.getReceiveNamecard()
+        this(exchange.getExchangeSeq(), exchange.getReceiveNamecard().getNamecardName(), exchange.getReceiveNamecard()
                                                 .getNamecardImage(), exchange.getReceiveNamecard()
                                                                              .getNamecardEmail(),
             exchange.getReceiveNamecard()

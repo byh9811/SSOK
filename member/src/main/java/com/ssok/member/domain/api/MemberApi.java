@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
@@ -193,17 +195,15 @@ public class MemberApi {
 //        return OK(check);
 //    }
 //
-//    @ApiOperation(value = "로그아웃", notes = "세션 종료 및 로그아웃을 진행하는 API")
-//    @GetMapping("/logout")
-//    public ApiResponse<Void> logout(HttpServletRequest httpServletRequest, @AuthenticationPrincipal User user) {
-//        HttpSession session = httpServletRequest.getSession();
-//        session.invalidate();
-//
-//        Long memberId = Long.parseLong(user.getUsername());
-//        memberService.logout(memberId);
-//
-//        return OK(null);
-//    }
+    @PostMapping("/logout")
+    public ApiResponse<Void> logout(HttpServletRequest httpServletRequest,@RequestParam (name = "member-id")String memberId ) {
+        HttpSession session = httpServletRequest.getSession();
+        session.invalidate();
+
+        memberService.logout(memberId);
+
+        return OK(null);
+    }
 //
 //    @ApiOperation(value = "회원 정보 조회", notes = "회원 정보를 조회하는 API")
 //    @GetMapping("/info")

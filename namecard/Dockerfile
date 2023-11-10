@@ -10,4 +10,7 @@ COPY ${JAR_FILE} /app.jar
 ARG ssh_encrypt_key
 ENV ssh-encrypt-key $ssh_encrypt_key
 
+ENV TZ=Asia/Seoul
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 ENTRYPOINT ["java", "-jar","-Dspring.cloud.config.profile=dev", "/app.jar"]

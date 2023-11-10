@@ -6,8 +6,8 @@ import 'package:ssok/screens/businesscard/business_card_detail_page.dart';
 import 'package:ssok/screens/businesscard/business_card_map_page.dart';
 import 'package:ssok/screens/businesscard/business_card_my_page.dart';
 import 'package:ssok/screens/businesscard/business_card_self_create_page.dart';
-import 'package:ssok/screens/businesscard/business_card_receive_bluetooth_page.dart';
 import 'package:ssok/screens/businesscard/business_card_send_bluetooth_page.dart';
+import 'package:ssok/screens/businesscard/business_card_receive_bluetooth_page.dart';
 import 'package:ssok/screens/creditcard/credit_card_create_page.dart';
 import 'package:ssok/screens/creditcard/credit_card_history_list_page.dart';
 import 'package:ssok/screens/creditcard/test.dart';
@@ -45,19 +45,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(                                                
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
         '/signin': (context) => SigninPage(),
         '/main': (context) => MainPage(),
+        // '/main' :(c ontext) => CreditCardPaymentPage(),
         '/id/create': (context) => IdCreatePage(),
         '/drive/id/create': (context) => DriveIdCreatePage(),
         '/creditcard/payment': (context) => CreditCardPaymentPage(),
         '/businesscard/my': (context) => BusinessCardMyPage(),
         '/businesscard/detail': (context) => BusinessCardDetailPage(),
-        '/businesscard/self/create': (context) => BusinessCardSelfCreatePage(),
+        '/businesscard/self/create': (context) => BusinessCardSelfCreatePage(),                                 
         '/businesscard/camera/create': (context) =>
             BusinessCardCameraCreatePage(),
         '/businesscard/map': (context) => BusinessCardMapPage(),
@@ -65,7 +66,8 @@ class MyApp extends StatelessWidget {
             BusinessCardSendBluetoothPage(),
         '/businesscard/receive/bluetooth': (context) =>
             BusinessCardReceiveBlueToothPage(),
-        '/creditcard/create': (context) => CreditCardCreatePage(),
+        // '/creditcard/create': (context) => CreditCardCreatePage(),
+        '/creditcard/create': (context) => CreditCardPaymentPage(),
         '/creditcard/history/list': (context) => CreditCardHistoryListPage(),
         '/receipt/detail': (context) => ReceiptListDetailPage(),
         '/pocket/account/create': (context) => PocketAccountCreatePage(),

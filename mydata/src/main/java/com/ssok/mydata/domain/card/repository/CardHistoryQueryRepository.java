@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.ssok.mydata.domain.card.entity.QCard.card;
 import static com.ssok.mydata.domain.card.entity.QCardHistory.cardHistory;
 
 @Repository
@@ -35,7 +36,7 @@ public class CardHistoryQueryRepository {
         ))
                 .from(cardHistory)
                 .where(
-                        cardHistory.card.cardId.eq(cardId).and(ltCursor(cursor))
+                        cardHistory.card.cardId.eq(cardId).and(cursorId(cursor))
                 )
                 .orderBy(new OrderSpecifier<>(Order.DESC, cardHistory.id))
                 .limit(limit + 1)
@@ -48,8 +49,8 @@ public class CardHistoryQueryRepository {
                 .fetchFirst();
     }
 
-    private BooleanExpression ltCursor(Long cursorId){
-        return cursorId == null ? null : cardHistory.id.loe(cursorId);
+    private BooleanExpression cursorId(Long cursorId){
+        return cursorId == null ? null : card.id.gt(cursorId);
     }
 
 }

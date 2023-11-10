@@ -284,7 +284,7 @@ class _ReceiptHistoryListState extends State<ReceiptHistoryList> {
                                 Navigator.pushNamed(
                                   context,
                                   '/receipt/detail',
-                                  arguments: detailData,
+                                  arguments: detailData.receiptDetailDocumentId,
                                 );
                               },
                               title: Text(shopName),

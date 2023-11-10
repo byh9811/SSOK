@@ -199,9 +199,8 @@ public class MemberApi {
     public ApiResponse<Void> logout(HttpServletRequest httpServletRequest, @RequestBody String memberId ) {
         HttpSession session = httpServletRequest.getSession();
         session.invalidate();
-
+        System.out.println(memberId);
         memberService.logout(memberId);
-
         return OK(null);
     }
 //

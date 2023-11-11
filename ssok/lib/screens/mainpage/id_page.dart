@@ -17,48 +17,136 @@ class IDPage extends StatefulWidget {
   State<IDPage> createState() => _IdPageState();
 }
 
+class RegistrationCard {
+  final String registrationCardName;
+  final String registrationCardPersonalNumber;
+
+  RegistrationCard({
+    required this.registrationCardName,
+    required this.registrationCardPersonalNumber
+  });
+}
+
+class License {
+  final String licenseName;
+  final String licensePersonalNumber;
+
+  License({
+    required this.licenseName,
+    required this.licensePersonalNumber
+  });
+}
+
+class RecognizedRegCard {
+  final String registrationCardName;
+  final String registrationCardPersonalNumber;
+  final String registrationCardAddress;
+  final String registrationCardIssueDate;
+  final String registrationCardAuthority;
+
+  RecognizedRegCard({
+    required this.registrationCardName,
+    required this.registrationCardPersonalNumber,
+    required this.registrationCardAddress,
+    required this.registrationCardIssueDate,
+    required this.registrationCardAuthority
+  });
+}
+
+class RecognizedLicense {
+  final String licenseName;
+  final String licensePersonalNumber;
+  final String licenseType;
+  final String licenseAddress;
+  final String licenseNumber;
+  final String licenseRenewStartDate;
+  final String licenseRenewEndDate;
+  final String licenseCondition;
+  final String licenseCode;
+  final String licenseIssueDate;
+  final String licenseAuthority;
+
+  RecognizedLicense({
+    required this.licenseName,
+    required this.licensePersonalNumber,
+    required this.licenseType,
+    required this.licenseAddress,
+    required this.licenseNumber,
+    required this.licenseRenewStartDate,
+    required this.licenseRenewEndDate,
+    required this.licenseCondition,
+    required this.licenseCode,
+    required this.licenseIssueDate,
+    required this.licenseAuthority
+  });
+}
+
+class ImageAndData {
+  final XFile image;
+  final RecognizedRegCard data;
+
+  ImageAndData({required this.image, required this.data});
+}
+
 class _IdPageState extends State<IDPage> {
   ApiService apiService = ApiService();
   String? accessToken;
   bool isIdCardHave = false;
   bool isLicenseHave = false;
   final picker = ImagePicker();
+  late Map<String, Object?> jsonString = {};
+  late RegistrationCard? registrationCard;
+  late License? license;
   late XFile? pickedImage;
 
   @override
   void initState() {
     super.initState();
-    getIdCardInfo();
-    getDriveLicenseInfo();
+    getIdentifications();
   }
 
-  void getIdCardInfo() async {
-    final response = await apiService.getRequest(
-        "idcard-service/registration", TokenManager().accessToken);
+  void getIdentifications()async{
+    final response = await apiService.getRequest("idcard-service/summary/idcard", TokenManager().accessToken);
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     print(jsonData);
-    if (response.statusCode == 200) {
-      if (jsonData['response'] == null) {
-        print("신분증 없어영");
-        setState(() {
-          isIdCardHave = false;
-        });
-      } else {
-        print("신분증이 있어연");
-        setState(() {
-          isIdCardHave = true;
-        });
+    if(response.statusCode == 200) {
+      final idCard = jsonData['response.summaryRegistrationCard'];
+      final license = jsonData['response.summaryLicense'];
+      print(idCard);
+      if(idCard!=null) {
+        registrationCard = getIdCardInfo(idCard);
+      }
+
+      if(license!=null) {
+        getDriveLicenseInfo(license);
       }
     }
   }
 
-  void getDriveLicenseInfo() async {
-    final response = await apiService.getRequest(
-        "idcard-service/license", TokenManager().accessToken);
-    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+  RegistrationCard? getIdCardInfo(Map<String, dynamic> idCard) {
+    print("신분증이 있어연");
+    setState(() {
+      isIdCardHave = true;
+    });
 
-    print(jsonData);
-    if (response.statusCode == 200) {}
+    return
+      RegistrationCard(
+        registrationCardName: idCard["registrationCardName"],
+        registrationCardPersonalNumber: idCard["registrationCardPersonalNumber"]
+      );
+  }
+
+  License? getDriveLicenseInfo(Map<String, dynamic> license) {
+    print("면허증이 있어연");
+    setState(() {
+      isLicenseHave = true;
+    });
+
+    return
+      License(
+        licenseName: license["licenseName"],
+        licensePersonalNumber: license["licensePersonalNumber"]
+      );
   }
 
   Future<void> _pickImage() async {
@@ -69,13 +157,15 @@ class _IdPageState extends State<IDPage> {
     });
   }
 
-  void sendImage() async {
+  Future<RecognizedRegCard> ocrRC() async {
     final response = await apiService.postRequest(
         'idcard-service/scan/registration',
         {"img": "$pickedImage"},
         TokenManager().accessToken);
     if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+      return jsonData['response'];
+
       print(jsonData);
     } else {
       throw Exception('Failed to load');
@@ -107,6 +197,7 @@ class _IdPageState extends State<IDPage> {
         isIdCardHave
             ? contentBox(
                 context,
+                // 여기에 민증정보가 들어가야함. 클릭하면 상세정보 이동.
                 Column(
                   children: [
                     Expanded(
@@ -143,7 +234,7 @@ class _IdPageState extends State<IDPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        "등록된 주민등록증이 없습니다 ㄹㅇ루",
+                        "등록된 주민등록증이 없습니다.",
                         style: TextStyle(color: Color(0xFF989898)),
                       ),
                     ),
@@ -155,10 +246,11 @@ class _IdPageState extends State<IDPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => ServiceAggreementPage(
-                                onTap: () {
+                                onTap: () async {
                                   _pickImage();
-                                  //  Navigator.of(context)
-                                  //     .pushReplacementNamed('/id/create');
+                                  final data = await ocrRC();
+                                  Navigator.of(context)
+                                     .pushReplacementNamed('/id/create', arguments:ImageAndData(image: pickedImage!, data: data), );
                                 },
                               ),
                             ),
@@ -175,6 +267,7 @@ class _IdPageState extends State<IDPage> {
         isLicenseHave
             ? contentBox(
                 context,
+                // 여기에 면허정보가 들어가야함. 클릭하면 상세정보 이동.
                 Column(
                   children: [
                     Expanded(
@@ -211,7 +304,7 @@ class _IdPageState extends State<IDPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        "등록된 운전면허증이 없습니다 ㄹㅇ루",
+                        "등록된 운전면허증이 없습니다.",
                         style: TextStyle(color: Color(0xFF989898)),
                       ),
                     ),

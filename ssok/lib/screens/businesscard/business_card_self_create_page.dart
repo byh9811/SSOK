@@ -1,8 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_down.dart';
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_left.dart';
@@ -47,7 +54,7 @@ class _BusinessCardSelfCreatePageState
     false,
     false
   ];
-  var globalKey = GlobalKey();
+  late ApiService apiService = ApiService();
 
   void isCheckedChange() {
     int temp = currentOffsetIndex;
@@ -68,27 +75,106 @@ class _BusinessCardSelfCreatePageState
     });
   }
 
-  // void _capture() async {
-  //   print("START CAPTURE");
-  //   var renderObject = globalKey.currentContext();
-  //   if (renderObject is RenderRepaintBoundary) {
-  //     var boundary = renderObject;
-  //     ui.Image image = await boundary.toImage();
-  //     final directory = (await getApplicationDocumentsDirectory()).path;
-  //     ByteData byteData =
-  //         await image.toByteData(format: ui.ImageByteFormat.png);
-  //     Uint8List pngBytes = byteData.buffer.asUint8List();
-  //     print(pngBytes);
-  //     File imgFile = new File('$directory/screenshot.png');
-  //     imgFile.writeAsBytes(pngBytes);
-  //     print("FINISH CAPTURE ${imgFile.path}");
-  //   }
-  // }
-
   void isCheckedFocus(int num) {
     setState(() {
       currentOffsetIndex = num;
     });
+  }
+
+  // late File myCard;
+
+  Future<Uint8List> capturePng() async {
+    RenderRepaintBoundary boundary =
+        globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
+    // File myCard = await createFile(pngBytes);
+    return pngBytes;
+    // print(pngBytes);
+    // String appDocPath = 'C:/SSAFY';
+    // File imgFile = File('$appDocPath/screenshot.png');
+    // imgFile.writeAsBytes(pngBytes);
+    // print("FINISH CAPTURE ${imgFile.path}");
+    // saveImage(pngBytes);
+  }
+
+  // Future<void> saveImage(Uint8List imageBytes) async {
+  //   // 외부 저장소 디렉터리 찾기
+  //   final directory = await getExternalStorageDirectory();
+
+  //   if (directory != null) {
+  //     // 디렉터리가 존재하면 파일 경로 생성
+  //     final imagePath = '${directory.path}/screenshot.png';
+
+  //     // 파일로 변환하여 저장
+  //     final imgFile = File(imagePath);
+  //     await imgFile.writeAsBytes(imageBytes);
+
+  //     print("Image saved at: $imagePath");
+  //   } else {
+  //     print("Directory not found");
+  //   }
+  // }
+  Future<File> createFile(Uint8List pngBytes) async {
+    const filename = 'myBusinesscard.png';
+    final path = (await getApplicationDocumentsDirectory()).path;
+    final file = File('$path/$filename');
+    await file.writeAsBytes(pngBytes);
+    return file;
+  }
+
+  void createBusinessCard(Uint8List image) async {
+    Map<String, dynamic> namecardCreateRequest = {
+      "namecardName": registeredName,
+      "namecardEmail": registeredEmail,
+      "namecardCompany": registeredCompany,
+      "namecardJob": registeredJob,
+      "namecardAddress": registeredAddress,
+      "namecardPhone": registeredPhone,
+      "namecardFax": registeredFax,
+      "namecardWebsite": registeredWebsite
+    };
+
+    final response = await apiService.postRequestWithFile(
+        'namecard-service/',
+        "namecardCreateRequest",
+        namecardCreateRequest,
+        TokenManager().accessToken,
+        image);
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      // showDialog(
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       title: Text('Success'),
+      //       content: Text('Data loaded successfully!'),
+      //       actions: [
+      //         TextButton(
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //             Navigator.of(context).pushNamed('/main', arguments: 1);
+      //           },
+      //           child: Text('OK'),
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
+      Navigator.of(context).pushNamed('/main');
+      print(jsonData);
+    } else {
+      throw Exception('Failed to load');
+    }
+  }
+
+  late final globalKey;
+  @override
+  void initState() {
+    super.initState();
+    apiService = ApiService();
+    globalKey = GlobalKey();
   }
 
   @override
@@ -319,7 +405,10 @@ class _BusinessCardSelfCreatePageState
                     SizedBox(height: screenHeight * 0.06),
                     MainButton(
                       title: "등록",
-                      onPressed: () {},
+                      onPressed: () async {
+                        Uint8List image = await capturePng();
+                        createBusinessCard(image);
+                      },
                     ),
                     SizedBox(height: screenHeight * 0.04),
                   ],

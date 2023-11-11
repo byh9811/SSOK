@@ -85,7 +85,7 @@ class _MyAccountState extends State<MyAccount> {
                   ),
                 ),
                 SizedBox(
-                  height: screenHeight * 0.11,
+                  height: screenHeight * 0.1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,

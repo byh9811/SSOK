@@ -42,20 +42,20 @@ class BusinessTransferModal extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ModalTypeButton(
-                title: "NFC",
-                icon: Icons.nfc,
+                title: "받기",
+                icon: Icons.archive,
                 ontap: () {
                   Navigator.of(context).pushNamed(
-                      '/businesscard/send/bluetooth',
+                      '/businesscard/receive/bluetooth',
                       arguments: namecardSeq);
                 },
               ),
               ModalTypeButton(
-                title: "Bluetooth",
-                icon: Icons.bluetooth_searching,
+                title: "보내기",
+                icon: Icons.send,
                 ontap: () {
                   Navigator.of(context).pushNamed(
-                      '/businesscard/transfer/bluetooth',
+                      '/businesscard/send/bluetooth',
                       arguments: namecardSeq);
                 },
               ),

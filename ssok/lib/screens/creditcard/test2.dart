@@ -375,6 +375,7 @@ class _MyBodyState extends State<Body> {
   void onConnectionInit(String id, ConnectionInfo info) {
     showModalBottomSheet(
       context: context,
+      barrierColor: Colors.transparent,
       builder: (builder) {
         return Center(
           child: Column(

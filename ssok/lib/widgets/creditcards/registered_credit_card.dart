@@ -77,7 +77,9 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
         ),
         ElevatedButton(
           onPressed: (){
-            Navigator.of(context).pushNamed('/creditcard/history/list');
+            Navigator.of(context).pushNamed('/creditcard/history/list',
+            arguments: {"ownerName":widget.creditCard.ownerName,"cardNum":widget.creditCard.cardNum}
+            );
           }, 
           child: Text("거래내역"),
         ),

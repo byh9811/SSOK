@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../http/http.dart';
+import 'package:http/http.dart' as http;
 import '../../http/token_manager.dart';
 
 class IdCreatePage extends StatefulWidget {
@@ -12,7 +15,35 @@ class IdCreatePage extends StatefulWidget {
   State<IdCreatePage> createState() => _IdCreatePageState();
 }
 
+class ImageAndData {
+  final XFile image;
+  final RecognizedRegCard data;
+
+  ImageAndData({required this.image, required this.data});
+}
+
+class RecognizedRegCard {
+  final String registrationCardName;
+  final String registrationCardPersonalNumber;
+  final String registrationCardAddress;
+  final String registrationCardIssueDate;
+  final String registrationCardAuthority;
+
+  RecognizedRegCard({
+    required this.registrationCardName,
+    required this.registrationCardPersonalNumber,
+    required this.registrationCardAddress,
+    required this.registrationCardIssueDate,
+    required this.registrationCardAuthority
+  });
+}
+
 class _IdCreatePageState extends State<IdCreatePage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _personalNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _issueDateController = TextEditingController();
+  final TextEditingController _authorityController = TextEditingController();
 
   ApiService apiService = ApiService();
   late String registrationCardName="";
@@ -20,6 +51,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
   late String registrationCardAddress="";
   late String registrationCardIssueDate="";
   late String registrationCardAuthority="";
+  late XFile image;
 
   bool checkRegistrationCardName = false;
   bool checkRegistrationCardPersonalNumber = false;
@@ -33,14 +65,20 @@ class _IdCreatePageState extends State<IdCreatePage> {
         checkRegistrationCardAddress &&
         checkRegistrationCardIssueDate &&
         checkRegistrationCardAuthority){
-      final response = await apiService.postRequest(
-          'idcard-service/registration', {
-            "registrationCardName": registrationCardName,
-            "registrationCardPersonalNumber": registrationCardPersonalNumber,
-            "registrationCardAddress": registrationCardAddress,
-            "registrationCardIssueDate": registrationCardIssueDate,
-            "registrationCardAuthority":registrationCardAuthority
-      }, TokenManager().accessToken);
+      Map<String, dynamic> requestData = {
+        "registrationCardName": registrationCardName,
+        "registrationCardPersonalNumber": registrationCardPersonalNumber,
+        "registrationCardAddress": registrationCardAddress,
+        "registrationCardIssueDate": registrationCardIssueDate,
+        "registrationCardAuthority": registrationCardAuthority
+      };
+      var bytes = await File(image.path).readAsBytes();
+      final response = await apiService.postRequestWithFile(
+          'idcard-service/registration',
+          'licenseCreateRequest',
+          requestData,
+          TokenManager().accessToken
+          ,bytes);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         print(jsonData);
@@ -51,21 +89,16 @@ class _IdCreatePageState extends State<IdCreatePage> {
     }
   }
 
-  void ocr() async {
-    final response = await apiService.postRequest(
-        'idcard-service/scan/registration', {
-    }, TokenManager().accessToken);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      print(jsonData);
-      Navigator.of(context).pushReplacementNamed('/');
-    } else {
-      throw Exception('Failed to load');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final ImageAndData args = ModalRoute.of(context)!.settings.arguments as ImageAndData;
+    registrationCardName = args.data.registrationCardName;
+    registrationCardPersonalNumber = args.data.registrationCardPersonalNumber;
+    registrationCardAddress = args.data.registrationCardAddress;
+    registrationCardIssueDate = args.data.registrationCardIssueDate;
+    registrationCardAuthority = args.data.registrationCardAuthority;
+    image = args.image;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -118,61 +151,57 @@ class _IdCreatePageState extends State<IdCreatePage> {
                       child: Column(
                         children: <Widget>[
                           TextField(
+                            controller: _nameController,
                             decoration: InputDecoration(labelText: '이름'),
                             keyboardType: TextInputType.name,
                             onChanged: (value){
-                              registrationCardName = value;
+                              setState(() {
+                                registrationCardName = value.trim();
+                                checkRegistrationCardName =
+                                    registrationCardName.isNotEmpty;
+                              });
                             },
                           ),
-                          Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(labelText: '주민등록번호'),
-                                    keyboardType: TextInputType.text,
-                                    onChanged: (value){
-                                      registrationCardPersonalNumber=value.trim();
-                                      checkRegistrationCardName = registrationCardName.isNotEmpty;
-                                    },
-                                  ),
-                                )
-                              ]
-                          ),
-
-                          Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(labelText: '주소'),
-                                    keyboardType: TextInputType.streetAddress,
-                                    onChanged: (value){
-                                      setState(() {
-                                        registrationCardAddress=value;
-                                      });
-                                    },
-                                  ),
-                                )
-                              ]
-                          ),
-                          Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    decoration:InputDecoration(labelText: '발급일자'),
-                                    keyboardType: TextInputType.datetime,
-                                    onChanged: (value){
-                                      registrationCardIssueDate=value;
-                                    },
-                                  ),
-                                ),
-                              ]
+                          TextField(
+                            controller: _personalNumberController,
+                            decoration: InputDecoration(labelText: '주민등록번호'),
+                            keyboardType: TextInputType.text,
+                            onChanged: (value){
+                              setState(() {
+                                registrationCardPersonalNumber = value.trim();
+                                checkRegistrationCardPersonalNumber =
+                                    registrationCardPersonalNumber.isNotEmpty;
+                              });
+                            },
                           ),
                           TextField(
+                            controller: _addressController,
+                            decoration: InputDecoration(labelText: '주소'),
+                            keyboardType: TextInputType.streetAddress,
+                            onChanged: (value){
+                              setState(() {
+                                registrationCardAddress = value.trim();
+                                checkRegistrationCardAddress = registrationCardAddress.isNotEmpty;
+                              });
+                            },
+                          ),
+                          TextField(
+                            controller: _issueDateController,
+                            decoration:InputDecoration(labelText: '발급일자'),
+                            keyboardType: TextInputType.datetime,
+                            onChanged: (value){
+                              registrationCardIssueDate = value.trim();
+                              checkRegistrationCardIssueDate = registrationCardIssueDate.isNotEmpty;
+                            },
+                          ),
+                          TextField(
+                            controller: _authorityController,
                             decoration: InputDecoration(labelText: '인증기관'),
                             keyboardType: TextInputType.text,
                             onChanged: (value){
                               setState(() {
-                                registrationCardAuthority=value;
+                                registrationCardAuthority = value.trim();
+                                checkRegistrationCardAuthority = registrationCardAuthority.isNotEmpty;
                               });
                             },
                           ),
@@ -195,23 +224,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
                                         ),
                                       )
                                   ),
-                                ),
-                                ButtonTheme(
-                                    height: 50.0,
-                                    child: ElevatedButton(
-                                      onPressed: (){
-                                        ocr();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.orangeAccent
-                                      ),
-                                      child: Icon(
-                                        Icons.accessibility,
-                                        color: Colors.white,
-                                        size: 35.0,
-                                      ),
-                                    )
-                                ),
+                                )
                               ]
                           ),
                         ],

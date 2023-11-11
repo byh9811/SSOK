@@ -246,7 +246,9 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
             padding: EdgeInsets.only(
                 right: screenWidth * 0.008, top: screenHeight * 0.006),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop("/main");
+              },
               child: SizedBox(
                 width: screenWidth * 0.2,
                 child: Row(
@@ -484,7 +486,11 @@ Future<String> getAddressFromLatLng(double lat, double lon) async {
 
   if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
-    return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
+    print(jsonData);
+    if(jsonData["status"]["cope"]==0)
+      return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
+    else
+      return "위치 정보를 파악할 수 없습니다.";
   } else {
     throw Exception('Failed to get address from Naver API');
   }
@@ -506,7 +512,7 @@ class _BusinessCardDetailMapState extends State<BusinessCardDetailMap> {
   late NaverMapController mapController;
   NaverMapViewOptions options = const NaverMapViewOptions();
   late NameCardPos nameCardPos;
-  late String positionName;
+  late String positionName="zz";
 
   _BusinessCardDetailMapState(this.nameCardPos);
 

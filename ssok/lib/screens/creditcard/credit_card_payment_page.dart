@@ -90,6 +90,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     var _authorized = '';
@@ -131,6 +134,8 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
             alignment: Alignment.center,
             child: MyCreditCard(
               vertical: true,
+              ownerName: args["ownerName"],
+              cardNum: args["cardNum"],
             ),
           ),
           SizedBox(

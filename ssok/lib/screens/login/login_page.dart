@@ -35,12 +35,16 @@ class _LoginPageState extends State<LoginPage> {
         body: jsonEncode({"loginId": id, "password": password})); // Use the entered ID and password
     
     if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       await tokenManager.setAccessToken(jsonData["response"]["accessToken"]);
       await tokenManager.setRefreshToken(jsonData["response"]["refreshToken"]);
+      await tokenManager.setLoginId(jsonData["response"]["loginId"]);
+      await tokenManager.setMemberName(jsonData["response"]["memberName"]);
       print("넣었다");
       print(jsonData["response"]["accessToken"]);
       print(jsonData["response"]["refreshToken"]);
+      print(jsonData["response"]["loginId"]);
+      print(jsonData["response"]["memberName"]);
       Navigator.of(context).pushReplacementNamed('/main');
     } else {
       throw Exception('Failed to load album');

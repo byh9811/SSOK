@@ -22,6 +22,7 @@ class _BusinessCardSendBluetoothPageState
   Map<int, String> map = {};
   bool advertising = false;
   bool scanning = false;
+  late int namecardSeq;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _BusinessCardSendBluetoothPageState
         onConnectionInitiated: onConnectionInit,
         onConnectionResult: (id, status) {
           showSnackbar(status);
+          sendBusinessCard(namecardSeq);
         },
         onDisconnected: (id) {
           showSnackbar(
@@ -155,14 +157,14 @@ class _BusinessCardSendBluetoothPageState
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    int namecardSeq = ModalRoute.of(context)!.settings.arguments as int;
+    namecardSeq = ModalRoute.of(context)!.settings.arguments as int;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         title: Text(
-          "명함 교환",
+          "명함 전송",
           style: TextStyle(
             fontSize: 19,
             color: Colors.white,
@@ -207,20 +209,27 @@ class _BusinessCardSendBluetoothPageState
             onPressed: () {
               pointClear();
               advertisingStart();
-              // scanningStart();
             },
-            child: Text(advertising ? "어필 중" : "어필시작"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF00ADEF),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.radar,
+                  size: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 3.0),
+                  child: Text(advertising ? "어필 중" : "어필시작"),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: screenHeight * 0.02,
           ),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     pointClear();
-          //     scanningStart();
-          //   },
-          //   child: Text(scanning ? "스캔 중" : "스캔 시작"),
-          // ),
           SizedBox(
             height: screenHeight * 0.025,
           ),

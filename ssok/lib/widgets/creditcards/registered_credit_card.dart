@@ -61,7 +61,7 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
                     if (Navigator.of(context).canPop()) {
                       Navigator.of(context).pop();
                     }
-                    Navigator.of(context).pushNamed('/creditcard/payment');
+                    Navigator.of(context).pushNamed('/creditcard/payment', arguments:{"ownerName":widget.creditCard.ownerName,"cardNum":widget.creditCard.cardNum});
                   },
                   child: Text("결제")),
             ),

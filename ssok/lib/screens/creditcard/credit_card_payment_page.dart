@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nfc_manager/nfc_manager.dart';
@@ -14,6 +16,22 @@ class CreditCardPaymentPage extends StatefulWidget {
   State<CreditCardPaymentPage> createState() => _CreditCardPaymentPageState();
 }
 
+class PaymentItem {
+  int itemSeq;
+  String itemCnt;
+
+  PaymentItem({
+    required this.itemSeq,
+    required this.itemCnt,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'itemSeq': itemSeq,
+      'itemCnt': itemCnt,
+    };
+  }
+}
 
 
 class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
@@ -26,6 +44,19 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   bool _isPaymentDone = false;
   ValueNotifier<dynamic> result = ValueNotifier(null);
   ApiService apiService = ApiService();
+  Map<String, dynamic>? args;
+
+  // 요청 변수
+  String cardNum = "";
+  String cardType = "01";
+  String amount = "";
+  String type = "01";
+  String installPeriod = "0";
+  String shopName = "ssafy-ssok";
+  String shopNumber = "123-45-67890";
+  List<Map<String, dynamic>> paymentItemList = [];
+  // List<PaymentItem> paymentItemList = [];
+  //
 
 
 
@@ -79,6 +110,8 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   }
 
   check() async {
+    print("check 함수 시작");
+    
     bool isLocalAuth;
     isLocalAuth = await LocalAuthentication().canCheckBiometrics;
     setState(() {
@@ -103,25 +136,84 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       
       
     });
-    
-
-
-
-    // bool isAvailable = await NfcManager.instance.isAvailable();
-    // print("됩니까? ${isAvailable}");
-
-    // // Start Session
-    // NfcManager.instance.startSession(
-    //   onDiscovered: (NfcTag tag) async {
-    //     // Do something with an NfcTag instance.
-    //   },
-    // );
+  
   }
 
-  void send () async {
-    final response = apiService.postRequest("pos/payment-service/payment", {}, TokenManager().accessToken);
+  void createPayment () async {
+    print("생성@@@@@@@@@@@@@@@@생성");
+
+
+    Map<String, dynamic> paymentCreatRequest = {
+    "cardNum": args?["cardNum"],
+    "cardType": "01",
+    "amount": amount.toString(),
+    "type": "01",
+    "installPeriod": "0",
+    "shopName": "날봐날봐털쌤",
+    "shopNumber": "123-45-67890",
+    "paymentItemList": paymentItemList
+    };
+    print(paymentCreatRequest);
+
+    final response = await apiService.postRequestToVirtual(
+      "pos/payment-service/payment",
+       paymentCreatRequest,
+        TokenManager().accessToken);
+
+    if(response.statusCode == 200){
+      // ignore: use_build_context_synchronously
+      await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("결제 완료"),
+            content: Text(
+              "결제에 성공했습니다.",
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
+            actions: <Widget>[  
+              TextButton(
+                onPressed: () { 
+                  Navigator.of(context).pop();
+                  
+                  },
+                child: Text("확인"),
+              ),
+            ],
+          ),
+        );
+      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
+    }else{
+      print(response.statusCode);
+      await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("결제 실패"),
+            content: Text(
+              "결제에 실패했습니다. 다시 시도해주세요.",
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
+            actions: <Widget>[  
+              TextButton(
+                onPressed: () { 
+                  Navigator.of(context).pop();
+                  
+                  },
+                child: Text("확인"),
+              ),
+            ],
+          ),
+        );
+      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
+      throw Exception('Failed to load');
+      
+    }
   }
   
+  
+
+
   void _tagRead() {
     checkNFCAvailability();
     print("1231232131");
@@ -156,9 +248,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   List<String> parts = data.split(' / ');
 
   // 변수 초기화
-  String? amount;
-  List<Map<String, dynamic>> paymentItemList = [];
-  String? key;
+  String key = "";
+  
+  
 
   // 분할된 데이터를 변수에 할당
   for (String part in parts) {
@@ -191,12 +283,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
     print('Invalid key. Returning false.');
     return;
   }
-
-
-  
+  createPayment();
   // 결과 출력
-  print('amount: $amount');
-  print('paymentItemList: $paymentItemList');
+
   }
 
 
@@ -308,10 +397,23 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   }
 
 
+
   @override
   void initState() {
     super.initState();
-    auth = LocalAuthentication();
+    auth = LocalAuthentication();  
+    // args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    Future.delayed(Duration.zero, () {
+      // ModalRoute.of(context)!.settings.arguments를 통해 데이터를 읽어옵니다.
+      args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+
+      // 읽어온 데이터를 출력하거나 다른 초기화 작업을 수행할 수 있습니다.
+      if (args != null) {
+        print("cardcardcardcardcardcardcardcardcard");
+        print(args!['cardNum']); // 'value'
+      }
+    });
+    
     check();
     // _authenticateWithBiometrics();
     // checkNFCAvailability();
@@ -323,7 +425,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   Widget build(BuildContext context) {
     
     final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
-
+    
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     var _authorized = '';
@@ -366,7 +468,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
             alignment: Alignment.center,
             child: MyCreditCard(
               vertical: true,
-              ownerName: args["ownerName"],
+              ownerName: args["ownerName"] ,
               cardNum: args["cardNum"],
             ),
           ),

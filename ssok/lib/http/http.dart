@@ -5,7 +5,8 @@ import 'dart:convert';
 
 class ApiService {
   String baseUrl = "https://gateway.ssok.site/api";
-
+  String virtualUrl = "https://k9c107.p.ssafy.io";
+  
   Future<http.Response> getRequest(String endpoint, String? accessToken) async {
     final response = await http.get(
       Uri.parse('$baseUrl/$endpoint'),
@@ -22,6 +23,20 @@ class ApiService {
       String endpoint, Map<String, dynamic> data, String? accessToken) async {
     final response = await http.post(
       Uri.parse('$baseUrl/$endpoint'),
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'ACCESS-TOKEN': accessToken ?? ""
+      },
+      body: jsonEncode(data),
+    );
+    return response;
+  }
+
+  Future<http.Response> postRequestToVirtual(
+      String endpoint, Map<String, dynamic> data, String? accessToken) async {
+    final response = await http.post(
+      Uri.parse('$virtualUrl/$endpoint'),
       headers: {
         'content-type': 'application/json',
         'accept': 'application/json',

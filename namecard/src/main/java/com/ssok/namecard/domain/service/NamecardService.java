@@ -194,4 +194,11 @@ public class NamecardService {
         if(namecardList.isEmpty()) return false;
         return true;
     }
+
+    public void uploadFileTest(MultipartFile file) {
+        String s = gcsService.uploadFile(file);
+        log.info("================이미지 업로드 테스트==================");
+        log.info(s);
+        System.out.println(s);
+    }
 }

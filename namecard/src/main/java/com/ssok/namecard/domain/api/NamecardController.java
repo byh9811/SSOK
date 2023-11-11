@@ -43,7 +43,7 @@ public class NamecardController {
     public ApiResponse<Long> createNamecardRequest(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
         @RequestPart NamecardCreateRequest namecardCreateRequest,
-        @RequestPart(name = "image", required = false) MultipartFile multipartFile
+        @RequestPart(name = "image") MultipartFile multipartFile
     ){
         log.info("UUID: {}", memberUuid);
         Long namecardSeq = namecardService.createNamecard(namecardCreateRequest, memberUuid,
@@ -158,4 +158,11 @@ public class NamecardController {
         return OK(isNamecardExist);
     }
 
+    @PostMapping("/test")
+    public ApiResponse<String> imageTest(
+        @RequestPart(name = "image") MultipartFile file
+    ){
+        namecardService.uploadFileTest(file);
+        return OK("이미지 업로드 성공입니다.");
+    }
 }

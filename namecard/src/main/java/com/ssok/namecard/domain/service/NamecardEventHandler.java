@@ -42,11 +42,14 @@ public class NamecardEventHandler {
     }
 
     public void createNamecard(Namecard namecard) {
+        /** 내 명함 메인 업데이트 - 내 명함 이미지, 내 명함 seq*/
         NamecardMainDoc namecardMainDoc = namecardMainDocMongoRepository
             .findByMemberSeq(namecard.getMemberSeq())
             .orElse(NamecardMainDoc.from(namecard)); // 기존에 존재하지 않으면 새 객체 생성
         namecardMainDoc.updateMyNamecard(namecard); // 명함 업데이트 (새로운 경우에는 초기 설정)
         namecardMainDocMongoRepository.save(namecardMainDoc); // 객체 저장
+
+
     }
 
     public void exchangeNamecard(Namecard namecardA, Namecard namecardB, Exchange exchange) {

@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:html';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -8,6 +10,8 @@ import 'package:ssok/dto/business_card_data.dart';
 import 'package:ssok/dto/business_card_data_map.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
+import 'package:http/http.dart' as http;
+import 'dart:ui';
 
 class BusinessCardMapPage extends StatefulWidget {
   const BusinessCardMapPage({super.key});
@@ -24,6 +28,7 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
   Location location = Location();
   /* 명함 리스트 초기화 */
   late List<BusinessCardDataMap> businessCardDataMap = [];
+  late HashMap<String, String> businessCardIdToAddr = HashMap();
 
   void bringBusinessCardListMap() async {
     final response = await apiService.getRequest(
@@ -32,9 +37,12 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       if (jsonData['response'] is List<dynamic>) {
         final responseList = jsonData['response'] as List<dynamic>;
-        businessCardDataMap = responseList
-            .map((data) => BusinessCardDataMap.fromJson(data))
-            .toList();
+        setState(() {
+          businessCardDataMap = responseList
+              .map((data) => BusinessCardDataMap.fromJson(data))
+              .toList();
+          addMarkers();
+        });
       } else {
         throw Exception('Invalid JSON format: "response" is not an array');
       }
@@ -66,7 +74,6 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
         return;
       }
     }
-
     _getLocation();
   }
 
@@ -76,6 +83,133 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
       currentLocation =
           NLatLng(locationData.latitude!, locationData.longitude!);
     });
+  }
+
+  String parseAddress(Map<String, dynamic> jsonData) {
+    final area1 = jsonData['results'][0]['region']['area1']['name'];
+    final area2 = jsonData['results'][0]['region']['area2']['name'];
+    final area3 = jsonData['results'][0]['region']['area3']['name'];
+    final area4 = jsonData['results'][0]['region']['area4']['name'];
+
+    return '$area1 $area2 $area3 $area4';
+  }
+  Future<String> getAddressFromLatLng(double lat, double lon) async {
+    final String clientId = '6sfqyu6her'; // 여기에 클라이언트 ID를 입력하세요
+    final String clientSecret = 'cG12rGByf6VklpfZc0O7lW5KxUgqAh5GcGqAzW68'; // 여기에 클라이언트 Secret을 입력하세요
+
+    final response = await http.get(
+      Uri.parse('https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=$lon,$lat&sourcecrs=epsg:4326&orders=legalcode&output=json'),
+      headers: {
+        'X-NCP-APIGW-API-KEY-ID': clientId,
+        'X-NCP-APIGW-API-KEY': clientSecret,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
+    } else {
+      throw Exception('Failed to get address from Naver API');
+    }
+  }
+
+
+  void addMarkers() async{
+    if (mapController == null || businessCardDataMap.isEmpty) {
+      return;
+    }
+    for (final data in businessCardDataMap) {
+      /** 위도 경도를 주소로 반환해서 caption에 넣어야 함. */
+      /**                */
+      String address = await getAddressFromLatLng(data.lat, data.lon);
+      businessCardIdToAddr[data.exchangeSeq.toString()] = address;
+      // target: currentLocation ?? NLatLng(37.5666102, 126.9783881),
+      final marker = NMarker(
+        id: data.exchangeSeq.toString(),
+        position: NLatLng(data.lat, data.lon),
+        caption: NOverlayCaption(text: data.namecardName,color: Colors.black, textSize: 15),
+        // icon: data.namecardImage
+        // data.namecardImage != null ? NOverlayImage.fromWidget(widget: Image.network(data.namecardImage), size: size, context: context) : NOverlayImage.fromAssetImage("assets/logo.png")
+        // icon: NOverlayImage.fromWidget(widget:Image.network(data.namecardImage, errorBuilder: Image.asset("assets/logo.png")))
+        // icon: NOverlayImage.fromAssetImage("assets/logo.png")
+        // icon: NOverlayImage..fromAssetImage(data.namecardImage)
+        // icon: {
+        //   url: 'data.namecardIMage'
+        // }
+      );
+
+      mapController.addOverlay(marker);
+      // 마커 클릭시 모달 보여주기.
+      marker.setOnTapListener((NMarker marker) {
+        showModalBottomSheet(
+          context: context,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25.0),
+              topRight: Radius.circular(25.0),
+            ),
+          ),
+          barrierColor: Colors.transparent,
+          builder: (BuildContext context) {
+            final businessCard = businessCardDataMap
+                .firstWhere((card) => card.exchangeSeq.toString() == marker.info.id);
+
+            return Container(
+              height: 300,
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 200, // 이미지의 너비
+                    height: 100, // 이미지의 높이
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover, // 이미지를 컨테이너에 맞추도록 조정
+                        image: NetworkImage(businessCard.namecardImage),
+                      ),
+                      borderRadius: BorderRadius.circular(10), // 모서리를 둥글게 (선택 사항)
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    businessCard.namecardName,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    businessCard.namecardCompany,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    businessCard.namecardJob,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    '${businessCardIdToAddr[marker.info.id]}',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
+            );
+          },
+        );
+      });
+    }
   }
 
   @override
@@ -131,83 +265,6 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
 
   void onMapReady(NaverMapController controller) {
     mapController = controller;
-
-    // businessCardDataMap에 있는 데이터를 사용하여 마커 추가
-    for (final data in businessCardDataMap) {
-      final marker = NMarker(
-        id: data.exchangeSeq.toString(),
-        position: NLatLng(data.lat, data.lon),
-      );
-
-      mapController.addOverlay(marker);
-      // 마커 클릭시 모달 보여주기.
-      marker.setOnTapListener((NMarker marker) {
-        showModalBottomSheet(
-          context: context,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25.0),
-              topRight: Radius.circular(25.0),
-            ),
-          ),
-          barrierColor: Colors.transparent,
-          builder: (BuildContext context) {
-            final businessCard = businessCardDataMap
-                .firstWhere((card) => card.exchangeSeq.toString() == marker.info.id);
-
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(businessCard.namecardImage),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    businessCard.namecardName,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    businessCard.namecardCompany,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    businessCard.namecardJob,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    '위도 경도로 장소 찾아서 적기', // TODO: 장소 정보 표시
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '마커 위치: ${marker.position.latitude}, ${marker.position.longitude}',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      });
-    }
+    addMarkers();
   }
 }

@@ -155,8 +155,10 @@ class _IdPageState extends State<IDPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => ServiceAggreementPage(
-                                onTap: () {
-                                  _pickImage();
+                                onTap: () async {
+                                  await _pickImage();
+                                  // 사진 변수에 자장했으면 api로 네이버에 보내야댐!
+
                                   //  Navigator.of(context)
                                   //     .pushReplacementNamed('/id/create');
                                 },

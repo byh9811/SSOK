@@ -10,9 +10,12 @@ class BusinessCardPage extends StatefulWidget {
 }
 
 class _BusinessCardPageState extends State<BusinessCardPage> {
+  bool isBusinessCardRegiste = false;
   @override
   Widget build(BuildContext context) {
-    // return NotRegisteredBusinessCard();
-    return RegisteredBusinessCard();
+    if (isBusinessCardRegiste) {
+      return RegisteredBusinessCard();
+    }
+    return NotRegisteredBusinessCard();
   }
 }

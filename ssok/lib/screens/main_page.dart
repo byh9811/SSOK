@@ -38,26 +38,28 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     setState(() {
-      memberName = TokenManager().memberName??"회원";
+      memberName = TokenManager().memberName ?? "회원";
     });
   }
 
-  void logOut()async{
+  void logOut() async {
     print(TokenManager().loginId);
     print(TokenManager().accessToken);
-    final response = await apiService.postRequest("member-service/logout",{"memberId":TokenManager().loginId.toString()}, TokenManager().accessToken);
+    final response = await apiService.postRequest(
+        "member-service/logout",
+        {"memberId": TokenManager().loginId.toString()},
+        TokenManager().accessToken);
     print(response.body);
     // if(response.statusCode==200){
-      Navigator.of(context).pushNamed("/");
+    Navigator.of(context).pushNamed("/");
     // }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       key: _key,
       appBar: AppBar(

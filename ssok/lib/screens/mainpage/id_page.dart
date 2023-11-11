@@ -16,6 +16,25 @@ class IDPage extends StatefulWidget {
   State<IDPage> createState() => _IdPageState();
 }
 
+class RegistrationCard {
+  final String registrationCardName;
+  final String registrationCardPersonalNumber;
+
+  RegistrationCard({
+    required this.registrationCardName,
+    required this.registrationCardPersonalNumber
+  });
+}
+
+class License {
+  final String licenseName;
+  final String licensePersonalNumber;
+
+  License({
+    required this.licenseName,
+    required this.licensePersonalNumber
+  });
+}
 
 class _IdPageState extends State<IDPage> {
   ApiService apiService = ApiService();
@@ -26,37 +45,48 @@ class _IdPageState extends State<IDPage> {
   @override
   void initState() {
     super.initState();
-    getIdCardInfo();
-    getDriveLicenseInfo();
+    getIdentifications();
   }
 
-  void getIdCardInfo()async{
-    final response = await apiService.getRequest("idcard-service/registration", TokenManager().accessToken);
+  void getIdentifications()async{
+    final response = await apiService.getRequest("idcard-service/summary/idcard", TokenManager().accessToken);
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     print(jsonData);
-    if(response.statusCode == 200){
-      if(jsonData['response']==null){
-        print("신분증 없어영");
+    if(response.statusCode == 200) {
+      final idCard = jsonData['response.summaryRegistrationCard'];
+      final license = jsonData['response.summaryLicense'];
+
+      if(idCard!=null) {
+
+        getIdCardInfo(idCard);
+      }
+
+      if(license!=null) {
+        print("면허증이 있어연");
         setState(() {
-          isIdCardHave=false;
+          isLicenseHave=true;
         });
-      }else{
-        print("신분증이 있어연");
-        setState(() {
-          isIdCardHave=true;
-        });
+        getDriveLicenseInfo(license);
       }
     }
   }
-  
-  void getDriveLicenseInfo()async{
+
+  void getIdCardInfo(idCard)async{
+    print("신분증이 있어연");
+    setState(() {
+      isIdCardHave=true;
+    });
+
+  }
+
+  void getDriveLicenseInfo(license)async{
     final response = await apiService.getRequest("idcard-service/license", TokenManager().accessToken);
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-    
+
     print(jsonData);
     if(response.statusCode == 200){
-
-    }    
+      RegistrationCard.
+    }
   }
 
   @override

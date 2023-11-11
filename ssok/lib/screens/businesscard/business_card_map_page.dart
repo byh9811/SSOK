@@ -110,7 +110,10 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
+      if(jsonData["status"]["cope"]==0)
+        return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
+      else
+        return "위치 정보를 파악할 수 없습니다.";
     } else {
       throw Exception('Failed to get address from Naver API');
     }

@@ -32,6 +32,11 @@ public class NamecardMainDoc {
         this.namecards.add(namecardDoc);
     }
 
+    public void updateMyNamecard(Namecard namecard) {
+        this.namecardSeq = namecard.getNamecardSeq();
+        this.namecardImg = namecard.getNamecardImage();
+    }
+
 
     @Getter
     @Builder

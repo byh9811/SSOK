@@ -31,6 +31,7 @@ public class Namecard extends BaseEntity {
     private String namecardImage;
     private String namecardEmail;
     private String namecardCompany;
+    private String namecardTel;
     private String namecardJob;
     private String namecardAddress;
     private String namecardPhone;
@@ -51,6 +52,7 @@ public class Namecard extends BaseEntity {
                        .namecardImage(uploadUrl)
                        .namecardEmail(namecardCreateRequest.namecardEmail())
                        .namecardCompany(namecardCreateRequest.namecardCompany())
+                       .namecardTel(namecardCreateRequest.namecardTel())
                        .namecardJob(namecardCreateRequest.namecardJob())
                        .namecardAddress(namecardCreateRequest.namecardAddress())
                        .namecardPhone(namecardCreateRequest.namecardPhone())

@@ -4,6 +4,7 @@ public record NamecardCreateRequest(
     String namecardName,
     String namecardEmail,
     String namecardCompany,
+    String namecardTel,
     String namecardJob,
     String namecardAddress,
     String namecardPhone,

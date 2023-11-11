@@ -29,6 +29,7 @@ public class NamecardDetailDoc {
     private String namecardName;
     private String namecardEmail;
     private String namecardCompany;
+    private String namecardTel;
     private String namecardJob;
     private String namecardAddress;
     private String namecardPhone;
@@ -48,6 +49,7 @@ public class NamecardDetailDoc {
                                 .namecardEmail(namecard.getNamecardEmail())
                                 .namecardName(namecard.getNamecardName())
                                 .namecardCompany(namecard.getNamecardCompany())
+                                .namecardTel(namecard.getNamecardTel())
                                 .namecardJob(namecard.getNamecardJob())
                                 .namecardAddress(namecard.getNamecardAddress())
                                 .namecardPhone(namecard.getNamecardPhone())

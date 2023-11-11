@@ -12,6 +12,7 @@ public record NamecardDetailDocResponse(
     String namecardName,
     String namecardEmail,
     String namecardCompany,
+    String namecardTel,
     String namecardJob,
     String namecardAddress,
     String namecardPhone,
@@ -30,6 +31,7 @@ public record NamecardDetailDocResponse(
                                         .namecardName(namecardDetailDoc.getNamecardName())
                                         .namecardEmail(namecardDetailDoc.getNamecardEmail())
                                         .namecardCompany(namecardDetailDoc.getNamecardCompany())
+                                        .namecardTel(namecardDetailDoc.getNamecardTel())
                                         .namecardJob(namecardDetailDoc.getNamecardJob())
                                         .namecardAddress(namecardDetailDoc.getNamecardAddress())
                                         .namecardPhone(namecardDetailDoc.getNamecardPhone())

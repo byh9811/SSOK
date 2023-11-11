@@ -83,14 +83,14 @@ class _BusinessCardSelfCreatePageState
 
   // late File myCard;
 
-  Future<File> capturePng() async {
+  Future<Uint8List> capturePng() async {
     RenderRepaintBoundary boundary =
         globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
-    File myCard = await createFile(pngBytes);
-    return myCard;
+    // File myCard = await createFile(pngBytes);
+    return pngBytes;
     // print(pngBytes);
     // String appDocPath = 'C:/SSAFY';
     // File imgFile = File('$appDocPath/screenshot.png');
@@ -124,7 +124,7 @@ class _BusinessCardSelfCreatePageState
     return file;
   }
 
-  void createBusinessCard(File file) async {
+  void createBusinessCard(Uint8List image) async {
     Map<String, dynamic> namecardCreateRequest = {
       "namecardName": registeredName,
       "namecardEmail": registeredEmail,
@@ -136,13 +136,12 @@ class _BusinessCardSelfCreatePageState
       "namecardWebsite": registeredWebsite
     };
 
-    final response = await apiService.postRequest(
+    final response = await apiService.postRequestWithFile(
         'namecard-service/',
-        {
-          "namecardCreateRequest": jsonEncode(namecardCreateRequest),
-          "image": "$file"
-        },
-        TokenManager().accessToken);
+        "namecardCreateRequest",
+        namecardCreateRequest,
+        TokenManager().accessToken,
+        image);
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       // showDialog(
@@ -407,8 +406,8 @@ class _BusinessCardSelfCreatePageState
                     MainButton(
                       title: "등록",
                       onPressed: () async {
-                        File file = await capturePng();
-                        createBusinessCard(file);
+                        Uint8List image = await capturePng();
+                        createBusinessCard(image);
                       },
                     ),
                     SizedBox(height: screenHeight * 0.04),

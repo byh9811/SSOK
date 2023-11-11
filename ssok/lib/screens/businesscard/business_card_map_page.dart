@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:ffi';
-import 'dart:html';
+// import 'dart:html';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -93,12 +93,15 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
 
     return '$area1 $area2 $area3 $area4';
   }
+
   Future<String> getAddressFromLatLng(double lat, double lon) async {
     final String clientId = '6sfqyu6her'; // 여기에 클라이언트 ID를 입력하세요
-    final String clientSecret = 'cG12rGByf6VklpfZc0O7lW5KxUgqAh5GcGqAzW68'; // 여기에 클라이언트 Secret을 입력하세요
+    final String clientSecret =
+        'cG12rGByf6VklpfZc0O7lW5KxUgqAh5GcGqAzW68'; // 여기에 클라이언트 Secret을 입력하세요
 
     final response = await http.get(
-      Uri.parse('https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=$lon,$lat&sourcecrs=epsg:4326&orders=legalcode&output=json'),
+      Uri.parse(
+          'https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=$lon,$lat&sourcecrs=epsg:4326&orders=legalcode&output=json'),
       headers: {
         'X-NCP-APIGW-API-KEY-ID': clientId,
         'X-NCP-APIGW-API-KEY': clientSecret,
@@ -113,8 +116,7 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
     }
   }
 
-
-  void addMarkers() async{
+  void addMarkers() async {
     if (mapController == null || businessCardDataMap.isEmpty) {
       return;
     }
@@ -127,7 +129,8 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
       final marker = NMarker(
         id: data.exchangeSeq.toString(),
         position: NLatLng(data.lat, data.lon),
-        caption: NOverlayCaption(text: data.namecardName,color: Colors.black, textSize: 15),
+        caption: NOverlayCaption(
+            text: data.namecardName, color: Colors.black, textSize: 15),
         // icon: data.namecardImage
         // data.namecardImage != null ? NOverlayImage.fromWidget(widget: Image.network(data.namecardImage), size: size, context: context) : NOverlayImage.fromAssetImage("assets/logo.png")
         // icon: NOverlayImage.fromWidget(widget:Image.network(data.namecardImage, errorBuilder: Image.asset("assets/logo.png")))
@@ -151,8 +154,8 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
           ),
           barrierColor: Colors.transparent,
           builder: (BuildContext context) {
-            final businessCard = businessCardDataMap
-                .firstWhere((card) => card.exchangeSeq.toString() == marker.info.id);
+            final businessCard = businessCardDataMap.firstWhere(
+                (card) => card.exchangeSeq.toString() == marker.info.id);
 
             return Container(
               height: 300,
@@ -168,7 +171,8 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
                         fit: BoxFit.cover, // 이미지를 컨테이너에 맞추도록 조정
                         image: NetworkImage(businessCard.namecardImage),
                       ),
-                      borderRadius: BorderRadius.circular(10), // 모서리를 둥글게 (선택 사항)
+                      borderRadius:
+                          BorderRadius.circular(10), // 모서리를 둥글게 (선택 사항)
                     ),
                   ),
                   SizedBox(height: 5),

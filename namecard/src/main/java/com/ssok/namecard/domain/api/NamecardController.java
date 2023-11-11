@@ -147,4 +147,13 @@ public class NamecardController {
         return OK(searchResponseList);
     }
 
+    /** 명함 있는지 여부 */
+    @GetMapping("/exist")
+    public ApiResponse<Boolean> isNamecardExist(
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid
+    ){
+        Boolean isNamecardExist = namecardService.isNamecardExist(memberUuid);
+        return OK(isNamecardExist);
+    }
+
 }

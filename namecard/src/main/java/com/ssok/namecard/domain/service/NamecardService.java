@@ -187,4 +187,11 @@ public class NamecardService {
                                                                                 .collect(Collectors.toList());;
         return searchResponseList;
     }
+
+    public Boolean isNamecardExist(String memberUuid) {
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+        List<Namecard> namecardList = namecardRepository.findAllByMemberSeq(memberSeq);
+        if(namecardList.isEmpty()) return false;
+        return true;
+    }
 }

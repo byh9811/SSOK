@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/mainpage/id_page.dart';
 import 'package:ssok/screens/mainpage/business_card_page.dart';
@@ -26,13 +29,30 @@ class _MainPageState extends State<MainPage> {
   ];
 
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  late TokenManager tokenManager;
+
+  ApiService apiService = ApiService();
+
+  late String memberName;
 
   @override
   void initState() {
     super.initState();
-    tokenManager = TokenManager();
+    setState(() {
+      memberName = TokenManager().memberName??"회원";
+    });
   }
+
+  void logOut()async{
+    print(TokenManager().loginId);
+    print(TokenManager().accessToken);
+    final response = await apiService.postRequest("member-service/logout",{"memberId":TokenManager().loginId.toString()}, TokenManager().accessToken);
+    print(response.body);
+    // if(response.statusCode==200){
+      Navigator.of(context).pushNamed("/");
+    // }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +103,7 @@ class _MainPageState extends State<MainPage> {
                   child: Row(
                     children: [
                       Text(
-                        "나종현",
+                        memberName,
                         style: TextStyle(fontSize: 22, color: Colors.white),
                       ),
                       Padding(
@@ -107,8 +127,7 @@ class _MainPageState extends State<MainPage> {
                                     actions: [
                                       TextButton(
                                         onPressed: () {
-                                          tokenManager.logout();
-                                          Navigator.of(context).pushNamed("/");
+                                          logOut();
                                         },
                                         child: const Text('네'),
                                       ),

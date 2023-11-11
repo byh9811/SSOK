@@ -89,7 +89,7 @@ class _BusinessCardSelfCreatePageState
     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
-    // File myCard = await createFile(pngBytes);
+    // File? myCard = await saveImage(pngBytes);
     return pngBytes;
     // print(pngBytes);
     // String appDocPath = 'C:/SSAFY';
@@ -99,39 +99,43 @@ class _BusinessCardSelfCreatePageState
     // saveImage(pngBytes);
   }
 
-  // Future<void> saveImage(Uint8List imageBytes) async {
-  //   // 외부 저장소 디렉터리 찾기
-  //   final directory = await getExternalStorageDirectory();
+  Future<File?> saveImage(Uint8List imageBytes) async {
+    // 외부 저장소 디렉터리 찾기
+    final directory = await getExternalStorageDirectory();
 
-  //   if (directory != null) {
-  //     // 디렉터리가 존재하면 파일 경로 생성
-  //     final imagePath = '${directory.path}/screenshot.png';
+    if (directory != null) {
+      // 디렉터리가 존재하면 파일 경로 생성
+      final imagePath = '${directory.path}/mycard.png';
 
-  //     // 파일로 변환하여 저장
-  //     final imgFile = File(imagePath);
-  //     await imgFile.writeAsBytes(imageBytes);
+      // 파일로 변환하여 저장
+      File imgFile = File(imagePath);
+      await imgFile.writeAsBytes(imageBytes);
 
-  //     print("Image saved at: $imagePath");
-  //   } else {
-  //     print("Directory not found");
-  //   }
-  // }
-  Future<File> createFile(Uint8List pngBytes) async {
-    const filename = 'myBusinesscard.png';
-    final path = (await getApplicationDocumentsDirectory()).path;
-    final file = File('$path/$filename');
-    await file.writeAsBytes(pngBytes);
-    return file;
+      print("Image saved at: $imagePath");
+      return imgFile;
+    } else {
+      print("Directory not found");
+    }
+    return null;
   }
 
-  void createBusinessCard(Uint8List image) async {
-    Map<String, dynamic> namecardCreateRequest = {
+  // Future<File> createFile(Uint8List pngBytes) async {
+  //   const filename = 'myBusinesscard.png';
+  //   final path = (await getApplicationDocumentsDirectory()).path;
+  //   final file = File('$path/$filename');
+  //   await file.writeAsBytes(pngBytes);
+  //   return file;
+  // }
+
+  void createBusinessCard(Uint8List bytes) async {
+    Map<String, String> namecardCreateRequest = {
       "namecardName": registeredName,
       "namecardEmail": registeredEmail,
       "namecardCompany": registeredCompany,
       "namecardJob": registeredJob,
       "namecardAddress": registeredAddress,
       "namecardPhone": registeredPhone,
+      "namecardTel": "",
       "namecardFax": registeredFax,
       "namecardWebsite": registeredWebsite
     };
@@ -139,9 +143,9 @@ class _BusinessCardSelfCreatePageState
     final response = await apiService.postRequestWithFile(
         'namecard-service/',
         "namecardCreateRequest",
-        namecardCreateRequest,
+        jsonEncode(namecardCreateRequest),
         TokenManager().accessToken,
-        image);
+        bytes);
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       // showDialog(
@@ -406,8 +410,8 @@ class _BusinessCardSelfCreatePageState
                     MainButton(
                       title: "등록",
                       onPressed: () async {
-                        Uint8List image = await capturePng();
-                        createBusinessCard(image);
+                        Uint8List bytes = await capturePng();
+                        createBusinessCard(bytes);
                       },
                     ),
                     SizedBox(height: screenHeight * 0.04),

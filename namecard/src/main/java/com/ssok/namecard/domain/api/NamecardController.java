@@ -37,7 +37,7 @@ public class NamecardController {
 
     /**
      * 명함 등록
-     * @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+     * @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
      */
     @PostMapping(path = "/", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<Long> createNamecardRequest(

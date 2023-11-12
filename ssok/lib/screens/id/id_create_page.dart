@@ -29,28 +29,28 @@ class RecognizedRegCard {
   final String registrationCardIssueDate;
   final String registrationCardAuthority;
 
-  RecognizedRegCard({
-    required this.registrationCardName,
-    required this.registrationCardPersonalNumber,
-    required this.registrationCardAddress,
-    required this.registrationCardIssueDate,
-    required this.registrationCardAuthority
-  });
+  RecognizedRegCard(
+      {required this.registrationCardName,
+      required this.registrationCardPersonalNumber,
+      required this.registrationCardAddress,
+      required this.registrationCardIssueDate,
+      required this.registrationCardAuthority});
 }
 
 class _IdCreatePageState extends State<IdCreatePage> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _personalNumberController = TextEditingController();
+  final TextEditingController _personalNumberController =
+      TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _issueDateController = TextEditingController();
   final TextEditingController _authorityController = TextEditingController();
 
   ApiService apiService = ApiService();
-  late String registrationCardName="";
-  late String registrationCardPersonalNumber="";
-  late String registrationCardAddress="";
-  late String registrationCardIssueDate="";
-  late String registrationCardAuthority="";
+  late String registrationCardName = "";
+  late String registrationCardPersonalNumber = "";
+  late String registrationCardAddress = "";
+  late String registrationCardIssueDate = "";
+  late String registrationCardAuthority = "";
   late XFile image;
 
   bool checkRegistrationCardName = false;
@@ -59,39 +59,39 @@ class _IdCreatePageState extends State<IdCreatePage> {
   bool checkRegistrationCardIssueDate = false;
   bool checkRegistrationCardAuthority = false;
 
-  void register() async {
-    if(checkRegistrationCardName &&
-        checkRegistrationCardPersonalNumber &&
-        checkRegistrationCardAddress &&
-        checkRegistrationCardIssueDate &&
-        checkRegistrationCardAuthority){
-      Map<String, dynamic> requestData = {
-        "registrationCardName": registrationCardName,
-        "registrationCardPersonalNumber": registrationCardPersonalNumber,
-        "registrationCardAddress": registrationCardAddress,
-        "registrationCardIssueDate": registrationCardIssueDate,
-        "registrationCardAuthority": registrationCardAuthority
-      };
-      var bytes = await File(image.path).readAsBytes();
-      final response = await apiService.postRequestWithFile(
-          'idcard-service/registration',
-          'licenseCreateRequest',
-          requestData,
-          TokenManager().accessToken
-          ,bytes);
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        print(jsonData);
-        Navigator.of(context).pushReplacementNamed('/');
-      } else {
-        throw Exception('Failed to load');
-      }
-    }
-  }
+  // void register() async {
+  //   if (checkRegistrationCardName &&
+  //       checkRegistrationCardPersonalNumber &&
+  //       checkRegistrationCardAddress &&
+  //       checkRegistrationCardIssueDate &&
+  //       checkRegistrationCardAuthority) {
+  //     Map<String, String> requestData = {
+  //       "registrationCardName": registrationCardName,
+  //       "registrationCardPersonalNumber": registrationCardPersonalNumber,
+  //       "registrationCardAddress": registrationCardAddress,
+  //       "registrationCardIssueDate": registrationCardIssueDate,
+  //       "registrationCardAuthority": registrationCardAuthority
+  //     };
+  //     var bytes = await File(image.path).readAsBytes();
+  //     final response = await apiService.postRequestWithFile(
+  //         'idcard-service/registration',
+  //         requestData,
+  //         TokenManager().accessToken,
+  //         bytes);
+  //     if (response.statusCode == 200) {
+  //       final jsonData = jsonDecode(response.body);
+  //       print(jsonData);
+  //       Navigator.of(context).pushReplacementNamed('/');
+  //     } else {
+  //       throw Exception('Failed to load');
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final ImageAndData args = ModalRoute.of(context)!.settings.arguments as ImageAndData;
+    final ImageAndData args =
+        ModalRoute.of(context)!.settings.arguments as ImageAndData;
     registrationCardName = args.data.registrationCardName;
     registrationCardPersonalNumber = args.data.registrationCardPersonalNumber;
     registrationCardAddress = args.data.registrationCardAddress;
@@ -139,99 +139,97 @@ class _IdCreatePageState extends State<IdCreatePage> {
           ),
           Form(
               child: Theme(
-                data: ThemeData(
-                    primaryColor: Colors.grey,
-                    inputDecorationTheme: InputDecorationTheme(
-                        labelStyle: TextStyle(color: Colors.teal, fontSize: 15.0))),
-                child: Container(
-                    padding: EdgeInsets.all(40.0),
-                    // 키보드가 올라와서 만약 스크린 영역을 차지하는 경우 스크롤이 되도록
-                    // SingleChildScrollView으로 감싸 줌
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          TextField(
-                            controller: _nameController,
-                            decoration: InputDecoration(labelText: '이름'),
-                            keyboardType: TextInputType.name,
-                            onChanged: (value){
-                              setState(() {
-                                registrationCardName = value.trim();
-                                checkRegistrationCardName =
-                                    registrationCardName.isNotEmpty;
-                              });
-                            },
-                          ),
-                          TextField(
-                            controller: _personalNumberController,
-                            decoration: InputDecoration(labelText: '주민등록번호'),
-                            keyboardType: TextInputType.text,
-                            onChanged: (value){
-                              setState(() {
-                                registrationCardPersonalNumber = value.trim();
-                                checkRegistrationCardPersonalNumber =
-                                    registrationCardPersonalNumber.isNotEmpty;
-                              });
-                            },
-                          ),
-                          TextField(
-                            controller: _addressController,
-                            decoration: InputDecoration(labelText: '주소'),
-                            keyboardType: TextInputType.streetAddress,
-                            onChanged: (value){
-                              setState(() {
-                                registrationCardAddress = value.trim();
-                                checkRegistrationCardAddress = registrationCardAddress.isNotEmpty;
-                              });
-                            },
-                          ),
-                          TextField(
-                            controller: _issueDateController,
-                            decoration:InputDecoration(labelText: '발급일자'),
-                            keyboardType: TextInputType.datetime,
-                            onChanged: (value){
-                              registrationCardIssueDate = value.trim();
-                              checkRegistrationCardIssueDate = registrationCardIssueDate.isNotEmpty;
-                            },
-                          ),
-                          TextField(
-                            controller: _authorityController,
-                            decoration: InputDecoration(labelText: '인증기관'),
-                            keyboardType: TextInputType.text,
-                            onChanged: (value){
-                              setState(() {
-                                registrationCardAuthority = value.trim();
-                                checkRegistrationCardAuthority = registrationCardAuthority.isNotEmpty;
-                              });
-                            },
-                          ),
-                          Row(
-                              children: [
-                                Expanded(
-                                  child: ButtonTheme(
-                                      height: 50.0,
-                                      child: ElevatedButton(
-                                        onPressed: (){
-                                          register();
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.blueAccent
-                                        ),
-                                        child: Icon(
-                                          Icons.accessibility,
-                                          color: Colors.white,
-                                          size: 35.0,
-                                        ),
-                                      )
-                                  ),
-                                )
-                              ]
-                          ),
-                        ],
+            data: ThemeData(
+                primaryColor: Colors.grey,
+                inputDecorationTheme: InputDecorationTheme(
+                    labelStyle: TextStyle(color: Colors.teal, fontSize: 15.0))),
+            child: Container(
+                padding: EdgeInsets.all(40.0),
+                // 키보드가 올라와서 만약 스크린 영역을 차지하는 경우 스크롤이 되도록
+                // SingleChildScrollView으로 감싸 줌
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      TextField(
+                        controller: _nameController,
+                        decoration: InputDecoration(labelText: '이름'),
+                        keyboardType: TextInputType.name,
+                        onChanged: (value) {
+                          setState(() {
+                            registrationCardName = value.trim();
+                            checkRegistrationCardName =
+                                registrationCardName.isNotEmpty;
+                          });
+                        },
                       ),
-                    )),
-              )
-          )
+                      TextField(
+                        controller: _personalNumberController,
+                        decoration: InputDecoration(labelText: '주민등록번호'),
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          setState(() {
+                            registrationCardPersonalNumber = value.trim();
+                            checkRegistrationCardPersonalNumber =
+                                registrationCardPersonalNumber.isNotEmpty;
+                          });
+                        },
+                      ),
+                      TextField(
+                        controller: _addressController,
+                        decoration: InputDecoration(labelText: '주소'),
+                        keyboardType: TextInputType.streetAddress,
+                        onChanged: (value) {
+                          setState(() {
+                            registrationCardAddress = value.trim();
+                            checkRegistrationCardAddress =
+                                registrationCardAddress.isNotEmpty;
+                          });
+                        },
+                      ),
+                      TextField(
+                        controller: _issueDateController,
+                        decoration: InputDecoration(labelText: '발급일자'),
+                        keyboardType: TextInputType.datetime,
+                        onChanged: (value) {
+                          registrationCardIssueDate = value.trim();
+                          checkRegistrationCardIssueDate =
+                              registrationCardIssueDate.isNotEmpty;
+                        },
+                      ),
+                      TextField(
+                        controller: _authorityController,
+                        decoration: InputDecoration(labelText: '인증기관'),
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          setState(() {
+                            registrationCardAuthority = value.trim();
+                            checkRegistrationCardAuthority =
+                                registrationCardAuthority.isNotEmpty;
+                          });
+                        },
+                      ),
+                      Row(children: [
+                        Expanded(
+                          child: ButtonTheme(
+                              height: 50.0,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // register();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blueAccent),
+                                child: Icon(
+                                  Icons.accessibility,
+                                  color: Colors.white,
+                                  size: 35.0,
+                                ),
+                              )),
+                        )
+                      ]),
+                    ],
+                  ),
+                )),
+          ))
         ],
       ),
     );

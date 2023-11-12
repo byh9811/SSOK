@@ -110,7 +110,10 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
+      if(jsonData["status"]["cope"]==0)
+        return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
+      else
+        return "위치 정보를 파악할 수 없습니다.";
     } else {
       throw Exception('Failed to get address from Naver API');
     }
@@ -255,8 +258,8 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
         locationButtonEnable: true,
         consumeSymbolTapEvents: true,
         initialCameraPosition: NCameraPosition(
-            target: currentLocation ?? NLatLng(37.5666102, 126.9783881),
-            zoom: 15),
+            target: currentLocation ?? NLatLng(36.34, 127.77),
+            zoom: 6),
       ),
       onMapReady: onMapReady,
       // onMapTapped: onMapTapped,

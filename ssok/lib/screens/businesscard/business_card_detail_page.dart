@@ -59,8 +59,9 @@ class NameCardHead{
   late String? nameCardName;
   late String? nameCardJob;
   late int? nameCardMemberSeq;
+  late int? exchangeSeq;
   
-  NameCardHead(this.nameCardImage, this.nameCardName, this.nameCardJob, this.nameCardMemberSeq);
+  NameCardHead(this.nameCardImage, this.nameCardName, this.nameCardJob, this.nameCardMemberSeq, this.exchangeSeq);
 }
 
 class NameCardBody{
@@ -105,7 +106,7 @@ class _BusinessCardDetail extends State<BusinessCardDetail>{
 
     if(response.statusCode ==200){
       setState(() {
-        nameCardHead = NameCardHead(data["namecardImage"],data["namecardName"],data["namecardJob"],data["memberSeq"]);
+        nameCardHead = NameCardHead(data["namecardImage"],data["namecardName"],data["namecardJob"],data["memberSeq"], data["exchangeSeq"]);
         nameCardBody = NameCardBody(data["namecardCompany"], data["namecardWebsite"], data["namecardAddress"], data["namecardPhone"], data["namecardTel"], data["namecardFax"], data["namecardEmail"]);
         nameCardPos = NameCardPos(data["lat"], data["lon"]);
       });
@@ -247,7 +248,7 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                 right: screenWidth * 0.008, top: screenHeight * 0.006),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).pop("/main");
+                Navigator.of(context).pushNamed("/businesscard/history", arguments: nameCardHead.exchangeSeq);
               },
               child: SizedBox(
                 width: screenWidth * 0.2,

@@ -27,6 +27,7 @@ class _BusinessCardPageState extends State<BusinessCardPage> {
     final response = await apiService.getRequest(
         "namecard-service/exist", TokenManager().accessToken);
     final json = jsonDecode(response.body);
+    print("명함 보유 여부");
     print(json);
     if (response.statusCode == 200) {
       setState(() {

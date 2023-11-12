@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 
-class BusineessCardHistoryPage extends StatefulWidget {
-  const BusineessCardHistoryPage({Key? key}) : super(key: key);
+class BusineessCardMyHistoryPage extends StatefulWidget {
+  const BusineessCardMyHistoryPage({Key? key}) : super(key: key);
 
   @override
-  State<BusineessCardHistoryPage> createState() => _BusineessCardHistoryPage();
+  State<BusineessCardMyHistoryPage> createState() => _BusineessCardMyHistoryPage();
 }
 
-class _BusineessCardHistoryPage extends State<BusineessCardHistoryPage> {
+class _BusineessCardMyHistoryPage extends State<BusineessCardMyHistoryPage> {
   
   @override
   Widget build(BuildContext context) {
@@ -42,23 +42,23 @@ class _BusineessCardHistoryPage extends State<BusineessCardHistoryPage> {
             height: 1,
             color: Colors.black,
             thickness: 1,
-          ),BusinessCardHistory(exchangeSeq: args)]),
+          ),BusinessCardHistory(namecardSeq: args)]),
     );
   }
 }
 
 class BusinessCardHistory extends StatefulWidget{
-  final int exchangeSeq;
-  const BusinessCardHistory({Key? key, required this.exchangeSeq}) : super(key: key);
+  final int namecardSeq;
+  const BusinessCardHistory({Key? key, required this.namecardSeq}) : super(key: key);
 
   @override
-  State<BusinessCardHistory> createState() => _BusinessCardHistory(exchangeSeq);
+  State<BusinessCardHistory> createState() => _BusinessCardHistory(namecardSeq);
 }
 
 class _BusinessCardHistory extends State<BusinessCardHistory>{
 
-  final int exchangeSeq;
-  _BusinessCardHistory(this.exchangeSeq);
+  final int namecardSeq;
+  _BusinessCardHistory(this.namecardSeq);
 
   ApiService apiService = ApiService();
 
@@ -73,8 +73,7 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
   }
 
   void getHistory()async{
-    final response = await apiService.getRequest("namecard-service/timeline/${exchangeSeq}", TokenManager().accessToken);
-
+    final response = await apiService.getRequest("namecard-service/my/timeline/${namecardSeq}", TokenManager().accessToken);
     final jsonData = jsonDecode(response.body);
     if(response.statusCode==200){
       setState(() {
@@ -82,7 +81,6 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
       });
     }
     print("목록 조회");
-    print(exchangeSeq);
     print(imageList.length);
   }
 

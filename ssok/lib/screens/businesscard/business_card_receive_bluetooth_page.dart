@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ripple_wave/ripple_wave.dart';
+import 'package:ssok/dto/business_card_data.dart';
 
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
@@ -30,17 +31,15 @@ class _BusinessCardReceiveBluetoothPageState
     extends State<BusinessCardReceiveBluetoothPage>
     with SingleTickerProviderStateMixin {
   ApiService apiService = ApiService();
-  final String userName = Random().nextInt(10000).toString();
+  // final String userName = Random().nextInt(10000).toString();
   final Strategy strategy = Strategy.P2P_STAR;
   Map<String, ConnectionInfo> endpointMap = {};
   String? tempFileUri;
   Map<int, String> map = {};
   bool advertising = false;
   bool scanning = false;
-  late int namecardSeq;
-  List<Endpoint> discoveredEndpoints = [
-    Endpoint(id: "1", name: "나종현", serviceId: "hoho")
-  ];
+  late MyNameCard myNamecardItem;
+  List<Endpoint> discoveredEndpoints = [];
 
   // void showDiscoveredEndpoints(BuildContext context) {
   //   double screenHeight = MediaQuery.of(context).size.height;
@@ -91,7 +90,7 @@ class _BusinessCardReceiveBluetoothPageState
     double screenHeight = MediaQuery.of(context).size.height;
     try {
       bool a = await Nearby().startDiscovery(
-        userName,
+        myNamecardItem.namecardName,
         strategy,
         onEndpointFound: (id, name, serviceId) {
           // show sheet automatically to request connection
@@ -114,7 +113,7 @@ class _BusinessCardReceiveBluetoothPageState
               "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
         },
       );
-      showSnackbar("DISCOVERING: $a");
+      showSnackbar("스캔 시작: $a");
       setState(() {
         scanning = true;
       });
@@ -173,12 +172,14 @@ class _BusinessCardReceiveBluetoothPageState
       duration: const Duration(seconds: 3),
       vsync: this,
     );
+    Permission.nearbyWifiDevices.request();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    namecardSeq = ModalRoute.of(context)!.settings.arguments as int;
+    myNamecardItem = ModalRoute.of(context)!.settings.arguments as MyNameCard;
+    print(myNamecardItem.namecardName);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -227,7 +228,7 @@ class _BusinessCardReceiveBluetoothPageState
             ),
           ),
           Text(
-            "User Name: $namecardSeq",
+            "User: ${myNamecardItem.namecardName}",
             style: TextStyle(color: Colors.white),
           ),
           SizedBox(height: screenHeight * 0.01),
@@ -273,7 +274,7 @@ class _BusinessCardReceiveBluetoothPageState
                       // Navigator.pop(context);
                       // 선택한 디바이스에 대한 추가 동작 수행
                       Nearby().requestConnection(
-                        userName,
+                        myNamecardItem.namecardName,
                         endpoint.id,
                         onConnectionInitiated: (id, info) {
                           onConnectionInit(id, info);
@@ -364,8 +365,8 @@ class _BusinessCardReceiveBluetoothPageState
                                 showSnackbar("$endid: $str");
                                 int seq = int.parse(str);
                                 print(
-                                    "namecardSeqA :  $namecardSeq , namecardSeqB : $seq");
-                                transfer(namecardSeq, seq);
+                                    "namecardSeqA :  ${myNamecardItem.namecardSeq} , namecardSeqB : $seq");
+                                transfer(myNamecardItem.namecardSeq, seq);
                                 // 모달을 띄워서 너도 보낼래????? 해줌
                                 // 확인 누르면 나도 보내는 api 호출
                               }

@@ -53,19 +53,32 @@ class ApiService {
       String? accessToken, Uint8List bytes) async {
     var uri = '$baseUrl/$endpoint';
     print(uri);
-    FormData formData = FormData.fromMap({
-      'image': await MultipartFile.fromBytes(
-        bytes,
-        filename: 'mycard.png',
-        contentType: MediaType('image', 'png'),
-      ),
-      key: data
-    });
+    FormData formData;
+    if(key==null) {
+      formData = FormData.fromMap({
+        'img': await MultipartFile.fromBytes(
+          bytes,
+          filename: 'mycard.png',
+          contentType: MediaType('image', 'png'),
+        ),
+      });
+    } else {
+      formData = FormData.fromMap({
+        'image': await MultipartFile.fromBytes(
+          bytes,
+          filename: 'mycard.png',
+          contentType: MediaType('image', 'png'),
+        ),
+        key: data
+      });
+    }
 
     Dio dio = Dio();
 
     dio.options.headers = {'ACCESS-TOKEN': accessToken};
     dio.options.contentType = 'multipart/form-data';
+
+    print(dio.options.contentType);
     var response = await dio.post(
       uri,
       data: formData,

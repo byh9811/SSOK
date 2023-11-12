@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ssok/dto/business_card_data.dart';
 
 class BusinessCardSendBluetoothPage extends StatefulWidget {
   const BusinessCardSendBluetoothPage({super.key});
@@ -15,14 +16,14 @@ class BusinessCardSendBluetoothPage extends StatefulWidget {
 
 class _BusinessCardSendBluetoothPageState
     extends State<BusinessCardSendBluetoothPage> {
-  final String userName = Random().nextInt(10000).toString();
+  // final String userName = Random().nextInt(10000).toString();
   final Strategy strategy = Strategy.P2P_STAR;
   Map<String, ConnectionInfo> endpointMap = {};
   String? tempFileUri;
   Map<int, String> map = {};
   bool advertising = false;
   bool scanning = false;
-  late int namecardSeq;
+  late MyNameCard myNamecardItem;
 
   @override
   void initState() {
@@ -38,12 +39,12 @@ class _BusinessCardSendBluetoothPageState
   void advertisingStart() async {
     try {
       bool a = await Nearby().startAdvertising(
-        userName,
+        myNamecardItem.namecardName,
         strategy,
         onConnectionInitiated: onConnectionInit,
         onConnectionResult: (id, status) {
           showSnackbar(status);
-          sendBusinessCard(namecardSeq);
+          sendBusinessCard(myNamecardItem.namecardSeq);
         },
         onDisconnected: (id) {
           showSnackbar(
@@ -157,7 +158,7 @@ class _BusinessCardSendBluetoothPageState
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    namecardSeq = ModalRoute.of(context)!.settings.arguments as int;
+    myNamecardItem = ModalRoute.of(context)!.settings.arguments as MyNameCard;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -201,7 +202,7 @@ class _BusinessCardSendBluetoothPageState
               )),
           SizedBox(height: screenHeight * 0.04),
           Text(
-            "User Name: $namecardSeq",
+            "User : ${myNamecardItem.namecardName}",
             style: TextStyle(color: Colors.white),
           ),
           SizedBox(height: screenHeight * 0.01),
@@ -236,7 +237,7 @@ class _BusinessCardSendBluetoothPageState
           ElevatedButton(
             child: const Text("명함 전송"),
             onPressed: () async {
-              sendBusinessCard(namecardSeq);
+              sendBusinessCard(myNamecardItem.namecardSeq);
             },
           ),
         ],
@@ -251,6 +252,7 @@ class _BusinessCardSendBluetoothPageState
   }
 
   void onConnectionInit(String id, ConnectionInfo info) {
+    double screenWidth = MediaQuery.of(context).size.width;
     showModalBottomSheet(
       context: context,
       builder: (builder) {
@@ -261,43 +263,72 @@ class _BusinessCardSendBluetoothPageState
               Text("Token: ${info.authenticationToken}"),
               Text("Name${info.endpointName}"),
               Text("Incoming: ${info.isIncomingConnection}"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+                    child: button(
+                      "수락",
+                      () {
+                        Navigator.pop(context);
+                        setState(() {
+                          endpointMap[id] = info;
+                        });
+                        Nearby().acceptConnection(
+                          // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
+                          id,
+                          onPayLoadRecieved: (endid, payload) async {
+                            // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
+                            if (payload.type == PayloadType.BYTES) {
+                              String str = String.fromCharCodes(
+                                  payload.bytes!); // 바이트 데이터를 문자열로 반환
+                              showSnackbar("$endid: $str");
+                            }
+                          },
+                          onPayloadTransferUpdate:
+                              (endid, payloadTransferUpdate) {
+                            if (payloadTransferUpdate
+                                    .status == // 상태 == IN_PROGRESS인 경우 전송 중인 데이터 양 등을 업데이트
+                                PayloadStatus.IN_PROGRESS) {
+                              print(payloadTransferUpdate.bytesTransferred);
+                            } else if (payloadTransferUpdate.status ==
+                                PayloadStatus.FAILURE) {
+                              // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
+                              print("failed");
+                              showSnackbar("$endid 명함 전송 실패");
+                            } else if (payloadTransferUpdate
+                                    .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
+                                PayloadStatus.SUCCESS) {
+                              showSnackbar(
+                                  "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+                    child: button(
+                      "거절",
+                      () async {
+                        Navigator.pop(context);
+                        try {
+                          await Nearby().rejectConnection(id);
+                        } catch (e) {
+                          showSnackbar(e);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
               ElevatedButton(
                 child: const Text("Accept Connection"),
-                onPressed: () {
-                  Navigator.pop(context);
-                  setState(() {
-                    endpointMap[id] = info;
-                  });
-                  Nearby().acceptConnection(
-                    // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
-                    id,
-                    onPayLoadRecieved: (endid, payload) async {
-                      // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
-                      if (payload.type == PayloadType.BYTES) {
-                        String str = String.fromCharCodes(
-                            payload.bytes!); // 바이트 데이터를 문자열로 반환
-                        showSnackbar("$endid: $str");
-                      }
-                    },
-                    onPayloadTransferUpdate: (endid, payloadTransferUpdate) {
-                      if (payloadTransferUpdate
-                              .status == // 상태 == IN_PROGRESS인 경우 전송 중인 데이터 양 등을 업데이트
-                          PayloadStatus.IN_PROGRESS) {
-                        print(payloadTransferUpdate.bytesTransferred);
-                      } else if (payloadTransferUpdate.status ==
-                          PayloadStatus.FAILURE) {
-                        // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
-                        print("failed");
-                        showSnackbar("$endid: FAILED to transfer file");
-                      } else if (payloadTransferUpdate
-                              .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
-                          PayloadStatus.SUCCESS) {
-                        showSnackbar(
-                            "$endid success, total bytes = ${payloadTransferUpdate.totalBytes}");
-                      }
-                    },
-                  );
-                },
+                onPressed: () {},
               ),
               ElevatedButton(
                 child: const Text("Reject Connection"),
@@ -314,6 +345,28 @@ class _BusinessCardSendBluetoothPageState
           ),
         );
       },
+    );
+  }
+
+  Widget button(
+    title,
+    onPressed,
+  ) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(screenWidth * 0.3, screenHeight * 0.06),
+        backgroundColor: Color(0xFF00ADEF),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        ),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: 18),
+      ),
     );
   }
 }

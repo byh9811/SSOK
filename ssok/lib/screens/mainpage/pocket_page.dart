@@ -75,7 +75,7 @@ void getAccountStatus()async{
 
 void getPocket()async{
     final response = await apiService.getRequest('pocket-service/pocket', TokenManager().accessToken);
-    print("포켓가져옴");
+    print("pocket_page getPocket()");
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       print(jsonDecode(utf8.decode(response.bodyBytes)));
@@ -85,7 +85,7 @@ void getPocket()async{
         pocketTotalPoint = jsonData['response']['pocketTotalPoint'];
       });
     } else {
-      print("에러다 에러");
+      print("pocket_page getPocket() 오류 발생");
       print(jsonDecode(utf8.decode(response.bodyBytes))['error']['message']);
       throw Exception('Failed to load');
     }

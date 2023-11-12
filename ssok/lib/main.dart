@@ -14,7 +14,9 @@ import 'package:ssok/screens/creditcard/credit_card_history_list_page.dart';
 import 'package:ssok/screens/creditcard/test.dart';
 import 'package:ssok/screens/creditcard/test2.dart';
 import 'package:ssok/screens/id/drive_id_create_page.dart';
+import 'package:ssok/screens/id/drive_id_detail_page.dart';
 import 'package:ssok/screens/id/id_create_page.dart';
+import 'package:ssok/screens/id/id_detail_page.dart';
 
 import 'package:ssok/screens/login/login_page.dart';
 import 'package:ssok/screens/login/signin_page.dart';
@@ -54,12 +56,14 @@ class MyApp extends StatelessWidget {
         '/signin': (context) => SigninPage(),
         '/main': (context) => MainPage(),
         '/id/create': (context) => IdCreatePage(),
+        '/id/detail': (context) => IdDetailPage(),
         '/drive/id/create': (context) => DriveIdCreatePage(),
+        '/drive/id/detail': (context) => DriveIdDetailPage(),
         '/creditcard/payment': (context) => CreditCardPaymentPage(),
         '/businesscard/my': (context) => BusinessCardMyPage(),
         '/businesscard/detail': (context) => BusinessCardDetailPage(),
         '/businesscard/self/create': (context) => BusinessCardSelfCreatePage(),
-        '/businesscard/history':(context) => BusineessCardHistoryPage(),
+        '/businesscard/history': (context) => BusineessCardHistoryPage(),
         '/businesscard/camera/create': (context) =>
             BusinessCardCameraCreatePage(),
         '/businesscard/map': (context) => BusinessCardMapPage(),

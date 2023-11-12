@@ -3,6 +3,7 @@ package com.ssok.namecard.domain.api;
 import static com.ssok.namecard.global.api.ApiResponse.OK;
 
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
+import com.ssok.namecard.domain.api.dto.response.MyNamecardDetailResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardDetailDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMainDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMapResponse;
@@ -122,6 +123,9 @@ public class NamecardController {
         return OK(namecardDetailDocResponse);
     }
 
+    /**
+     * 업데이트 반영 yes
+     * */
     @PostMapping("/{exchangeSeq}")
     public ApiResponse<NamecardResponse> updateNamecard(
         @PathVariable Long exchangeSeq
@@ -209,4 +213,15 @@ public class NamecardController {
         namecardService.uploadFileTest(file);
         return OK("이미지 업로드 성공입니다.");
     }
+
+    @GetMapping("/my/{namecardSeq}")
+    public ApiResponse<MyNamecardDetailResponse> getMyNamecardDetail(
+        @PathVariable Long namecardSeq,
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid
+    ){
+        MyNamecardDetailResponse namecardDetailDocResponse = namecardService.getMyNamecardDetail(namecardSeq, memberUuid);
+        log.info("명함 상세 body 로그: {}", namecardDetailDocResponse);
+        return OK(namecardDetailDocResponse);
+    }
+
 }

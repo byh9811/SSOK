@@ -3,6 +3,7 @@ package com.ssok.namecard.domain.service;
 import com.ssok.namecard.client.MemberServiceClient;
 import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
 import com.ssok.namecard.domain.api.dto.response.MyExchangeItemResponse;
+import com.ssok.namecard.domain.api.dto.response.MyNamecardDetailResponse;
 import com.ssok.namecard.domain.api.dto.response.MyNamecardItemResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardDetailDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMainDocResponse;
@@ -319,5 +320,14 @@ public class NamecardService {
         //그 명함 중 root가 업데이트 시켜야할 root와 같은 것
         exchange.updateNamecard(latestNamecard);
         return new NamecardResponse(latestNamecard, exchange);
+    }
+
+    public MyNamecardDetailResponse getMyNamecardDetail(Long namecardSeq, String memberUuid) {
+        Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
+        //내 명함 조회
+        Namecard myNamecard = findBySeqFromNamecardRepository(namecardSeq);
+        if(!myNamecard.getMemberSeq().equals(memberSeq)) throw new NamecardException(ErrorCode.NAMECARD_UNAUTHORIZED);
+        MyNamecardDetailResponse  myNamecardDetailResponse = new MyNamecardDetailResponse(myNamecard);
+        return myNamecardDetailResponse;
     }
 }

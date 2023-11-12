@@ -15,6 +15,7 @@ public enum ErrorCode {
     NAMECARD_NOT_FOUND("NAMECARD_01", HttpStatus.NOT_FOUND, "존재하지 않는 명함입니다."),
     NAMECARD_BAD_REQUEST("NAMECARD_02", HttpStatus.BAD_REQUEST, "이미지는 필수입니다."),
     GCS_EXCEPTION("NAMECARD_03", HttpStatus.BAD_REQUEST, "GCS 업로드시 오류가 발생했습니다."),
+    NAMECARD_UNAUTHORIZED("NAMECARD_03", HttpStatus.UNAUTHORIZED, "내 명함이 아닙니다."),
 
 
     /* 명함교환 예외 */

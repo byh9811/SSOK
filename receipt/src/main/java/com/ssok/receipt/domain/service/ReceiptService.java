@@ -10,6 +10,7 @@ import com.ssok.receipt.domain.maria.repository.EcoItemRepository;
 import com.ssok.receipt.domain.maria.repository.PurchaseItemRepository;
 import com.ssok.receipt.domain.maria.repository.ReceiptRepository;
 import com.ssok.receipt.domain.service.dto.ReceiptCreateServiceDto;
+import com.ssok.receipt.global.api.ApiResponse;
 import com.ssok.receipt.global.openfeign.member.MemberClient;
 import com.ssok.receipt.global.openfeign.mydata.bank.BankAccessUtil;
 import com.ssok.receipt.global.openfeign.pocket.PocketClient;
@@ -76,7 +77,12 @@ public class ReceiptService {
                     .pocketHistoryType("CARBON")
                     .pocketHistoryTransAmt(earnedCNP)
                     .build();
-            pocketClient.createPocketHistory(request);
+            try {
+                pocketClient.createPocketHistory(request);
+            } catch(Exception e) {
+                log.info("포켓이 없어서 기록은 안했습니다~");
+            }
+
         }
 
         // 잔금 적립 계산

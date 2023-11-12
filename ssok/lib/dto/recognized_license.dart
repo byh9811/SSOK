@@ -1,26 +1,26 @@
 class RecognizedLicense {
-  final String licenseName;
-  final String licensePersonalNumber;
-  final String licenseType;
-  final String licenseAddress;
-  final String licenseNumber;
-  final String licenseRenewStartDate;
-  final String licenseRenewEndDate;
-  final String licenseCondition;
-  final String licenseCode;
-  final String licenseIssueDate;
-  final String licenseAuthority;
+  String? licenseName;
+  String? licensePersonalNumber;
+  String? licenseType;
+  String? licenseAddress;
+  String? licenseNumber;
+  String? licenseRenewStartDate;
+  String? licenseRenewEndDate;
+  String? licenseCondition;
+  String? licenseCode;
+  String? licenseIssueDate;
+  String? licenseAuthority;
 
   RecognizedLicense(
-      {required this.licenseName,
-      required this.licensePersonalNumber,
-      required this.licenseType,
-      required this.licenseAddress,
-      required this.licenseNumber,
-      required this.licenseRenewStartDate,
-      required this.licenseRenewEndDate,
-      required this.licenseCondition,
-      required this.licenseCode,
-      required this.licenseIssueDate,
-      required this.licenseAuthority});
+      {this.licenseName,
+      this.licensePersonalNumber,
+      this.licenseType,
+      this.licenseAddress,
+      this.licenseNumber,
+      this.licenseRenewStartDate,
+      this.licenseRenewEndDate,
+      this.licenseCondition,
+      this.licenseCode,
+      this.licenseIssueDate,
+      this.licenseAuthority});
 }

@@ -81,9 +81,9 @@ class _RegisteredIdCardState extends State<RegisteredIdCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  idInfoText(context, "이름", "나종현"),
+                  idInfoText(context, "이름", widget.registrationCard!.registrationCardName),
                   SizedBox(height: screenHeight * 0.01),
-                  idInfoText(context, "주민번호", "980113-1******"),
+                  idInfoText(context, "주민번호", widget.registrationCard!.registrationCardPersonalNumber),
                   Expanded(
                     child: Align(
                       alignment: Alignment.bottomRight,

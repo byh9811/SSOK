@@ -33,7 +33,7 @@ public class RegistrationCard extends BaseEntity implements Serializable {
     private String registrationCardPersonalNumber;
 
     @Column(nullable = false)
-    @Size(max = 50)
+    @Size(max = 200)
     private String registrationCardAddress;
 
     @Column(nullable = false)

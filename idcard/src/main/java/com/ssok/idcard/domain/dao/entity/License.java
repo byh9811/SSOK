@@ -35,7 +35,7 @@ public class License extends BaseEntity implements Serializable {
     private String licenseType;
 
     @Column(nullable = false)
-    @Size(max = 50)
+    @Size(max = 200)
     private String licenseAddress;
 
     @Column(nullable = false)

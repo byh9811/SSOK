@@ -99,7 +99,7 @@ class _MyFavoriteCard extends State<MyFavoriteCard>{
             thickness: 1,
           ),
           SizedBox(
-          height: 100, //////////////////////////////////////////////////////내부 높이랑 동일하게 설정하기
+          height: 150, //////////////////////////////////////////////////////내부 높이랑 동일하게 설정하기
           child: ListView.builder(
             itemCount: widget.favorites.length,
             itemBuilder: (context, index) {
@@ -249,8 +249,6 @@ class _ExchangeCardListState extends State<ExchangeCardList> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     print("뭐 : ${widget.myExchangeItems.length}");
 
     return Column(

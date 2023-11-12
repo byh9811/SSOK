@@ -23,19 +23,17 @@ public record RecognizedNameCardResponse(
         String homepage
 ) {
     public static RecognizedNameCardResponse from(NameCardOcrResponse.Result nameCard) {
-        System.out.println("record from method-------------------");
-        System.out.println(nameCard.toString());
         return RecognizedNameCardResponse.builder()
-                .name(nameCard.getName().get(0).getFormatted().getValue())
-                .company(nameCard.getCompany().get(0).getFormatted().getValue())
-                .department(nameCard.getAddress().get(0).getFormatted().getValue())
-                .address(nameCard.getAddress().get(0).getFormatted().getValue())
-                .position(nameCard.getPosition().get(0).getFormatted().getValue())
-                .mobile(nameCard.getMobile().get(0).getFormatted().getValue())
-                .tel(nameCard.getTel().get(0).getFormatted().getValue())
-                .fax(nameCard.getFax().get(0).getFormatted().getValue())
-                .email(nameCard.getEmail().get(0).getFormatted().getValue())
-                .homepage(nameCard.getHomepage().get(0).getFormatted().getValue())
+                .name(nameCard.getName() == null ? null : nameCard.getName().get(0).getText())
+                .company(nameCard.getCompany()== null ? null : nameCard.getCompany().get(0).getText())
+                .department(nameCard.getAddress() == null ? null : nameCard.getAddress().get(0).getText())
+                .address(nameCard.getAddress() == null ? null : nameCard.getAddress().get(0).getText())
+                .position(nameCard.getPosition() == null ? null : nameCard.getPosition().get(0).getText())
+                .mobile(nameCard.getMobile() == null ? null : nameCard.getMobile().get(0).getText())
+                .tel(nameCard.getTel() == null ? null : nameCard.getTel().get(0).getText())
+                .fax(nameCard.getFax() == null ? null : nameCard.getFax().get(0).getText())
+                .email(nameCard.getEmail() == null ? null : nameCard.getEmail().get(0).getText())
+                .homepage(nameCard.getHomepage() == null ? null : nameCard.getHomepage().get(0).getText())
                 .build();
     }
 }

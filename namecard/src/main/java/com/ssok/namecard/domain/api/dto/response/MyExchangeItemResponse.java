@@ -8,6 +8,7 @@ public record MyExchangeItemResponse(
     Long exchangeSeq,
     Long namecardSeq,
     Long belongNamecardSeq,
+    String namecardImg,
     String name,
     UpdateStatus updateStatus,
     String company,
@@ -19,7 +20,7 @@ public record MyExchangeItemResponse(
         this(exchange, exchange.getReceiveNamecard(), exchange.getSendNamecard());
     }
     public MyExchangeItemResponse(Exchange exchange, Namecard receiveNamecard, Namecard sendNamecard){
-        this(exchange.getExchangeSeq(), receiveNamecard.getNamecardSeq(), sendNamecard.getNamecardSeq(), receiveNamecard.getNamecardName(), exchange.getUpdateStatus(), receiveNamecard.getNamecardCompany(),
+        this(exchange.getExchangeSeq(), receiveNamecard.getNamecardSeq(), sendNamecard.getNamecardSeq(), receiveNamecard.getNamecardImage(), receiveNamecard.getNamecardName(), exchange.getUpdateStatus(), receiveNamecard.getNamecardCompany(),
             receiveNamecard.getNamecardJob(), exchange.getCreateDate().toLocalDate().toString(), exchange.getExchangeIsFavorite());
     }
 }

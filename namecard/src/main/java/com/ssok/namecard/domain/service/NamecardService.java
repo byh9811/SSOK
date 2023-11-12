@@ -192,21 +192,12 @@ public class NamecardService {
         Long memberSeq = receivedNamecard.getMemberSeq();
         List<Namecard> allByMemberSeqNamecards = findByMemberSeqFromNamecardRepository(memberSeq);
         List<TimeLineResponse> timelines = allByMemberSeqNamecards.stream()
-                                                                .filter(
-                                                                    namecard -> namecard.getRootNamecardSeq()
-                                                                                        .equals(
+                                                                .filter(namecard -> namecard.getRootNamecardSeq().equals(
                                                                                             receivedNamecard.getRootNamecardSeq()))
-                                                                .filter(
-                                                                    namecard ->
-                                                                        namecard.getCreateDate()
-                                                                                .compareTo(
-                                                                                    exchange.getCreateDate())
-                                                                            >= 0)
-                                                                .map(
-                                                                    namecard -> new TimeLineResponse(
-                                                                        namecard))
-                                                                .collect(
-                                                                    Collectors.toList());
+                                                                .filter(namecard ->namecard.getCreateDate().toLocalDate()
+                                                                                .compareTo(exchange.getCreateDate().toLocalDate()) >= 0)
+                                                                .map(namecard -> new TimeLineResponse(namecard))
+                                                                .collect(Collectors.toList());
         return timelines;
     }
 

@@ -270,8 +270,10 @@ class BusinessCardListHeader extends StatefulWidget {
 }
 
 class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
+
   final int namecardCnt;
   _BusinessCardListHeaderState(this.namecardCnt);
+
 
   @override
   Widget build(BuildContext context) {
@@ -406,6 +408,7 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
 // }
 
 class CustomListItem extends StatelessWidget {
+
   const CustomListItem({
     Key? key,
     required this.name,
@@ -420,6 +423,13 @@ class CustomListItem extends StatelessWidget {
   final String company;
   final String dateTime;
   final bool favorite;
+
+  // ApiService apiService = ApiService();
+
+  // void makeFavorite()async{
+  //   final response = await apiService.postRequest("namecard-service/like",{},TokenManager().accessToken);
+  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -446,7 +456,12 @@ class CustomListItem extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    if(favorite) Container(child:Icon(Icons.star,color: Colors.yellow,))
+                    if(favorite) InkWell(
+                      onTap: () {
+                        // makeFavorite();
+                      },
+                      child:Icon(Icons.star, color: Colors.yellow),
+                    ),
                   ],
                 ),
 

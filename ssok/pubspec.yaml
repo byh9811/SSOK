@@ -58,6 +58,7 @@ dependencies:
   path_provider: ^2.1.1
   http_parser: ^4.0.2
   dio: ^5.3.3
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

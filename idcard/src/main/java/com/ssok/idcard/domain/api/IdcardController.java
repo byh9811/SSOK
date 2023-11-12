@@ -13,6 +13,7 @@ import com.ssok.idcard.domain.service.dto.RegistrationGetDto;
 import com.ssok.idcard.global.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +29,7 @@ public class IdcardController {
     private final AnalysisService analysisService;
     private final MemberServiceClient memberServiceClient;
 
-    @PostMapping("/license")
+    @PostMapping(value = "/license", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<Void> createLicense(
             @RequestHeader("MEMBER-UUID") String memberUUID,
             @RequestPart LicenseCreateRequest licenseCreateRequest,
@@ -64,7 +65,7 @@ public class IdcardController {
         else return OK(registrationGetDto.of(registrationGetDto));
     }
 
-    @PostMapping("/registration")
+    @PostMapping(value = "/registration", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<Void> createRegistrationCard(
             @RequestHeader("MEMBER-UUID") String memberUUID,
             @RequestPart RegistrationCardCreateRequest request,
@@ -77,7 +78,7 @@ public class IdcardController {
         return OK(null);
     }
 
-    @PostMapping("/scan/registration")
+    @PostMapping(value = "/scan/registration", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<RecognizedRegistrationCardResponse> ocrRegistration(
             @RequestPart(value="img") MultipartFile file
     ) {
@@ -86,7 +87,7 @@ public class IdcardController {
         return OK(result);
     }
 
-    @PostMapping("/scan/license")
+    @PostMapping(value = "/scan/license", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<RecognizedLicenseResponse> ocrLicense(
             @RequestPart(value="img") MultipartFile file
     ) {
@@ -95,7 +96,7 @@ public class IdcardController {
         return OK(result);
     }
 
-    @PostMapping("/scan/namecard")
+    @PostMapping(value = "/scan/namecard", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<RecognizedNameCardResponse> ocrNameCard(
             @RequestPart(value="img") MultipartFile file
     ) {

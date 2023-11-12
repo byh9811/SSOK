@@ -18,19 +18,43 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () {
+      shake();
+    });
+    // detector = ShakeDetector.autoStart(
+    //   onPhoneShake: () {
+    //     if (Navigator.of(context).canPop()) {
+    //       Navigator.of(context).pop();
+    //     }
+
+    //     Navigator.of(context).pushNamed('/creditcard/payment', arguments:{"ownerName":widget.creditCard.ownerName,"cardNum":widget.creditCard.cardNum});
+    //   },
+    //   minimumShakeCount: 3,
+    //   shakeSlopTimeMS: 500,
+    //   shakeCountResetTime: 3000,
+    //   shakeThresholdGravity: 2.7,
+    // );
+  }
+
+  void shake(){
+    String cardNum = widget.creditCard.cardNum;
+    String ownerName = widget.creditCard.ownerName; 
+    print(widget.creditCard.cardName);
+    print(widget.creditCard.cardNum);
     detector = ShakeDetector.autoStart(
       onPhoneShake: () {
         if (Navigator.of(context).canPop()) {
           Navigator.of(context).pop();
         }
-        Navigator.of(context).pushNamed('/creditcard/payment');
+        Navigator.of(context).pushNamed('/creditcard/payment', arguments:{"ownerName":cardNum,"cardNum":ownerName});
       },
-      minimumShakeCount: 1,
+      minimumShakeCount: 3,
       shakeSlopTimeMS: 500,
       shakeCountResetTime: 3000,
       shakeThresholdGravity: 2.7,
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

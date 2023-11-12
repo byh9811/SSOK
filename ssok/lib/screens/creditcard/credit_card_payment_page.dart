@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -138,7 +139,6 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
     });
   
   }
-
   void createPayment () async {
     print("생성@@@@@@@@@@@@@@@@생성");
 
@@ -217,7 +217,31 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   void _tagRead() {
     checkNFCAvailability();
     print("1231232131");
-    
+    Future.delayed(Duration(seconds: 5), () async {
+      await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("시간 초과"),
+            content: Text(
+              "결제 시간이 초과했습니다. 다시 시도해주세요.",
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
+            actions: <Widget>[  
+              TextButton(
+                onPressed: () { 
+                  Navigator.of(context).pop();
+                  
+                  // Navigator.of(context).pop();
+                  },
+                child: Text("확인"),
+              ),
+            ],
+          ),
+        );
+      print("60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@");
+      return;
+    });
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       var ndef = Ndef.from(tag);
       if (ndef != null) {
@@ -284,8 +308,6 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
     return;
   }
   createPayment();
-  // 결과 출력
-
   }
 
 
@@ -398,6 +420,10 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
 
 
 
+
+
+
+
   @override
   void initState() {
     super.initState();
@@ -413,12 +439,8 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
         print(args!['cardNum']); // 'value'
       }
     });
-    
+  
     check();
-    // _authenticateWithBiometrics();
-    // checkNFCAvailability();
-    //                                                                                                                                                        _ndefWrite();    
-    // checkNFCAvailability();
   }
 
   @override

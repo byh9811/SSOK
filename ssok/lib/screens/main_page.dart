@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/mainpage/id_page.dart';
 import 'package:ssok/screens/mainpage/business_card_page.dart';
 import 'package:ssok/screens/mainpage/credit_card_page.dart';
@@ -14,7 +18,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0; // 현재 보여주려는 index
-
+  bool _isCheckedChanges = false;
   final List<Widget> navPages = [
     // 각 위젯 페이지들
     IDPage(),
@@ -24,21 +28,52 @@ class _MainPageState extends State<MainPage> {
     PocketPage(),
   ];
 
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
+  ApiService apiService = ApiService();
+
+  late String memberName;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      memberName = TokenManager().memberName ?? "회원";
+    });
+  }
+
+  void logOut() async {
+    print(TokenManager().loginId);
+    print(TokenManager().accessToken);
+    final response = await apiService.postRequest(
+        "member-service/logout",
+        {"memberId": TokenManager().loginId.toString()},
+        TokenManager().accessToken);
+    print(response.body);
+    // if(response.statusCode==200){
+    Navigator.of(context).pushNamed("/");
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      key: _key,
       appBar: AppBar(
         elevation: 0,
         actions: [
           IconButton(
             icon: Icon(
-              Icons.notifications_none,
+              Icons.menu,
               color: Color(0xFF676767),
               size: 30.0,
             ),
-            onPressed: () {},
+            onPressed: () {
+              _key.currentState?.openEndDrawer();
+            },
           )
         ],
         title: Image.asset(
@@ -55,6 +90,92 @@ class _MainPageState extends State<MainPage> {
             )),
       ),
       body: navPages.elementAt(currentIndex),
+      endDrawer: SizedBox(
+        width: screenWidth * 0.6,
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              SizedBox(
+                height: screenHeight * 0.15,
+                child: DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF00ADEF),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        memberName,
+                        style: TextStyle(fontSize: 22, color: Colors.white),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.0, left: 4.0),
+                        child: Text(
+                          '님 환영합니다',
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            onPressed: () async {
+                              final result = await showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('로그아웃'),
+                                    content: const Text('로그아웃 하시겠습니까?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          logOut();
+                                        },
+                                        child: const Text('네'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, '아니오');
+                                        },
+                                        child: const Text('아니오'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              if (result == '네') {}
+                            },
+                            icon: Icon(Icons.logout),
+                            color: Color.fromARGB(255, 225, 225, 225),
+                            iconSize: 25,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    "잔돈 저금 활성화",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Switch(
+                    value: _isCheckedChanges,
+                    onChanged: (value) {
+                      setState(() {
+                        _isCheckedChanges = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
       bottomNavigationBar: SizedBox(
         height: 60.0,
         child: BottomNavigationBar(

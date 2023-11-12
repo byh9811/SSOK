@@ -22,7 +22,7 @@ class CreditCardHistory {
 }
 
 class CreditCardDetail {
-  final int? receiptDetailDocumentId;
+  final String? receiptDetailDocumentId;
   final String shopName;
   final int payAmt;
   final String approvedDate;
@@ -41,7 +41,6 @@ List<CreditCardHistory> parseCreditCardHistory(Map<String, Object?> jsonStr) {
   // final jsonData = json.decode(jsonStr);
 
   final response = jsonStr['response'] as Map<String, dynamic>?;
-  print("1");
   print(response);
 
   List<CreditCardHistory> creditCardHistories = [];
@@ -98,7 +97,6 @@ class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
     final response = await apiService.getRequest('receipt-service/card/history/list', TokenManager().accessToken);
     print("카드 전체 내역 가져옴");
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-    // print(jsonData['response']);
     if (response.statusCode == 200) {
       setState(() {
         jsonString = jsonData;
@@ -266,7 +264,7 @@ class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
                     itemBuilder: (context, index) {
                       CreditCardDetail detailData =
                           selectedCreditCardHistory.creditCardDetail[index];
-                      int? receiptDetailDocumentId = detailData.receiptDetailDocumentId;
+                      String? receiptDetailDocumentId = detailData.receiptDetailDocumentId;
                       String approvedDate = detailData.approvedDate;
                       int payAmt =detailData.payAmt;
                       String? shopName = detailData.shopName;

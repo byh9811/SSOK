@@ -55,6 +55,9 @@ dependencies:
   image_picker: ^1.0.4
   permission_handler: ^11.0.1
   ripple_wave:
+  path_provider: ^2.1.1
+  http_parser: ^4.0.2
+  dio: ^5.3.3
 
 dev_dependencies:
   flutter_test:

@@ -20,6 +20,9 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
     super.initState();
     Future.delayed(Duration.zero, () {
       shake();
+       if (!Navigator.of(context).canPop()) {
+        detector.startListening();
+       }
     });
     // detector = ShakeDetector.autoStart(
     //   onPhoneShake: () {
@@ -41,12 +44,11 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
     String ownerName = widget.creditCard.ownerName; 
     print(widget.creditCard.cardName);
     print(widget.creditCard.cardNum);
-    detector = ShakeDetector.autoStart(
+    detector = ShakeDetector.waitForStart(
       onPhoneShake: () {
-        if (Navigator.of(context).canPop()) {
-          Navigator.of(context).pop();
+        if (!Navigator.of(context).canPop()) {
+          Navigator.of(context).pushNamed('/creditcard/payment', arguments:{"ownerName":cardNum,"cardNum":ownerName});
         }
-        Navigator.of(context).pushNamed('/creditcard/payment', arguments:{"ownerName":cardNum,"cardNum":ownerName});
       },
       minimumShakeCount: 3,
       shakeSlopTimeMS: 500,

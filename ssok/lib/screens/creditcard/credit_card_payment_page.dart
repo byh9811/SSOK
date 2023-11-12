@@ -9,6 +9,8 @@ import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/creditcards/childrens/my_credit_card.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:ssok/widgets/creditcards/creditcard_payment_timer.dart';
+
 
 class CreditCardPaymentPage extends StatefulWidget {
   const CreditCardPaymentPage({super.key});
@@ -46,7 +48,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   ValueNotifier<dynamic> result = ValueNotifier(null);
   ApiService apiService = ApiService();
   Map<String, dynamic>? args;
-
+  CreditCardPaymentTimer te = CreditCardPaymentTimer();
   // 요청 변수
   String cardNum = "";
   String cardType = "01";
@@ -58,7 +60,6 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   List<Map<String, dynamic>> paymentItemList = [];
   // List<PaymentItem> paymentItemList = [];
   //
-
 
 
 
@@ -133,8 +134,10 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
         Future<bool> NFCFlag = checkNFCAvailability();
         NFCFlag.then((bool isNFCAvailable){
           if(isNFCAvailable){
-            Future.delayed(Duration(seconds: 5), () async {
-              await NfcManager.instance.stopSession();
+            
+            Future.delayed(Duration(seconds: 60), () async {
+              if(!_isPaymentDone){
+                await NfcManager.instance.stopSession();
             await showDialog(
                 barrierDismissible: false,
                 context: context,
@@ -157,7 +160,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
                 ),
               );
             print("60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@");
-            return;
+            
+              }
+              return;
             
           });
             _tagRead();
@@ -492,18 +497,24 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       extendBodyBehindAppBar: true,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+         SizedBox(height: screenHeight * 0.15),
           Container(
-            alignment: Alignment.center,
             child: MyCreditCard(
               vertical: true,
               ownerName: args["ownerName"] ,
               cardNum: args["cardNum"],
-            ),
+            )
           ),
-          SizedBox(
-            height: screenHeight * 0.2,
-          ),
+          SizedBox(height: screenHeight * 0.1),
+          // Container(
+          //   alignment: Alignment.center,
+          //   child: CreditCardPaymentTimer(),
+          // ),
+          // if(authenticated && _isNFC) CreditCardPaymentTimer() ,
+          // CreditCardPaymentTimer(),
+          authenticated && _isNFC? CreditCardPaymentTimer():Container() ,
           ElevatedButton(
             onPressed: () {},
             child: Row(

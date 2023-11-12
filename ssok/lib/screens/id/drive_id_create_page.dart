@@ -83,17 +83,17 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
   bool checkLicenseCondition = false;
 
   void register() async {
-    if (checkLicenseName &&
-        checkLicensePersonalNumber &&
-        checkLicenseAddress &&
-        checkLicenseIssueDate &&
-        checkLicenseAuthority &&
-        checkLicenseType &&
-        checkLicenseCode &&
-        checkLicenseNumber &&
-        checkLicenseRenewStartDate &&
-        checkLicenseRenewEndDate &&
-        checkLicenseCondition) {
+    if (_nameController.text.isNotEmpty &&
+        _personalNumberController.text.isNotEmpty &&
+        _typeController.text.isNotEmpty &&
+        _addressController.text.isNotEmpty &&
+        _numberController.text.isNotEmpty &&
+        _renewStartDateController.text.isNotEmpty &&
+        _renewEndDateController.text.isNotEmpty &&
+        _conditionController.text.isNotEmpty &&
+        _codeController.text.isNotEmpty &&
+        _issueDateController.text.isNotEmpty &&
+        _authorityController.text.isNotEmpty) {
       Map<String, String> requestData = {
         "licenseName": licenseName!,
         "licensePersonalNumber": licensePersonalNumber!,
@@ -348,7 +348,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
                                     height: 50.0,
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        // register();
+                                        register();
                                       },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blueAccent),

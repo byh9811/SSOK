@@ -4,6 +4,8 @@ import 'package:ssok/screens/identification/service_aggreement_page.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/register_button.dart';
 
+import 'childrens/id_info_text.dart';
+
 class RegisteredDriveIdCard extends StatefulWidget {
   const RegisteredDriveIdCard({
     Key? key,
@@ -79,29 +81,9 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("이름"),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: screenWidth * 0.01, top: 3.0),
-                    child: Text(
-                      "나종현",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
+                  idInfoText(context, "이름", widget.license!.licenseName),
+                  idInfoText(context, "주민번호", widget.license!.licensePersonalNumber),
                   SizedBox(height: screenHeight * 0.01),
-                  Text("주민번호"),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: screenWidth * 0.01, top: 3.0),
-                    child: Text(
-                      "980113-1******",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
                   Expanded(
                     child: Align(
                       alignment: Alignment.bottomRight,

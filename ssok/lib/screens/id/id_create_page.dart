@@ -63,11 +63,11 @@ class _IdCreatePageState extends State<IdCreatePage> {
         _issueDateController.text.isNotEmpty &&
         _authorityController.text.isNotEmpty) {
       Map<String, String> requestData = {
-        "registrationCardName": registrationCardName,
-        "registrationCardPersonalNumber": registrationCardPersonalNumber,
-        "registrationCardAddress": registrationCardAddress,
-        "registrationCardIssueDate": registrationCardIssueDate,
-        "registrationCardAuthority": registrationCardAuthority
+        "registrationCardName": _nameController.text,
+        "registrationCardPersonalNumber": _personalNumberController.text,
+        "registrationCardAddress": _addressController.text,
+        "registrationCardIssueDate": _issueDateController.text,
+        "registrationCardAuthority": _authorityController.text
       };
       var bytes = await File(image.path).readAsBytes();
       final response = await apiService.postRequestWithFile(

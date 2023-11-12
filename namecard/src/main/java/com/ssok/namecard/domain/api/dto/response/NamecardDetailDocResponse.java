@@ -1,6 +1,7 @@
 package com.ssok.namecard.domain.api.dto.response;
 
-import com.ssok.namecard.domain.mongo.document.NamecardDetailDoc;
+import com.ssok.namecard.domain.maria.entity.Exchange;
+import com.ssok.namecard.domain.maria.entity.Namecard;
 import lombok.Builder;
 
 @Builder
@@ -22,23 +23,15 @@ public record NamecardDetailDocResponse(
     Double lon
 ){
 
-    public static NamecardDetailDocResponse from(NamecardDetailDoc namecardDetailDoc) {
-        return NamecardDetailDocResponse.builder()
-                                        .exchangeSeq(namecardDetailDoc.getExchangeSeq())
-                                        .namecardSeq(namecardDetailDoc.getNamecardSeq())
-                                        .namecardImage(namecardDetailDoc.getNamecardImage())
-                                        .memberSeq(namecardDetailDoc.getMemberSeq())
-                                        .namecardName(namecardDetailDoc.getNamecardName())
-                                        .namecardEmail(namecardDetailDoc.getNamecardEmail())
-                                        .namecardCompany(namecardDetailDoc.getNamecardCompany())
-                                        .namecardTel(namecardDetailDoc.getNamecardTel())
-                                        .namecardJob(namecardDetailDoc.getNamecardJob())
-                                        .namecardAddress(namecardDetailDoc.getNamecardAddress())
-                                        .namecardPhone(namecardDetailDoc.getNamecardPhone())
-                                        .namecardFax(namecardDetailDoc.getNamecardFax())
-                                        .namecardWebsite(namecardDetailDoc.getNamecardWebsite())
-                                        .lat(namecardDetailDoc.getLat())
-                                        .lon(namecardDetailDoc.getLon())
-                                        .build();
+    public NamecardDetailDocResponse(Exchange exchange, Namecard receiveNamecard) {
+        this(exchange.getExchangeSeq(), receiveNamecard.getNamecardImage(),
+            receiveNamecard.getMemberSeq(),
+            receiveNamecard.getNamecardSeq(), receiveNamecard.getNamecardName(),
+            receiveNamecard.getNamecardEmail(), receiveNamecard.getNamecardCompany(),
+            receiveNamecard.getNamecardTel(), receiveNamecard.getNamecardJob(),
+            receiveNamecard.getNamecardAddress(), receiveNamecard.getNamecardPhone(),
+            receiveNamecard.getNamecardFax(), receiveNamecard.getNamecardWebsite(),
+            exchange.getExchangeLatitude(), exchange.getExchangeLongitude());
+
     }
 }

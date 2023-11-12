@@ -2,6 +2,8 @@ package com.ssok.namecard.domain.maria.entity;
 
 import com.ssok.namecard.global.entity.BaseEntity;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,11 +40,26 @@ public class Exchange extends BaseEntity {
     private String exchangeNote = "";
     private Boolean exchangeIsFavorite = false;
 
+    @Enumerated(value = EnumType.STRING)
+    private UpdateStatus updateStatus = UpdateStatus.CHECKED;
+
     public void editMemo(String content) {
         this.exchangeNote = content;
     }
 
     public void updateFavorite() {
         this.exchangeIsFavorite = !this.exchangeIsFavorite;
+    }
+
+    public void toUpdated() {
+        this.updateStatus = UpdateStatus.UPDATED;
+    }
+
+    public void toChecked() {
+        this.updateStatus = UpdateStatus.CHECKED;
+    }
+
+    public void updateNamecard(Namecard latestNamecard) {
+        this.receiveNamecard = latestNamecard;
     }
 }

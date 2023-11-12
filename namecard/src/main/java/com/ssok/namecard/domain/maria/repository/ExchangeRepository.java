@@ -18,4 +18,5 @@ public interface ExchangeRepository extends JpaRepository<Exchange, Long> {
 
     Optional<Exchange> findByExchangeSeq(Long exchangeSeq);
 
+    List<Exchange> findAllByReceiveNamecard_RootNamecardSeq(Long namecardSeq);
 }

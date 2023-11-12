@@ -27,6 +27,8 @@ public class Namecard extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long namecardSeq;
     private Long memberSeq;
+    private Long rootNamecardSeq;
+    private Boolean isRepNamecard;
     private String namecardName;
     private String namecardImage;
     private String namecardEmail;
@@ -42,13 +44,34 @@ public class Namecard extends BaseEntity {
     private List<Exchange> exchanges = new ArrayList<>();
 
 
-
+    //새롭게 생성
     public static Namecard from(NamecardCreateRequest namecardCreateRequest, Long memberSeq,
         String uploadUrl) {
 
         return Namecard.builder()
                        .memberSeq(memberSeq)
                        .namecardName(namecardCreateRequest.namecardName())
+                       .isRepNamecard(Boolean.TRUE)
+                       .namecardImage(uploadUrl)
+                       .namecardEmail(namecardCreateRequest.namecardEmail())
+                       .namecardCompany(namecardCreateRequest.namecardCompany())
+                       .namecardTel(namecardCreateRequest.namecardTel())
+                       .namecardJob(namecardCreateRequest.namecardJob())
+                       .namecardAddress(namecardCreateRequest.namecardAddress())
+                       .namecardPhone(namecardCreateRequest.namecardPhone())
+                       .namecardFax(namecardCreateRequest.namecardFax())
+                       .namecardWebsite(namecardCreateRequest.namecardWebsite())
+                       .build();
+    }
+
+    //기존 명함에 업데이트
+    public static Namecard from(NamecardCreateRequest namecardCreateRequest, Long memberSeq,
+        String uploadUrl, Long rootNamecardSeq) {
+
+        return Namecard.builder()
+                       .memberSeq(memberSeq)
+                       .namecardName(namecardCreateRequest.namecardName())
+                       .rootNamecardSeq(rootNamecardSeq)
                        .namecardImage(uploadUrl)
                        .namecardEmail(namecardCreateRequest.namecardEmail())
                        .namecardCompany(namecardCreateRequest.namecardCompany())
@@ -62,4 +85,14 @@ public class Namecard extends BaseEntity {
     }
 
 
+    public void updateParentSeq(Long rootNamecardSeq) {
+        this.rootNamecardSeq = rootNamecardSeq;
+    }
+
+    public void updateOld() {
+        this.isRepNamecard = false;
+    }
+    public void updateNew() {
+        this.isRepNamecard = true;
+    }
 }

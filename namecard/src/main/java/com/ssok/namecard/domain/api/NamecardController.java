@@ -6,8 +6,9 @@ import com.ssok.namecard.domain.api.dto.request.ExchangeSingleRequest;
 import com.ssok.namecard.domain.api.dto.response.NamecardDetailDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMainDocResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardMapResponse;
+import com.ssok.namecard.domain.api.dto.response.NamecardResponse;
 import com.ssok.namecard.domain.api.dto.response.NamecardSearchResponse;
-import com.ssok.namecard.domain.service.NamecardQueryService;
+import com.ssok.namecard.domain.api.dto.response.TimeLineResponse;
 import com.ssok.namecard.domain.service.NamecardService;
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.api.ApiResponse;
@@ -33,37 +34,56 @@ import org.springframework.web.multipart.MultipartFile;
 public class NamecardController {
 
     private final NamecardService namecardService;
-    private final NamecardQueryService namecardQueryService;
 
     /**
      * 명함 등록
      * @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+     * 새로운 명함 등록임.
+     * 완료!!!!
      */
-    @PostMapping(path = "/", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(path = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<Long> createNamecardRequest(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
         @RequestPart NamecardCreateRequest namecardCreateRequest,
         @RequestPart(name = "image") MultipartFile multipartFile
     ){
         log.info("UUID: {}", memberUuid);
-        Long namecardSeq = namecardService.createNamecard(namecardCreateRequest, memberUuid,
-            multipartFile);
+        Long namecardSeq = namecardService.createNamecard(namecardCreateRequest, memberUuid, multipartFile);
         return OK(namecardSeq);
     }
 
+    /** 
+     * 기존의 명함을 갱신하는 거임
+     * 기존 명함에 추가로 쌓임.
+     * 완료!!!
+     * */
+    @PostMapping("/update/{preNamecardSeq}")
+    public ApiResponse<Long> updateNamecardRequest(
+        @RequestHeader(name = "MEMBER-UUID") String memberUuid,
+        @RequestPart NamecardCreateRequest namecardUpdateRequest,
+        @RequestPart(name = "image") MultipartFile multipartFile,
+        @PathVariable Long preNamecardSeq
+    ){
+        Long namecardSeq = namecardService.updateNamecard(namecardUpdateRequest, memberUuid, multipartFile, preNamecardSeq);
+        return OK(namecardSeq);
+    }
+
+
     /**
      * 1:1 명함 교환
+     * 완료!!!!
      */
     @PostMapping("/exchange/single")
     public ApiResponse<String> exchangeNamecards(
-        @RequestHeader(name = "MEMBER-UUID") String memberUuid,
         @RequestBody ExchangeSingleRequest exchangeSingleRequest
     ){
-        namecardService.exchangeSingle(memberUuid, exchangeSingleRequest);
+        namecardService.exchangeSingle(exchangeSingleRequest);
         return OK("명함 교환 완료");
     }
 
-    /** 명함 메모 작성 (변경도 동일 api)*/
+    /** 명함 메모 작성 (변경도 동일 api)
+     * 완료!!!
+     * */
     @PostMapping("/memo/{exchangeSeq}")
     public ApiResponse<String> editMemo(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
@@ -76,12 +96,14 @@ public class NamecardController {
 
 
 
-    /** 명함 목록 조회 - 메인 */
+    /** 명함 목록 조회 - 메인
+     * 완료!!!!
+     * */
     @GetMapping("/")
     public ApiResponse<NamecardMainDocResponse> getNamecardMainDoc(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid
     ){
-        NamecardMainDocResponse namecardMainDocResponse = namecardQueryService.getNamecardMainDoc(memberUuid);
+        NamecardMainDocResponse namecardMainDocResponse = namecardService.getNamecardMain(memberUuid);
         log.info("메인페이지 body 로그: {}", namecardMainDocResponse);
         return OK(namecardMainDocResponse);
     }
@@ -89,18 +111,29 @@ public class NamecardController {
 
     /**
      * 명함 상세 조회
+     * 완료!!!
      */
     @GetMapping("/{exchangeSeq}")
     public ApiResponse<NamecardDetailDocResponse> getNamecardDetailDoc(
-        @PathVariable Long exchangeSeq,
-        @RequestHeader(name = "MEMBER-UUID") String memberUuid)
+        @PathVariable Long exchangeSeq)
     {
-        NamecardDetailDocResponse namecardDetailDocResponse = namecardQueryService.getNamecardDetailDoc(exchangeSeq, memberUuid);
+        NamecardDetailDocResponse namecardDetailDocResponse = namecardService.getNamecardDetailDoc(exchangeSeq);
         log.info("명함 상세 body 로그: {}", namecardDetailDocResponse);
         return OK(namecardDetailDocResponse);
     }
 
-    /** 명함지도 조회 */
+    @PostMapping("/{exchangeSeq}")
+    public ApiResponse<NamecardResponse> updateNamecard(
+        @PathVariable Long exchangeSeq
+    ){
+        NamecardResponse updatedOtherNamecard = namecardService.updateOtherNamecard(exchangeSeq);
+        return OK(updatedOtherNamecard);
+    }
+
+
+    /** 명함지도 조회
+     *  완료!!!
+     * */
     @GetMapping("/map")
     public ApiResponse<List<NamecardMapResponse>> getNamecardByMap(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid
@@ -109,7 +142,9 @@ public class NamecardController {
         return OK(namecardMapResponses);
     }
 
-    /** 즐겨 찾기 - 성공 후 교환 Seq을 반환함 */
+    /** 즐겨 찾기 - 성공 후 교환 Seq를 반환함
+     *  완료
+     * */
     @PostMapping("/like")
     public ApiResponse<Long> likeNamecard(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
@@ -120,16 +155,20 @@ public class NamecardController {
     }
 
 
-    /** 명함 타임라인 조회 */
+    /** 명함 타임라인 조회
+     *  완료!!!
+     * */
     @GetMapping("/timeline/{exchangeSeq}")
-    public ApiResponse<List<String>> getNamecardTimeline(
+    public ApiResponse<List<TimeLineResponse>> getNamecardTimeline(
         @PathVariable Long exchangeSeq
     ){
-        List<String> timeline = namecardService.getNamecardTimeline(exchangeSeq);
-        return OK(timeline);
+        List<TimeLineResponse> timelines = namecardService.getNamecardTimeline(exchangeSeq);
+        return OK(timelines);
     }
 
-    /** 명함 메모 조회 */
+    /** 명함 메모 조회
+     *  완료!!!
+     * */
     @GetMapping("/memo/{exchangeSeq}")
     public ApiResponse<String> getNamecardMemo(
         @PathVariable Long exchangeSeq
@@ -149,7 +188,9 @@ public class NamecardController {
         return OK(searchResponseList);
     }
 
-    /** 명함 있는지 여부 */
+    /** 명함 있는지 여부
+     *  완료!!!
+     * */
     @GetMapping("/exist")
     public ApiResponse<Boolean> isNamecardExist(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid
@@ -158,6 +199,9 @@ public class NamecardController {
         return OK(isNamecardExist);
     }
 
+    /**
+     * 완료!!!
+     * */
     @PostMapping("/test")
     public ApiResponse<String> imageTest(
         @RequestPart(name = "image") MultipartFile file

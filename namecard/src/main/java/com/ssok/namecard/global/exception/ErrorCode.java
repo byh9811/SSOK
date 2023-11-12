@@ -21,11 +21,11 @@ public enum ErrorCode {
     EXCHANGE_DUPLICATED("EXCHANGE_01", HttpStatus.NOT_ACCEPTABLE, "교환을 한 상대입니다."),
     EXCHANGE_NOT_FOUND("EXCHANGE_02", HttpStatus.NOT_FOUND, "해당 명함 교환을 찾을 수 없습니다."),
     EXCHANGE_BAD_REQUEST("EXCHANGE_03", HttpStatus.NOT_FOUND, "잘못된 명함 교환입니다."),
+    UNAUTHORIZED("EXCHANGE_04", HttpStatus.UNAUTHORIZED, "요청 권한이 없습니다."),
 
     /** Mongo */
     MONGO_NAMECARD_NOT_FOUND("NAMECARD_MONGO_01", HttpStatus.NOT_FOUND, "존재하지 않는 명함입니다."),
-    MONGO_MEMO_NOT_FOUND("MEMO_MONGO_01", HttpStatus.NOT_FOUND, "존재하지 않는 명함 메모입니다."),
-    ;
+    MONGO_MEMO_NOT_FOUND("MEMO_MONGO_01", HttpStatus.NOT_FOUND, "존재하지 않는 명함 메모입니다.");
 
 
 

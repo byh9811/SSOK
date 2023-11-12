@@ -1,5 +1,7 @@
 package com.ssok.namecard.domain.api.dto.response;
 
+import com.ssok.namecard.domain.maria.entity.Exchange;
+import com.ssok.namecard.domain.maria.entity.Namecard;
 import com.ssok.namecard.domain.mongo.document.NamecardMainDoc.NamecardDoc;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,6 +33,17 @@ public record NamecardResponse(
             namecardDoc.getNamecardFax(), namecardDoc.getNamecardWebsite(),
             namecardDoc.isFavorite(), namecardDoc.getExchangeNote(),
             namecardDoc.getDate());
+    }
+
+    public NamecardResponse(Namecard latestNamecard, Exchange exchange) {
+        this(latestNamecard.getNamecardSeq(), latestNamecard.getMemberSeq(),
+            exchange.getExchangeSeq(), latestNamecard.getNamecardName(),
+            latestNamecard.getNamecardImage(), latestNamecard.getNamecardEmail(),
+            latestNamecard.getNamecardCompany(), latestNamecard.getNamecardJob(),
+            latestNamecard.getNamecardAddress(), latestNamecard.getNamecardPhone(),
+            latestNamecard.getNamecardFax(), latestNamecard.getNamecardWebsite(),
+            exchange.getExchangeIsFavorite(), exchange.getExchangeNote(),
+            exchange.getCreateDate().toLocalDate());
     }
 
     public static List<NamecardResponse> toNamecardResponses(List<NamecardDoc> namecardDocs){

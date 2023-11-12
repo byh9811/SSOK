@@ -44,11 +44,98 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
     return Column(
       children: [
         MyBusinessCard(myNamecardItems : businessCardData.myNamecardItems),
+        MyFavoriteCard(favorites : businessCardData.favorites)
         // BusinessCardList(myExchangeItems: businessCardData.myExchangeItems),
       ],
     );
   }
 }
+
+class MyFavoriteCard extends StatefulWidget{
+  final List<NameCard> favorites;
+  const MyFavoriteCard({super.key, required this.favorites});
+
+  @override
+  State<MyFavoriteCard> createState() => _MyFavoriteCard();
+}
+
+class _MyFavoriteCard extends State<MyFavoriteCard>{
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                  child: Text(
+                "즐겨찾기(${widget.favorites.length})",
+                style: TextStyle(fontSize: 18),
+              )),
+              InkWell(
+                onTap: () {
+                  print("등록일순");
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.tune),
+                    Text("등록일 순"),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: screenHeight * 0.005),
+          Divider(
+            height: 1,
+            color: Colors.black,
+            thickness: 1,
+          ),
+          SizedBox(
+          height: screenHeight * 0.57 - 60.0,
+          child: ListView.builder(
+            itemCount: widget.favorites.length,
+            itemBuilder: (context, index) {
+              NameCard data = widget.favorites[index];
+              String namecardName = data.name;
+              String namecardJob = data.job;
+              String namecardImage = data.namecardImg;
+              String namecardCompany = data.company;
+              String namecardDateTime = data.exchangeDate;
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: screenWidth * 0.01,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/businesscard/detail',arguments: data.exchangeSeq);
+                  },
+                  child: CustomListItem(
+                    name: namecardName,
+                    image: namecardImage,
+                    job: namecardJob,
+                    company: namecardCompany,
+                    dateTime: namecardDateTime,
+                    favorite: true,
+                  ),
+                ),
+              );
+            },
+          ),
+        )
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
 
 class MyBusinessCard extends StatefulWidget {
   const MyBusinessCard({
@@ -279,7 +366,6 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
 //   void initState() {
 //     super.initState();
 //   }
-
 //   @override
 //   Widget build(BuildContext context) {
 //     double screenWidth = MediaQuery.of(context).size.width;
@@ -295,7 +381,6 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
 //           String namecardImage = data.namecardImage;
 //           String namecardCompany = data.namecardCompany;
 //           String namecardDateTime = data.date;
-
 //           return Padding(
 //             padding: EdgeInsets.symmetric(
 //               horizontal: screenHeight * 0.04,
@@ -320,87 +405,92 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
 //   }
 // }
 
+class CustomListItem extends StatelessWidget {
+  const CustomListItem({
+    Key? key,
+    required this.name,
+    required this.image,
+    required this.job,
+    required this.company,
+    required this.dateTime, required this.favorite,
+  }) : super(key: key);
+  final String name;
+  final String image;
+  final String job;
+  final String company;
+  final String dateTime;
+  final bool favorite;
 
-// class CustomListItem extends StatelessWidget {
-//   const CustomListItem({
-//     Key? key,
-//     required this.name,
-//     required this.image,
-//     required this.job,
-//     required this.company,
-//     required this.dateTime,
-//   }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return SizedBox(
+      width: screenWidth,
+      height: screenHeight * 0.1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: screenWidth * 0.01),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    if(favorite) Container(child:Icon(Icons.star,color: Colors.yellow,))
+                  ],
+                ),
 
-//   final String name;
-//   final String image;
-//   final String job;
-//   final String company;
-//   final String dateTime;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     double screenWidth = MediaQuery.of(context).size.width;
-//     double screenHeight = MediaQuery.of(context).size.height;
-//     return SizedBox(
-//       width: screenWidth,
-//       height: screenHeight * 0.1,
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Padding(
-//             padding: EdgeInsets.only(left: screenWidth * 0.01),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Text(
-//                   name,
-//                   style: TextStyle(
-//                     fontSize: 17,
-//                     fontWeight: FontWeight.w400,
-//                   ),
-//                 ),
-//                 Padding(
-//                   padding: EdgeInsets.only(
-//                       top: screenHeight * 0.01, bottom: screenHeight * 0.005),
-//                   child: Text(
-//                     job,
-//                     style: TextStyle(
-//                       fontSize: 13,
-//                       color: Color(0xFF858585),
-//                     ),
-//                   ),
-//                 ),
-//                 Text(
-//                   company,
-//                   style: TextStyle(
-//                     fontSize: 13,
-//                     color: Color(0xFF858585),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: AspectRatio(
-//               aspectRatio: 9 / 5,
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: Colors.grey,
-//                       offset: Offset(0, 2),
-//                       blurRadius: 1.0,
-//                     ),
-//                   ],
-//                 ),
-//                 child: Image.network(image, fit: BoxFit.cover),
-//               ),
-//             ),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: screenHeight * 0.01, bottom: screenHeight * 0.005),
+                  child: Text(
+                    job,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF858585),
+                    ),
+                  ),
+                ),
+                Text(
+                  company,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF858585),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AspectRatio(
+              aspectRatio: 9 / 5,
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0, 2),
+                      blurRadius: 1.0,
+                    ),
+                  ],
+                ),
+                child: Image.network(image, fit: BoxFit.cover),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

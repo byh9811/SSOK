@@ -41,14 +41,27 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
 
   @override
   Widget build(BuildContext context) {
+    print("안ㄴ영하세용  12312321");
+    print(businessCardData.myExchangeItems.length);
+
     return Column(
       children: [
         MyBusinessCard(myNamecardItems : businessCardData.myNamecardItems),
-        // BusinessCardList(myExchangeItems: businessCardData.myExchangeItems),
+        // FavoriteCardList(myFavoriteItems: businessCardData.favorites),
+        ExchangeCardList(myExchangeItems: businessCardData.myExchangeItems),
       ],
     );
   }
 }
+
+// class FavoriteCardList extends StatefulWidget {
+//
+//   @override
+//   State<StatefulWidget> createState() {
+//     // TODO: implement createState
+//     throw UnimplementedError();
+//   }
+// }
 
 class MyBusinessCard extends StatelessWidget {
   const MyBusinessCard({
@@ -149,51 +162,51 @@ class MyBusinessCard extends StatelessWidget {
 }
 
 
-class BusinessCardList extends StatefulWidget {
-  final List<MyNameCard> myExchangeItems;
-  const BusinessCardList({
+class ExchangeCardList extends StatefulWidget {
+  final List<NameCard> myExchangeItems;
+  const ExchangeCardList({
     Key? key,
     required this.myExchangeItems,
   }) : super(key: key);
   @override
-  State<BusinessCardList> createState() => _BusinessCardListState(myExchangeItems);
+  State<ExchangeCardList> createState() => _ExchangeCardListState();
 }
 
-class _BusinessCardListState extends State<BusinessCardList> {
-
-  final List<MyNameCard> myExchangeItems;
-  _BusinessCardListState(this.myExchangeItems);
+class _ExchangeCardListState extends State<ExchangeCardList> {
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    print("뭐 : ${widget.myExchangeItems.length}");
+
     return Column(
       children: [
-        BusinessCardListHeader(namecardCnt: myExchangeItems.length),
-        // BusinessCardListBody(myExchangeItems: myExchangeItems),
+        ExchangeCardListHeader(namecardCnt: widget.myExchangeItems.length),
+        ExchangeCardListBody(myExchangeItems: widget.myExchangeItems),
       ],
     );
   }
 }
 
 
-class BusinessCardListHeader extends StatefulWidget {
-  final int namecardCnt;
-  const BusinessCardListHeader({super.key, required this.namecardCnt});
+class ExchangeCardListHeader extends StatefulWidget {
 
+  const ExchangeCardListHeader({Key? key, required this.namecardCnt}): super(key: key);
+  final int namecardCnt;
   @override
-  State<BusinessCardListHeader> createState() => _BusinessCardListHeaderState(namecardCnt);
+  State<ExchangeCardListHeader> createState() => _ExchangeCardListHeaderState();
 }
 
-class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
-  final int namecardCnt;
-  _BusinessCardListHeaderState(this.namecardCnt);
+class _ExchangeCardListHeaderState extends State<ExchangeCardListHeader> {
+
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    print("efef");
+    print(widget.namecardCnt);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
       child: Column(
@@ -202,7 +215,7 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
             children: [
               Expanded(
                   child: Text(
-                "전체(${namecardCnt})",
+                "전체(${widget.namecardCnt})",
                 style: TextStyle(fontSize: 18),
               )),
               InkWell(
@@ -265,146 +278,146 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
 }
 
 
-// class BusinessCardListBody extends StatefulWidget {
-//   const BusinessCardListBody({
-//     Key? key,
-//     required this.myExchangeItems,
-//   }) : super(key: key);
-//   final List<MyNameCard> myExchangeItems;
-//   @override
-//   State<BusinessCardListBody> createState() => _BusinessCardListBodyState(myExchangeItems);
-// }
+class ExchangeCardListBody extends StatefulWidget {
+  const ExchangeCardListBody({
+    Key? key,
+    required this.myExchangeItems,
+  }) : super(key: key);
+  final List<NameCard> myExchangeItems;
+  @override
+  State<ExchangeCardListBody> createState() => _ExchangeCardListBodyState();
+}
+//
+class _ExchangeCardListBodyState extends State<ExchangeCardListBody> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
-// class _BusinessCardListBodyState extends State<BusinessCardListBody> {
-//   final List<MyNameCard> businessCardList;
-  
-//   _BusinessCardListBodyState(this.businessCardList);
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    print("========");
+    print(widget.myExchangeItems.length);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     double screenWidth = MediaQuery.of(context).size.width;
-//     double screenHeight = MediaQuery.of(context).size.height;
-//     return SizedBox(
-//       height: screenHeight * 0.57 - 60.0,
-//       child: ListView.builder(
-//         itemCount: businessCardList.length,
-//         itemBuilder: (context, index) {
-//           MyNameCard data = businessCardList[index];
-//           String namecardName = data.namecardName;
-//           String namecardJob = data.namecardJob;
-//           String namecardImage = data.namecardImage;
-//           String namecardCompany = data.namecardCompany;
-//           String namecardDateTime = data.date;
+    return SizedBox(
+      height: screenHeight * 0.57 - 60.0,
+      child: ListView.builder(
+        itemCount: widget.myExchangeItems.length,
+        itemBuilder: (context, index) {
+          NameCard data = widget.myExchangeItems[index];
+          String namecardName = data.name;
+          String namecardJob = data.job;
+          String namecardImage = data.namecardImg;
+          String namecardCompany = data.company;
+          String namecardDateTime = data.exchangeDate;
 
-//           return Padding(
-//             padding: EdgeInsets.symmetric(
-//               horizontal: screenHeight * 0.04,
-//               vertical: screenWidth * 0.01,
-//             ),
-//             child: InkWell(
-//               onTap: () {
-//                 Navigator.of(context).pushNamed('/businesscard/detail',arguments: data.exchangeSeq);
-//               },
-//               child: CustomListItem(
-//                 name: namecardName,
-//                 image: namecardImage,
-//                 job: namecardJob,
-//                 company: namecardCompany,
-//                 dateTime: namecardDateTime,
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: screenHeight * 0.04,
+              vertical: screenWidth * 0.01,
+            ),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).pushNamed('/businesscard/detail',arguments: data.exchangeSeq);
+              },
+              child: CustomListItem(
+                name: namecardName,
+                image: namecardImage,
+                job: namecardJob,
+                company: namecardCompany,
+                dateTime: namecardDateTime,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
 
 
-// class CustomListItem extends StatelessWidget {
-//   const CustomListItem({
-//     Key? key,
-//     required this.name,
-//     required this.image,
-//     required this.job,
-//     required this.company,
-//     required this.dateTime,
-//   }) : super(key: key);
+class CustomListItem extends StatelessWidget {
+  const CustomListItem({
+    Key? key,
+    required this.name,
+    required this.image,
+    required this.job,
+    required this.company,
+    required this.dateTime,
+  }) : super(key: key);
 
-//   final String name;
-//   final String image;
-//   final String job;
-//   final String company;
-//   final String dateTime;
+  final String name;
+  final String image;
+  final String job;
+  final String company;
+  final String dateTime;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     double screenWidth = MediaQuery.of(context).size.width;
-//     double screenHeight = MediaQuery.of(context).size.height;
-//     return SizedBox(
-//       width: screenWidth,
-//       height: screenHeight * 0.1,
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Padding(
-//             padding: EdgeInsets.only(left: screenWidth * 0.01),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Text(
-//                   name,
-//                   style: TextStyle(
-//                     fontSize: 17,
-//                     fontWeight: FontWeight.w400,
-//                   ),
-//                 ),
-//                 Padding(
-//                   padding: EdgeInsets.only(
-//                       top: screenHeight * 0.01, bottom: screenHeight * 0.005),
-//                   child: Text(
-//                     job,
-//                     style: TextStyle(
-//                       fontSize: 13,
-//                       color: Color(0xFF858585),
-//                     ),
-//                   ),
-//                 ),
-//                 Text(
-//                   company,
-//                   style: TextStyle(
-//                     fontSize: 13,
-//                     color: Color(0xFF858585),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: AspectRatio(
-//               aspectRatio: 9 / 5,
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: Colors.grey,
-//                       offset: Offset(0, 2),
-//                       blurRadius: 1.0,
-//                     ),
-//                   ],
-//                 ),
-//                 child: Image.network(image, fit: BoxFit.cover),
-//               ),
-//             ),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return SizedBox(
+      width: screenWidth,
+      height: screenHeight * 0.1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: screenWidth * 0.01),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: screenHeight * 0.01, bottom: screenHeight * 0.005),
+                  child: Text(
+                    job,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF858585),
+                    ),
+                  ),
+                ),
+                Text(
+                  company,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF858585),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AspectRatio(
+              aspectRatio: 9 / 5,
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0, 2),
+                      blurRadius: 1.0,
+                    ),
+                  ],
+                ),
+                child: Image.network(image, fit: BoxFit.cover),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

@@ -184,7 +184,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
     "amount": amount.toString(),
     "type": "01",
     "installPeriod": "0",
-    "shopName": "날봐날봐털쌤",
+    "shopName": "날봐날봐털쌤 2",
     "shopNumber": "123-45-67890",
     "paymentItemList": paymentItemList
     };

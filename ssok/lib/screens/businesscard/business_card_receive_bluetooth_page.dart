@@ -39,9 +39,7 @@ class _BusinessCardReceiveBluetoothPageState
   bool advertising = false;
   bool scanning = false;
   late MyNameCard myNamecardItem;
-  List<Endpoint> discoveredEndpoints = [
-    Endpoint(id: "1", name: "나종현", serviceId: "hoho")
-  ];
+  List<Endpoint> discoveredEndpoints = [];
 
   // void showDiscoveredEndpoints(BuildContext context) {
   //   double screenHeight = MediaQuery.of(context).size.height;
@@ -174,6 +172,7 @@ class _BusinessCardReceiveBluetoothPageState
       duration: const Duration(seconds: 3),
       vsync: this,
     );
+    Permission.nearbyWifiDevices.request();
     super.initState();
   }
 

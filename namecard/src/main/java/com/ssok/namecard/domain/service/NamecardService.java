@@ -21,6 +21,7 @@ import com.ssok.namecard.domain.maria.repository.NamecardRepository;
 import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.exception.ErrorCode;
 import com.ssok.namecard.global.service.GCSService;
+import java.sql.Time;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -329,5 +330,17 @@ public class NamecardService {
         if(!myNamecard.getMemberSeq().equals(memberSeq)) throw new NamecardException(ErrorCode.NAMECARD_UNAUTHORIZED);
         MyNamecardDetailResponse  myNamecardDetailResponse = new MyNamecardDetailResponse(myNamecard);
         return myNamecardDetailResponse;
+    }
+
+    public List<TimeLineResponse> getMyTimeline(Long namecardSeq) {
+        Namecard myNamecard = findBySeqFromNamecardRepository(namecardSeq);
+        Long memberSeq = myNamecard.getMemberSeq();
+        List<TimeLineResponse> myTimelines = findByMemberSeqFromNamecardRepository(memberSeq)
+            .stream()
+            .filter(namecard -> namecard.getRootNamecardSeq()
+                                        .equals(myNamecard.getRootNamecardSeq()))
+            .map(namecard -> new TimeLineResponse(namecard))
+            .collect(Collectors.toList());
+        return myTimelines;
     }
 }

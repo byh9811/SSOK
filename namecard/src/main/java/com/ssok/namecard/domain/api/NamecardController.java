@@ -224,4 +224,11 @@ public class NamecardController {
         return OK(namecardDetailDocResponse);
     }
 
+    @GetMapping("/my/timeline/{namecardSeq}")
+    public ApiResponse<List<TimeLineResponse>> getMyTimeline(
+        @PathVariable Long namecardSeq
+    ){
+        List<TimeLineResponse> timelines = namecardService.getMyTimeline(namecardSeq);
+        return OK(timelines);
+    }
 }

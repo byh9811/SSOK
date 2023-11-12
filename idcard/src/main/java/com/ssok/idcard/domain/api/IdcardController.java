@@ -89,6 +89,7 @@ public class IdcardController {
     public ApiResponse<RecognizedLicenseResponse> ocrLicense(
             @RequestPart(value="img") MultipartFile file
     ) {
+        log.info("controller entered method ocrLicense");
         RecognizedLicenseResponse result = analysisService.analysisLicense(file);
         return OK(result);
     }

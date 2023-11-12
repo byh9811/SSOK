@@ -3,6 +3,7 @@ package com.ssok.idcard.global.openfeign.naver.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.tomcat.jni.Address;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import static lombok.AccessLevel.PUBLIC;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = PUBLIC)
+@ToString
 public class LicenseOcrResponse {
     List<Images> images;
 
@@ -41,16 +43,16 @@ public class LicenseOcrResponse {
     @NoArgsConstructor(access = PUBLIC)
     public static class DriverLicense {
         private Type type;
-        private LicenseNumber num;
-        private Name name;
-        private PersonalNum personalNum;
-        private Address address;
-        private RenewStartDate renewStartDate;
-        private RenewEndDate renewEndDate;
+        private List<LicenseNumber> num;
+        private List<Name> name;
+        private List<PersonalNum> personalNum;
+        private List<Address> address;
+        private List<RenewStartDate> renewStartDate;
+        private List<RenewEndDate> renewEndDate;
         private Condition condition;
-        private Code code;
-        private IssueDate issueDate;
-        private Authority authority;
+        private List<Code> code;
+        private List<IssueDate> issueDate;
+        private List<Authority> authority;
     }
 
     @Getter

@@ -27,7 +27,10 @@ public class AnalysisService {
     private final FileUtil fileUtil;
 
     public RecognizedLicenseResponse analysisLicense(MultipartFile file) {
+        log.info("service entered method analysisLicense");
         LicenseOcrResponse ocrDto = licenseOCR(file);
+        log.info("ocrDto =============");
+        log.info(ocrDto.toString());
         return RecognizedLicenseResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getDl());
     }
 
@@ -47,7 +50,7 @@ public class AnalysisService {
         }
 
         return "{\"version\": \"V2\",\"requestId\": \"" + UUID.randomUUID() +
-                "\",\"timestamp\": " + System.currentTimeMillis() +
+                "\",\"timestamp\": " + System.currentTimeMillis() + ", \"lang\":\"ko\" " +
                 ",\"images\": [{ \"format\": \"" + fileUtil.extractExt(file.getOriginalFilename()) +
                 // images.data가 있어야 될거 같은데 ?
                 "\", \"name\": \"" + file.getOriginalFilename() +
@@ -55,7 +58,15 @@ public class AnalysisService {
     }
 
     private LicenseOcrResponse licenseOCR(MultipartFile file) {
+        log.info("service licenseOCR method");
         String message = getMessage(file);
+        log.info("message ================");
+        log.info(message);
+        log.info("ocrKey ==================");
+        log.info(ocrKey);
+        log.info("file ==================");
+        log.info(file.toString());
+
         return analysisClient.analyzeLicense(ocrKey, message, file).get();
     }
 

@@ -22,17 +22,18 @@ public record RecognizedLicenseResponse(
         String licenseAuthority
 ) {
     public static RecognizedLicenseResponse from(LicenseOcrResponse.DriverLicense license) {
+
         return RecognizedLicenseResponse.builder()
-                .licenseName(license.getName().getFormatted().getValue())
-                .licensePersonalNumber(license.getPersonalNum().getFormatted().getValue())
-                .licenseAddress(license.getAddress().getFormatted().getValue())
-                .licenseNumber(license.getNum().getFormatted().getValue())
-                .licenseRenewStartDate(toLocalDate(license.getRenewStartDate().getFormatted()))
-                .licenseRenewEndDate(toLocalDate(license.getRenewEndDate().getFormatted()))
-                .licenseCondition(license.getCondition().getFormatted().getValue())
-                .licenseCode(license.getCode().getFormatted().getValue())
-                .licenseIssueDate(toLocalDate(license.getIssueDate().getFormatted()))
-                .licenseAuthority(license.getAuthority().getFormatted().getValue())
+                .licenseName(license.getName().get(0).getFormatted().getValue())
+                .licensePersonalNumber(license.getPersonalNum().get(0).getFormatted().getValue())
+                .licenseAddress(license.getAddress().get(0).getFormatted().getValue())
+                .licenseNumber(license.getNum().get(0).getFormatted().getValue())
+                .licenseRenewStartDate(toLocalDate(license.getRenewStartDate().get(0).getFormatted()))
+                .licenseRenewEndDate(toLocalDate(license.getRenewEndDate().get(0).getFormatted()))
+                .licenseCondition(license.getCondition() != null ? license.getCondition().getFormatted().getValue() : null)
+                .licenseCode(license.getCode().get(0).getFormatted().getValue())
+                .licenseIssueDate(toLocalDate(license.getIssueDate().get(0).getFormatted()))
+                .licenseAuthority(license.getAuthority().get(0).getFormatted().getValue())
                 .build();
     }
 }

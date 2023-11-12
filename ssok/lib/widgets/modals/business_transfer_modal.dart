@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:ssok/dto/business_card_data.dart';
 import 'package:ssok/widgets/businesscards/childrens/modal_type_button.dart';
 
 class BusinessTransferModal extends StatelessWidget {
   const BusinessTransferModal({
     Key? key,
-    required this.namecardSeq,
+    required this.myNamecardItem,
   }) : super(key: key);
-  final int namecardSeq;
+  final MyNameCard myNamecardItem;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    print(myNamecardItem.namecardName);
     return SizedBox(
       width: screenWidth * 0.75,
       height: screenHeight * 0.3,
@@ -47,7 +50,7 @@ class BusinessTransferModal extends StatelessWidget {
                 ontap: () {
                   Navigator.of(context).pushNamed(
                       '/businesscard/receive/bluetooth',
-                      arguments: namecardSeq);
+                      arguments: myNamecardItem);
                 },
               ),
               ModalTypeButton(
@@ -56,7 +59,7 @@ class BusinessTransferModal extends StatelessWidget {
                 ontap: () {
                   Navigator.of(context).pushNamed(
                       '/businesscard/send/bluetooth',
-                      arguments: namecardSeq);
+                      arguments: myNamecardItem);
                 },
               ),
               ModalTypeButton(

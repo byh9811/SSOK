@@ -19,7 +19,8 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   late BusinessCardData businessCardData;
 
   void bringBusinessCardList() async {
-    final response = await apiService.getRequest('namecard-service/', TokenManager().accessToken);
+    final response = await apiService.getRequest(
+        'namecard-service/', TokenManager().accessToken);
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       print("registered_business_card // bringBusinessCardList");
@@ -35,7 +36,8 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   @override
   void initState() {
     super.initState();
-    businessCardData = BusinessCardData(favorites: [],memberSeq: 0,myExchangeItems: [],myNamecardItems: []);
+    businessCardData = BusinessCardData(
+        favorites: [], memberSeq: 0, myExchangeItems: [], myNamecardItems: []);
     bringBusinessCardList();
   }
 
@@ -43,7 +45,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MyBusinessCard(myNamecardItems : businessCardData.myNamecardItems),
+        MyBusinessCard(myNamecardItems: businessCardData.myNamecardItems),
         // BusinessCardList(myExchangeItems: businessCardData.myExchangeItems),
       ],
     );
@@ -61,7 +63,7 @@ class MyBusinessCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-     final CarouselController _carouselController = CarouselController();
+    final CarouselController _carouselController = CarouselController();
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
@@ -94,7 +96,8 @@ class MyBusinessCard extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
-                          child: BusinessTransferModal(namecardSeq: myNamecardItems[0].namecardSeq),
+                          child: BusinessTransferModal(
+                              namecardSeq: myNamecardItems[0].namecardSeq),
                         );
                       },
                     );
@@ -134,7 +137,8 @@ class MyBusinessCard extends StatelessWidget {
                     builder: (BuildContext context) {
                       return AspectRatio(
                         aspectRatio: 9 / 5,
-                        child: Image.network(item.namecardImg, fit: BoxFit.cover),
+                        child:
+                            Image.network(item.namecardImg, fit: BoxFit.cover),
                       );
                     },
                   );
@@ -148,7 +152,6 @@ class MyBusinessCard extends StatelessWidget {
   }
 }
 
-
 class BusinessCardList extends StatefulWidget {
   final List<MyNameCard> myExchangeItems;
   const BusinessCardList({
@@ -156,11 +159,11 @@ class BusinessCardList extends StatefulWidget {
     required this.myExchangeItems,
   }) : super(key: key);
   @override
-  State<BusinessCardList> createState() => _BusinessCardListState(myExchangeItems);
+  State<BusinessCardList> createState() =>
+      _BusinessCardListState(myExchangeItems);
 }
 
 class _BusinessCardListState extends State<BusinessCardList> {
-
   final List<MyNameCard> myExchangeItems;
   _BusinessCardListState(this.myExchangeItems);
 
@@ -177,13 +180,13 @@ class _BusinessCardListState extends State<BusinessCardList> {
   }
 }
 
-
 class BusinessCardListHeader extends StatefulWidget {
   final int namecardCnt;
   const BusinessCardListHeader({super.key, required this.namecardCnt});
 
   @override
-  State<BusinessCardListHeader> createState() => _BusinessCardListHeaderState(namecardCnt);
+  State<BusinessCardListHeader> createState() =>
+      _BusinessCardListHeaderState(namecardCnt);
 }
 
 class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {

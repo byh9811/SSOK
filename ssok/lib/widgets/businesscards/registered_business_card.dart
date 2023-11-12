@@ -54,16 +54,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   }
 }
 
-// class FavoriteCardList extends StatefulWidget {
-//
-//   @override
-//   State<StatefulWidget> createState() {
-//     // TODO: implement createState
-//     throw UnimplementedError();
-//   }
-// }
-
-class MyBusinessCard extends StatelessWidget {
+class MyBusinessCard extends StatefulWidget {
   const MyBusinessCard({
     Key? key,
     required this.myNamecardItems,
@@ -71,11 +62,16 @@ class MyBusinessCard extends StatelessWidget {
   final List<MyNameCard> myNamecardItems;
 
   @override
+  _MyBusinessCardState createState() => _MyBusinessCardState();
+}
+
+class _MyBusinessCardState extends State<MyBusinessCard> {
+  final CarouselController _carouselController = CarouselController();
+  int _currentPage = 0;
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-     final CarouselController _carouselController = CarouselController();
-
     return Container(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
       child: Column(
@@ -107,7 +103,8 @@ class MyBusinessCard extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
-                          child: BusinessTransferModal(namecardSeq: myNamecardItems[0].namecardSeq),
+                          child: BusinessTransferModal(
+                              namecardSeq: widget.myNamecardItems[_currentPage].namecardSeq),
                         );
                       },
                     );
@@ -124,33 +121,23 @@ class MyBusinessCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed("/businesscard/my");
+                Navigator.of(context).pushNamed("/businesscard/my",arguments: widget.myNamecardItems[_currentPage].namecardSeq);
               },
               child: CarouselSlider(
                 carouselController: _carouselController,
                 options: CarouselOptions(
                   height: screenHeight * 0.18,
-                  aspectRatio: 16 / 9,
-                  viewportFraction: 0.8,
-                  initialPage: 0,
-                  enableInfiniteScroll: false,
-                  reverse: false,
-                  autoPlay: false,
-                  autoPlayInterval: Duration(seconds: 3),
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enlargeCenterPage: true,
-                  scrollDirection: Axis.horizontal,
+                  aspectRatio: 9 / 5,
+                  viewportFraction: 1.0,
+                  onPageChanged: (index, reason) {
+                    // 페이지가 변경될 때 호출되는 콜백
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
                 ),
-                items: myNamecardItems.map((item) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return AspectRatio(
-                        aspectRatio: 9 / 5,
-                        child: Image.network(item.namecardImg, fit: BoxFit.cover),
-                      );
-                    },
-                  );
+                items: widget.myNamecardItems.map((item) {
+                  return Image.network(item.namecardImg, fit: BoxFit.cover);
                 }).toList(),
               ),
             ),

@@ -3,7 +3,8 @@ package com.ssok.idcard.domain.service;
 import com.ssok.idcard.domain.api.response.RecognizedLicenseResponse;
 import com.ssok.idcard.domain.api.response.RecognizedNameCardResponse;
 import com.ssok.idcard.domain.api.response.RecognizedRegistrationCardResponse;
-import com.ssok.idcard.global.openfeign.naver.AnalysisClient;
+import com.ssok.idcard.global.openfeign.naver.AnalysisIdcardClient;
+import com.ssok.idcard.global.openfeign.naver.AnalysisNameCardClient;
 import com.ssok.idcard.global.openfeign.naver.dto.response.NameCardOcrResponse;
 import com.ssok.idcard.global.openfeign.naver.dto.response.RegistrationCardOcrResponse;
 import com.ssok.idcard.global.openfeign.naver.dto.response.LicenseOcrResponse;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,9 +23,14 @@ import java.util.UUID;
 @Slf4j
 public class AnalysisService {
 
-    @Value("${ocr.key}")
-    private String ocrKey;
-    private final AnalysisClient analysisClient;
+    @Value("${ocr.idcard.key}")
+    private String ocrIdcardKey;
+
+    @Value("${ocr.namecard.key}")
+    private String ocrnameCardKey;
+
+    private final AnalysisIdcardClient analysisIdcardClient;
+    private final AnalysisNameCardClient analysisNameCardClient;
     private final FileUtil fileUtil;
 
     public RecognizedLicenseResponse analysisLicense(MultipartFile file) {
@@ -35,7 +42,10 @@ public class AnalysisService {
     }
 
     public RecognizedRegistrationCardResponse analysisRegistration(MultipartFile file) {
+        log.info("service entered method analysisLRegistration");
         RegistrationCardOcrResponse ocrDto = registrationCardOCR(file);
+        log.info("ocrDto =============");
+        log.info(ocrDto.toString());
         return RecognizedRegistrationCardResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getIc());
     }
 
@@ -65,16 +75,16 @@ public class AnalysisService {
         log.info("message ================");
         log.info(message);
         log.info("ocrKey ==================");
-        log.info(ocrKey);
+        log.info(ocrIdcardKey);
         log.info("file ==================");
         log.info(file.toString());
 
-        return analysisClient.analyzeLicense(ocrKey, message, file).get();
+        return analysisIdcardClient.analyzeLicense(ocrIdcardKey, message, file).get();
     }
 
     private RegistrationCardOcrResponse registrationCardOCR(MultipartFile file) {
         String message = getMessage(file);
-        return analysisClient.analyzeIdcard(ocrKey, message, file).get();
+        return analysisIdcardClient.analyzeIdcard(ocrIdcardKey, message, file).get();
     }
     private NameCardOcrResponse nameCardOCR(MultipartFile file) {
 
@@ -82,10 +92,16 @@ public class AnalysisService {
         log.info("message ================");
         log.info(message);
         log.info("ocrKey ==================");
-        log.info(ocrKey);
+        log.info(ocrnameCardKey);
         log.info("file ==================");
         log.info(file.toString());
-        return analysisClient.analyzeNameCard(ocrKey, message, file).get();
+
+        NameCardOcrResponse value = analysisNameCardClient.analyzeNameCard(ocrnameCardKey, message, file).get();
+
+        log.info("value =============");
+        log.info(value.toString());
+
+        return value;
     }
 
 }

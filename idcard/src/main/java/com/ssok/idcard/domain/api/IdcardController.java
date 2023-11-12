@@ -98,6 +98,7 @@ public class IdcardController {
     public ApiResponse<RecognizedNameCardResponse> ocrNameCard(
             @RequestPart(value="img") MultipartFile file
     ) {
+        log.info("controller entered method ocrNameCard");
         RecognizedNameCardResponse result = analysisService.analysisNameCard(file);
         return OK(result);
     }

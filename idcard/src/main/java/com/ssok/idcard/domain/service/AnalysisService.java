@@ -40,7 +40,9 @@ public class AnalysisService {
     }
 
     public RecognizedNameCardResponse analysisNameCard(MultipartFile file) {
+        log.info("service entered method analysisNameCard");
         NameCardOcrResponse ocrDto = nameCardOCR(file);
+
         return RecognizedNameCardResponse.from(ocrDto.getImages().get(0).getNameCard().getResult());
     }
 
@@ -75,7 +77,14 @@ public class AnalysisService {
         return analysisClient.analyzeIdcard(ocrKey, message, file).get();
     }
     private NameCardOcrResponse nameCardOCR(MultipartFile file) {
+
         String message = getMessage(file);
+        log.info("message ================");
+        log.info(message);
+        log.info("ocrKey ==================");
+        log.info(ocrKey);
+        log.info("file ==================");
+        log.info(file.toString());
         return analysisClient.analyzeNameCard(ocrKey, message, file).get();
     }
 

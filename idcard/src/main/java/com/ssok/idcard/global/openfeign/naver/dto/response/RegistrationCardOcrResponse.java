@@ -39,11 +39,11 @@ public class RegistrationCardOcrResponse {
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class RegstrationCard {
-        private Name name;
-        private PersonalNum personalNum;
-        private Address address;
-        private IssueDate issueDate;
-        private Authority authority;
+        private List<Name> name;
+        private List<PersonalNum> personalNum;
+        private List<Address> address;
+        private List<IssueDate> issueDate;
+        private List<Authority> authority;
     }
 
     @Getter

@@ -12,7 +12,6 @@ import static lombok.AccessLevel.PUBLIC;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = PUBLIC)
-@ToString
 public class NameCardOcrResponse {
     List<Images> images;
 
@@ -33,7 +32,6 @@ public class NameCardOcrResponse {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
-    @ToString
     public static class Result {
         private List<Name> name;
         private List<Company> company;
@@ -51,28 +49,28 @@ public class NameCardOcrResponse {
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Name {
-        private StringObject formatted;
+        private String text;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Company {
-        private StringObject formatted;
+        private String text;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Address {
-        private StringObject formatted;
+        private String text;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Department {
-        private StringObject formatted;
+        private String text;
 
     }
 
@@ -80,7 +78,7 @@ public class NameCardOcrResponse {
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Position {
-        private StringObject formatted;
+        private String text;
 
     }
 
@@ -88,35 +86,35 @@ public class NameCardOcrResponse {
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Mobile {
-        private StringObject formatted;
+        private String text;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Tel {
-        private StringObject formatted;
+        private String text;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Fax {
-        private StringObject formatted;
+        private String text;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Email {
-        private StringObject formatted;
+        private String text;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class Homepage {
-        private StringObject formatted;
+        private String text;
     }
 
     @Getter

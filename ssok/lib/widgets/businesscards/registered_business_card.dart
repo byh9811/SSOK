@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/dto/business_card_data.dart';
@@ -16,19 +17,15 @@ class RegisteredBusinessCard extends StatefulWidget {
 class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   ApiService apiService = ApiService();
   late BusinessCardData businessCardData;
-  String myImage = "";
-  late int myNamecardSeq;
 
   void bringBusinessCardList() async {
     final response = await apiService.getRequest('namecard-service/', TokenManager().accessToken);
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      print("내 명함");
-      print(jsonData);
+      print("registered_business_card // bringBusinessCardList");
+      print(jsonData["response"]);
       setState(() {
         businessCardData = BusinessCardData.fromJson(jsonData['response']);
-        myImage = businessCardData.namecardImg;
-        myNamecardSeq = businessCardData.namecardSeq;
       });
     } else {
       throw Exception('Failed to load');
@@ -38,7 +35,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   @override
   void initState() {
     super.initState();
-    businessCardData = BusinessCardData(namecardSeq: 0, namecardImg: "", namecards: []);
+    businessCardData = BusinessCardData(favorites: [],memberSeq: 0,myExchangeItems: [],myNamecardItems: []);
     bringBusinessCardList();
   }
 
@@ -46,8 +43,8 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MyBusinessCard(myImage: myImage, myNamecardSeq: myNamecardSeq),
-        BusinessCardList(businessCardData: businessCardData),
+        MyBusinessCard(myNamecardItems : businessCardData.myNamecardItems),
+        // BusinessCardList(myExchangeItems: businessCardData.myExchangeItems),
       ],
     );
   }
@@ -56,16 +53,16 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
 class MyBusinessCard extends StatelessWidget {
   const MyBusinessCard({
     Key? key,
-    required this.myImage,
-    required this.myNamecardSeq,
+    required this.myNamecardItems,
   }) : super(key: key);
-  final String myImage;
-  final int myNamecardSeq;
+  final List<MyNameCard> myNamecardItems;
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+     final CarouselController _carouselController = CarouselController();
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
       child: Column(
@@ -97,8 +94,7 @@ class MyBusinessCard extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
-                          child:
-                              BusinessTransferModal(namecardSeq: myNamecardSeq),
+                          child: BusinessTransferModal(namecardSeq: myNamecardItems[0].namecardSeq),
                         );
                       },
                     );
@@ -117,44 +113,70 @@ class MyBusinessCard extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed("/businesscard/my");
               },
-              child: SizedBox(
-                height: screenHeight * 0.18,
-                child: AspectRatio(
-                  aspectRatio: 9 / 5,
-                  child: Image.network(myImage, fit: BoxFit.cover),
+              child: CarouselSlider(
+                carouselController: _carouselController,
+                options: CarouselOptions(
+                  height: screenHeight * 0.18,
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 0.8,
+                  initialPage: 0,
+                  enableInfiniteScroll: false,
+                  reverse: false,
+                  autoPlay: false,
+                  autoPlayInterval: Duration(seconds: 3),
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                  scrollDirection: Axis.horizontal,
                 ),
+                items: myNamecardItems.map((item) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return AspectRatio(
+                        aspectRatio: 9 / 5,
+                        child: Image.network(item.namecardImg, fit: BoxFit.cover),
+                      );
+                    },
+                  );
+                }).toList(),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
 
+
 class BusinessCardList extends StatefulWidget {
-  final BusinessCardData businessCardData;
+  final List<MyNameCard> myExchangeItems;
   const BusinessCardList({
     Key? key,
-    required this.businessCardData,
+    required this.myExchangeItems,
   }) : super(key: key);
   @override
-  State<BusinessCardList> createState() => _BusinessCardListState();
+  State<BusinessCardList> createState() => _BusinessCardListState(myExchangeItems);
 }
 
 class _BusinessCardListState extends State<BusinessCardList> {
+
+  final List<MyNameCard> myExchangeItems;
+  _BusinessCardListState(this.myExchangeItems);
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        BusinessCardListHeader(namecardCnt:widget.businessCardData.namecards.length),
-        BusinessCardListBody(namecards: widget.businessCardData.namecards),
+        BusinessCardListHeader(namecardCnt: myExchangeItems.length),
+        // BusinessCardListBody(myExchangeItems: myExchangeItems),
       ],
     );
   }
 }
+
 
 class BusinessCardListHeader extends StatefulWidget {
   final int namecardCnt;
@@ -242,144 +264,147 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
   }
 }
 
-class BusinessCardListBody extends StatefulWidget {
-  const BusinessCardListBody({
-    Key? key,
-    required this.namecards,
-  }) : super(key: key);
-  final List<Namecard> namecards;
-  @override
-  State<BusinessCardListBody> createState() => _BusinessCardListBodyState();
-}
 
-class _BusinessCardListBodyState extends State<BusinessCardListBody> {
-  late List<Namecard> businessCardList;
-  @override
-  void initState() {
-    super.initState();
-    businessCardList = widget.namecards;
-  }
+// class BusinessCardListBody extends StatefulWidget {
+//   const BusinessCardListBody({
+//     Key? key,
+//     required this.myExchangeItems,
+//   }) : super(key: key);
+//   final List<MyNameCard> myExchangeItems;
+//   @override
+//   State<BusinessCardListBody> createState() => _BusinessCardListBodyState(myExchangeItems);
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return SizedBox(
-      height: screenHeight * 0.57 - 60.0,
-      child: ListView.builder(
-        itemCount: businessCardList.length,
-        itemBuilder: (context, index) {
-          Namecard data = businessCardList[index];
-          String namecardName = data.namecardName;
-          String namecardJob = data.namecardJob;
-          String namecardImage = data.namecardImage;
-          String namecardCompany = data.namecardCompany;
-          String namecardDateTime = data.date;
+// class _BusinessCardListBodyState extends State<BusinessCardListBody> {
+//   final List<MyNameCard> businessCardList;
+  
+//   _BusinessCardListBodyState(this.businessCardList);
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
 
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: screenHeight * 0.04,
-              vertical: screenWidth * 0.01,
-            ),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed('/businesscard/detail',arguments: data.exchangeSeq);
-              },
-              child: CustomListItem(
-                name: namecardName,
-                image: namecardImage,
-                job: namecardJob,
-                company: namecardCompany,
-                dateTime: namecardDateTime,
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     double screenWidth = MediaQuery.of(context).size.width;
+//     double screenHeight = MediaQuery.of(context).size.height;
+//     return SizedBox(
+//       height: screenHeight * 0.57 - 60.0,
+//       child: ListView.builder(
+//         itemCount: businessCardList.length,
+//         itemBuilder: (context, index) {
+//           MyNameCard data = businessCardList[index];
+//           String namecardName = data.namecardName;
+//           String namecardJob = data.namecardJob;
+//           String namecardImage = data.namecardImage;
+//           String namecardCompany = data.namecardCompany;
+//           String namecardDateTime = data.date;
 
-class CustomListItem extends StatelessWidget {
-  const CustomListItem({
-    Key? key,
-    required this.name,
-    required this.image,
-    required this.job,
-    required this.company,
-    required this.dateTime,
-  }) : super(key: key);
+//           return Padding(
+//             padding: EdgeInsets.symmetric(
+//               horizontal: screenHeight * 0.04,
+//               vertical: screenWidth * 0.01,
+//             ),
+//             child: InkWell(
+//               onTap: () {
+//                 Navigator.of(context).pushNamed('/businesscard/detail',arguments: data.exchangeSeq);
+//               },
+//               child: CustomListItem(
+//                 name: namecardName,
+//                 image: namecardImage,
+//                 job: namecardJob,
+//                 company: namecardCompany,
+//                 dateTime: namecardDateTime,
+//               ),
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
-  final String name;
-  final String image;
-  final String job;
-  final String company;
-  final String dateTime;
 
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return SizedBox(
-      width: screenWidth,
-      height: screenHeight * 0.1,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: screenWidth * 0.01),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: screenHeight * 0.01, bottom: screenHeight * 0.005),
-                  child: Text(
-                    job,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF858585),
-                    ),
-                  ),
-                ),
-                Text(
-                  company,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF858585),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AspectRatio(
-              aspectRatio: 9 / 5,
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(0, 2),
-                      blurRadius: 1.0,
-                    ),
-                  ],
-                ),
-                child: Image.network(image, fit: BoxFit.cover),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
+// class CustomListItem extends StatelessWidget {
+//   const CustomListItem({
+//     Key? key,
+//     required this.name,
+//     required this.image,
+//     required this.job,
+//     required this.company,
+//     required this.dateTime,
+//   }) : super(key: key);
+
+//   final String name;
+//   final String image;
+//   final String job;
+//   final String company;
+//   final String dateTime;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     double screenWidth = MediaQuery.of(context).size.width;
+//     double screenHeight = MediaQuery.of(context).size.height;
+//     return SizedBox(
+//       width: screenWidth,
+//       height: screenHeight * 0.1,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Padding(
+//             padding: EdgeInsets.only(left: screenWidth * 0.01),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 Text(
+//                   name,
+//                   style: TextStyle(
+//                     fontSize: 17,
+//                     fontWeight: FontWeight.w400,
+//                   ),
+//                 ),
+//                 Padding(
+//                   padding: EdgeInsets.only(
+//                       top: screenHeight * 0.01, bottom: screenHeight * 0.005),
+//                   child: Text(
+//                     job,
+//                     style: TextStyle(
+//                       fontSize: 13,
+//                       color: Color(0xFF858585),
+//                     ),
+//                   ),
+//                 ),
+//                 Text(
+//                   company,
+//                   style: TextStyle(
+//                     fontSize: 13,
+//                     color: Color(0xFF858585),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(8.0),
+//             child: AspectRatio(
+//               aspectRatio: 9 / 5,
+//               child: Container(
+//                 decoration: BoxDecoration(
+//                   boxShadow: [
+//                     BoxShadow(
+//                       color: Colors.grey,
+//                       offset: Offset(0, 2),
+//                       blurRadius: 1.0,
+//                     ),
+//                   ],
+//                 ),
+//                 child: Image.network(image, fit: BoxFit.cover),
+//               ),
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }

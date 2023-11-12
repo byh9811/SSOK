@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -103,17 +105,16 @@ class _IdPageState extends State<IDPage> {
     final response = await apiService.getRequest(
         "idcard-service/summary/idcard", TokenManager().accessToken);
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-    print(jsonData);
     if (response.statusCode == 200) {
-      final idCard = jsonData['response.summaryRegistrationCard'];
-      final license = jsonData['response.summaryLicense'];
-      print(idCard);
-      if (idCard != null) {
-        registrationCard = getIdCardInfo(idCard);
+      final tempRes = jsonData['response'];
+      final idCardRes = tempRes['summaryRegistrationCard'];
+      final licenseRes = tempRes['summaryLicense'];
+      if (idCardRes != null) {
+        registrationCard = getIdCardInfo(idCardRes);
       }
 
-      if (license != null) {
-        getDriveLicenseInfo(license);
+      if (licenseRes != null) {
+        license = getDriveLicenseInfo(licenseRes);
       }
     }
   }
@@ -164,6 +165,28 @@ class _IdPageState extends State<IDPage> {
     }
   }
 
+  Future<RecognizedRegCard> ocrLicense() async {
+    print("3:${pickedImage!.path}");
+    File file = File(pickedImage!.path);
+    Uint8List uint8list = await file.readAsBytes();
+    final response = await apiService.postRequestWithFile(
+        'idcard-service/scan/license',
+        null,
+        null,
+        TokenManager().accessToken,
+        uint8list);
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+      return jsonData['response'];
+
+      print(jsonData);
+    } else {
+      print(response.statusCode);
+      print(response.body);
+      throw Exception('Failed to load');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -189,14 +212,17 @@ class _IdPageState extends State<IDPage> {
         isIdCardHave
             ? contentBox(
                 context,
-                // 여기에 민증정보가 들어가야함. 클릭하면 상세정보 이동.
                 Column(
                   children: [
                     Expanded(
                       child: Text(
-                        "등록된 주민등록증이 있습니다",
+                        registrationCard!.registrationCardName,
                         style: TextStyle(color: Color(0xFF989898)),
                       ),
+                    ),
+                    Text(
+                      registrationCard!.registrationCardPersonalNumber,
+                      style: TextStyle(color: Color(0xFF989898)),
                     ),
                     SizedBox(
                       height: screenHeight * 0.06,
@@ -311,9 +337,16 @@ class _IdPageState extends State<IDPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => ServiceAggreementPage(
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushReplacementNamed('/drive/id/create');
+                                onTap: () async {
+                                  await _pickImage();
+
+                                  print("2:$pickedImage");
+                                  final data = await ocrLicense();
+                                  Navigator.of(context).pushReplacementNamed(
+                                    '/drive/id/create',
+                                    arguments: ImageAndData(
+                                        image: pickedImage!, data: data),
+                                  );
                                 },
                               ),
                             ),

@@ -34,18 +34,29 @@ class ApiService {
     return response;
   }
 
-  Future<dynamic> postRequestWithFile(String endpoint, String key, String data,
+  Future<dynamic> postRequestWithFile(String endpoint, String? key, String? data,
       String? accessToken, Uint8List bytes) async {
     var uri = '$baseUrl/$endpoint';
     print(uri);
-    FormData formData = FormData.fromMap({
-      'image': await MultipartFile.fromBytes(
-        bytes,
-        filename: 'mycard.png',
-        contentType: MediaType('image', 'png'),
-      ),
-      key: data
-    });
+    FormData formData;
+    if(key==null) {
+      formData = FormData.fromMap({
+        'img': await MultipartFile.fromBytes(
+          bytes,
+          filename: 'mycard.png',
+          contentType: MediaType('image', 'png'),
+        ),
+      });
+    } else {
+      formData = FormData.fromMap({
+        'image': await MultipartFile.fromBytes(
+          bytes,
+          filename: 'mycard.png',
+          contentType: MediaType('image', 'png'),
+        ),
+        key: data
+      });
+    }
 
     Dio dio = Dio();
 

@@ -59,35 +59,74 @@ class _IdCreatePageState extends State<IdCreatePage> {
   bool checkRegistrationCardIssueDate = false;
   bool checkRegistrationCardAuthority = false;
 
-  // void register() async {
-  //   if (checkRegistrationCardName &&
-  //       checkRegistrationCardPersonalNumber &&
-  //       checkRegistrationCardAddress &&
-  //       checkRegistrationCardIssueDate &&
-  //       checkRegistrationCardAuthority) {
-  //     Map<String, String> requestData = {
-  //       "registrationCardName": registrationCardName,
-  //       "registrationCardPersonalNumber": registrationCardPersonalNumber,
-  //       "registrationCardAddress": registrationCardAddress,
-  //       "registrationCardIssueDate": registrationCardIssueDate,
-  //       "registrationCardAuthority": registrationCardAuthority
-  //     };
-  //     var bytes = await File(image.path).readAsBytes();
-  //     final response = await apiService.postRequestWithFile(
-  //         'idcard-service/registration',
-  //         requestData,
-  //         TokenManager().accessToken,
-  //         bytes);
-  //     if (response.statusCode == 200) {
-  //       final jsonData = jsonDecode(response.body);
-  //       print(jsonData);
-  //       Navigator.of(context).pushReplacementNamed('/');
-  //     } else {
-  //       throw Exception('Failed to load');
-  //     }
-  //   }
-  // }
+  void register() async {
+    if (checkRegistrationCardName &&
+        checkRegistrationCardPersonalNumber &&
+        checkRegistrationCardAddress &&
+        checkRegistrationCardIssueDate &&
+        checkRegistrationCardAuthority) {
+      Map<String, String> requestData = {
+        "registrationCardName": registrationCardName,
+        "registrationCardPersonalNumber": registrationCardPersonalNumber,
+        "registrationCardAddress": registrationCardAddress,
+        "registrationCardIssueDate": registrationCardIssueDate,
+        "registrationCardAuthority": registrationCardAuthority
+      };
+      var bytes = await File(image.path).readAsBytes();
+      final response = await apiService.postRequestWithFile(
+          'idcard-service/registration',
+          'registrationCardCreateRequest',
+          jsonEncode(requestData),
+          TokenManager().accessToken,
+          bytes);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        print(jsonData);
+        Navigator.of(context).pushReplacementNamed('/');
+      } else {
+        throw Exception('Failed to load');
+      }
+    }
+  }
 
+  /**
+   * final TextEditingController _nameController = TextEditingController();
+      final TextEditingController _personalNumberController = TextEditingController();
+      final TextEditingController _typeController = TextEditingController();
+      final TextEditingController _addressController = TextEditingController();
+      final TextEditingController _numberController = TextEditingController();
+      final TextEditingController _renewStartDateController = TextEditingController();
+      final TextEditingController _renewEndDateController = TextEditingController();
+      final TextEditingController _conditionController = TextEditingController();
+      final TextEditingController _codeController = TextEditingController();
+      final TextEditingController _issueDateController = TextEditingController();
+      final TextEditingController _authorityController = TextEditingController();
+
+      "licenseName": licenseName,
+      "licensePersonalNumber": licensePersonalNumber,
+      "licenseType": licenseType,
+      "licenseAddress": licenseAddress,
+      "licenseNumber": licenseNumber,
+      "licenseRenewStartDate": licenseRenewStartDate,
+      "licenseRenewEndDate": licenseRenewEndDate,
+      "licenseCondition": licenseCondition,
+      "licenseCode": licenseCode,
+      "licenseIssueDate": licenseIssueDate,
+      "licenseAuthority": licenseAuthority
+
+      bool checkLicenseName = false;
+      bool checkLicensePersonalNumber = false;
+      bool checkLicenseAddress = false;
+      bool checkLicenseIssueDate = false;
+      bool checkLicenseAuthority = false;
+      bool checkLicenseType = false;
+      bool checkLicenseCode = false;
+      bool checkLicenseNumber = false;
+      bool checkLicenseRenewStartDate = false;
+      bool checkLicenseRenewEndDate = false;
+      bool checkLicenseCondition = false;
+
+   */
   @override
   Widget build(BuildContext context) {
     final ImageAndData args =

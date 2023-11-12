@@ -31,28 +31,6 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
   late Map<String, Object?> jsonString = {};
   late XFile? pickedImage;
 
-  Future<RecognizedRegCard> ocrLicense() async {
-    print("3:${pickedImage!.path}");
-    File file = File(pickedImage!.path);
-    Uint8List uint8list = await file.readAsBytes();
-    final response = await apiService.postRequestWithFile(
-        'idcard-service/scan/license',
-        null,
-        null,
-        TokenManager().accessToken,
-        uint8list);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      return jsonData['response'];
-
-      print(jsonData);
-    } else {
-      print(response.statusCode);
-      print(response.body);
-      throw Exception('Failed to load');
-    }
-  }
-
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     print(pickedFile);
@@ -62,15 +40,25 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
   }
 
   Future<RecognizedRegCard> ocrRC() async {
-    final response = await apiService.postRequest(
+    File file = File(pickedImage!.path);
+    Uint8List uint8list = await file.readAsBytes();
+    final response = await apiService.postRequestWithFile(
         'idcard-service/scan/registration',
-        {"img": "$pickedImage"},
-        TokenManager().accessToken);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      return jsonData['response'];
+        null,
+        null,
+        TokenManager().accessToken,
+        uint8list);
+    Map<String, dynamic> jsonData = jsonDecode(response);
 
-      print(jsonData);
+    if (jsonData['success']) {
+      Map<String, dynamic> data = jsonData['response'];
+      return RecognizedRegCard(
+          registrationCardName: data["registrationCardName"],
+          registrationCardPersonalNumber: data["registrationCardPersonalNumber"],
+          registrationCardAddress: data["registrationCardAddress"],
+          registrationCardIssueDate: data["registrationCardIssueDate"],
+          registrationCardAuthority: data["registrationCardAuthority"]
+      );
     } else {
       throw Exception('Failed to load');
     }
@@ -100,8 +88,9 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
                   MaterialPageRoute(
                     builder: (context) => ServiceAggreementPage(
                       onTap: () async {
-                        _pickImage();
+                        await _pickImage();
                         final data = await ocrRC();
+                        print("data:$data");
                         Navigator.of(context).pushReplacementNamed(
                           '/id/create',
                           arguments:

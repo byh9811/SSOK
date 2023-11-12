@@ -51,14 +51,24 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
         null,
         TokenManager().accessToken,
         uint8list);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      return jsonData['response'];
+    Map<String, dynamic> jsonData = jsonDecode(response);
+    if (jsonData['success']) {
+      Map<String, dynamic> data = jsonData['response'];
 
-      print(jsonData);
+      return RecognizedLicense(
+          licenseName: data["licenseName"],
+          licensePersonalNumber: data["licensePersonalNumber"],
+          licenseType: data["licenseType"],
+          licenseAddress: data["licenseAddress"],
+          licenseNumber: data["licenseNumber"],
+          licenseRenewStartDate: data["licenseRenewStartDate"],
+          licenseRenewEndDate: data["licenseRenewEndDate"],
+          licenseCondition: data["licenseCondition"],
+          licenseCode: data["licenseCode"],
+          licenseIssueDate: data["licenseIssueDate"],
+          licenseAuthority: data["licenseAuthority"]
+      );
     } else {
-      print(response.statusCode);
-      print(response.body);
       throw Exception('Failed to load');
     }
   }

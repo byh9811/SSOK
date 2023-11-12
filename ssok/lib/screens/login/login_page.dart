@@ -47,8 +47,29 @@ class _LoginPageState extends State<LoginPage> {
       print(jsonData["response"]["memberName"]);
       Navigator.of(context).pushReplacementNamed('/main');
     } else {
+      _showAlertDialog();
       throw Exception('Failed to load album');
     }
+  }
+
+  void _showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('로그인 실패'),
+          content: Text('아이디 혹은 비밀번호를 확인해주세요.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 알림 창 닫기
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -60,14 +81,15 @@ class _LoginPageState extends State<LoginPage> {
       child: Center(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-          child: Column(
+          child:Column(
             children: <Widget>[
               SizedBox(height: screenHeight * 0.1),
               Image.asset(
                 'assets/mainLogo.png',
-                height: 250,
+                height: 300,
               ),
-              SizedBox(height: screenHeight * 0.06),
+              SizedBox(height: screenHeight * 0.04),
+
               Form(
                   child: Column(
                 children: [
@@ -96,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true, // 비밀번호 안보이도록 하는 것
                     decoration: InputDecoration(
                         labelText: 'PW',
-                        hintText: " 입력하세요",
+                        hintText: " 비밀번호를 입력하세요",
                         labelStyle: TextStyle(color: Colors.black),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),

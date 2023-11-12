@@ -81,7 +81,7 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
       });
     }
     print("목록 조회");
-    print(imageList[0]);
+    print(imageList.length);
   }
 
   @override
@@ -113,22 +113,12 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
                         ),
                       ),
                     ),
-                    if(index==0)Container(
+                    if(imageList.length!=1 && index==0)Container(
                       width:100,
                       height:230,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/2.PNG'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    if(index==imageList.length-1)Container(
-                      width:100,
-                      height:230,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/4.PNG'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -143,6 +133,17 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
                         ),
                       ),
                     ),
+                    if(index!=0 && index==imageList.length-1)Container(
+                      width:100,
+                      height:230,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/4.PNG'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+
                     Text(
                       '명함 생성일\n2022-10-31',
                     ),

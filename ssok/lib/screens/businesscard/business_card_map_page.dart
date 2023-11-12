@@ -258,8 +258,8 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
         locationButtonEnable: true,
         consumeSymbolTapEvents: true,
         initialCameraPosition: NCameraPosition(
-            target: currentLocation ?? NLatLng(37.5666102, 126.9783881),
-            zoom: 15),
+            target: currentLocation ?? NLatLng(36.34, 127.77),
+            zoom: 6),
       ),
       onMapReady: onMapReady,
       // onMapTapped: onMapTapped,

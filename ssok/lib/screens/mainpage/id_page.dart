@@ -13,6 +13,7 @@ import 'package:ssok/widgets/ids/registered_drive_id_card.dart';
 import 'package:ssok/widgets/ids/registered_id_card.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../dto/registration_card.dart';
 
@@ -33,7 +34,8 @@ class _IdPageState extends State<IDPage> {
   late RegistrationCard? registrationCard;
   late License? license;
   late XFile? pickedImage;
-
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
   @override
   void initState() {
     super.initState();
@@ -86,6 +88,10 @@ class _IdPageState extends State<IDPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    List<Widget> imageSliders = [
+      isIdCardHave ? NotRegisteredIdCard() : RegisteredIdCard(),
+      isLicenseHave ? NotRegisteredDriveIdCard() : RegisteredDriveIdCard(),
+    ];
     return Column(
       children: [
         SizedBox(height: screenHeight * 0.03),
@@ -102,15 +108,45 @@ class _IdPageState extends State<IDPage> {
           ],
         ),
         SizedBox(height: screenHeight * 0.03),
-        titleText(text: "주민등록증"),
-        isIdCardHave
-            ? RegisteredIdCard(registrationCard: registrationCard)
-            : NotRegisteredIdCard(),
-        SizedBox(height: screenHeight * 0.03),
-        titleText(text: "운전면허증"),
-        isLicenseHave
-            ? RegisteredDriveIdCard(license: license)
-            : NotRegisteredDriveIdCard(),
+        CarouselSlider(
+          options: CarouselOptions(
+              enlargeCenterPage: true,
+              height: screenHeight * 0.57,
+              viewportFraction: 1,
+              enableInfiniteScroll: false,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _current = index;
+                });
+              }),
+          items: imageSliders,
+        ),
+        SizedBox(height: screenHeight * 0.01),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: imageSliders.asMap().entries.map((entry) {
+            return GestureDetector(
+              onTap: () => _controller.animateToPage(entry.key),
+              child: Container(
+                width: 9.0,
+                height: 9.0,
+                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: (Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black)
+                        .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+              ),
+            );
+          }).toList(),
+        ),
+        // isIdCardHave ? NotRegisteredIdCard() : RegisteredIdCard(),
+        // SizedBox(height: screenHeight * 0.03),
+        // titleText(text: "운전면허증"),
+        // isLicenseHave
+        //     ? RegisteredDriveIdCard(license: license)
+        //     : NotRegisteredDriveIdCard(),
       ],
     );
   }

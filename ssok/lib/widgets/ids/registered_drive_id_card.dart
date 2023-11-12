@@ -21,36 +21,108 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard> {
     double screenHeight = MediaQuery.of(context).size.height;
     return contentBox(
       context,
-      // 여기에 면허정보가 들어가야함. 클릭하면 상세정보 이동.
       Column(
         children: [
           Expanded(
-            child: Text(
-              "등록된 운전면허증이 있습니다",
-              style: TextStyle(color: Color(0xFF989898)),
-            ),
-          ),
-          SizedBox(
-            height: screenHeight * 0.06,
-            width: screenWidth * 0.7,
-            child: registerButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ServiceAggreementPage(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/drive/id/create');
-                      },
+            child: Container(
+              width: screenWidth,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/license_card_color.png'),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Image.asset(
+                      'assets/logo.png',
+                      height: 45,
+                      color: Colors.white54,
                     ),
                   ),
-                );
-              },
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          "운전면허증",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: screenHeight * 0.19,
+            width: screenWidth,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: screenWidth * 0.03, top: screenHeight * 0.01),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("이름"),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: screenWidth * 0.01, top: 3.0),
+                    child: Text(
+                      "나종현",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Text("주민번호"),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: screenWidth * 0.01, top: 3.0),
+                    child: Text(
+                      "980113-1******",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/drive/id/detail');
+                        },
+                        child: Text(
+                          "자세히",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],
       ),
-      0.23,
+      0.5,
     );
   }
 }

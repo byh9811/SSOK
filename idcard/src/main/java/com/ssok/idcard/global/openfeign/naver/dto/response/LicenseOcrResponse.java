@@ -42,14 +42,14 @@ public class LicenseOcrResponse {
     @AllArgsConstructor
     @NoArgsConstructor(access = PUBLIC)
     public static class DriverLicense {
-        private Type type;
+        private List<Type> type;
         private List<LicenseNumber> num;
         private List<Name> name;
         private List<PersonalNum> personalNum;
         private List<Address> address;
         private List<RenewStartDate> renewStartDate;
         private List<RenewEndDate> renewEndDate;
-        private Condition condition;
+        private List<Condition> condition;
         private List<Code> code;
         private List<IssueDate> issueDate;
         private List<Authority> authority;

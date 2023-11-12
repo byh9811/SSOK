@@ -23,9 +23,9 @@ class _MainPageState extends State<MainPage> {
     // 각 위젯 페이지들
     IDPage(),
     BusinessCardPage(),
+    PocketPage(),
     CreditCardPage(),
     ReceiptPage(),
-    PocketPage(),
   ];
 
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
@@ -215,7 +215,16 @@ class _MainPageState extends State<MainPage> {
                     size: 24,
                   ),
                 ),
-                label: "명함"), // index 1
+                label: "명함"), // index 3
+            BottomNavigationBarItem(
+                icon: Padding(
+                  padding: const EdgeInsets.only(),
+                  child: Icon(
+                    Icons.monetization_on,
+                    size: 24,
+                  ),
+                ),
+                label: "포켓"), // index 1
             BottomNavigationBarItem(
                 icon: Padding(
                   padding: const EdgeInsets.only(),
@@ -233,16 +242,7 @@ class _MainPageState extends State<MainPage> {
                     size: 24,
                   ),
                 ),
-                label: "영수증"), // index 3
-            BottomNavigationBarItem(
-                icon: Padding(
-                  padding: const EdgeInsets.only(),
-                  child: Icon(
-                    Icons.monetization_on,
-                    size: 24,
-                  ),
-                ),
-                label: "포켓"), // index 4
+                label: "영수증"), // index 4
           ],
         ),
       ),

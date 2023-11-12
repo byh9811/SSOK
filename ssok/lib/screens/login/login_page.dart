@@ -140,12 +140,18 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     fetchTodos();
                   },
-                  child: Text("로그인")),
+                  style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all(Size(200, 50))),
+                  child: Text("로그인"),),
+              SizedBox(height: screenHeight * 0.01),
               ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushReplacementNamed('/signin');
                   },
-                  child: Text("회원가입"))
+                  style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all(Size(200, 50))),
+                  child: Text("회원가입")
+                  )
             ],
           ),
         ),

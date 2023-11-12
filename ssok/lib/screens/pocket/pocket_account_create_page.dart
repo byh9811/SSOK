@@ -61,8 +61,8 @@ class _PocketAccountCreatePageState extends State<PocketAccountCreatePage> {
             SizedBox(
               height: screenHeight * 0.05,
             ),
-            MainButton(title: "다음단계로", onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/main'); //포켓페이지로 이동해야댐
+            MainButton(title: "포켓머니 생성하기", onPressed: () {
+            Navigator.of(context).pushReplacementNamed('/pocket/pocket/create'); //포켓페이지로 이동해야댐
             })
           ],
         ),

@@ -115,6 +115,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
     
     bool isLocalAuth;
     isLocalAuth = await LocalAuthentication().canCheckBiometrics;
+    print(isLocalAuth);
+
+
     setState(() {
       authenticated = true;
       _isLocalAuth = isLocalAuth;
@@ -130,6 +133,33 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
         Future<bool> NFCFlag = checkNFCAvailability();
         NFCFlag.then((bool isNFCAvailable){
           if(isNFCAvailable){
+            Future.delayed(Duration(seconds: 5), () async {
+              await NfcManager.instance.stopSession();
+            await showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("시간 초과"),
+                  content: Text(
+                    "결제 시간이 초과했습니다. 다시 시도해주세요.",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  actions: <Widget>[  
+                    TextButton(
+                      onPressed: () { 
+                        Navigator.of(context).pop();
+                        
+                        Navigator.of(context).pop();
+                        },
+                      child: Text("확인"),
+                    ),
+                  ],
+                ),
+              );
+            print("60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@");
+            return;
+            
+          });
             _tagRead();
           }
         });
@@ -159,7 +189,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       "pos/payment-service/payment",
        paymentCreatRequest,
         TokenManager().accessToken);
-
+    print("결과십년아");
     if(response.statusCode == 200){
       // ignore: use_build_context_synchronously
       await showDialog(
@@ -217,32 +247,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   void _tagRead() {
     checkNFCAvailability();
     print("1231232131");
-    Future.delayed(Duration(seconds: 5), () async {
-      await showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("시간 초과"),
-            content: Text(
-              "결제 시간이 초과했습니다. 다시 시도해주세요.",
-              style: TextStyle(color: Colors.black, fontSize: 16),
-            ),
-            actions: <Widget>[  
-              TextButton(
-                onPressed: () { 
-                  Navigator.of(context).pop();
-                  
-                  // Navigator.of(context).pop();
-                  },
-                child: Text("확인"),
-              ),
-            ],
-          ),
-        );
-      print("60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@");
-      return;
-    });
+    
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+      print("세션이 시작되었습니다.");
       var ndef = Ndef.from(tag);
       if (ndef != null) {
       final NdefMessage message = await ndef.read();

@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
 //                .antMatchers("/**").permitAll()
-                .antMatchers("/mydata/auth-management/oauth/2.0/**", "/pos/**").permitAll()
+                .antMatchers("/actuator/**", "/mydata/auth-management/oauth/2.0/**", "/pos/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class);

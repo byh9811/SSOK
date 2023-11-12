@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ssok/dto/business_card_data.dart';
 
 class BusinessCardSendBluetoothPage extends StatefulWidget {
   const BusinessCardSendBluetoothPage({super.key});
@@ -15,14 +16,14 @@ class BusinessCardSendBluetoothPage extends StatefulWidget {
 
 class _BusinessCardSendBluetoothPageState
     extends State<BusinessCardSendBluetoothPage> {
-  final String userName = Random().nextInt(10000).toString();
+  // final String userName = Random().nextInt(10000).toString();
   final Strategy strategy = Strategy.P2P_STAR;
   Map<String, ConnectionInfo> endpointMap = {};
   String? tempFileUri;
   Map<int, String> map = {};
   bool advertising = false;
   bool scanning = false;
-  late int namecardSeq;
+  late MyNameCard myNamecardItem;
 
   @override
   void initState() {
@@ -38,12 +39,12 @@ class _BusinessCardSendBluetoothPageState
   void advertisingStart() async {
     try {
       bool a = await Nearby().startAdvertising(
-        userName,
+        myNamecardItem.namecardName,
         strategy,
         onConnectionInitiated: onConnectionInit,
         onConnectionResult: (id, status) {
           showSnackbar(status);
-          sendBusinessCard(namecardSeq);
+          sendBusinessCard(myNamecardItem.namecardSeq);
         },
         onDisconnected: (id) {
           showSnackbar(
@@ -157,7 +158,7 @@ class _BusinessCardSendBluetoothPageState
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    namecardSeq = ModalRoute.of(context)!.settings.arguments as int;
+    myNamecardItem = ModalRoute.of(context)!.settings.arguments as MyNameCard;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -201,7 +202,7 @@ class _BusinessCardSendBluetoothPageState
               )),
           SizedBox(height: screenHeight * 0.04),
           Text(
-            "User Name: $namecardSeq",
+            "User : ${myNamecardItem.namecardName}",
             style: TextStyle(color: Colors.white),
           ),
           SizedBox(height: screenHeight * 0.01),
@@ -236,7 +237,7 @@ class _BusinessCardSendBluetoothPageState
           ElevatedButton(
             child: const Text("명함 전송"),
             onPressed: () async {
-              sendBusinessCard(namecardSeq);
+              sendBusinessCard(myNamecardItem.namecardSeq);
             },
           ),
         ],

@@ -13,7 +13,7 @@ class BusinessTransferModal extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print(myNamecardItem.namecardName);
+
     return SizedBox(
       width: screenWidth * 0.75,
       height: screenHeight * 0.3,
@@ -48,6 +48,7 @@ class BusinessTransferModal extends StatelessWidget {
                 title: "받기",
                 icon: Icons.archive,
                 ontap: () {
+                  print(myNamecardItem.namecardName);
                   Navigator.of(context).pushNamed(
                       '/businesscard/receive/bluetooth',
                       arguments: myNamecardItem);

@@ -43,7 +43,6 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
 
   @override
   Widget build(BuildContext context) {
-    print("안ㄴ영하세용  12312321");
     print(businessCardData.myExchangeItems.length);
 
     return Column(
@@ -275,7 +274,6 @@ class _ExchangeCardListHeaderState extends State<ExchangeCardListHeader> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print("efef");
     print(widget.namecardCnt);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),

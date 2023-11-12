@@ -115,7 +115,7 @@ class _BusinessCardReceiveBluetoothPageState
               "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
         },
       );
-      showSnackbar("연결 해제: $a");
+      showSnackbar("스캔 시작: $a");
       setState(() {
         scanning = true;
       });
@@ -229,7 +229,7 @@ class _BusinessCardReceiveBluetoothPageState
             ),
           ),
           Text(
-            "User Name: ${myNamecardItem.namecardName}",
+            "User: ${myNamecardItem.namecardName}",
             style: TextStyle(color: Colors.white),
           ),
           SizedBox(height: screenHeight * 0.01),

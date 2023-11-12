@@ -74,6 +74,7 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
 
   void getHistory()async{
     final response = await apiService.getRequest("namecard-service/timeline/${exchangeSeq}", TokenManager().accessToken);
+
     final jsonData = jsonDecode(response.body);
     if(response.statusCode==200){
       setState(() {
@@ -81,6 +82,7 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
       });
     }
     print("목록 조회");
+    print(exchangeSeq);
     print(imageList.length);
   }
 

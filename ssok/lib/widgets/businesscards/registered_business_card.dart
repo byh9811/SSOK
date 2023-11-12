@@ -41,11 +41,14 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
 
   @override
   Widget build(BuildContext context) {
+    print("안ㄴ영하세용  12312321");
+    print(businessCardData.myExchangeItems.length);
+
     return Column(
       children: [
         MyBusinessCard(myNamecardItems : businessCardData.myNamecardItems),
-        MyFavoriteCard(favorites : businessCardData.favorites)
-        // BusinessCardList(myExchangeItems: businessCardData.myExchangeItems),
+        MyFavoriteCard(favorites : businessCardData.favorites),
+        ExchangeCardList(myExchangeItems: businessCardData.myExchangeItems),
       ],
     );
   }
@@ -96,7 +99,7 @@ class _MyFavoriteCard extends State<MyFavoriteCard>{
             thickness: 1,
           ),
           SizedBox(
-          height: screenHeight * 0.57 - 60.0,
+          height: 100, //////////////////////////////////////////////////////내부 높이랑 동일하게 설정하기
           child: ListView.builder(
             itemCount: widget.favorites.length,
             itemBuilder: (context, index) {
@@ -232,53 +235,52 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
 }
 
 
-class BusinessCardList extends StatefulWidget {
-  final List<MyNameCard> myExchangeItems;
-  const BusinessCardList({
+class ExchangeCardList extends StatefulWidget {
+  final List<NameCard> myExchangeItems;
+  const ExchangeCardList({
     Key? key,
     required this.myExchangeItems,
   }) : super(key: key);
   @override
-  State<BusinessCardList> createState() => _BusinessCardListState(myExchangeItems);
+  State<ExchangeCardList> createState() => _ExchangeCardListState();
 }
 
-class _BusinessCardListState extends State<BusinessCardList> {
-
-  final List<MyNameCard> myExchangeItems;
-  _BusinessCardListState(this.myExchangeItems);
+class _ExchangeCardListState extends State<ExchangeCardList> {
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    print("뭐 : ${widget.myExchangeItems.length}");
+
     return Column(
       children: [
-        BusinessCardListHeader(namecardCnt: myExchangeItems.length),
-        // BusinessCardListBody(myExchangeItems: myExchangeItems),
+        ExchangeCardListHeader(namecardCnt: widget.myExchangeItems.length),
+        ExchangeCardListBody(myExchangeItems: widget.myExchangeItems),
       ],
     );
   }
 }
 
 
-class BusinessCardListHeader extends StatefulWidget {
-  final int namecardCnt;
-  const BusinessCardListHeader({super.key, required this.namecardCnt});
+class ExchangeCardListHeader extends StatefulWidget {
 
+  const ExchangeCardListHeader({Key? key, required this.namecardCnt}): super(key: key);
+  final int namecardCnt;
   @override
-  State<BusinessCardListHeader> createState() => _BusinessCardListHeaderState(namecardCnt);
+  State<ExchangeCardListHeader> createState() => _ExchangeCardListHeaderState();
 }
 
-class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
+class _ExchangeCardListHeaderState extends State<ExchangeCardListHeader> {
 
-  final int namecardCnt;
-  _BusinessCardListHeaderState(this.namecardCnt);
 
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    print("efef");
+    print(widget.namecardCnt);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
       child: Column(
@@ -287,7 +289,7 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
             children: [
               Expanded(
                   child: Text(
-                "전체(${namecardCnt})",
+                "전체(${widget.namecardCnt})",
                 style: TextStyle(fontSize: 18),
               )),
               InkWell(
@@ -350,73 +352,79 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
 }
 
 
-// class BusinessCardListBody extends StatefulWidget {
-//   const BusinessCardListBody({
-//     Key? key,
-//     required this.myExchangeItems,
-//   }) : super(key: key);
-//   final List<MyNameCard> myExchangeItems;
-//   @override
-//   State<BusinessCardListBody> createState() => _BusinessCardListBodyState(myExchangeItems);
-// }
+class ExchangeCardListBody extends StatefulWidget {
+  const ExchangeCardListBody({
+    Key? key,
+    required this.myExchangeItems,
+  }) : super(key: key);
+  final List<NameCard> myExchangeItems;
+  @override
+  State<ExchangeCardListBody> createState() => _ExchangeCardListBodyState();
+}
+//
+class _ExchangeCardListBodyState extends State<ExchangeCardListBody> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
-// class _BusinessCardListBodyState extends State<BusinessCardListBody> {
-//   final List<MyNameCard> businessCardList;
-  
-//   _BusinessCardListBodyState(this.businessCardList);
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     double screenWidth = MediaQuery.of(context).size.width;
-//     double screenHeight = MediaQuery.of(context).size.height;
-//     return SizedBox(
-//       height: screenHeight * 0.57 - 60.0,
-//       child: ListView.builder(
-//         itemCount: businessCardList.length,
-//         itemBuilder: (context, index) {
-//           MyNameCard data = businessCardList[index];
-//           String namecardName = data.namecardName;
-//           String namecardJob = data.namecardJob;
-//           String namecardImage = data.namecardImage;
-//           String namecardCompany = data.namecardCompany;
-//           String namecardDateTime = data.date;
-//           return Padding(
-//             padding: EdgeInsets.symmetric(
-//               horizontal: screenHeight * 0.04,
-//               vertical: screenWidth * 0.01,
-//             ),
-//             child: InkWell(
-//               onTap: () {
-//                 Navigator.of(context).pushNamed('/businesscard/detail',arguments: data.exchangeSeq);
-//               },
-//               child: CustomListItem(
-//                 name: namecardName,
-//                 image: namecardImage,
-//                 job: namecardJob,
-//                 company: namecardCompany,
-//                 dateTime: namecardDateTime,
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    print("========");
+    print(widget.myExchangeItems.length);
+
+    return SizedBox(
+      height: screenHeight * 0.57 - 60.0,
+      child: ListView.builder(
+        itemCount: widget.myExchangeItems.length,
+        itemBuilder: (context, index) {
+          NameCard data = widget.myExchangeItems[index];
+          String namecardName = data.name;
+          String namecardJob = data.job;
+          String namecardImage = data.namecardImg;
+          String namecardCompany = data.company;
+          String namecardDateTime = data.exchangeDate;
+          bool favorite = data.isFavorite;
+
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: screenHeight * 0.04,
+              vertical: screenWidth * 0.01,
+            ),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).pushNamed('/businesscard/detail',arguments: data.exchangeSeq);
+              },
+              child: CustomListItem(
+                name: namecardName,
+                image: namecardImage,
+                job: namecardJob,
+                company: namecardCompany,
+                dateTime: namecardDateTime,
+                favorite: favorite,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 
 class CustomListItem extends StatelessWidget {
-
   const CustomListItem({
     Key? key,
     required this.name,
     required this.image,
     required this.job,
     required this.company,
-    required this.dateTime, required this.favorite,
+    required this.dateTime,
+    required this.favorite,
   }) : super(key: key);
+
   final String name;
   final String image;
   final String job;
@@ -456,11 +464,11 @@ class CustomListItem extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    if(favorite) InkWell(
+                    InkWell(
                       onTap: () {
                         // makeFavorite();
                       },
-                      child:Icon(Icons.star, color: Colors.yellow),
+                      child: favorite?Icon(Icons.star, color: Colors.yellow):Icon(Icons.star_border_outlined, color: Colors.yellow),
                     ),
                   ],
                 ),

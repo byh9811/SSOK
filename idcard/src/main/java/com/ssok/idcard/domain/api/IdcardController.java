@@ -81,6 +81,7 @@ public class IdcardController {
     public ApiResponse<RecognizedRegistrationCardResponse> ocrRegistration(
             @RequestPart(value="img") MultipartFile file
     ) {
+        log.info("controller entered method ocrRegistration");
         RecognizedRegistrationCardResponse result = analysisService.analysisRegistration(file);
         return OK(result);
     }

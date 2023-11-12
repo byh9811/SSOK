@@ -18,11 +18,11 @@ public record RecognizedRegistrationCardResponse(
 
     public static RecognizedRegistrationCardResponse from(RegistrationCardOcrResponse.RegstrationCard regstrationCard) {
         return RecognizedRegistrationCardResponse.builder()
-                .registrationCardName(regstrationCard.getName().getFormatted().getValue())
-                .registrationCardPersonalNumber(regstrationCard.getPersonalNum().getFormatted().getValue())
-                .registrationCardAddress(regstrationCard.getAddress().getFormatted().getValue())
-                .registrationCardIssueDate(toLocalDate(regstrationCard.getIssueDate().getFormatted()))
-                .registrationCardAuthority(regstrationCard.getAuthority().getFormatted().getValue())
+                .registrationCardName(regstrationCard.getName().get(0).getFormatted().getValue())
+                .registrationCardPersonalNumber(regstrationCard.getPersonalNum().get(0).getFormatted().getValue())
+                .registrationCardAddress(regstrationCard.getAddress().get(0).getFormatted().getValue())
+                .registrationCardIssueDate(toLocalDate(regstrationCard.getIssueDate().get(0).getFormatted()))
+                .registrationCardAuthority(regstrationCard.getAuthority().get(0).getFormatted().getValue())
                 .build();
     }
 }

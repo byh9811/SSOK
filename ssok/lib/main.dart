@@ -5,6 +5,7 @@ import 'package:ssok/screens/businesscard/business_card_camera_create_page.dart'
 import 'package:ssok/screens/businesscard/business_card_detail_page.dart';
 import 'package:ssok/screens/businesscard/business_card_history_page.dart';
 import 'package:ssok/screens/businesscard/business_card_map_page.dart';
+import 'package:ssok/screens/businesscard/business_card_my_history_page%20.dart';
 import 'package:ssok/screens/businesscard/business_card_my_page.dart';
 import 'package:ssok/screens/businesscard/business_card_self_create_page.dart';
 import 'package:ssok/screens/businesscard/business_card_receive_bluetooth_page.dart';
@@ -63,7 +64,8 @@ class MyApp extends StatelessWidget {
         '/businesscard/my': (context) => BusinessCardMyPage(),
         '/businesscard/detail': (context) => BusinessCardDetailPage(),
         '/businesscard/self/create': (context) => BusinessCardSelfCreatePage(),
-        '/businesscard/history': (context) => BusineessCardHistoryPage(),
+        '/businesscard/history':(context) => BusineessCardHistoryPage(),
+        '/businesscard/myhistory':(context) => BusineessCardMyHistoryPage(),
         '/businesscard/camera/create': (context) =>
             BusinessCardCameraCreatePage(),
         '/businesscard/map': (context) => BusinessCardMapPage(),

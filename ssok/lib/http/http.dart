@@ -62,6 +62,8 @@ class ApiService {
 
     dio.options.headers = {'ACCESS-TOKEN': accessToken};
     dio.options.contentType = 'multipart/form-data';
+
+    print(dio.options.contentType);
     var response = await dio.post(
       uri,
       data: formData,

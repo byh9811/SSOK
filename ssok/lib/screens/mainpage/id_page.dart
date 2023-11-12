@@ -89,8 +89,8 @@ class _IdPageState extends State<IDPage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     List<Widget> imageSliders = [
-      isIdCardHave ? NotRegisteredIdCard() : RegisteredIdCard(),
-      isLicenseHave ? NotRegisteredDriveIdCard() : RegisteredDriveIdCard(),
+      isIdCardHave ? RegisteredIdCard(registrationCard: registrationCard) : NotRegisteredIdCard(),
+      isLicenseHave ? RegisteredDriveIdCard(license: license) : NotRegisteredDriveIdCard(),
     ];
     return Column(
       children: [

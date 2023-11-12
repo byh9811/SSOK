@@ -20,13 +20,13 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   late int myNamecardSeq;
 
   void bringBusinessCardList() async {
-    final response = await apiService.getRequest(
-        'namecard-service/', TokenManager().accessToken);
+    final response = await apiService.getRequest('namecard-service/', TokenManager().accessToken);
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      businessCardData = BusinessCardData.fromJson(jsonData['response']);
-
+      print("내 명함");
+      print(jsonData);
       setState(() {
+        businessCardData = BusinessCardData.fromJson(jsonData['response']);
         myImage = businessCardData.namecardImg;
         myNamecardSeq = businessCardData.namecardSeq;
       });
@@ -38,8 +38,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   @override
   void initState() {
     super.initState();
-    businessCardData =
-        BusinessCardData(namecardSeq: 0, namecardImg: "", namecards: []);
+    businessCardData = BusinessCardData(namecardSeq: 0, namecardImg: "", namecards: []);
     bringBusinessCardList();
   }
 
@@ -134,11 +133,11 @@ class MyBusinessCard extends StatelessWidget {
 }
 
 class BusinessCardList extends StatefulWidget {
+  final BusinessCardData businessCardData;
   const BusinessCardList({
     Key? key,
     required this.businessCardData,
   }) : super(key: key);
-  final BusinessCardData businessCardData;
   @override
   State<BusinessCardList> createState() => _BusinessCardListState();
 }
@@ -150,7 +149,7 @@ class _BusinessCardListState extends State<BusinessCardList> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        BusinessCardListHeader(),
+        BusinessCardListHeader(namecardCnt:widget.businessCardData.namecards.length),
         BusinessCardListBody(namecards: widget.businessCardData.namecards),
       ],
     );
@@ -158,13 +157,17 @@ class _BusinessCardListState extends State<BusinessCardList> {
 }
 
 class BusinessCardListHeader extends StatefulWidget {
-  const BusinessCardListHeader({super.key});
+  final int namecardCnt;
+  const BusinessCardListHeader({super.key, required this.namecardCnt});
 
   @override
-  State<BusinessCardListHeader> createState() => _BusinessCardListHeaderState();
+  State<BusinessCardListHeader> createState() => _BusinessCardListHeaderState(namecardCnt);
 }
 
 class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
+  final int namecardCnt;
+  _BusinessCardListHeaderState(this.namecardCnt);
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -177,7 +180,7 @@ class _BusinessCardListHeaderState extends State<BusinessCardListHeader> {
             children: [
               Expanded(
                   child: Text(
-                "전체(0)",
+                "전체(${namecardCnt})",
                 style: TextStyle(fontSize: 18),
               )),
               InkWell(

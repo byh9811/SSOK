@@ -248,8 +248,6 @@ class ExchangeCardList extends StatefulWidget {
 class _ExchangeCardListState extends State<ExchangeCardList> {
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     print("뭐 : ${widget.myExchangeItems.length}");
 
     return Column(

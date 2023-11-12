@@ -113,6 +113,7 @@ public class NamecardService {
         /* 명함을 교환하지 않았다면 교환 */
         log.info("교환 시작: {}, {}", namecardA, namecardB);
         Exchange exchange = makeExchange(exchangeSingleRequest.lat(), exchangeSingleRequest.lon(), namecardA, namecardB);
+        exchange.updateFirstDate(namecardB.getCreateDate().toLocalDate());
         exchangeRepository.save(exchange);
     }
 
@@ -192,12 +193,10 @@ public class NamecardService {
         Long memberSeq = receivedNamecard.getMemberSeq();
         List<Namecard> allByMemberSeqNamecards = findByMemberSeqFromNamecardRepository(memberSeq);
         List<TimeLineResponse> timelines = allByMemberSeqNamecards.stream()
-                                                                .filter(namecard -> namecard.getRootNamecardSeq().equals(
-                                                                                            receivedNamecard.getRootNamecardSeq()))
-                                                                .filter(namecard ->namecard.getCreateDate().toLocalDate()
-                                                                                .compareTo(exchange.getCreateDate().toLocalDate()) >= 0)
-                                                                .map(namecard -> new TimeLineResponse(namecard))
-                                                                .collect(Collectors.toList());
+                                                                  .filter(namecard -> namecard.getRootNamecardSeq().equals(receivedNamecard.getRootNamecardSeq()))
+                                                                  .filter(namecard ->namecard.getCreateDate().toLocalDate().compareTo(exchange.getFirstNamecardCreateDate())>= 0)
+                                                                  .map(namecard -> new TimeLineResponse(namecard))
+                                                                  .collect(Collectors.toList());
         return timelines;
     }
 

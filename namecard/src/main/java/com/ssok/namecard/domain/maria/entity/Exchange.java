@@ -1,6 +1,7 @@
 package com.ssok.namecard.domain.maria.entity;
 
 import com.ssok.namecard.global.entity.BaseEntity;
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -43,6 +44,9 @@ public class Exchange extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private UpdateStatus updateStatus = UpdateStatus.CHECKED;
 
+    //처음 교환된 명함의 생성날짜
+    private LocalDate firstNamecardCreateDate;
+
     public void editMemo(String content) {
         this.exchangeNote = content;
     }
@@ -61,5 +65,9 @@ public class Exchange extends BaseEntity {
 
     public void updateNamecard(Namecard latestNamecard) {
         this.receiveNamecard = latestNamecard;
+    }
+
+    public void updateFirstDate(LocalDate localDate) {
+        this.firstNamecardCreateDate = localDate;
     }
 }

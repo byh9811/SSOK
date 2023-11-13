@@ -258,7 +258,13 @@ class _BusinessCardReceiveBluetoothPageState
       duration: const Duration(seconds: 3),
       vsync: this,
     );
-    Permission.nearbyWifiDevices.request();
+    [
+      Permission.bluetooth,
+      Permission.bluetoothAdvertise,
+      Permission.bluetoothConnect,
+      Permission.bluetoothScan,
+      Permission.location,
+    ].request();
     super.initState();
   }
 

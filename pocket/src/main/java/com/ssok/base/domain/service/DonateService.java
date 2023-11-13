@@ -48,7 +48,7 @@ public class DonateService {
         Donate donate = Donate.builder()
                 .donateTotalDonation(0L)
                 .donateTotalDonator(0)
-                .donateState(true)
+                .donateState(request.getDonateState())
                 .donateTitle(request.getDonateTitle())
                 .donateImage(request.getDonateImage())
                 .build();

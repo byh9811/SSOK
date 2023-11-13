@@ -1,78 +1,93 @@
 class BusinessCardData {
-  final int namecardSeq;
-  final String namecardImg;
-  final List<Namecard> namecards;
+  final int memberSeq;
+  final List<MyNameCard> myNamecardItems;
+  final List<NameCard> myExchangeItems;
+  final List<NameCard> favorites;
 
   BusinessCardData({
-    required this.namecardSeq,
-    required this.namecardImg,
-    required this.namecards,
+    required this.memberSeq,
+    required this.myNamecardItems,
+    required this.myExchangeItems,
+    required this.favorites,
   });
 
   factory BusinessCardData.fromJson(Map<String, dynamic> json) {
-    List<Namecard> namecards = List<Namecard>.from(
-        (json['namecards'] as List).map((item) => Namecard.fromJson(item)));
+    List<MyNameCard> myNamecardItems = List<MyNameCard>.from(
+        (json['myNamecardItems'] as List)
+            .map((item) => MyNameCard.fromJson(item)));
+    List<NameCard> myExchangeItems = List<NameCard>.from(
+        (json['myExchangeItems'] as List)
+            .map((item) => NameCard.fromJson(item)));
+    List<NameCard> favorites = List<NameCard>.from(
+        (json['favorites'] as List).map((item) => NameCard.fromJson(item)));
 
     return BusinessCardData(
-      namecardSeq: json['namecardSeq'],
-      namecardImg: json['namecardImg'],
-      namecards: namecards,
-    );
+        memberSeq: json["memberSeq"],
+        myNamecardItems: myNamecardItems,
+        myExchangeItems: myExchangeItems,
+        favorites: favorites);
   }
 }
 
-class Namecard {
+class MyNameCard {
   final int namecardSeq;
-  final int memberSeq;
-  final int exchangeSeq;
   final String namecardName;
-  final String namecardImage;
-  final String namecardEmail;
   final String namecardCompany;
   final String namecardJob;
-  final String namecardAddress;
-  final String namecardPhone;
-  final String namecardFax;
-  final String namecardWebsite;
+  final String namecardImg;
+
+  MyNameCard(
+      {required this.namecardSeq,
+      required this.namecardName,
+      required this.namecardCompany,
+      required this.namecardJob,
+      required this.namecardImg});
+
+  factory MyNameCard.fromJson(Map<String, dynamic> json) {
+    return MyNameCard(
+        namecardSeq: json["namecardSeq"],
+        namecardName: json["namecardName"],
+        namecardCompany: json["namecardCompany"],
+        namecardJob: json["namecardJob"],
+        namecardImg: json["namecardImg"]);
+  }
+}
+
+class NameCard {
+  final int exchangeSeq;
+  final int namecardSeq;
+  final int belongNamecardSeq;
+  final String namecardImg;
+  final String name;
+  final String updateStatus;
+  final String company;
+  final String job;
+  final String exchangeDate;
   final bool isFavorite;
-  final String exchangeNote;
-  final String date;
 
-  Namecard({
-    required this.namecardSeq,
-    required this.memberSeq,
-    required this.exchangeSeq,
-    required this.namecardName,
-    required this.namecardImage,
-    required this.namecardEmail,
-    required this.namecardCompany,
-    required this.namecardJob,
-    required this.namecardAddress,
-    required this.namecardPhone,
-    required this.namecardFax,
-    required this.namecardWebsite,
-    required this.isFavorite,
-    required this.exchangeNote,
-    required this.date,
-  });
+  NameCard(
+      {required this.exchangeSeq,
+      required this.namecardSeq,
+      required this.belongNamecardSeq,
+      required this.namecardImg,
+      required this.name,
+      required this.updateStatus,
+      required this.company,
+      required this.job,
+      required this.exchangeDate,
+      required this.isFavorite});
 
-  factory Namecard.fromJson(Map<String, dynamic> json) {
-    return Namecard(
-      namecardSeq: json['namecardSeq'],
-      memberSeq: json['memberSeq'],
-      exchangeSeq: json['exchangeSeq'],
-      namecardName: json['namecardName'],
-      namecardImage: json['namecardImage'],
-      namecardEmail: json['namecardEmail'],
-      namecardCompany: json['namecardCompany'],
-      namecardJob: json['namecardJob'],
-      namecardAddress: json['namecardAddress'],
-      namecardPhone: json['namecardPhone'],
-      namecardFax: json['namecardFax'],
-      namecardWebsite: json['namecardWebsite'],
-      isFavorite: json['isFavorite'],
-      exchangeNote: json['exchangeNote'],
-      date: json['date'],
-    );
+  factory NameCard.fromJson(Map<String, dynamic> json) {
+    return NameCard(
+        exchangeSeq: json["exchangeSeq"],
+        namecardSeq: json["namecardSeq"],
+        belongNamecardSeq: json["belongNamecardSeq"],
+        namecardImg: json["namecardImg"],
+        name: json["name"],
+        updateStatus: json["updateStatus"],
+        company: json["company"],
+        job: json["job"],
+        exchangeDate: json["exchangeDate"],
+        isFavorite: json["isFavorite"]);
   }
 }

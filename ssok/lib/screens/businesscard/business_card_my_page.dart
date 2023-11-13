@@ -1,23 +1,58 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/businesscards/childrens/content_by_card.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
 
-class BusinessCardMyPage extends StatelessWidget {
+class BusinessCardMyPage extends StatefulWidget {
+  
   const BusinessCardMyPage({super.key});
+  @override
+  State<BusinessCardMyPage> createState() => _BusinessCardMyPage();
+}
+
+
+class _BusinessCardMyPage extends State<BusinessCardMyPage> {
+
+  ApiService apiService = ApiService();
+  late int args;
+  late Map<String,dynamic> mycardInfo;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Future.delayed(Duration.zero, () {
+      // ModalRoute.of(context)!.settings.arguments를 통해 데이터를 읽어옵니다.
+      args = ModalRoute.of(context)!.settings.arguments as int;
+    // 읽어온 데이터를 출력하거나 다른 초기화 작업을 수행할 수 있습니다.
+      getMyNameCardInfo(args);
+    });
+  }
+
+  void getMyNameCardInfo(int nameCardSeq)async{
+    print(nameCardSeq);
+    final response = await apiService.getRequest("namecard-service/my/${nameCardSeq}", TokenManager().accessToken);
+    if(response.statusCode==200){
+      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+      print("getMyNameCardInfo");
+      print(jsonData["response"]);
+
+      setState(() {
+        mycardInfo = jsonData["response"];
+        print(mycardInfo);
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> businessCardInfo = {
-      'namecardName': '홍길동',
-      'namecardJob': 'Android Developer',
-      'namecardCompany': 'Dev Team',
-      'namecardAddress': '경기도 성남시 분당구 ...',
-      'namecardPhone': '010-1111-2222',
-      'namecardTel': '010-1111-2222',
-      'namecardFax': '050-000-2222',
-      'namecardEmail': 'i0364842@naver.com',
-      'namecardWebsite': 'samsung.com',
-    };
+    final args = ModalRoute.of(context)!.settings.arguments as int;
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -47,29 +82,54 @@ class BusinessCardMyPage extends StatelessWidget {
                 aspectRatio: 9 / 5,
                 child: Padding(
                   padding: EdgeInsets.all(screenWidth * 0.04),
-                  child: Container(
-                    color: Colors.amber,
-                  ),
+                  child: Image.network(mycardInfo["namecardImage"]),
                 ),
               ),
               Align(
                 alignment: Alignment.center,
-                child: updateButton("수정", () {}, context),
+                child: updateButton("명함 갱신", () {}, context),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: screenWidth * 0.008, top: screenHeight * 0.006),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed("/businesscard/myhistory", arguments: args);
+                    },
+                    child: SizedBox(
+                      width: screenWidth * 0.2,
+                      child: Row(
+                        children: [
+                          Icon(Icons.timeline),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 3.0),
+                            child: Text(
+                              "타임라인",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: screenHeight * 0.015),
               ContentByCard(
                 title: "이름",
-                content: businessCardInfo['namecardName'] ?? "",
+                content: mycardInfo["namecardName"] ?? "",
               ),
               ContentByCard(
                 title: "직책(회사)",
-                content: (businessCardInfo['namecardJob'] ?? "") +
+                content: (mycardInfo['namecardJob'] ?? "") +
                     " / " +
-                    (businessCardInfo['namecardCompany'] ?? ""),
+                    (mycardInfo['namecardCompany'] ?? ""),
               ),
               ContentByCard(
                 title: "주소",
-                content: businessCardInfo['namecardAddress'] ?? "",
+                content: mycardInfo['namecardAddress'] ?? "",
               ),
               Divider(
                 height: 1,
@@ -78,19 +138,19 @@ class BusinessCardMyPage extends StatelessWidget {
               SizedBox(height: screenHeight * 0.02),
               ContentByCard(
                 title: "휴대폰",
-                content: businessCardInfo['namecardPhone'] ?? "",
+                content: mycardInfo['namecardPhone'] ?? "",
               ),
               ContentByCard(
                 title: "회사번호",
-                content: businessCardInfo['namecardTel'] ?? "",
+                content: mycardInfo['namecardTel'] ?? "",
               ),
               ContentByCard(
                 title: "FAX",
-                content: businessCardInfo['namecardFax'] ?? "",
+                content: mycardInfo['namecardFax'] ?? "",
               ),
               ContentByCard(
                 title: "이메일",
-                content: businessCardInfo['namecardEmail'] ?? "",
+                content: mycardInfo['namecardEmail'] ?? "",
               ),
               Divider(
                 height: 1,
@@ -99,7 +159,7 @@ class BusinessCardMyPage extends StatelessWidget {
               SizedBox(height: screenHeight * 0.02),
               ContentByCard(
                 title: "홈페이지",
-                content: businessCardInfo['namecardWebsite'] ?? "",
+                content: mycardInfo['namecardWebsite'] ?? "",
               ),
             ],
           ),
@@ -117,9 +177,9 @@ class BusinessCardMyPage extends StatelessWidget {
           screenWidth * 0.25,
           screenHeight * 0.05,
         ),
-        backgroundColor: Color(0xFF00ADEF),
+        backgroundColor: Color.fromARGB(255, 72, 96, 253),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
       ),
       onPressed: onPressed,

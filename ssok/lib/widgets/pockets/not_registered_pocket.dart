@@ -12,6 +12,7 @@ class NotRegisteredPocket extends StatefulWidget {
 
 class _NotRegisteredPocketState extends State<NotRegisteredPocket> {
   ApiService apiService = ApiService();
+  
   void makeAccount() async {
     final response = await apiService.postRequest('receipt-service/card',{}, TokenManager().accessToken);
     if (response.statusCode == 200) {

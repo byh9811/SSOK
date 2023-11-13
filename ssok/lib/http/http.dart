@@ -7,7 +7,8 @@ import 'package:dio/dio.dart';
 
 class ApiService {
   String baseUrl = "https://gateway.ssok.site/api";
-
+  String virtualUrl = "https://k9c107.p.ssafy.io";
+  
   Future<http.Response> getRequest(String endpoint, String? accessToken) async {
     final response = await http.get(
       Uri.parse('$baseUrl/$endpoint'),
@@ -34,23 +35,61 @@ class ApiService {
     return response;
   }
 
-  Future<dynamic> postRequestWithFile(String endpoint, String key, String data,
+<<<<<<< HEAD
+  Future<http.Response> postRawRequest(
+      String endpoint, String data, String? accessToken) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/$endpoint'),
+=======
+  Future<http.Response> postRequestToVirtual(
+      String endpoint, Map<String, dynamic> data, String? accessToken) async {
+    final response = await http.post(
+      Uri.parse('$virtualUrl/$endpoint'),
+>>>>>>> 8107ce6df02ed2026fac477c403962c6b4871d15
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'ACCESS-TOKEN': accessToken ?? ""
+      },
+<<<<<<< HEAD
+      body: data,
+=======
+      body: jsonEncode(data),
+>>>>>>> 8107ce6df02ed2026fac477c403962c6b4871d15
+    );
+    return response;
+  }
+
+  Future<dynamic> postRequestWithFile(String endpoint, String? key, String? data,
       String? accessToken, Uint8List bytes) async {
     var uri = '$baseUrl/$endpoint';
     print(uri);
-    FormData formData = FormData.fromMap({
-      'image': await MultipartFile.fromBytes(
-        bytes,
-        filename: 'mycard.png',
-        contentType: MediaType('image', 'png'),
-      ),
-      key: data
-    });
+    FormData formData;
+    if(key==null) {
+      formData = FormData.fromMap({
+        'img': await MultipartFile.fromBytes(
+          bytes,
+          filename: 'mycard.png',
+          contentType: MediaType('image', 'png'),
+        ),
+      });
+    } else {
+      formData = FormData.fromMap({
+        'image': await MultipartFile.fromBytes(
+          bytes,
+          filename: 'mycard.png',
+          contentType: MediaType('image', 'png'),
+        ),
+        key: data
+      });
+    }
 
     Dio dio = Dio();
 
     dio.options.headers = {'ACCESS-TOKEN': accessToken};
     dio.options.contentType = 'multipart/form-data';
+
+    print(dio.options.contentType);
     var response = await dio.post(
       uri,
       data: formData,

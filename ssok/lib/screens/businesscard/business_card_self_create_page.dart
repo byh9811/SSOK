@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
+import 'package:ssok/screens/main_page.dart';
 
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_down.dart';
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_left.dart';
@@ -38,6 +39,8 @@ class _BusinessCardSelfCreatePageState
   String registeredAddress = "";
   String phone = "";
   String registeredPhone = "";
+  String tel = "";
+  String registeredTel = "";
   String fax = "";
   String registeredFax = "";
   String email = "";
@@ -52,7 +55,8 @@ class _BusinessCardSelfCreatePageState
     false,
     false,
     false,
-    false
+    false,
+    false,
   ];
   late ApiService apiService = ApiService();
 
@@ -135,7 +139,7 @@ class _BusinessCardSelfCreatePageState
       "namecardJob": registeredJob,
       "namecardAddress": registeredAddress,
       "namecardPhone": registeredPhone,
-      "namecardTel": "",
+      "namecardTel": registeredTel,
       "namecardFax": registeredFax,
       "namecardWebsite": registeredWebsite
     };
@@ -146,31 +150,23 @@ class _BusinessCardSelfCreatePageState
         jsonEncode(namecardCreateRequest),
         TokenManager().accessToken,
         bytes);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      // showDialog(
-      //   context: context,
-      //   builder: (BuildContext context) {
-      //     return AlertDialog(
-      //       title: Text('Success'),
-      //       content: Text('Data loaded successfully!'),
-      //       actions: [
-      //         TextButton(
-      //           onPressed: () {
-      //             Navigator.of(context).pop();
-      //             Navigator.of(context).pushNamed('/main', arguments: 1);
-      //           },
-      //           child: Text('OK'),
-      //         ),
-      //       ],
-      //     );
-      //   },
-      // );
-      Navigator.of(context).pushNamed('/main');
+    // print("response : $response");
+    Map<String, dynamic> jsonData = jsonDecode(response);
+    print(jsonData['success']);
+    print(jsonData['success'].runtimeType);
+    if (jsonData['success']) {
       print(jsonData);
+      showSnackbar("명함이 생성되었습니다.");
+      Navigator.of(context).popAndPushNamed('/main');
     } else {
       throw Exception('Failed to load');
     }
+  }
+
+  void showSnackbar(dynamic a) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(a.toString()),
+    ));
   }
 
   late final globalKey;
@@ -220,6 +216,7 @@ class _BusinessCardSelfCreatePageState
                   company: registeredCompany,
                   address: registeredAddress,
                   phone: registeredPhone,
+                  tel: registeredTel,
                   fax: registeredFax,
                   email: registeredEmail,
                   website: registeredWebsite,
@@ -341,6 +338,28 @@ class _BusinessCardSelfCreatePageState
                       isChecked: isCheckedList[4],
                     ),
                     BusinessCardText(
+                      title: "회사번호",
+                      hintContent: "회사번호 입력",
+                      updateValue: (newValue) {
+                        setState(() {
+                          tel = newValue;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isCheckedList[5] = !isCheckedList[5];
+                          if (!isCheckedList[5]) {
+                            registeredTel = "";
+                            isCheckedChange();
+                          } else {
+                            registeredTel = tel;
+                            isCheckedFocus(5);
+                          }
+                        });
+                      },
+                      isChecked: isCheckedList[5],
+                    ),
+                    BusinessCardText(
                       title: "FAX",
                       hintContent: "FAX 입력",
                       updateValue: (newValue) {
@@ -350,17 +369,17 @@ class _BusinessCardSelfCreatePageState
                       },
                       onTap: () {
                         setState(() {
-                          isCheckedList[5] = !isCheckedList[5];
-                          if (!isCheckedList[5]) {
+                          isCheckedList[6] = !isCheckedList[6];
+                          if (!isCheckedList[6]) {
                             registeredFax = "";
                             isCheckedChange();
                           } else {
                             registeredFax = fax;
-                            isCheckedFocus(5);
+                            isCheckedFocus(6);
                           }
                         });
                       },
-                      isChecked: isCheckedList[5],
+                      isChecked: isCheckedList[6],
                     ),
                     BusinessCardText(
                       title: "이메일",
@@ -372,17 +391,17 @@ class _BusinessCardSelfCreatePageState
                       },
                       onTap: () {
                         setState(() {
-                          isCheckedList[6] = !isCheckedList[6];
-                          if (!isCheckedList[6]) {
+                          isCheckedList[7] = !isCheckedList[7];
+                          if (!isCheckedList[7]) {
                             registeredEmail = "";
                             isCheckedChange();
                           } else {
                             registeredEmail = email;
-                            isCheckedFocus(6);
+                            isCheckedFocus(7);
                           }
                         });
                       },
-                      isChecked: isCheckedList[6],
+                      isChecked: isCheckedList[7],
                     ),
                     BusinessCardText(
                       title: "홈페이지",
@@ -394,24 +413,46 @@ class _BusinessCardSelfCreatePageState
                       },
                       onTap: () {
                         setState(() {
-                          isCheckedList[7] = !isCheckedList[7];
-                          if (!isCheckedList[7]) {
+                          isCheckedList[8] = !isCheckedList[8];
+                          if (!isCheckedList[8]) {
                             registeredWebsite = "";
                             isCheckedChange();
                           } else {
                             registeredWebsite = website;
-                            isCheckedFocus(7);
+                            isCheckedFocus(8);
                           }
                         });
                       },
-                      isChecked: isCheckedList[7],
+                      isChecked: isCheckedList[8],
                     ),
                     SizedBox(height: screenHeight * 0.06),
                     MainButton(
                       title: "등록",
-                      onPressed: () async {
-                        Uint8List bytes = await capturePng();
-                        createBusinessCard(bytes);
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('명함 생성'),
+                              content: Text('명함을 생성하시겠습니까?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () async {
+                                    Uint8List bytes = await capturePng();
+                                    createBusinessCard(bytes);
+                                  },
+                                  child: Text('생성'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.pop(context, '취소');
+                                  },
+                                  child: Text('취소'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                     SizedBox(height: screenHeight * 0.04),
@@ -434,6 +475,7 @@ class BusinessCardBox extends StatefulWidget {
     required this.company,
     required this.address,
     required this.phone,
+    required this.tel,
     required this.fax,
     required this.email,
     required this.website,
@@ -447,6 +489,7 @@ class BusinessCardBox extends StatefulWidget {
   final String company;
   final String address;
   final String phone;
+  final String tel;
   final String fax;
   final String email;
   final String website;
@@ -459,6 +502,7 @@ class BusinessCardBox extends StatefulWidget {
 class _BusinessCardBoxState extends State<BusinessCardBox> {
   late List<String> values;
   List<Offset> offsets = [
+    Offset(0, 0),
     Offset(0, 0),
     Offset(0, 0),
     Offset(0, 0),
@@ -492,12 +536,29 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
       "회사",
       "주소",
       "휴대폰",
+      "회사번호",
       "FAX",
       "이메일",
       "홈페이지"
     ];
     return Column(
       children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "※ 추가된 텍스트는 끌어당겨 이동",
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              Text(
+                "※ 버튼을 통해 타겟을 설정하고 화살표를 이용하여 상세 이동",
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -563,7 +624,7 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                     },
                   ),
                   DraggableText(
-                    name: widget.fax,
+                    name: widget.tel,
                     offset: offsets[5],
                     onPositionChanged: (newOffset) {
                       setState(() {
@@ -572,7 +633,7 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                     },
                   ),
                   DraggableText(
-                    name: widget.email,
+                    name: widget.fax,
                     offset: offsets[6],
                     onPositionChanged: (newOffset) {
                       setState(() {
@@ -581,11 +642,20 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                     },
                   ),
                   DraggableText(
-                    name: widget.website,
+                    name: widget.email,
                     offset: offsets[7],
                     onPositionChanged: (newOffset) {
                       setState(() {
                         offsets[7] = newOffset;
+                      });
+                    },
+                  ),
+                  DraggableText(
+                    name: widget.website,
+                    offset: offsets[8],
+                    onPositionChanged: (newOffset) {
+                      setState(() {
+                        offsets[8] = newOffset;
                       });
                     },
                   ),
@@ -622,9 +692,12 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                     ),
                   ],
                 ),
-                child: Text(widget.currentOffsetIndex == -1
-                    ? "${widget.currentOffsetIndex}"
-                    : titleList[widget.currentOffsetIndex]),
+                child: Text(
+                  widget.currentOffsetIndex == -1
+                      ? "타겟 버튼"
+                      : titleList[widget.currentOffsetIndex],
+                  style: TextStyle(fontSize: 14),
+                ),
               ),
             ),
             SizedBox(width: 5.0),
@@ -782,7 +855,10 @@ class _BusinessCardTextState extends State<BusinessCardText> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       widget.title,
-                      style: TextStyle(color: Color(0xFF9B9999)),
+                      style: TextStyle(
+                          color: widget.isChecked
+                              ? Color(0xFF9B9999)
+                              : Color(0xFF00496F)),
                     ),
                   ),
                   Padding(
@@ -824,7 +900,7 @@ class _BusinessCardTextState extends State<BusinessCardText> {
                       ),
                     ),
                     Text(
-                      widget.isChecked ? "적용 해제" : "적용",
+                      widget.isChecked ? "추가 해제" : "추가",
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,

@@ -84,6 +84,7 @@ class _EnterAmountState extends State<EnterAmount> {
         ),
         SizedBox(height: screenHeight * 0.08),
         MainButton(
+          color: "0xFF00ADEF",
           title: widget.buttonTitle,
           onPressed: () {
             if(widget.donateSeq==0){

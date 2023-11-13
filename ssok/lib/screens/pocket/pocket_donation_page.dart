@@ -128,16 +128,6 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                 ),
                 child: Column(
                   children: [
-                    // Container(
-                    //   height: screenHeight * 0.2,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.amber,
-                    //     borderRadius: BorderRadius.only(
-                    //       topLeft: Radius.circular(25.0),
-                    //       topRight: Radius.circular(25.0),
-                    //     ),
-                    //   ),
-                    // ),
                     Container(
                       height: screenHeight * 0.2,
                       decoration: BoxDecoration(
@@ -203,17 +193,24 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.02),
-                    if(item['donateState'])
-                    MainButton(
-                        title: "기부하기",
-                        onPressed: () {
-                          print(item);
-                          item["pocketSaving"]=args;
-                          print(item);
-                          Navigator.of(context).pushNamed('/pocket/donation/send',arguments: item);
-                        },
-                      )
-
+                    item['donateState']?
+                      MainButton(
+                          title: "기부하기",
+                          color: "0xFF00ADEF",
+                          onPressed: () {
+                            print(item);
+                            item["pocketSaving"]=args;
+                            print(item);
+                            Navigator.of(context).pushNamed('/pocket/donation/send',arguments: item);
+                          },
+                        )
+                      :
+                      MainButton(
+                          title: "종료된 기부 입니다",
+                          color: "0xFFD8D8D8",
+                          onPressed: () {
+                          },
+                        )
                       ,
                   ],
                 ),

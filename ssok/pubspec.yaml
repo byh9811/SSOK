@@ -40,6 +40,7 @@ dependencies:
   remedi_kopo: ^0.0.2
   http:
   file_picker: ^6.0.0
+  image_cropper: 
   flutter_naver_map: ^1.0.2
   location: ^5.0.3
   url_launcher: ^6.2.1

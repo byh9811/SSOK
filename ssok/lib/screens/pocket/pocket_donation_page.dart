@@ -72,7 +72,6 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
   }
 
   void getDonateList()async{
-        print("뭔데 이거");
     final response = await apiService.getRequest('pocket-service/donate',TokenManager().accessToken);
 
     if (response.statusCode == 200) {

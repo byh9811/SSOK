@@ -153,7 +153,7 @@ public class PocketController {
      * @return pocket 내역
      */
 
-    @PatchMapping("/pocket/change-saving")
+    @PostMapping("/pocket/change-saving")
     public ApiResponse<PocketResponse> editPocketIsChangeSaving(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
         PocketResponse response = pocketService.editPocketIsChangeSaving(memberUuid);
         return ApiResponse.OK(response);

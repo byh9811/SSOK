@@ -314,7 +314,6 @@ public class PocketService {
         if(dto.getPocketHistoryType().equals("WITHDRAWAL")){
             checkIsTransfer(dto.getPocketHistoryTransAmt(), pocket);
             pocket.transferWithdrawal(dto.getPocketHistoryTransAmt());
-            // TODO: 2023-11-03 @홍진식 : 계좌 변경 요청 추가 필요
             receiptServiceClient.accountTransfer(AccountTransferRequest.fromHistory(dto));
             resultMap.put("type",PocketHistoryType.WITHDRAWAL);
             resultMap.put("title", "출금");

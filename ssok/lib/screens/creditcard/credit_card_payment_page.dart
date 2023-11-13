@@ -166,6 +166,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
             
           });
             _tagRead();
+            // _ndefWrite();
           }
         });
       }
@@ -199,6 +200,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       // ignore: use_build_context_synchronously
       await showDialog(
           context: context,
+          barrierDismissible: false,
           builder: (context) => AlertDialog(
             title: Text("결제 완료"),
             content: Text(
@@ -222,6 +224,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       print(response.statusCode);
       await showDialog(
           context: context,
+          barrierDismissible: false,
           builder: (context) => AlertDialog(
             title: Text("결제 실패"),
             content: Text(
@@ -407,7 +410,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       }          
 
       NdefMessage message = NdefMessage([
-        NdefRecord.createText('Hello World!'),
+        NdefRecord.createText('amount:14280 / itemSeq:1,3 / itemCnt:1,2 / key:ssok'),
         NdefRecord.createUri(Uri.parse('https://flutter.dev')),
         NdefRecord.createMime(
             'text/plain', Uint8List.fromList('Hello'.codeUnits)),

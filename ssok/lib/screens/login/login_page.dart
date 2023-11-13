@@ -3,6 +3,7 @@ import 'package:ssok/http/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:ssok/screens/identification/service_aggreement_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,8 +14,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late TokenManager tokenManager;
-  TextEditingController idController = TextEditingController(); // Controller for ID TextField
-  TextEditingController passwordController = TextEditingController(); // Controller for Password TextField
+  TextEditingController idController =
+      TextEditingController(); // Controller for ID TextField
+  TextEditingController passwordController =
+      TextEditingController(); // Controller for Password TextField
 
   @override
   void initState() {
@@ -25,27 +28,35 @@ class _LoginPageState extends State<LoginPage> {
   void fetchTodos() async {
     String id = idController.text; // Get the entered ID
     String password = passwordController.text; // Get the entered password
-    
+
     final response = await http.post(
         Uri.parse('https://gateway.ssok.site/api/member-service/member/login'),
         headers: {
           'content-type': 'application/json',
           'accept': 'application/json'
         },
-        body: jsonEncode({"loginId": id, "password": password})); // Use the entered ID and password
-    
+        body: jsonEncode({
+          "loginId": id,
+          "password": password
+        })); // Use the entered ID and password
+
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       await tokenManager.setAccessToken(jsonData["response"]["accessToken"]);
       await tokenManager.setRefreshToken(jsonData["response"]["refreshToken"]);
       await tokenManager.setLoginId(jsonData["response"]["loginId"]);
       await tokenManager.setMemberName(jsonData["response"]["memberName"]);
+      bool state = jsonData["response"]["serviceAgreement"];
       print("넣었다");
       print(jsonData["response"]["accessToken"]);
       print(jsonData["response"]["refreshToken"]);
       print(jsonData["response"]["loginId"]);
       print(jsonData["response"]["memberName"]);
-      Navigator.of(context).pushReplacementNamed('/main');
+      if (state) {
+        Navigator.of(context).pushReplacementNamed('/main');
+      } else {
+        Navigator.of(context).pushReplacementNamed('/intro');
+      }
     } else {
       _showAlertDialog();
       throw Exception('Failed to load album');
@@ -81,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Center(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-          child:Column(
+          child: Column(
             children: <Widget>[
               SizedBox(height: screenHeight * 0.1),
               Image.asset(
@@ -89,7 +100,6 @@ class _LoginPageState extends State<LoginPage> {
                 height: 300,
               ),
               SizedBox(height: screenHeight * 0.04),
-
               Form(
                   child: Column(
                 children: [
@@ -114,7 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: screenHeight * 0.03),
                   TextField(
-                    controller: passwordController, // Use the password controller
+                    controller:
+                        passwordController, // Use the password controller
                     obscureText: true, // 비밀번호 안보이도록 하는 것
                     decoration: InputDecoration(
                         labelText: 'PW',
@@ -137,21 +148,30 @@ class _LoginPageState extends State<LoginPage> {
               )),
               SizedBox(height: screenHeight * 0.06),
               ElevatedButton(
-                  onPressed: () {
-                    fetchTodos();
-                  },
-                  style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(Size(200, 50))),
-                  child: Text("로그인"),),
+                onPressed: () {
+                  fetchTodos();
+                },
+                style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all(Size(200, 50))),
+                child: Text("로그인"),
+              ),
               SizedBox(height: screenHeight * 0.01),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacementNamed('/signin');
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ServiceAggreementPage(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/signin');
+                          },
+                        ),
+                      ),
+                    );
                   },
                   style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(Size(200, 50))),
-                  child: Text("회원가입")
-                  )
+                      fixedSize: MaterialStateProperty.all(Size(200, 50))),
+                  child: Text("회원가입"))
             ],
           ),
         ),

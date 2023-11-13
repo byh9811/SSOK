@@ -84,43 +84,46 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return contentBox(
-      context,
-      Column(
-        children: [
-          Expanded(
-            child: Text(
-              "등록된 주민등록증이 없습니다.",
-              style: TextStyle(color: Color(0xFF989898)),
+    return Padding(
+      padding: EdgeInsets.only(bottom:screenHeight*0.01),
+      child: contentBox(
+        context,
+        Column(
+          children: [
+            Expanded(
+              child: Text(
+                "등록된 주민등록증이 없습니다.",
+                style: TextStyle(color: Color(0xFF989898)),
+              ),
             ),
-          ),
-          SizedBox(
-            height: screenHeight * 0.06,
-            width: screenWidth * 0.7,
-            child: registerButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ServiceAggreementPage(
-                      onTap: () async {
-                        await pickAndCropImage();
-                        final data = await ocrRC();
-                        print("data:$data");
-                        Navigator.of(context).pushReplacementNamed(
-                          '/id/create',
-                          arguments:
-                              ImageAndRegData(image: pickedImage!, data: data),
-                        );
-                      },
+            SizedBox(
+              height: screenHeight * 0.06,
+              width: screenWidth * 0.7,
+              child: registerButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ServiceAggreementPage(
+                        onTap: () async {
+                          await pickAndCropImage();
+                          final data = await ocrRC();
+                          print("data:$data");
+                          Navigator.of(context).pushReplacementNamed(
+                            '/id/create',
+                            arguments:
+                                ImageAndRegData(image: pickedImage!, data: data),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          )
-        ],
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+        0.23,
       ),
-      0.23,
     );
   }
 }

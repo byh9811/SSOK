@@ -15,8 +15,8 @@ class RegisteredPocketState extends State<RegisteredPocket> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        SizedBox(height: screenHeight * 0.07),
-        introText(),
+        // SizedBox(height: screenHeight * 0.07),
+        // introText(),
         SizedBox(height: screenHeight * 0.04),
         introText2(),
         SizedBox(height: screenHeight * 0.03),

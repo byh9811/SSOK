@@ -78,8 +78,8 @@ class _DriveIdDetailPageState extends State<DriveIdDetailPage> {
           color: Colors.black, // 원하는 색상으로 변경
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body:
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
@@ -120,7 +120,6 @@ class _DriveIdDetailPageState extends State<DriveIdDetailPage> {
                   ),
                   Expanded(
                     child: Container(
-                      height: screenHeight * 0.4,
                       width: screenWidth,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -128,7 +127,7 @@ class _DriveIdDetailPageState extends State<DriveIdDetailPage> {
                             bottomLeft: Radius.circular(10.0),
                             bottomRight: Radius.circular(10.0)),
                       ),
-                      child: Padding(
+                      child: SingleChildScrollView(
                         padding: EdgeInsets.only(
                             left: screenWidth * 0.03, top: screenHeight * 0.01),
                         child: Column(
@@ -159,13 +158,12 @@ class _DriveIdDetailPageState extends State<DriveIdDetailPage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               0.5,
             ),
           ],
-        ),
       ),
     );
   }

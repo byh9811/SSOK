@@ -350,7 +350,7 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
               SizedBox(height:screenHeight*0.02),
               MainButton(title: "등록", onPressed: (){
                 register();
-              }),
+              }, color: "0xFF00ADEF",),
               SizedBox(height:screenHeight*0.03),
             ],
           ),

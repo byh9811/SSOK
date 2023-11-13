@@ -21,6 +21,7 @@ class _PocketPageState extends State<PocketPage> {
   int? pocketMoney;
   int? pocketTotalDonate;
   int? pocketTotalPoint;
+  bool? pocketIsChangeSaving;
 
 
   @override
@@ -83,6 +84,7 @@ void getPocket()async{
         pocketMoney = jsonData['response']['pocketSaving'];
         pocketTotalDonate = jsonData['response']['pocketTotalDonate'];
         pocketTotalPoint = jsonData['response']['pocketTotalPoint'];
+        pocketIsChangeSaving = jsonData['response']['pocketIsChangeSaving'];
       });
     } else {
       print("pocket_page getPocket() 오류 발생");
@@ -100,7 +102,7 @@ void getPocket()async{
       return RegisteredPocket();
     }else{
       return AllRegisteredPocket(pocketTotalDonate: pocketTotalDonate,
-  pocketTotalPoint: pocketTotalPoint,);
+  pocketTotalPoint: pocketTotalPoint, pocketIsChangeSaving: pocketIsChangeSaving,);
     }
   }
 }

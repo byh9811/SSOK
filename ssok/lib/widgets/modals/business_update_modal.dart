@@ -95,10 +95,12 @@ class _BusinessUpdateModalState extends State<BusinessUpdateModal> {
                   },
                   addressType: entry.key == '주소' ? true : false),
             SizedBox(height: screenHeight * 0.05),
+
             MainButton(title: "수정", onPressed: () {
               widget.onCardInfoChanged(_editableCardInfo);
               Navigator.of(context).pop();
-            }),
+            }, color: '',),
+
           ],
         ),
       ),

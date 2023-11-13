@@ -5,10 +5,12 @@ class MainButton extends StatelessWidget {
     Key? key,
     required this.title,
     required this.onPressed,
+    required this.color
   }) : super(key: key);
 
   final String title;
   final Function() onPressed;
+  final String color;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class MainButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           minimumSize: Size(screenWidth, screenHeight * 0.06),
-          backgroundColor: Color(0xFF00ADEF),
+          backgroundColor: Color(int.parse(color)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
           ),

@@ -428,6 +428,7 @@ class _BusinessCardSelfCreatePageState
                     SizedBox(height: screenHeight * 0.06),
                     MainButton(
                       title: "등록",
+                      color: "0xFF00ADEF",
                       onPressed: () {
                         showDialog(
                           context: context,

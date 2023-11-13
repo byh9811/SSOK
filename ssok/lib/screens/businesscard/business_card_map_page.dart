@@ -95,6 +95,8 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
   }
 
   Future<String> getAddressFromLatLng(double lat, double lon) async {
+
+    print("zzzzzz");
     final String clientId = '6sfqyu6her'; // 여기에 클라이언트 ID를 입력하세요
     final String clientSecret =
         'cG12rGByf6VklpfZc0O7lW5KxUgqAh5GcGqAzW68'; // 여기에 클라이언트 Secret을 입력하세요
@@ -107,10 +109,11 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
         'X-NCP-APIGW-API-KEY': clientSecret,
       },
     );
-
+      print("위치");
+      print(response);
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      if(jsonData["status"]["cope"]==0)
+      if(jsonData["status"]["code"]==0)
         return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
       else
         return "위치 정보를 파악할 수 없습니다.";

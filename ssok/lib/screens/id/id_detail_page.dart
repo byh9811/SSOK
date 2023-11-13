@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/ids/childrens/id_info_text.dart';
+
+import '../../http/http.dart';
+import '../../http/token_manager.dart';
 
 class IdDetailPage extends StatefulWidget {
   const IdDetailPage({super.key});
@@ -10,6 +15,37 @@ class IdDetailPage extends StatefulWidget {
 }
 
 class _IdDetailPageState extends State<IdDetailPage> {
+
+  ApiService apiService = ApiService();
+  late String registrationCardName = "";
+  late String registrationCardPersonalNumber = "";
+  late String registrationCardAddress = "";
+  late String registrationCardIssueDate = "";
+  late String registrationCardAuthority = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getRegCard();
+  }
+
+  void getRegCard() async {
+    final response = await apiService.getRequest(
+        "idcard-service/registration", TokenManager().accessToken);
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 200) {
+      final tempRes = jsonData['response'];
+
+      setState(() {
+        registrationCardName = tempRes['registrationCardName'];
+        registrationCardPersonalNumber = tempRes['registrationCardPersonalNumber'];
+        registrationCardAddress = tempRes['registrationCardAddress'];
+        registrationCardIssueDate = tempRes['registrationCardIssueDate'];
+        registrationCardAuthority = tempRes['registrationCardAuthority'];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

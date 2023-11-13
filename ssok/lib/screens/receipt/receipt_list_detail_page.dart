@@ -124,13 +124,14 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("왔다!");
       getReceiptDetail();
-      // receiptDetail = parseReceiptDetail(jsonString)!;
+      receiptDetail = parseReceiptDetail(jsonString)!;
     });
 
   }
 
   void getReceiptDetail() async {
     final args = ModalRoute.of(context)!.settings.arguments as String;
+    print("getReceiptDetail");
     print(args);
     final response = await apiService.getRequest(
         'receipt-service/receipt/$args', TokenManager().accessToken);

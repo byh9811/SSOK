@@ -118,14 +118,10 @@ public class NamecardService {
     }
 
     private void checkDuplicate(Namecard namecardA, Namecard namecardB) {
-        //B의 조상 찾기
-        Long parentBseq = namecardB.getRootNamecardSeq();
-
-        //A의 교환 명함들 중 parent가 B의 조상인것이 있는지?
-        List<Namecard> namecardListFromA = findByMemberSeqFromNamecardRepository(namecardA.getMemberSeq());
-        boolean isDuplicated = namecardListFromA.stream()
-                                                  .anyMatch(
-                                                      namecard -> namecard.getRootNamecardSeq().equals(parentBseq));
+        //A의 교환 명함 목록을 찾는다.
+        List<Exchange> allExchangesByMemberSeq = findAllExchangesByMemberSeq(namecardA.getMemberSeq());
+        //A의 교환 명함 목록을 순회하면서 그 명함과 교환한 명함의 부모가 같은지를 파악한다.
+        boolean isDuplicated = allExchangesByMemberSeq.stream().anyMatch(exchange -> exchange.getReceiveNamecard().getRootNamecardSeq().equals(namecardB.getRootNamecardSeq()))
         //있으면 exception
         if(isDuplicated) throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
     }

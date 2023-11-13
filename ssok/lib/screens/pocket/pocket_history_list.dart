@@ -390,11 +390,11 @@ void getWithdrawHistory()async{
                             horizontal: screenHeight * 0.04),
                         child: ListTile(
                           onTap: () {
-                            Navigator.pushNamed(
+                            if(receiptDocumentId!=null) {Navigator.pushNamed(
                               context,
                               '/receipt/detail',
                               arguments: receiptDocumentId,
-                            );
+                            );};
                           },
                           title: Text(pocketHistoryTitle),
                           subtitle: Text(

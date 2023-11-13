@@ -505,13 +505,12 @@ Future<String> getAddressFromLatLng(double lat, double lon) async {
       'X-NCP-APIGW-API-KEY': clientSecret,
     },
   );
-
+  print("getAddressFromLatLng");
   if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
-    print(jsonData);
-    if (jsonData["status"]["cope"] == 0)
+    if (jsonData["status"]["code"] == 0){
       return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
-    else
+    }
       return "위치 정보를 파악할 수 없습니다.";
   } else {
     throw Exception('Failed to get address from Naver API');

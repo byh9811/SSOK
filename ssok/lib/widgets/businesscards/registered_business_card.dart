@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/dto/business_card_data.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/widgets/modals/business_transfer_modal.dart';
 import 'package:ssok/http/http.dart';
 
@@ -180,19 +181,27 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                     ),
                   ),
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                          child: BusinessTransferModal(
-                              myNamecardItem:
-                                  widget.myNamecardItems[_currentPage]),
-                        );
-                      },
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        opaque: false, // 배경이 투명해야 함을 나타냅니다
+                        pageBuilder: (BuildContext context, _, __) {
+                          return TransferLoadingPage();
+                        },
+                      ),
                     );
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (context) {
+                    //     return Dialog(
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.all(Radius.circular(15)),
+                    //       ),
+                    //       child: BusinessTransferModal(
+                    //           myNamecardItem:
+                    //               widget.myNamecardItems[_currentPage]),
+                    //     );
+                    //   },
+                    // );
                   },
                   child: Text(
                     "명함 교환",

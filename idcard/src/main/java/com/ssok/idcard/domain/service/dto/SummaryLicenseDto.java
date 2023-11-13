@@ -9,9 +9,11 @@ public record SummaryLicenseDto(
 
     public static SummaryLicenseDto from(License license){
         if(license == null) return null;
+        if(license.getLicensePersonalNumber().length()<8) return null;
+        String maskedPN = license.getLicensePersonalNumber().substring(0, 8) + "*".repeat(license.getLicensePersonalNumber().length() - 8);
         return new SummaryLicenseDto(
                 license.getLicenseName(),
-                license.getLicensePersonalNumber()
+                maskedPN
         );
     }
 }

@@ -120,8 +120,18 @@ public class NamecardService {
     private void checkDuplicate(Namecard namecardA, Namecard namecardB) {
         //A의 교환 명함 목록을 찾는다.
         List<Exchange> allExchangesByMemberSeq = findAllExchangesByMemberSeq(namecardA.getMemberSeq());
+        log.info("namecardB의 rootSeq: {}", namecardB.getRootNamecardSeq());
         //A의 교환 명함 목록을 순회하면서 그 명함과 교환한 명함의 부모가 같은지를 파악한다.
-        boolean isDuplicated = allExchangesByMemberSeq.stream().anyMatch(exchange -> exchange.getReceiveNamecard().getRootNamecardSeq().equals(namecardB.getRootNamecardSeq()))
+        boolean isDuplicated = allExchangesByMemberSeq.stream()
+                                                      .anyMatch(
+                                                          exchange -> {
+                                                              log.info("A가 수행한 교환을 순회한다.");
+                                                              log.info("받은 명함의 rootSeq: {}", exchange.getReceiveNamecard().getRootNamecardSeq());
+                                                              return exchange.getReceiveNamecard()
+                                                                      .getRootNamecardSeq()
+                                                                      .equals(
+                                                                          namecardB.getRootNamecardSeq());
+                                                          });
         //있으면 exception
         if(isDuplicated) throw new ExchangeException(ErrorCode.EXCHANGE_DUPLICATED);
     }
@@ -262,10 +272,10 @@ public class NamecardService {
     }
 
     private List<Exchange> findAllExchangesByMemberSeq(Long memberSeq) {
+        //member
         List<Namecard> namecardList = findByMemberSeqFromNamecardRepository(memberSeq);
         return namecardList.stream() // Stream<Namecard> 생성
-                           .flatMap(namecard -> namecard.getExchanges()
-                                                        .stream()) // Stream<List<Exchange>>를 Stream<Exchange>로 평탄화
+                           .flatMap(namecard -> namecard.getExchanges().stream()) // Stream<List<Exchange>>를 Stream<Exchange>로 평탄화
                            .collect(Collectors.toList());
     }
 

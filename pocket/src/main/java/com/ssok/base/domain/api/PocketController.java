@@ -142,6 +142,7 @@ public class PocketController {
      */
     @GetMapping("/pocket/change-saving")
     public ApiResponse<Boolean> getPocketIsChangeSaving(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+        log.info("init 잔금 저금 여부 조회 ");
         Boolean response = pocketQueryService.getPocketIsChangeSaving(memberUuid);
         return ApiResponse.OK(response);
     }

@@ -39,7 +39,7 @@ public class ReceiptQueryService {
         Map<YearMonth, List<ReceiptListQueryResponse>> receiptListMap = new HashMap<>();
 
         Long memberSeq = memberClient.getMemberSeq(memberUUID).getResponse();
-        List<ReceiptListDocument> receiptDocumentList = receiptListDocumentRepository.findAllByMemberSeq(memberSeq);
+        List<ReceiptListDocument> receiptDocumentList = receiptListDocumentRepository.findAllByMemberSeqOrderByApprovedDateDesc(memberSeq);
 
         if(receiptDocumentList.size() == 0){
             throw new IllegalArgumentException("상세 내역이 없습니다.");

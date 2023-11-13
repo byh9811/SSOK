@@ -14,6 +14,6 @@ public interface ReceiptListDocumentRepository extends MongoRepository<ReceiptLi
 //    @Query(value = "{ 'approvedDate' : { $gte: ?0, $lt: ?1 } }")
 //    List<ReceiptListDocument> findAllByApprovedDate(LocalDateTime start, LocalDateTime end);
 
-    List<ReceiptListDocument> findAllByMemberSeq(Long memberSeq);
+    List<ReceiptListDocument> findAllByMemberSeqOrderByApprovedDateDesc(Long memberSeq);
 
 }

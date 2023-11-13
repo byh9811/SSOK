@@ -189,7 +189,7 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                             ),
                           ],
                         ),
-                        child: _isBack ? Image.network(nameCardHead.nameCardImage.toString()) : null),
+                        child: _isBack ? Image. network(nameCardHead.nameCardImage.toString()) : null),
                   ),
                 );
               },

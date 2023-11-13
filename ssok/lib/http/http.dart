@@ -7,7 +7,8 @@ import 'package:dio/dio.dart';
 
 class ApiService {
   String baseUrl = "https://gateway.ssok.site/api";
-
+  String virtualUrl = "https://k9c107.p.ssafy.io";
+  
   Future<http.Response> getRequest(String endpoint, String? accessToken) async {
     final response = await http.get(
       Uri.parse('$baseUrl/$endpoint'),
@@ -34,7 +35,21 @@ class ApiService {
     return response;
   }
 
-  Future<dynamic> postRequestWithFile(String endpoint, String? key, String? data,
+  Future<http.Response> postRequestToVirtual(
+      String endpoint, Map<String, dynamic> data, String? accessToken) async {
+    final response = await http.post(
+      Uri.parse('$virtualUrl/$endpoint'),
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'ACCESS-TOKEN': accessToken ?? ""
+      },
+      body: jsonEncode(data),
+    );
+    return response;
+  }
+
+  Future<dynamic> postRequestWithFile(String endpoint, String key, String data,
       String? accessToken, Uint8List bytes) async {
     var uri = '$baseUrl/$endpoint';
     print(uri);

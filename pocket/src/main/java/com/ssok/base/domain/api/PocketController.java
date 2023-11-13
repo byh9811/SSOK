@@ -135,4 +135,28 @@ public class PocketController {
         return ApiResponse.OK(response);
     }
 
+    /**
+     * 포켓 잔금 저금 여부 조회
+     * @param memberUuid
+     * @return true : 잔금 저금 o / false : 잔금 저금 x
+     */
+    @GetMapping("/pocket/change-saving")
+    public ApiResponse<Boolean> getPocketIsChangeSaving(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+        log.info("init 잔금 저금 여부 조회 ");
+        Boolean response = pocketQueryService.getPocketIsChangeSaving(memberUuid);
+        return ApiResponse.OK(response);
+    }
+
+    /**
+     * 포켓 잔금 저금 여부 변경
+     * @param memberUuid
+     * @return pocket 내역
+     */
+
+    @PatchMapping("/pocket/change-saving")
+    public ApiResponse<PocketResponse> editPocketIsChangeSaving(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+        PocketResponse response = pocketService.editPocketIsChangeSaving(memberUuid);
+        return ApiResponse.OK(response);
+    }
+
 }

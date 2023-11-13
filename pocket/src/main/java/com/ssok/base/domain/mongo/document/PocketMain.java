@@ -31,17 +31,20 @@ public class PocketMain {
     // 누적 잔금 저축 금액
     private Long pocketTotalChange;
 
+    private Boolean pocketIsChangeSaving;
+
     private LocalDateTime createDate;
 
     private LocalDateTime modifyDate;
 
     @Builder
-    public PocketMain(Long memberSeq, Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint, Long pocketTotalChange, LocalDateTime createDate, LocalDateTime modifyDate) {
+    public PocketMain(Long memberSeq, Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint, Long pocketTotalChange, Boolean pocketIsChangeSaving, LocalDateTime createDate, LocalDateTime modifyDate) {
         this.memberSeq = memberSeq;
         this.pocketSaving = pocketSaving;
         this.pocketTotalDonate = pocketTotalDonate;
         this.pocketTotalPoint = pocketTotalPoint;
         this.pocketTotalChange = pocketTotalChange;
+        this.pocketIsChangeSaving = pocketIsChangeSaving;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
     }
@@ -53,6 +56,7 @@ public class PocketMain {
                 .pocketTotalDonate(pocket.getPocketTotalDonate())
                 .pocketTotalChange(pocket.getPocketTotalChange())
                 .pocketTotalPoint(pocket.getPocketTotalPoint())
+                .pocketIsChangeSaving(pocket.getPocketIsChangeSaving())
                 .createDate(pocket.getCreateDate())
                 .modifyDate(pocket.getModifyDate())
                 .build();
@@ -63,6 +67,7 @@ public class PocketMain {
         this.pocketTotalDonate = pocket.getPocketTotalDonate();
         this.pocketTotalPoint = pocket.getPocketTotalPoint();
         this.pocketTotalChange = pocket.getPocketTotalChange();
+        this.pocketIsChangeSaving = pocket.getPocketIsChangeSaving();
         this.createDate = pocket.getCreateDate();
         this.modifyDate = pocket.getModifyDate();
     }

@@ -88,6 +88,7 @@ public class PocketService {
                 .pocketTotalDonate(0L)
                 .pocketTotalPoint(0L)
                 .pocketTotalChange(0L)
+                .pocketIsChangeSaving(false)
                 .build();
 
         pocketRepository.save(pocket);
@@ -313,7 +314,6 @@ public class PocketService {
         if(dto.getPocketHistoryType().equals("WITHDRAWAL")){
             checkIsTransfer(dto.getPocketHistoryTransAmt(), pocket);
             pocket.transferWithdrawal(dto.getPocketHistoryTransAmt());
-            // TODO: 2023-11-03 @홍진식 : 계좌 변경 요청 추가 필요
             receiptServiceClient.accountTransfer(AccountTransferRequest.fromHistory(dto));
             resultMap.put("type",PocketHistoryType.WITHDRAWAL);
             resultMap.put("title", "출금");
@@ -337,4 +337,20 @@ public class PocketService {
         }
     }
 
+    public PocketResponse editPocketIsChangeSaving(String memberUuid) {
+        Long memberSeq = isMemberExist(memberUuid);
+        Pocket findPocket = pocketRepository.findById(memberSeq).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
+        // RDB 변경
+        findPocket.updatePocketIsChangeSaving();
+
+        PocketMain pocketMain = pocketMainMongoRepository.findById(findPocket.getMemberSeq()).orElseThrow(()
+                -> new IllegalArgumentException("조회용이 존재하지 않는다."));
+
+        // Mongo - update PocketDetail
+        log.info(String.valueOf(findPocket.getPocketSaving()));
+        pocketMain.updatePocketMain(findPocket);
+        pocketMainMongoRepository.save(pocketMain);
+        return PocketResponse.fromPocketMain(pocketMain);
+
+    }
 }

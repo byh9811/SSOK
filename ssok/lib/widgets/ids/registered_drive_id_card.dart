@@ -202,7 +202,7 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
                           onPressed: _toggleAnimation,
                           child: Text(
                             "자세히",
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(fontSize: 20, color: Colors.grey),
                           ),
                         ),
                       ),
@@ -226,7 +226,15 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
         .of(context)
         .size
         .height;
-    return Padding(
+    return GestureDetector(
+        onTap: (){
+      if (_animationController.isCompleted) {
+        _animationController.reverse();
+      } else {
+        _animationController.forward();
+      }
+    },
+    child: Padding(
       padding: EdgeInsets.only(bottom:screenHeight*0.01),
       child: contentBox(
           context,
@@ -272,7 +280,7 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
               ),
             )),
           0.5,
-        ),
+        ),),
     );
   }
 

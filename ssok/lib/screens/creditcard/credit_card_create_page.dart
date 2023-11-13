@@ -55,6 +55,7 @@ class _CreditCardCreatePage extends State<CreditCardCreatePage>{
             SizedBox(height: screenHeight * 0.1),
             MainButton(
                 title: "메인으로",
+                color: "0xFF00ADEF",
                 onPressed: () {
                   Navigator.pop(context);
                 })

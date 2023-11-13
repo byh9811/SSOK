@@ -9,6 +9,7 @@ COPY ${JAR_FILE} /app.jar
 # 환경변수 설정
 ARG ssh_encrypt_key
 ENV ssh-encrypt-key $ssh_encrypt_key
+ENV TZ Asia/Seoul
 
 ENTRYPOINT ["java", "-jar","-Dspring.cloud.config.profile=dev", "/app.jar"]
 

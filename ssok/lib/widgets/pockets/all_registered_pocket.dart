@@ -3,9 +3,11 @@ import 'package:ssok/widgets/pockets/childrens/my_account.dart';
 import 'package:ssok/widgets/pockets/childrens/my_pocket.dart';
 
 class AllRegisteredPocket extends StatefulWidget {
-  const AllRegisteredPocket({super.key, this.pocketTotalDonate, this.pocketTotalPoint});
+  const AllRegisteredPocket({super.key, this.pocketTotalDonate, this.pocketTotalPoint, this.pocketIsChangeSaving,});
   final int? pocketTotalDonate;
   final int? pocketTotalPoint;
+  final bool? pocketIsChangeSaving;
+
   @override
   State<AllRegisteredPocket> createState() => _AllRegisteredPocketState();
 }
@@ -14,6 +16,7 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
 int level = 0;
 double exp = 0;
 String name = "";
+bool _isCheckedChanges = false;
 
 @override
   void initState() {
@@ -21,7 +24,7 @@ String name = "";
     super.initState();
     int pd = widget.pocketTotalDonate ?? 0;
     int pp = widget.pocketTotalPoint ?? 0;
-
+    _isCheckedChanges = widget.pocketIsChangeSaving ?? false;
     int sum = pd+pp;
 
     if(0<=sum && sum<10000){
@@ -66,7 +69,30 @@ String name = "";
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        SizedBox(height: screenHeight * 0.03),
+        // SizedBox(height: screenHeight * 0.03),
+        Row(
+          mainAxisAlignment:  MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              width: 108,
+            ),
+            Row(
+              children:[
+            Text(
+              "잔돈 저금하기",
+              style: TextStyle(fontSize: 15),
+            ),
+            Switch(
+              value: _isCheckedChanges,
+              onChanged: (value) {
+                setState(() {
+                  
+                  _isCheckedChanges = value;
+                });
+              },
+            )]),
+          ],
+        ),
         MyAccount(),
         SizedBox(height: screenHeight * 0.02),
         MyPocket(
@@ -75,6 +101,11 @@ String name = "";
           },
         ),
         SizedBox(height: screenHeight * 0.03),
+
+
+
+
+        
         Divider(
           height: 1,
           indent: screenWidth * 0.1,

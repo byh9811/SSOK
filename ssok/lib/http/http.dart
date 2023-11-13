@@ -49,7 +49,7 @@ class ApiService {
     return response;
   }
 
-  Future<dynamic> postRequestWithFile(String endpoint, String key, String data,
+  Future<dynamic> postRequestWithFile(String endpoint, String? key, String? data,
       String? accessToken, Uint8List bytes) async {
     var uri = '$baseUrl/$endpoint';
     print(uri);

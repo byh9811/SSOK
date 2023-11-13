@@ -36,13 +36,17 @@ public class Pocket extends BaseEntity {
     // 누적 잔금 저축 금액
     private Long pocketTotalChange;
 
+    // 잔금 저금 여부
+    private Boolean pocketIsChangeSaving;
+
     @Builder
-    public Pocket(Long memberSeq, Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint, Long pocketTotalChange) {
+    public Pocket(Long memberSeq, Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint, Long pocketTotalChange, Boolean pocketIsChangeSaving) {
         this.memberSeq = memberSeq;
         this.pocketSaving = pocketSaving;
         this.pocketTotalDonate = pocketTotalDonate;
         this.pocketTotalPoint = pocketTotalPoint;
         this.pocketTotalChange = pocketTotalChange;
+        this.pocketIsChangeSaving = pocketIsChangeSaving;
     }
 
     public void transferChange(Long amt) {

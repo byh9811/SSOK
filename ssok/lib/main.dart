@@ -22,6 +22,7 @@ import 'package:ssok/screens/id/id_detail_page.dart';
 import 'package:ssok/screens/login/login_page.dart';
 import 'package:ssok/screens/login/signin_page.dart';
 import 'package:ssok/screens/main_page.dart';
+import 'package:ssok/screens/mainpage/credit_card_page.dart';
 import 'package:ssok/screens/pocket/pocket_account_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_send_page.dart';
@@ -56,7 +57,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginPage(),
         '/signin': (context) => SigninPage(),
         '/main': (context) => MainPage(),
+        // '/main' :(c ontext) => CreditCardPaymentPage(),
         '/id/create': (context) => IdCreatePage(),
+        '/creditcard/main' : (context) => CreditCardPage(),
         '/id/detail': (context) => IdDetailPage(),
         '/drive/id/create': (context) => DriveIdCreatePage(),
         '/drive/id/detail': (context) => DriveIdDetailPage(),

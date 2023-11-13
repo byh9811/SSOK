@@ -147,9 +147,9 @@ public class PocketQueryService {
                 .build();
     }
 
-    public Boolean getPocketIsChangeSaving(String memberUuid) {
+    public Boolean getPocketIsChangeSaving(Long memberSeq) {
         // memberUuid로 pk 뽑기 / 없으면 에러처리
-        Long memberSeq = isMemberExist(memberUuid);
+//        Long memberSeq = isMemberExist(memberUuid);
         PocketMain findPocketMain = pocketMainMongoRepository.findById(memberSeq).orElseThrow(() -> new IllegalArgumentException("Pocket이 존재하지 않습니다."));
         return findPocketMain.getPocketIsChangeSaving();
     }

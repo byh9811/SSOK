@@ -137,13 +137,13 @@ public class PocketController {
 
     /**
      * 포켓 잔금 저금 여부 조회
-     * @param memberUuid
+     * @param memberSeq
      * @return true : 잔금 저금 o / false : 잔금 저금 x
      */
     @GetMapping("/pocket/change-saving")
-    public ApiResponse<Boolean> getPocketIsChangeSaving(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+    public ApiResponse<Boolean> getPocketIsChangeSaving(@RequestParam (name = "member-seq")Long memberSeq){
         log.info("init 잔금 저금 여부 조회 ");
-        Boolean response = pocketQueryService.getPocketIsChangeSaving(memberUuid);
+        Boolean response = pocketQueryService.getPocketIsChangeSaving(memberSeq);
         return ApiResponse.OK(response);
     }
 

@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/dto/business_card_data.dart';
+import 'package:ssok/widgets/modals/business_create_modal.dart';
 import 'package:ssok/widgets/modals/business_transfer_modal.dart';
 import 'package:ssok/http/http.dart';
 
@@ -165,24 +166,55 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
       child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
             children: [
-              Text(
-                "내 명함",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(screenWidth * 0.06, screenHeight * 0.03),
-                    backgroundColor: Color(0xFF3B8CED),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+              Row(
+                children: [
+                  Text(
+                    "내 명함",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(screenWidth * 0.06, screenHeight * 0.03),
+                        backgroundColor: Color(0xFF3B8CED),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                              ),
+                              child: BusinessTransferModal(
+                                  myNamecardItem:
+                                      widget.myNamecardItems[_currentPage]),
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        "명함 교환",
+                        style: TextStyle(fontSize: 10),
+                      ),
+
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 30),
+                child: TextButton(
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -191,17 +223,12 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
-                          child: BusinessTransferModal(
-                              myNamecardItem:
-                                  widget.myNamecardItems[_currentPage]),
+                          child: BusinessCreateModal(),
                         );
                       },
                     );
                   },
-                  child: Text(
-                    "명함 교환",
-                    style: TextStyle(fontSize: 10),
-                  ),
+                  child: Text('다른 직업도 있으신가요?', style: TextStyle(fontSize: 11, color: Color(0xFF00ADEF)),),
                 ),
               )
             ],

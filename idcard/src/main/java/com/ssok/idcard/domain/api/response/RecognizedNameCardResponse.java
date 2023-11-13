@@ -26,7 +26,7 @@ public record RecognizedNameCardResponse(
         return RecognizedNameCardResponse.builder()
                 .name(nameCard.getName() == null ? null : nameCard.getName().get(0).getText())
                 .company(nameCard.getCompany()== null ? null : nameCard.getCompany().get(0).getText())
-                .department(nameCard.getAddress() == null ? null : nameCard.getAddress().get(0).getText())
+                .department(nameCard.getDepartment() == null ? null : nameCard.getDepartment().get(0).getText())
                 .address(nameCard.getAddress() == null ? null : nameCard.getAddress().get(0).getText())
                 .position(nameCard.getPosition() == null ? null : nameCard.getPosition().get(0).getText())
                 .mobile(nameCard.getMobile() == null ? null : nameCard.getMobile().get(0).getText())

@@ -14,14 +14,12 @@ class BusinessCardDetailPage extends StatefulWidget {
   const BusinessCardDetailPage({super.key});
 
   @override
-    State<BusinessCardDetailPage> createState() => _BusinessCardDetailPage();
+  State<BusinessCardDetailPage> createState() => _BusinessCardDetailPage();
 }
 
 class _BusinessCardDetailPage extends State<BusinessCardDetailPage> {
-
   @override
   Widget build(BuildContext context) {
-
     final exchangeSeq = ModalRoute.of(context)!.settings.arguments as int;
 
     return Scaffold(
@@ -50,21 +48,22 @@ class BusinessCardDetail extends StatefulWidget {
   final int exchangeSeq;
   const BusinessCardDetail({super.key, required this.exchangeSeq});
 
-    @override
-    State<BusinessCardDetail> createState() => _BusinessCardDetail(exchangeSeq);
+  @override
+  State<BusinessCardDetail> createState() => _BusinessCardDetail(exchangeSeq);
 }
 
-class NameCardHead{
+class NameCardHead {
   late String? nameCardImage;
   late String? nameCardName;
   late String? nameCardJob;
   late int? nameCardMemberSeq;
   late int? exchangeSeq;
-  
-  NameCardHead(this.nameCardImage, this.nameCardName, this.nameCardJob, this.nameCardMemberSeq, this.exchangeSeq);
+
+  NameCardHead(this.nameCardImage, this.nameCardName, this.nameCardJob,
+      this.nameCardMemberSeq, this.exchangeSeq);
 }
 
-class NameCardBody{
+class NameCardBody {
   late String? nameCardCompany;
   late String? nameCardWebsite;
   late String? nameCardAddress;
@@ -72,17 +71,24 @@ class NameCardBody{
   late String? nameCardTel;
   late String? nameCardFax;
   late String? nameCardEmail;
-  NameCardBody(this.nameCardCompany, this.nameCardWebsite, this.nameCardAddress, this.nameCardPhone, this.nameCardTel, this.nameCardFax, this.nameCardEmail);
+  NameCardBody(
+      this.nameCardCompany,
+      this.nameCardWebsite,
+      this.nameCardAddress,
+      this.nameCardPhone,
+      this.nameCardTel,
+      this.nameCardFax,
+      this.nameCardEmail);
 }
 
-class NameCardPos{
+class NameCardPos {
   late double? lat;
   late double? lon;
 
   NameCardPos(this.lat, this.lon);
 }
 
-class _BusinessCardDetail extends State<BusinessCardDetail>{
+class _BusinessCardDetail extends State<BusinessCardDetail> {
   final int exchangeSeq;
   late NameCardHead nameCardHead;
   late NameCardBody nameCardBody;
@@ -98,25 +104,32 @@ class _BusinessCardDetail extends State<BusinessCardDetail>{
     getNameCardDetail();
   }
 
-  void getNameCardDetail()async{
-    final response = await apiService.getRequest("namecard-service/$exchangeSeq", TokenManager().accessToken);
+  void getNameCardDetail() async {
+    final response = await apiService.getRequest(
+        "namecard-service/$exchangeSeq", TokenManager().accessToken);
     final data = jsonDecode(utf8.decode(response.bodyBytes))["response"];
     print("getNameCardDetail");
     print(data);
 
-    if(response.statusCode ==200){
+    if (response.statusCode == 200) {
       setState(() {
-        nameCardHead = NameCardHead(data["namecardImage"],data["namecardName"],data["namecardJob"],data["memberSeq"], data["exchangeSeq"]);
-        nameCardBody = NameCardBody(data["namecardCompany"], data["namecardWebsite"], data["namecardAddress"], data["namecardPhone"], data["namecardTel"], data["namecardFax"], data["namecardEmail"]);
+        nameCardHead = NameCardHead(data["namecardImage"], data["namecardName"],
+            data["namecardJob"], data["memberSeq"], data["exchangeSeq"]);
+        nameCardBody = NameCardBody(
+            data["namecardCompany"],
+            data["namecardWebsite"],
+            data["namecardAddress"],
+            data["namecardPhone"],
+            data["namecardTel"],
+            data["namecardFax"],
+            data["namecardEmail"]);
         nameCardPos = NameCardPos(data["lat"], data["lon"]);
       });
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
@@ -126,9 +139,9 @@ class _BusinessCardDetail extends State<BusinessCardDetail>{
           children: [
             BusinessCardDetailHeader(nameCardHead: nameCardHead),
             SizedBox(height: screenHeight * 0.03),
-            BusinessCardDetailBody(nameCardBody:nameCardBody),
+            BusinessCardDetailBody(nameCardBody: nameCardBody),
             SizedBox(height: screenHeight * 0.02),
-            BusinessCardDetailMap(nameCardPos : nameCardPos),
+            BusinessCardDetailMap(nameCardPos: nameCardPos),
           ],
         ),
       ),
@@ -189,7 +202,10 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                             ),
                           ],
                         ),
-                        child: _isBack ? Image. network(nameCardHead.nameCardImage.toString()) : null),
+                        child: _isBack
+                            ? Image.network(
+                                nameCardHead.nameCardImage.toString())
+                            : null),
                   ),
                 );
               },
@@ -244,26 +260,24 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
         Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: EdgeInsets.only(
-                right: screenWidth * 0.008, top: screenHeight * 0.006),
+            padding: EdgeInsets.only(top: screenHeight * 0.006),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed("/businesscard/history", arguments: nameCardHead.exchangeSeq);
+                Navigator.of(context).pushNamed("/businesscard/history",
+                    arguments: nameCardHead.exchangeSeq);
               },
-              child: SizedBox(
-                width: screenWidth * 0.2,
-                child: Row(
-                  children: [
-                    Icon(Icons.timeline),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 3.0),
-                      child: Text(
-                        "타임라인",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    )
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(Icons.timeline),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 3.0),
+                    child: Text(
+                      "타임라인",
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -307,7 +321,8 @@ class BusinessCardDetailBody extends StatefulWidget {
   const BusinessCardDetailBody({super.key, required this.nameCardBody});
 
   @override
-  State<BusinessCardDetailBody> createState() => _BusinessCardDetailBodyState(nameCardBody);
+  State<BusinessCardDetailBody> createState() =>
+      _BusinessCardDetailBodyState(nameCardBody);
 }
 
 class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
@@ -322,6 +337,7 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
       throw Exception('Could not launch $url');
     }
   }
+
   // _launchURL 함수는 주어진 URL을 엽니다.
   void _launchURL(Uri url) async {
     if (await canLaunchUrl(url)) {
@@ -330,6 +346,7 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
       throw 'Could not launch $url';
     }
   }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -346,26 +363,27 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         header("부서위치"),
-        Row(
-          children:[
-            Text(
-              nameCardBody.nameCardCompany.toString(),
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),Padding(
-              padding: const EdgeInsets.only(left: 3.0, bottom: 1.0),
-              child: IconButton(
-                constraints: BoxConstraints(),
-                padding: EdgeInsets.zero,
-                iconSize: 22,
-                onPressed: () {
-                  Uri uri = Uri.parse("https://"+nameCardBody.nameCardWebsite.toString());
-                    _launchURL(uri);
-                },
-                icon: Icon(Icons.home_repair_service_rounded),
-              ),
-            )
+        Row(children: [
+          Text(
+            nameCardBody.nameCardCompany.toString(),
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 3.0, bottom: 1.0),
+            child: IconButton(
+              constraints: BoxConstraints(),
+              padding: EdgeInsets.zero,
+              iconSize: 22,
+              onPressed: () {
+                Uri uri = Uri.parse(
+                    "https://" + nameCardBody.nameCardWebsite.toString());
+                _launchURL(uri);
+              },
+              icon: Icon(Icons.home_repair_service_rounded),
+            ),
+          )
         ]),
         SizedBox(height: screenHeight * 0.01),
         Row(
@@ -384,8 +402,8 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
                 iconSize: 22,
                 onPressed: () {
                   setState(() {
-                    toLaunch =
-                        Uri.parse('nmap://search?query=${nameCardBody.nameCardAddress}');
+                    toLaunch = Uri.parse(
+                        'nmap://search?query=${nameCardBody.nameCardAddress}');
                     _launchInMap(toLaunch);
                   });
                 },
@@ -399,7 +417,7 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
         Row(
           children: [
             Text(
-              "휴대폰 : "+nameCardBody.nameCardPhone.toString(),
+              "휴대폰 : " + nameCardBody.nameCardPhone.toString(),
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -419,22 +437,24 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
           ],
         ),
         SizedBox(height: screenHeight * 0.01),
-        nameCardBody.nameCardTel!=null?Text(
-          "회사 : "+nameCardBody.nameCardTel.toString(),
-          style: TextStyle(
-            fontSize: 16,
-          ),
-        ):SizedBox(height:0),
+        nameCardBody.nameCardTel != null
+            ? Text(
+                "회사 : " + nameCardBody.nameCardTel.toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              )
+            : SizedBox(height: 0),
         SizedBox(height: screenHeight * 0.01),
         Text(
-          "FAX : "+nameCardBody.nameCardFax.toString(),
+          "FAX : " + nameCardBody.nameCardFax.toString(),
           style: TextStyle(
             fontSize: 16,
           ),
         ),
         SizedBox(height: screenHeight * 0.01),
         Text(
-          "Email : "+nameCardBody.nameCardEmail.toString(),
+          "Email : " + nameCardBody.nameCardEmail.toString(),
           style: TextStyle(
             fontSize: 16,
           ),
@@ -463,22 +483,23 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
   }
 }
 
-
 String parseAddress(Map<String, dynamic> jsonData) {
-    final area1 = jsonData['results'][0]['region']['area1']['name'];
-    final area2 = jsonData['results'][0]['region']['area2']['name'];
-    final area3 = jsonData['results'][0]['region']['area3']['name'];
-    final area4 = jsonData['results'][0]['region']['area4']['name'];
+  final area1 = jsonData['results'][0]['region']['area1']['name'];
+  final area2 = jsonData['results'][0]['region']['area2']['name'];
+  final area3 = jsonData['results'][0]['region']['area3']['name'];
+  final area4 = jsonData['results'][0]['region']['area4']['name'];
 
-    return '$area1 $area2 $area3 $area4';
-  }
-  
+  return '$area1 $area2 $area3 $area4';
+}
+
 Future<String> getAddressFromLatLng(double lat, double lon) async {
   const String clientId = '6sfqyu6her'; // 여기에 클라이언트 ID를 입력하세요
-  const String clientSecret = 'cG12rGByf6VklpfZc0O7lW5KxUgqAh5GcGqAzW68'; // 여기에 클라이언트 Secret을 입력하세요
+  const String clientSecret =
+      'cG12rGByf6VklpfZc0O7lW5KxUgqAh5GcGqAzW68'; // 여기에 클라이언트 Secret을 입력하세요
 
   final response = await http.get(
-    Uri.parse('https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=$lon,$lat&sourcecrs=epsg:4326&orders=legalcode&output=json'),
+    Uri.parse(
+        'https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=$lon,$lat&sourcecrs=epsg:4326&orders=legalcode&output=json'),
     headers: {
       'X-NCP-APIGW-API-KEY-ID': clientId,
       'X-NCP-APIGW-API-KEY': clientSecret,
@@ -488,7 +509,7 @@ Future<String> getAddressFromLatLng(double lat, double lon) async {
   if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
     print(jsonData);
-    if(jsonData["status"]["cope"]==0)
+    if (jsonData["status"]["cope"] == 0)
       return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
     else
       return "위치 정보를 파악할 수 없습니다.";
@@ -497,23 +518,20 @@ Future<String> getAddressFromLatLng(double lat, double lon) async {
   }
 }
 
-
-
 class BusinessCardDetailMap extends StatefulWidget {
   final NameCardPos nameCardPos;
   const BusinessCardDetailMap({super.key, required this.nameCardPos});
 
   @override
-  State<BusinessCardDetailMap> createState() => _BusinessCardDetailMapState(nameCardPos);
+  State<BusinessCardDetailMap> createState() =>
+      _BusinessCardDetailMapState(nameCardPos);
 }
 
 class _BusinessCardDetailMapState extends State<BusinessCardDetailMap> {
-  
-
   late NaverMapController mapController;
   NaverMapViewOptions options = const NaverMapViewOptions();
   late NameCardPos nameCardPos;
-  late String positionName="zz";
+  late String positionName = "zz";
 
   _BusinessCardDetailMapState(this.nameCardPos);
 
@@ -526,18 +544,18 @@ class _BusinessCardDetailMapState extends State<BusinessCardDetailMap> {
     }
   }
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
-    getAdd(nameCardPos.lat??0, nameCardPos.lon??0);
+    getAdd(nameCardPos.lat ?? 0, nameCardPos.lon ?? 0);
   }
 
-void getAdd(double lat, double lon)async{
-  String addressName = await getAddressFromLatLng(lat, lon);
-  setState(() {
-    positionName = addressName;
-  });
-}
+  void getAdd(double lat, double lon) async {
+    String addressName = await getAddressFromLatLng(lat, lon);
+    setState(() {
+      positionName = addressName;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -552,7 +570,8 @@ void getAdd(double lat, double lon)async{
             SizedBox(
               width: screenWidth,
               height: screenHeight * 0.18,
-              child: _naverMapSection(nameCardPos.lat??35.203845, nameCardPos.lon??126.8104095),
+              child: _naverMapSection(
+                  nameCardPos.lat ?? 35.203845, nameCardPos.lon ?? 126.8104095),
             ),
             InkWell(
               onTap: () {
@@ -603,8 +622,11 @@ void getAdd(double lat, double lon)async{
 
   void onMapReady(NaverMapController controller) {
     mapController = controller;
-    print(nameCardPos.lat.toString()+" "+nameCardPos.lat.toString());
-    final marker = NMarker(id: '1', position: NLatLng(nameCardPos.lat??35.203845, nameCardPos.lon??126.8104095));
+    print(nameCardPos.lat.toString() + " " + nameCardPos.lat.toString());
+    final marker = NMarker(
+        id: '1',
+        position: NLatLng(
+            nameCardPos.lat ?? 35.203845, nameCardPos.lon ?? 126.8104095));
     mapController = controller;
     mapController.addOverlay(marker);
   }

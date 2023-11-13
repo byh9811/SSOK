@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ripple_wave/ripple_wave.dart';
@@ -10,6 +11,7 @@ import 'package:ssok/dto/business_card_data.dart';
 
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 
 class Endpoint {
   final String id;
@@ -40,6 +42,7 @@ class _BusinessCardReceiveBluetoothPageState
   bool scanning = false;
   late MyNameCard myNamecardItem;
   List<Endpoint> discoveredEndpoints = [];
+  Location location = Location();
 
   // void showDiscoveredEndpoints(BuildContext context) {
   //   double screenHeight = MediaQuery.of(context).size.height;
@@ -139,18 +142,101 @@ class _BusinessCardReceiveBluetoothPageState
   }
 
   void transfer(int namecardASeq, int namecardBSeq) async {
+    LocationData locationData = await location.getLocation();
     final response = await apiService.postRequest(
         'namecard-service/exchange/single',
         {
           "namecardASeq": "$namecardASeq",
           "namecardBSeq": "$namecardBSeq",
-          "lat": "35.193844",
-          "lon": "126.8102029"
+          "lat": "${locationData.latitude}",
+          "lon": "${locationData.longitude}"
         },
         TokenManager().accessToken);
     print(jsonDecode(utf8.decode(response.bodyBytes)));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop();
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('명함 수신 완료'),
+            content: Text('당신도 명함을 보내시겠습니까?'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, '네');
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      opaque: false, // 배경이 투명해야 함을 나타냅니다
+                      pageBuilder: (BuildContext context, _, __) {
+                        return TransferLoadingPage();
+                      },
+                    ),
+                  );
+                  transferReverse(namecardBSeq, namecardASeq);
+                },
+                child: Text('네'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, '아니요');
+                  Navigator.of(context).pushNamed('/main');
+                },
+                child: Text('아니요'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      throw Exception('Failed to load');
+    }
+  }
+
+  void transferReverse(int namecardASeq, int namecardBSeq) async {
+    LocationData locationData = await location.getLocation();
+    final response = await apiService.postRequest(
+        'namecard-service/exchange/single',
+        {
+          "namecardASeq": "$namecardASeq",
+          "namecardBSeq": "$namecardBSeq",
+          "lat": "${locationData.latitude}",
+          "lon": "${locationData.longitude}"
+        },
+        TokenManager().accessToken);
+    print(jsonDecode(utf8.decode(response.bodyBytes)));
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop();
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('명함 교환 완료'),
+            // content: Text('당신도 명함을 보내시겠습니까?'),
+            actions: [
+              // TextButton(
+              //   onPressed: () async {
+              //     transfer(namecardBSeq, namecardASeq);
+              //   },
+              //   child: Text('네'),
+              // ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, '닫기');
+                  Navigator.of(context).pushNamed('/main');
+                },
+                child: Text('닫기'),
+              ),
+            ],
+          );
+        },
+      );
     } else {
       throw Exception('Failed to load');
     }
@@ -351,6 +437,14 @@ class _BusinessCardReceiveBluetoothPageState
                         "수락",
                         () {
                           Navigator.pop(context);
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              opaque: false, // 배경이 투명해야 함을 나타냅니다
+                              pageBuilder: (BuildContext context, _, __) {
+                                return TransferLoadingPage();
+                              },
+                            ),
+                          );
                           setState(() {
                             endpointMap[id] = info;
                           });
@@ -367,6 +461,7 @@ class _BusinessCardReceiveBluetoothPageState
                                 print(
                                     "namecardSeqA :  ${myNamecardItem.namecardSeq} , namecardSeqB : $seq");
                                 transfer(myNamecardItem.namecardSeq, seq);
+
                                 // 모달을 띄워서 너도 보낼래????? 해줌
                                 // 확인 누르면 나도 보내는 api 호출
                               }

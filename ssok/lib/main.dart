@@ -67,8 +67,8 @@ class MyApp extends StatelessWidget {
         '/businesscard/my': (context) => BusinessCardMyPage(),
         '/businesscard/detail': (context) => BusinessCardDetailPage(),
         '/businesscard/self/create': (context) => BusinessCardSelfCreatePage(),
-        '/businesscard/history':(context) => BusineessCardHistoryPage(),
-        '/businesscard/myhistory':(context) => BusineessCardMyHistoryPage(),
+        '/businesscard/history': (context) => BusineessCardHistoryPage(),
+        '/businesscard/myhistory': (context) => BusineessCardMyHistoryPage(),
         '/businesscard/camera/create': (context) =>
             BusinessCardCameraCreatePage(),
         '/businesscard/map': (context) => BusinessCardMapPage(),

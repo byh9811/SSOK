@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record PocketHistoryCreateRequest(
         Long memberSeq,
-        Long receiptSeq,
+        String receiptDocumentId,
         String pocketHistoryType,
         Long pocketHistoryTransAmt
 

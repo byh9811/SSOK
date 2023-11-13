@@ -70,10 +70,12 @@ public class ReceiptService {
         }
         purchaseItemRepository.saveAll(purchaseItemList);
 
+        String savedDocId = eventHandler.createReceipt(card, memberSeq, receiptCreateServiceDto);
+
         if (earnedCNP > 0) {
             PocketHistoryCreateRequest request = PocketHistoryCreateRequest.builder()
                     .memberSeq(memberSeq)
-                    .receiptSeq(receipt.getReceiptSeq())
+                    .receiptDocumentId(savedDocId)
                     .pocketHistoryType("CARBON")
                     .pocketHistoryTransAmt(earnedCNP)
                     .build();
@@ -96,7 +98,7 @@ public class ReceiptService {
                 bankAccessUtil.pay(mdToken, account, remain);
                 PocketHistoryCreateRequest request = PocketHistoryCreateRequest.builder()
                         .memberSeq(memberSeq)
-                        .receiptSeq(receipt.getReceiptSeq())
+                        .receiptDocumentId(savedDocId)
                         .pocketHistoryType("CHANGE")
                         .pocketHistoryTransAmt(remain)
                         .build();
@@ -106,8 +108,6 @@ public class ReceiptService {
         } catch(Exception e) {
             log.info("포켓이 없어서 기록은 안했습니다~");
         }
-
-        eventHandler.createReceipt(card, memberSeq, receiptCreateServiceDto);
     }
 
 }

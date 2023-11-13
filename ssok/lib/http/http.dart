@@ -34,6 +34,20 @@ class ApiService {
     return response;
   }
 
+  Future<http.Response> postRawRequest(
+      String endpoint, String data, String? accessToken) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/$endpoint'),
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'ACCESS-TOKEN': accessToken ?? ""
+      },
+      body: data,
+    );
+    return response;
+  }
+
   Future<dynamic> postRequestWithFile(String endpoint, String? key, String? data,
       String? accessToken, Uint8List bytes) async {
     var uri = '$baseUrl/$endpoint';

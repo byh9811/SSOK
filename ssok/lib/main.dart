@@ -22,6 +22,7 @@ import 'package:ssok/screens/id/id_detail_page.dart';
 import 'package:ssok/screens/login/login_page.dart';
 import 'package:ssok/screens/login/signin_page.dart';
 import 'package:ssok/screens/main_page.dart';
+import 'package:ssok/screens/mainpage/business_card_page.dart';
 import 'package:ssok/screens/pocket/pocket_account_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_send_page.dart';
@@ -30,6 +31,7 @@ import 'package:ssok/screens/pocket/pocket_pocket_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_transfer_page.dart';
 import 'package:ssok/screens/receipt/receipt_list_detail_page.dart';
 import 'package:ssok/screens/creditcard/credit_card_payment_page.dart';
+import 'package:ssok/widgets/businesscards/registered_business_card.dart';
 
 TokenManager tokenManager = TokenManager();
 void main() async {
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
         '/drive/id/detail': (context) => DriveIdDetailPage(),
         '/creditcard/payment': (context) => CreditCardPaymentPage(),
         '/businesscard/my': (context) => BusinessCardMyPage(),
+        '/businesscard/page': (context) => BusinessCardPage(),
         '/businesscard/detail': (context) => BusinessCardDetailPage(),
         '/businesscard/self/create': (context) => BusinessCardSelfCreatePage(),
         '/businesscard/history':(context) => BusineessCardHistoryPage(),

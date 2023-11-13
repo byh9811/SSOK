@@ -117,49 +117,49 @@ class _BusinessCardMyPage extends State<BusinessCardMyPage> {
                 ),
               ),
               SizedBox(height: screenHeight * 0.015),
-              ContentByCard(
+              if(mycardInfo["namecardName"]!="")ContentByCard(
                 title: "이름",
-                content: mycardInfo["namecardName"] ?? "",
+                content: mycardInfo["namecardName"],
               ),
-              ContentByCard(
-                title: "직책(회사)",
-                content: (mycardInfo['namecardJob'] ?? "") +
+              if(mycardInfo['namecardCompany']!="")ContentByCard(
+                title: "회사 / 직책",
+                content: (mycardInfo['namecardCompany']) +
                     " / " +
-                    (mycardInfo['namecardCompany'] ?? ""),
+                    (mycardInfo['namecardJob'] ?? ""),
               ),
-              ContentByCard(
+              if(mycardInfo['namecardAddress']!="")ContentByCard(
                 title: "주소",
-                content: mycardInfo['namecardAddress'] ?? "",
+                content: mycardInfo['namecardAddress'],
               ),
               Divider(
                 height: 1,
                 color: Colors.black,
               ),
               SizedBox(height: screenHeight * 0.02),
-              ContentByCard(
+              if(mycardInfo['namecardPhone']!="")ContentByCard(
                 title: "휴대폰",
-                content: mycardInfo['namecardPhone'] ?? "",
+                content: mycardInfo['namecardPhone'],
               ),
-              ContentByCard(
+              if(mycardInfo['namecardTel']!="")ContentByCard(
                 title: "회사번호",
-                content: mycardInfo['namecardTel'] ?? "",
+                content: mycardInfo['namecardTel'],
               ),
-              ContentByCard(
+              if(mycardInfo['namecardFax']!="")ContentByCard(
                 title: "FAX",
-                content: mycardInfo['namecardFax'] ?? "",
+                content: mycardInfo['namecardFax'],
               ),
-              ContentByCard(
+              if(mycardInfo['namecardEmail']!="")ContentByCard(
                 title: "이메일",
-                content: mycardInfo['namecardEmail'] ?? "",
+                content: mycardInfo['namecardEmail'],
               ),
-              Divider(
+              if(mycardInfo['namecardWebsite']!="")Divider(
                 height: 1,
                 color: Colors.black,
               ),
-              SizedBox(height: screenHeight * 0.02),
-              ContentByCard(
+              if(mycardInfo['namecardWebsite']!="")SizedBox(height: screenHeight * 0.02),
+              if(mycardInfo['namecardWebsite']!="")ContentByCard(
                 title: "홈페이지",
-                content: mycardInfo['namecardWebsite'] ?? "",
+                content: mycardInfo['namecardWebsite'],
               ),
             ],
           ),

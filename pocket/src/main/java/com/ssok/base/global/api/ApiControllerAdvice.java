@@ -43,7 +43,7 @@ public class ApiControllerAdvice {
     /**
      * NoSuchElementException 공통 처리 메서드
      * @param e NoSuchElementException
-     * @return 404 오류 메세지
+     * @return 400 오류 메세지
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NoSuchElementException.class)

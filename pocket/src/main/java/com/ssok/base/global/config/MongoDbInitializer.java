@@ -17,10 +17,10 @@ public class MongoDbInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 컬렉션 드랍
-        mongoTemplate.dropCollection(DonateMain.class);
-        mongoTemplate.dropCollection(DonateMemberDoc.class);
-        mongoTemplate.dropCollection(PocketDetail.class);
-        mongoTemplate.dropCollection(PocketMain.class);
+//        mongoTemplate.dropCollection(DonateMain.class);
+//        mongoTemplate.dropCollection(DonateMemberDoc.class);
+//        mongoTemplate.dropCollection(PocketDetail.class);
+//        mongoTemplate.dropCollection(PocketMain.class);
 
         // 여기에서 추가적인 초기화 작업을 수행할 수 있습니다.
     }

@@ -337,4 +337,20 @@ public class PocketService {
         }
     }
 
+    public PocketResponse editPocketIsChangeSaving(String memberUuid) {
+        Long memberSeq = isMemberExist(memberUuid);
+        Pocket findPocket = pocketRepository.findById(memberSeq).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
+        // RDB 변경
+        findPocket.updatePocketIsChangeSaving();
+
+        PocketMain pocketMain = pocketMainMongoRepository.findById(findPocket.getMemberSeq()).orElseThrow(()
+                -> new IllegalArgumentException("조회용이 존재하지 않는다."));
+
+        // Mongo - update PocketDetail
+        log.info(String.valueOf(findPocket.getPocketSaving()));
+        pocketMain.updatePocketMain(findPocket);
+        pocketMainMongoRepository.save(pocketMain);
+        return PocketResponse.fromPocketMain(pocketMain);
+
+    }
 }

@@ -37,6 +37,7 @@ public class Pocket extends BaseEntity {
     private Long pocketTotalChange;
 
     // 잔금 저금 여부
+    @Column(nullable = false)
     private Boolean pocketIsChangeSaving;
 
     @Builder
@@ -66,5 +67,9 @@ public class Pocket extends BaseEntity {
 
     public void transferWithdrawal(Long amt) {
         this.pocketSaving -= amt;
+    }
+
+    public void updatePocketIsChangeSaving(){
+        this.pocketIsChangeSaving = !this.pocketIsChangeSaving;
     }
 }

@@ -88,6 +88,7 @@ public class PocketService {
                 .pocketTotalDonate(0L)
                 .pocketTotalPoint(0L)
                 .pocketTotalChange(0L)
+                .pocketIsChangeSaving(false)
                 .build();
 
         pocketRepository.save(pocket);

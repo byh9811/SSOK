@@ -4,6 +4,7 @@ import com.ssok.base.domain.maria.entity.Pocket;
 import com.ssok.base.domain.mongo.document.PocketMain;
 import lombok.Builder;
 import lombok.Data;
+import org.eclipse.jdt.internal.compiler.ast.Block;
 
 @Data
 public class PocketResponse {
@@ -19,12 +20,16 @@ public class PocketResponse {
     // 누적 잔금 저축 금액
     private Long pocketTotalChange;
 
+    // 잔금 저금 여부
+    private Boolean pocketIsChangeSaving;
+
     @Builder
-    public PocketResponse(Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint, Long pocketTotalChange) {
+    public PocketResponse(Long pocketSaving, Long pocketTotalDonate, Long pocketTotalPoint, Long pocketTotalChange, Boolean pocketIsChangeSaving) {
         this.pocketSaving = pocketSaving;
         this.pocketTotalDonate = pocketTotalDonate;
         this.pocketTotalPoint = pocketTotalPoint;
         this.pocketTotalChange = pocketTotalChange;
+        this.pocketIsChangeSaving = pocketIsChangeSaving;
     }
 
     public static PocketResponse of(Pocket pocket){
@@ -33,6 +38,7 @@ public class PocketResponse {
                 .pocketTotalDonate(pocket.getPocketTotalDonate())
                 .pocketTotalPoint(pocket.getPocketTotalPoint())
                 .pocketTotalChange(pocket.getPocketTotalChange())
+                .pocketIsChangeSaving(pocket.getPocketIsChangeSaving())
                 .build();
     }
 
@@ -42,6 +48,7 @@ public class PocketResponse {
                 .pocketTotalDonate(pocketMain.getPocketTotalDonate())
                 .pocketTotalPoint(pocketMain.getPocketTotalPoint())
                 .pocketTotalChange(pocketMain.getPocketTotalChange())
+                .pocketIsChangeSaving(pocketMain.getPocketIsChangeSaving())
                 .build();
     }
 }

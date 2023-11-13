@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DonateHistory  {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pocket_history_seq")
+    @Column(name = "donate_history_seq")
     private Long donateHistorySeq;
 
 //    @Id

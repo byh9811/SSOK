@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PocketHistoryRequest {
-    private Long receiptSeq;
     // 구분
     private String pocketHistoryType;
     // 금액
@@ -17,8 +16,7 @@ public class PocketHistoryRequest {
 
 
     @Builder
-    public PocketHistoryRequest(Long receiptSeq, String pocketHistoryType, Long pocketHistoryTransAmt) {
-        this.receiptSeq = receiptSeq;
+    public PocketHistoryRequest(String pocketHistoryType, Long pocketHistoryTransAmt) {
         this.pocketHistoryType = pocketHistoryType;
         this.pocketHistoryTransAmt = pocketHistoryTransAmt;
     }
@@ -26,7 +24,6 @@ public class PocketHistoryRequest {
     public PocketHistoryAppDto toDto(String memberUuid){
         return PocketHistoryAppDto.builder()
                 .memberUuid(memberUuid)
-                .receiptSeq(this.receiptSeq)
                 .pocketHistoryType(this.pocketHistoryType)
                 .pocketHistoryTransAmt(this.pocketHistoryTransAmt)
                 .build();

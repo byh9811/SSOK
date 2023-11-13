@@ -16,15 +16,15 @@ public class ChangeHistory{
     @Column(name = "change_history_seq")
     private Long changeHistorySeq;
 
-    private Long receiptSeq;
+    private String receiptDocumentId;
 
     @OneToOne
     @JoinColumn(name = "pocket_history_seq")
     private PocketHistory pocketHistory;
 
     @Builder
-    public ChangeHistory(Long receiptSeq, PocketHistory pocketHistory) {
-        this.receiptSeq = receiptSeq;
+    public ChangeHistory(String receiptDocumentId, PocketHistory pocketHistory) {
+        this.receiptDocumentId = receiptDocumentId;
         this.pocketHistory = pocketHistory;
     }
 }

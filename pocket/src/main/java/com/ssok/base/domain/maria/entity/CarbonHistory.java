@@ -17,15 +17,15 @@ public class CarbonHistory {
     @Column(name = "carbon_history_seq")
     private Long carbonHistorySeq;
 
-    private Long receiptSeq;
+    private String receiptDocumentId;
 
     @OneToOne
     @JoinColumn(name = "pocket_history_seq")
     private PocketHistory pocketHistory;
 
     @Builder
-    public CarbonHistory(Long receiptSeq, PocketHistory pocketHistory) {
-        this.receiptSeq = receiptSeq;
+    public CarbonHistory(String receiptDocumentId, PocketHistory pocketHistory) {
+        this.receiptDocumentId = receiptDocumentId;
         this.pocketHistory = pocketHistory;
     }
 }

@@ -47,7 +47,8 @@ public class PocketController {
     }
 
     @GetMapping("/test")
-    public ApiResponse<?> test(){
+    public ApiResponse<?> test(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+        pocketService.getTest(memberUuid);
         log.info("test in  in  in");
         return OK("TESTdONE");
     }

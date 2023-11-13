@@ -11,16 +11,16 @@ public class PocketHistoryPosRequest {
 
     private Long memberSeq;
 
-    private Long receiptSeq;
+    private String receiptDocumentId;
     // 구분
     private String pocketHistoryType;
     // 금액
     private Long pocketHistoryTransAmt;
 
     @Builder
-    public PocketHistoryPosRequest(Long memberSeq, Long receiptSeq, String pocketHistoryType, Long pocketHistoryTransAmt) {
+    public PocketHistoryPosRequest(Long memberSeq, String receiptDocumentId, String pocketHistoryType, Long pocketHistoryTransAmt) {
         this.memberSeq = memberSeq;
-        this.receiptSeq = receiptSeq;
+        this.receiptDocumentId = receiptDocumentId;
         this.pocketHistoryType = pocketHistoryType;
         this.pocketHistoryTransAmt = pocketHistoryTransAmt;
     }
@@ -28,7 +28,7 @@ public class PocketHistoryPosRequest {
     public PocketHistoryDto toDto(){
         return PocketHistoryDto.builder()
                 .memberSeq(this.memberSeq)
-                .receiptSeq(this.receiptSeq)
+                .receiptDocumentId(this.receiptDocumentId)
                 .pocketHistoryType(this.pocketHistoryType)
                 .pocketHistoryTransAmt(this.pocketHistoryTransAmt)
                 .build();

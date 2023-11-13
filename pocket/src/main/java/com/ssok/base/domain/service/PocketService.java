@@ -17,6 +17,7 @@ import com.ssok.base.domain.service.dto.DomainDto;
 import com.ssok.base.domain.service.dto.DonatePocketHistoryDto;
 import com.ssok.base.domain.service.dto.PocketHistoryAppDto;
 import com.ssok.base.domain.service.dto.PocketHistoryDto;
+import com.ssok.base.global.api.ApiResponse;
 import com.ssok.base.global.exception.CustomException;
 import com.ssok.base.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.tags.EditorAwareTag;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -176,7 +180,7 @@ public class PocketService {
                 .build();
         // 내역 생성
         pocketHistoryRepository.save(pocketHistory);
-        createTypeHistory(dto.getPocketHistoryType(), dto.getReceiptSeq(), pocketHistory);
+        createTypeHistory(dto.getPocketHistoryType(), dto.getReceiptDocumentId(), pocketHistory);
 
         // Mongo
         PocketMain pocketMain = pocketMainMongoRepository.findById(findPocket.getMemberSeq()).orElseThrow(()
@@ -188,9 +192,8 @@ public class PocketService {
         pocketMainMongoRepository.save(pocketMain);
 
         // Mongo - create PocketDetail
-        PocketDetail pocketDetail = PocketDetail.fromPocketHistory(pocketHistory, dto.getReceiptSeq());
+        PocketDetail pocketDetail = PocketDetail.fromPocketHistory(pocketHistory, dto.getReceiptDocumentId());
         pocketDetailMongoRepository.save(pocketDetail);
-
     }
 
 
@@ -261,18 +264,18 @@ public class PocketService {
     }
 
 
-    private void createTypeHistory(String type, Long receiptSeq, PocketHistory pocketHistory){
+    private void createTypeHistory(String type, String receiptDocumentId, PocketHistory pocketHistory){
         if(type.equals("CHANGE")){
             ChangeHistory changeHistory = ChangeHistory.builder()
                     .pocketHistory(pocketHistory)
-                    .receiptSeq(receiptSeq)
+                    .receiptDocumentId(receiptDocumentId)
                     .build();
             changeHistoryRepository.save(changeHistory);
         }
         if(type.equals("CARBON")){
             CarbonHistory carbonHistory = CarbonHistory.builder()
                     .pocketHistory(pocketHistory)
-                    .receiptSeq(receiptSeq)
+                    .receiptDocumentId(receiptDocumentId)
                     .build();
             carbonHistoryRepository.save(carbonHistory);
         }
@@ -351,6 +354,18 @@ public class PocketService {
         pocketMain.updatePocketMain(findPocket);
         pocketMainMongoRepository.save(pocketMain);
         return PocketResponse.fromPocketMain(pocketMain);
+
+    }
+
+    public void getTest(String memberUuid) {
+        Long memberSeq = isMemberExist(memberUuid);
+        Pocket findPocket = pocketRepository.findById(memberSeq).orElseThrow(() -> new NoSuchElementException("Pocket이 존재하지 않습니다"));
+        log.warn(findPocket.getCreateDate().toString());
+        String str = findPocket.getCreateDate().toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
+        log.warn("변환된 데이트타임 나간다~" + dateTime);
+//        System.out.println(dateTime);
 
     }
 }

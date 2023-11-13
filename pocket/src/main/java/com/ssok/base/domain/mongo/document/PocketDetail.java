@@ -29,26 +29,26 @@ public class PocketDetail {
 
     private PocketHistoryType pocketHistoryType;
 
-    private Long receiptSeq;
+    private String receiptDocumentId;
 
     private LocalDateTime createDate;
 
     private LocalDateTime modifyDate;
 
     @Builder
-    public PocketDetail(Long pocketHistorySeq, Long memberSeq, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle, PocketHistoryType pocketHistoryType, Long receiptSeq, LocalDateTime createDate, LocalDateTime modifyDate) {
+    public PocketDetail(Long pocketHistorySeq, Long memberSeq, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String pocketHistoryTitle, PocketHistoryType pocketHistoryType, String receiptDocumentId, LocalDateTime createDate, LocalDateTime modifyDate) {
         this.pocketHistorySeq = pocketHistorySeq;
         this.memberSeq = memberSeq;
         this.pocketHistoryTransAmt = pocketHistoryTransAmt;
         this.pocketHistoryResultAmt = pocketHistoryResultAmt;
         this.pocketHistoryTitle = pocketHistoryTitle;
         this.pocketHistoryType = pocketHistoryType;
-        this.receiptSeq = receiptSeq;
+        this.receiptDocumentId = receiptDocumentId;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
     }
 
-    static public PocketDetail fromPocketHistory(PocketHistory pocketHistory, Long receiptSeq){
+    static public PocketDetail fromPocketHistory(PocketHistory pocketHistory, String receiptDocumentId){
         return PocketDetail.builder()
                 .pocketHistorySeq(pocketHistory.getPocketHistorySeq())
                 .memberSeq(pocketHistory.getMemberSeq())
@@ -56,7 +56,7 @@ public class PocketDetail {
                 .pocketHistoryResultAmt(pocketHistory.getPocketHistoryResultAmt())
                 .pocketHistoryTitle(pocketHistory.getPocketHistoryTitle())
                 .pocketHistoryType(pocketHistory.getPocketHistoryType())
-                .receiptSeq(receiptSeq)
+                .receiptDocumentId(receiptDocumentId)
                 .createDate(pocketHistory.getCreateDate())
                 .modifyDate(pocketHistory.getModifyDate())
                 .build();

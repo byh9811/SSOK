@@ -19,17 +19,17 @@ public class PocketDetailResponse {
     private Long pocketHistoryTransAmt;
     // 남은 금액
     private Long pocketHistoryResultAmt;
-    private Long receiptSeq;
+    private String receiptDocumentId;
     private String pocketHistoryTitle;
     private String createTime;
 
     @Builder
-    public PocketDetailResponse(Long pocketHistorySeq, PocketHistoryType pocketHistoryType, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, Long receiptSeq, String pocketHistoryTitle, LocalDateTime createTime) {
+    public PocketDetailResponse(Long pocketHistorySeq, PocketHistoryType pocketHistoryType, Long pocketHistoryTransAmt, Long pocketHistoryResultAmt, String receiptDocumentId, String pocketHistoryTitle, LocalDateTime createTime) {
         this.pocketHistorySeq = pocketHistorySeq;
         this.pocketHistoryType = pocketHistoryType;
         this.pocketHistoryTransAmt = pocketHistoryTransAmt;
         this.pocketHistoryResultAmt = pocketHistoryResultAmt;
-        this.receiptSeq = receiptSeq;
+        this.receiptDocumentId = receiptDocumentId;
         this.pocketHistoryTitle = pocketHistoryTitle;
         this.createTime = createTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     }
@@ -40,7 +40,7 @@ public class PocketDetailResponse {
                 .pocketHistoryType(pocketDetail.getPocketHistoryType())
                 .pocketHistoryTransAmt(pocketDetail.getPocketHistoryTransAmt())
                 .pocketHistoryResultAmt(pocketDetail.getPocketHistoryResultAmt())
-                .receiptSeq(pocketDetail.getReceiptSeq())
+                .receiptDocumentId(pocketDetail.getReceiptDocumentId())
                 .pocketHistoryTitle(pocketDetail.getPocketHistoryTitle())
                 .createTime(pocketDetail.getCreateDate())
                 .build();

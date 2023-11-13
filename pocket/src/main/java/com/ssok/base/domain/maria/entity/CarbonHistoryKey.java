@@ -12,12 +12,12 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class CarbonHistoryKey implements Serializable {
-    private Long receiptSeq;
+    private String receiptDocumentId;
     private PocketHistory pocketHistory;
 
     @Builder
-    public CarbonHistoryKey(Long receiptSeq, PocketHistory pocketHistory) {
-        this.receiptSeq = receiptSeq;
+    public CarbonHistoryKey(String receiptDocumentId, PocketHistory pocketHistory) {
+        this.receiptDocumentId = receiptDocumentId;
         this.pocketHistory = pocketHistory;
     }
 }

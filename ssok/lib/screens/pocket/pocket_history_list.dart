@@ -259,9 +259,13 @@ void getDepositHistory()async{
       print("zz");
       print(jsonString);
     } else {
+      setState(() {
+        pocketHistories=[];
+      });
       throw Exception('Failed to load');
     }
 }
+
 void getWithdrawHistory()async{
     final response = await apiService.getRequest('pocket-service/pocket/detail?detailType=2', TokenManager().accessToken);
     print("포켓 출금 내역 가져옴");
@@ -275,6 +279,9 @@ void getWithdrawHistory()async{
       print("zz");
       print(jsonString);
     } else {
+        setState(() {
+          pocketHistories=[];
+        });
       throw Exception('Failed to load');
     }
 }

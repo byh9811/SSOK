@@ -17,7 +17,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 0; // 현재 보여주려는 index
+  int currentIndex = 2; // 현재 보여주려는 index
   bool _isCheckedChanges = false;
   final List<Widget> navPages = [
     // 각 위젯 페이지들
@@ -155,23 +155,23 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    "잔돈 저금 활성화",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Switch(
-                    value: _isCheckedChanges,
-                    onChanged: (value) {
-                      setState(() {
-                        _isCheckedChanges = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      "잔돈 저금 활성화",
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    Switch(
+                      value: _isCheckedChanges,
+                      onChanged: (value) {
+                        setState(() {
+                          _isCheckedChanges = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

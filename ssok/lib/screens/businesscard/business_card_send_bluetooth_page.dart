@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ssok/dto/business_card_data.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 
 class BusinessCardSendBluetoothPage extends StatefulWidget {
   const BusinessCardSendBluetoothPage({super.key});
@@ -32,7 +33,8 @@ class _BusinessCardSendBluetoothPageState
       Permission.bluetooth,
       Permission.bluetoothAdvertise,
       Permission.bluetoothConnect,
-      Permission.bluetoothScan
+      Permission.bluetoothScan,
+      Permission.location,
     ].request();
   }
 
@@ -78,6 +80,24 @@ class _BusinessCardSendBluetoothPageState
           " ${value.endpointName} $myNamecardSeqString이 ~에게 명함을 보내요 ~~ , id: $key");
       Nearby().sendBytesPayload(
           key, Uint8List.fromList(myNamecardSeqString.codeUnits));
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('명함 전송 성공'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, '닫기');
+                  Navigator.of(context).pushNamed('/main');
+                },
+                child: Text('닫기'),
+              ),
+            ],
+          );
+        },
+      );
     });
   }
 
@@ -273,6 +293,14 @@ class _BusinessCardSendBluetoothPageState
                       "수락",
                       () {
                         Navigator.pop(context);
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            opaque: false, // 배경이 투명해야 함을 나타냅니다
+                            pageBuilder: (BuildContext context, _, __) {
+                              return TransferLoadingPage();
+                            },
+                          ),
+                        );
                         setState(() {
                           endpointMap[id] = info;
                         });
@@ -325,21 +353,6 @@ class _BusinessCardSendBluetoothPageState
                     ),
                   ),
                 ],
-              ),
-              ElevatedButton(
-                child: const Text("Accept Connection"),
-                onPressed: () {},
-              ),
-              ElevatedButton(
-                child: const Text("Reject Connection"),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  try {
-                    await Nearby().rejectConnection(id);
-                  } catch (e) {
-                    showSnackbar(e);
-                  }
-                },
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:ssok/dto/recognized_reg_card.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
@@ -37,6 +38,28 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
     setState(() {
       pickedImage = pickedFile;
     });
+  }
+
+  Future<void> pickAndCropImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      final CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.ratio16x9
+        ],
+      );
+
+      if (croppedFile != null) {
+        setState(() {
+          pickedImage = XFile(croppedFile.path);
+        });
+
+      }
+    }
+
   }
 
   Future<RecognizedRegCard> ocrRC() async {

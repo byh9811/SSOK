@@ -78,8 +78,8 @@ class _DriveIdDetailPageState extends State<DriveIdDetailPage> {
           color: Colors.black, // 원하는 색상으로 변경
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body:
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
@@ -120,7 +120,6 @@ class _DriveIdDetailPageState extends State<DriveIdDetailPage> {
                   ),
                   Expanded(
                     child: Container(
-                      height: screenHeight * 0.4,
                       width: screenWidth,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -128,7 +127,7 @@ class _DriveIdDetailPageState extends State<DriveIdDetailPage> {
                             bottomLeft: Radius.circular(10.0),
                             bottomRight: Radius.circular(10.0)),
                       ),
-                      child: Padding(
+                      child: SingleChildScrollView(
                         padding: EdgeInsets.only(
                             left: screenWidth * 0.03, top: screenHeight * 0.01),
                         child: Column(
@@ -159,14 +158,114 @@ class _DriveIdDetailPageState extends State<DriveIdDetailPage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               0.5,
             ),
           ],
-        ),
       ),
     );
   }
 }
+
+
+//=========================================================
+// import 'dart:convert';
+//
+// import 'package:flutter/material.dart';
+// import 'package:ssok/widgets/content_box.dart';
+// import 'package:ssok/widgets/ids/childrens/id_info_text.dart';
+//
+// import '../../http/http.dart';
+// import '../../http/token_manager.dart';
+// class LicenseDetailWidget extends StatelessWidget {
+//   final double screenHeight;
+//   final double screenWidth;
+//   final String license; // License 타입의 객체를 가정합니다.
+//
+//   LicenseDetailWidget({required this.screenHeight, required this.screenWidth, required this.license});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Expanded(
+//           child: Container(
+//             width: screenWidth,
+//             decoration: BoxDecoration(
+//               image: DecorationImage(
+//                 image: AssetImage('assets/license_card_color.png'),
+//                 fit: BoxFit.cover,
+//               ),
+//               borderRadius: BorderRadius.only(
+//                 topLeft: Radius.circular(10.0),
+//                 topRight: Radius.circular(10.0),
+//               ),
+//             ),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.end,
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(15.0),
+//                   child: Image.asset(
+//                     'assets/logo.png',
+//                     height: 45,
+//                     color: Colors.white54,
+//                   ),
+//                 ),
+//                 Expanded(
+//                   child: Align(
+//                     alignment: Alignment.bottomLeft,
+//                     child: Padding(
+//                       padding: const EdgeInsets.all(15.0),
+//                       child: Text(
+//                         "운전면허증",
+//                         style: TextStyle(
+//                             fontSize: 25, fontWeight: FontWeight.w500),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//         Container(
+//           width: screenWidth,
+//           decoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.only(
+//                 bottomLeft: Radius.circular(10.0),
+//                 bottomRight: Radius.circular(10.0)),
+//           ),
+//           child: Padding(
+//             padding: EdgeInsets.only(
+//                 left: screenWidth * 0.03, top: screenHeight * 0.01),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 idInfoText(context, "이름", "license.licenseName"),
+//                 idInfoText(context, "주민번호", "license.licensePersonalNumber"),
+//                 // ... 나머지 정보 표시
+//                 SizedBox(height: screenHeight * 0.01),
+//                 Align(
+//                   alignment: Alignment.bottomRight,
+//                   child: TextButton(
+//                     onPressed: () {
+//                       Navigator.of(context).pushNamed('/drive/id/detail');
+//                     },
+//                     child: Text(
+//                       "자세히",
+//                       style: TextStyle(color: Colors.grey),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

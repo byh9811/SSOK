@@ -66,8 +66,7 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
           licenseCondition: data["licenseCondition"],
           licenseCode: data["licenseCode"],
           licenseIssueDate: data["licenseIssueDate"],
-          licenseAuthority: data["licenseAuthority"]
-      );
+          licenseAuthority: data["licenseAuthority"]);
     } else {
       throw Exception('Failed to load');
     }
@@ -78,44 +77,47 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return contentBox(
-      context,
-      Column(
-        children: [
-          Expanded(
-            child: Text(
-              "등록된 운전면허증이 없습니다.",
-              style: TextStyle(color: Color(0xFF989898)),
+    return Padding(
+      padding: EdgeInsets.only(bottom:screenHeight*0.01),
+      child: contentBox(
+        context,
+        Column(
+          children: [
+            Expanded(
+              child: Text(
+                "등록된 운전면허증이 없습니다.",
+                style: TextStyle(color: Color(0xFF989898)),
+              ),
             ),
-          ),
-          SizedBox(
-            height: screenHeight * 0.06,
-            width: screenWidth * 0.7,
-            child: registerButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ServiceAggreementPage(
-                      onTap: () async {
-                        await _pickImage();
+            SizedBox(
+              height: screenHeight * 0.06,
+              width: screenWidth * 0.7,
+              child: registerButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ServiceAggreementPage(
+                        onTap: () async {
+                          await _pickImage();
 
-                        print("2:$pickedImage");
-                        final data = await ocrLicense();
-                        Navigator.of(context).pushReplacementNamed(
-                          '/drive/id/create',
-                          arguments: ImageAndLicenseData(
-                              image: pickedImage!, data: data),
-                        );
-                      },
+                          print("2:$pickedImage");
+                          final data = await ocrLicense();
+                          Navigator.of(context).pushReplacementNamed(
+                            '/drive/id/create',
+                            arguments: ImageAndLicenseData(
+                                image: pickedImage!, data: data),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          )
-        ],
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+        0.23,
       ),
-      0.23,
     );
   }
 }

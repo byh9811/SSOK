@@ -12,19 +12,21 @@ class IntroductionPage extends StatefulWidget {
 
 class _IntroductionPageState extends State<IntroductionPage> {
   ApiService apiService = ApiService();
+  String loginId = TokenManager().loginId ?? "";
   void introStateChange() async {
-    // final response = await apiService.postRequest(
-    //     '/member-service/member/agreement', TokenManager().loginId, TokenManager().accessToken);
-    // final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-    // if (response.statusCode == 200) {
-    //   print("카드 연동 여부");
-    //   print(jsonData);
-    //   setState(() {});
-    // } else if (response.statusCode == 500) {
-    //   print(jsonData);
-    // } else {
-    //   throw Exception('Failed to load');
-    // }
+    if (loginId != "") {
+      final response = await apiService.postRawRequest(
+        'member-service/member/agreement',
+        loginId,
+        TokenManager().accessToken,
+      );
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushNamed('/main');
+      } else {
+        throw Exception('Failed to load');
+      }
+    }
   }
 
   @override
@@ -122,7 +124,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
           next: Text("다음", style: TextStyle(fontWeight: FontWeight.w600)),
           done: Text("SSOK 시작", style: TextStyle(fontWeight: FontWeight.w600)),
           onDone: () {
-            Navigator.of(context).pushNamed('/main');
+            introStateChange();
           },
         ),
       ),

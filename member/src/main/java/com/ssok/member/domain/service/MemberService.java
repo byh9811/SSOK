@@ -116,6 +116,7 @@ public class MemberService {
                 .refreshToken(refreshToken)
                 .memberName(member.getMemberName())
                 .loginId(member.getMemberId())
+                .serviceAgreement(member.isServiceAgreement())
                 .build();
     }
 
@@ -139,6 +140,13 @@ public class MemberService {
         Member member = memberRepository.findMemberByMemberId(memberId).orElse(null);
         if(member!=null){
             member.deleteRefreshToken();
+        }
+    }
+
+    public void editAgreement(String memberId) {
+        Member member = memberRepository.findMemberByMemberId(memberId).orElse(null);
+        if(member!=null){
+            member.agreeService();
         }
     }
 

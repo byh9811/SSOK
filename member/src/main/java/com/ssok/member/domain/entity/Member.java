@@ -65,6 +65,9 @@ public class Member extends BaseEntity {
     @Column(name="member_refresh_token", length = 512)
     private String memberRefreshToken;
 
+    @Column(name="member_service_agreement")
+    private boolean serviceAgreement;
+
     public void updateRefreshToken(String refreshToken){
         this.memberRefreshToken = refreshToken;
     }
@@ -87,5 +90,9 @@ public class Member extends BaseEntity {
 
     public void deleteRefreshToken() {
         this.memberRefreshToken = null;
+    }
+
+    public void agreeService() {
+        this.serviceAgreement = true;
     }
 }

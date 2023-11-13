@@ -14,5 +14,6 @@ public class TokenResponse {
     private String refreshToken;
     private String loginId;
     private String memberName;
+    private boolean serviceAgreement;
 }
 

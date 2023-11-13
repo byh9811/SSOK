@@ -1,7 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/modals/business_create_modal.dart';
 import 'package:ssok/widgets/register_button.dart';
+
+import '../../dto/recognized_namecard.dart';
+import '../../dto/recognized_reg_card.dart';
+import '../../http/http.dart';
+import '../../http/token_manager.dart';
 
 class NotRegisteredBusinessCard extends StatefulWidget {
   const NotRegisteredBusinessCard({Key? key}) : super(key: key);
@@ -12,6 +23,7 @@ class NotRegisteredBusinessCard extends StatefulWidget {
 }
 
 class _NotRegisteredBusinessCardState extends State<NotRegisteredBusinessCard> {
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

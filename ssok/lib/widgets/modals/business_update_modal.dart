@@ -7,15 +7,31 @@ class BusinessUpdateModal extends StatefulWidget {
     Key? key,
     required this.selectedCardInfo,
     required this.heightSize,
+    required this.onCardInfoChanged,
   }) : super(key: key);
 
   final Map<String, dynamic> selectedCardInfo;
   final double heightSize;
+  final Function(Map<String, dynamic>) onCardInfoChanged;
   @override
   State<BusinessUpdateModal> createState() => _BusinessUpdateModalState();
 }
 
 class _BusinessUpdateModalState extends State<BusinessUpdateModal> {
+  late Map<String, dynamic> _editableCardInfo;
+  @override
+  void initState() {
+    super.initState();
+    _editableCardInfo = Map.from(widget.selectedCardInfo);
+    print("복사된 값 : $_editableCardInfo");
+  }
+
+  void _updateCardInfo(String key, dynamic newValue) {
+    setState(() {
+      _editableCardInfo[key] = newValue;
+      print("변경값 : ${_editableCardInfo[key]}");
+    });
+  }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -74,9 +90,15 @@ class _BusinessUpdateModalState extends State<BusinessUpdateModal> {
               ContentByCardUpdate(
                   title: entry.key,
                   content: entry.value,
+                  change: (newValue) {
+                    _updateCardInfo(entry.key, newValue);// 여기에서 newValue를 사용하여 상태를 업데이트합니다.
+                  },
                   addressType: entry.key == '주소' ? true : false),
             SizedBox(height: screenHeight * 0.05),
-            MainButton(title: "수정", onPressed: () {}),
+            MainButton(title: "수정", onPressed: () {
+              widget.onCardInfoChanged(_editableCardInfo);
+              Navigator.of(context).pop();
+            }),
           ],
         ),
       ),
@@ -90,10 +112,12 @@ class ContentByCardUpdate extends StatefulWidget {
     required this.title,
     required this.content,
     required this.addressType,
+    required this.change,
   }) : super(key: key);
   final String title;
   final String content;
   final bool addressType;
+  final Function(String) change;
   @override
   State<ContentByCardUpdate> createState() => _ContentByCardUpdateState();
 }
@@ -122,9 +146,12 @@ class _ContentByCardUpdateState extends State<ContentByCardUpdate> {
       );
       if (model != null) {
         final address = model.address ?? '';
-        controller.value = TextEditingValue(
-          text: address,
-        );
+
+          controller.value = TextEditingValue(
+            text: address,
+          );
+        widget.change(controller.value.text);
+
       }
     }
 
@@ -149,6 +176,7 @@ class _ContentByCardUpdateState extends State<ContentByCardUpdate> {
                 setState(() {
                   controller.text = newValue;
                 });
+                widget.change(newValue);
               },
               onSubmitted: (text) {}, // Enter를 누를 때 실행되는 함수
               readOnly: widget.addressType,

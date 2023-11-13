@@ -32,14 +32,6 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
   late Map<String, Object?> jsonString = {};
   late XFile? pickedImage;
 
-  Future<void> _pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-    print(pickedFile);
-    setState(() {
-      pickedImage = pickedFile;
-    });
-  }
-
   Future<void> pickAndCropImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
@@ -33,12 +34,26 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
   ApiService apiService = ApiService();
   String? accessToken;
 
-  Future<void> _pickImage() async {
+  Future<void> pickAndCropImage() async {
+    final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
-    print(pickedFile);
-    setState(() {
-      pickedImage = pickedFile;
-    });
+
+    if (pickedFile != null) {
+      final CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.ratio16x9
+        ],
+      );
+
+      if (croppedFile != null) {
+        setState(() {
+          pickedImage = XFile(croppedFile.path);
+        });
+
+      }
+    }
+
   }
 
   Future<RecognizedLicense> ocrLicense() async {
@@ -98,7 +113,7 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
                     MaterialPageRoute(
                       builder: (context) => ServiceAggreementPage(
                         onTap: () async {
-                          await _pickImage();
+                          await pickAndCropImage();
 
                           print("2:$pickedImage");
                           final data = await ocrLicense();

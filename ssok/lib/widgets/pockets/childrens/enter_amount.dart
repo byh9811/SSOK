@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
@@ -28,6 +30,13 @@ class _EnterAmountState extends State<EnterAmount> {
     if (response.statusCode == 200) {
       print(response.body);
       Navigator.of(context).pushReplacementNamed('/main');
+    }else if(response.statusCode == 400){ // 금액이 부족할떄 
+      if(jsonDecode(response.body)['error']['status'] == 400){
+          // ignore: use_build_context_synchronously
+          showAlet("기부");
+      }
+    }else{
+      showAlet("", msg2 : "오류발생", msg3 : "잠시후 다시 시도 해주세요.");
     }
   }
 
@@ -37,8 +46,42 @@ class _EnterAmountState extends State<EnterAmount> {
     if (response.statusCode == 200) {
       print(response.body);
       Navigator.of(context).pushReplacementNamed('/main');
+    }else if(response.statusCode == 400){ // 금액이 부족할떄 
+      if(jsonDecode(response.body)['error']['status'] == 400){
+          // ignore: use_build_context_synchronously
+          showAlet("이체");
+      }
+    }else{
+      showAlet("", msg2 : "오류발생", msg3 : "잠시후 다시 시도 해주세요.");
     }
   }
+
+
+  void showAlet(String msg, {String? msg2, String? msg3}) async{
+  await showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(
+                          msg2 != null ? msg2 : msg + "실패",
+                          ),
+                  content: Text(
+                          msg3 != null ? msg3 : "보유 포켓머니가 부족합니다.",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  actions: <Widget>[  
+                    TextButton(
+                      onPressed: () { 
+                        Navigator.of(context).pop();                       
+                        },
+                      child: Text("확인"),
+                    ),
+                  ],
+                ),
+              );
+}
+
+
 
   void changeMoney(int money){
     setState(() {

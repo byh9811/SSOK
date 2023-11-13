@@ -33,7 +33,8 @@ class _BusinessCardSendBluetoothPageState
       Permission.bluetooth,
       Permission.bluetoothAdvertise,
       Permission.bluetoothConnect,
-      Permission.bluetoothScan
+      Permission.bluetoothScan,
+      Permission.location,
     ].request();
   }
 
@@ -79,6 +80,24 @@ class _BusinessCardSendBluetoothPageState
           " ${value.endpointName} $myNamecardSeqString이 ~에게 명함을 보내요 ~~ , id: $key");
       Nearby().sendBytesPayload(
           key, Uint8List.fromList(myNamecardSeqString.codeUnits));
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('명함 전송 성공'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, '닫기');
+                  Navigator.of(context).pushNamed('/main');
+                },
+                child: Text('닫기'),
+              ),
+            ],
+          );
+        },
+      );
     });
   }
 
@@ -310,32 +329,6 @@ class _BusinessCardSendBluetoothPageState
                             } else if (payloadTransferUpdate
                                     .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
                                 PayloadStatus.SUCCESS) {
-                              Navigator.of(context).pop();
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('명함 전송 성공'),
-                                    // content: Text('당신도 명함을 보내시겠습니까?'),
-                                    actions: [
-                                      // TextButton(
-                                      //   onPressed: () async {
-                                      //     transfer(namecardBSeq, namecardASeq);
-                                      //   },
-                                      //   child: Text('네'),
-                                      // ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          Navigator.pop(context, '닫기');
-                                          Navigator.of(context)
-                                              .pushNamed('/main');
-                                        },
-                                        child: Text('닫기'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
                               showSnackbar(
                                   "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
                             }

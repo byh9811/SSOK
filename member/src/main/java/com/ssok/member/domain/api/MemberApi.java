@@ -157,6 +157,13 @@ public class MemberApi {
         TokenResponse tokenResponse = memberService.login(MemberLoginDto.of(memberLoginRequest));
         return OK(tokenResponse);
     }
+
+    @PostMapping("/member/agreement")
+    public ApiResponse<?> agreement(@RequestBody String loginId){
+        memberService.editAgreement(loginId);
+        return OK(null);
+    }
+
 //    // 비밀번호 검사
 //    @PostMapping("/password/check")
 //    public ApiResponse<Boolean> verifyPassword(@AuthenticationPrincipal User user, @RequestBody VerifyPasswordRequest verifyPasswordRequest) {

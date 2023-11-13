@@ -27,13 +27,13 @@ public class ReceiptController {
     private final ReceiptService receiptService;
     private final ReceiptQueryService receiptQueryService;
 
-    @PostMapping
-    public ApiResponse<Void> createReceipt(
-            @RequestBody ReceiptCreateRequest receiptCreateRequest
-    ) {
-        receiptService.createReceipt(ReceiptCreateServiceDto.fromRequest(receiptCreateRequest));
-        return OK(null);
-    }
+//    @PostMapping
+//    public ApiResponse<Void> createReceipt(
+//            @RequestBody ReceiptCreateRequest receiptCreateRequest
+//    ) {
+//        receiptService.createReceipt(ReceiptCreateServiceDto.fromRequest(receiptCreateRequest));
+//        return OK(null);
+//    }
 
     @GetMapping("/list")
     public ApiResponse<Map<YearMonth, ReceiptListQueryResponses>> getReceiptList(

@@ -16,6 +16,7 @@ import com.ssok.receipt.global.openfeign.pocket.PocketClient;
 import com.ssok.receipt.global.openfeign.pocket.dto.request.PocketHistoryCreateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,9 @@ public class ReceiptService {
     private final MemberClient memberClient;
     private final EcoItemRepository ecoItemRepository;
 
-    public void createReceipt(ReceiptCreateServiceDto receiptCreateServiceDto) {
+    @KafkaListener(topics = "payment-topic")
+    public void createReceipt(String kafkaMessage) {
+        ReceiptCreateServiceDto receiptCreateServiceDto = null;
         Receipt receipt = Receipt.fromCreateDto(receiptCreateServiceDto);
 
         // 카드와 연계된 정보 획득

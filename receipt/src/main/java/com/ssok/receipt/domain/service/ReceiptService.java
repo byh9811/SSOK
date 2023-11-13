@@ -85,21 +85,26 @@ public class ReceiptService {
 
         }
 
-        // 잔금 적립 계산
-        long remain = receipt.getReceiptAmount() % 1000;
-        remain = (remain != 0) ? 1000 - remain : 0;
-        long balance = (long) bankAccessUtil.getAccountDetail(mdToken, account).getBalanceAmt();
+        try {
+            // 잔금 적립 계산
+            long remain = receipt.getReceiptAmount() % 1000;
+            remain = (remain != 0) ? 1000 - remain : 0;
+            long balance = (long) bankAccessUtil.getAccountDetail(mdToken, account).getBalanceAmt();
 
-        // 잔금 적립 기능 활성화 여부 && 잔금 발생 여부 && 통장 잔액 존재 여부
-        if (memberClient.getMemberSaving(memberSeq).getResponse() && remain > 0 && balance >= remain) {
-            bankAccessUtil.pay(mdToken, account, remain);
-            PocketHistoryCreateRequest request = PocketHistoryCreateRequest.builder()
-                    .memberSeq(memberSeq)
-                    .receiptSeq(receipt.getReceiptSeq())
-                    .pocketHistoryType("CHANGE")
-                    .pocketHistoryTransAmt(remain)
-                    .build();
-            pocketClient.createPocketHistory(request);
+            // 잔금 적립 기능 활성화 여부 && 잔금 발생 여부 && 통장 잔액 존재 여부
+            if (pocketClient.getPocketSaving(memberSeq).getResponse() && remain > 0 && balance >= remain) {
+                bankAccessUtil.pay(mdToken, account, remain);
+                PocketHistoryCreateRequest request = PocketHistoryCreateRequest.builder()
+                        .memberSeq(memberSeq)
+                        .receiptSeq(receipt.getReceiptSeq())
+                        .pocketHistoryType("CHANGE")
+                        .pocketHistoryTransAmt(remain)
+                        .build();
+                pocketClient.createPocketHistory(request);
+            }
+
+        } catch(Exception e) {
+            log.info("포켓이 없어서 기록은 안했습니다~");
         }
 
         eventHandler.createReceipt(card, memberSeq, receiptCreateServiceDto);

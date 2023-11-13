@@ -29,9 +29,6 @@ public interface MemberClient {
     @GetMapping(value = "/member/account")
     ApiResponse<String> getMemberAccount(@RequestParam("member-seq") Long memberSeq);
 
-    @GetMapping(value = "/member/saving")
-    ApiResponse<Boolean> getMemberSaving(@RequestParam("member-seq") Long memberSeq);
-
     @PostMapping(value = "/member/account")
     ApiResponse<String> createMemberAccount(
             @RequestBody MydataAccountFeignRequest request);

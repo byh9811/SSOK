@@ -19,4 +19,7 @@ public interface PocketClient {
     ApiResponse<String> createPocketHistory(
             @RequestBody PocketHistoryCreateRequest request);
 
+    @GetMapping(value = "/pocket/change-saving")
+    ApiResponse<Boolean> getPocketSaving(@RequestParam("member-seq") Long memberSeq);
+
 }

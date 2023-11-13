@@ -22,11 +22,8 @@ import 'package:ssok/screens/id/id_detail_page.dart';
 import 'package:ssok/screens/login/login_page.dart';
 import 'package:ssok/screens/login/signin_page.dart';
 import 'package:ssok/screens/main_page.dart';
-<<<<<<< HEAD
 import 'package:ssok/screens/mainpage/business_card_page.dart';
-=======
 import 'package:ssok/screens/mainpage/credit_card_page.dart';
->>>>>>> 8107ce6df02ed2026fac477c403962c6b4871d15
 import 'package:ssok/screens/pocket/pocket_account_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_send_page.dart';

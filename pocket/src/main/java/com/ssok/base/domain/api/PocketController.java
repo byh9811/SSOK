@@ -146,4 +146,16 @@ public class PocketController {
         return ApiResponse.OK(response);
     }
 
+    /**
+     * 포켓 잔금 저금 여부 변경
+     * @param memberUuid
+     * @return pocket 내역
+     */
+
+    @PatchMapping("/pocket/change-saving")
+    public ApiResponse<PocketResponse> editPocketIsChangeSaving(@RequestHeader(name = "MEMBER-UUID") String memberUuid){
+        PocketResponse response = pocketService.editPocketIsChangeSaving(memberUuid);
+        return ApiResponse.OK(response);
+    }
+
 }

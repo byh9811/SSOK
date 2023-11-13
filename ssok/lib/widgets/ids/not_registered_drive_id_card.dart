@@ -66,8 +66,7 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
           licenseCondition: data["licenseCondition"],
           licenseCode: data["licenseCode"],
           licenseIssueDate: data["licenseIssueDate"],
-          licenseAuthority: data["licenseAuthority"]
-      );
+          licenseAuthority: data["licenseAuthority"]);
     } else {
       throw Exception('Failed to load');
     }

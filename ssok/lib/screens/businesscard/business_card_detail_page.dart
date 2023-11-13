@@ -180,7 +180,7 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                     aspectRatio: 9 / 5,
                     child: Container(
                         decoration: BoxDecoration(
-                          color: _isBack ? Colors.amber : Colors.blue,
+                          color: _isBack ? Colors.amber : Colors.white,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,

@@ -90,7 +90,6 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
         _numberController.text.isNotEmpty &&
         _renewStartDateController.text.isNotEmpty &&
         _renewEndDateController.text.isNotEmpty &&
-        _conditionController.text.isNotEmpty &&
         _codeController.text.isNotEmpty &&
         _issueDateController.text.isNotEmpty &&
         _authorityController.text.isNotEmpty) {

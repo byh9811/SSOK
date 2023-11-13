@@ -68,7 +68,7 @@ class _PocketAccountCreatePageState extends State<PocketAccountCreatePage> {
         ),
       ),
     );
-  }
+  } 
 
   Widget introText() {
     double screenWidth = MediaQuery.of(context).size.width;

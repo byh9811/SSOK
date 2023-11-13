@@ -8,8 +8,8 @@ import 'package:ssok/screens/businesscard/business_card_map_page.dart';
 import 'package:ssok/screens/businesscard/business_card_my_history_page%20.dart';
 import 'package:ssok/screens/businesscard/business_card_my_page.dart';
 import 'package:ssok/screens/businesscard/business_card_self_create_page.dart';
-import 'package:ssok/screens/businesscard/business_card_receive_bluetooth_page.dart';
 import 'package:ssok/screens/businesscard/business_card_send_bluetooth_page.dart';
+import 'package:ssok/screens/businesscard/business_card_receive_bluetooth_page.dart';
 import 'package:ssok/screens/creditcard/credit_card_create_page.dart';
 import 'package:ssok/screens/creditcard/credit_card_history_list_page.dart';
 import 'package:ssok/screens/creditcard/test.dart';
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(                                                
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {

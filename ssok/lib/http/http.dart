@@ -49,6 +49,19 @@ class ApiService {
     return response;
   }
 
+  Future<http.Response> postRequestWithoutData(
+      String endpoint, String? accessToken) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/$endpoint'),
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'ACCESS-TOKEN': accessToken ?? ""
+      },
+    );
+    return response;
+  }
+
   Future<http.Response> postRequestToVirtual(
       String endpoint, Map<String, dynamic> data, String? accessToken) async {
     final response = await http.post(

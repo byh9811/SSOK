@@ -95,17 +95,17 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
         _issueDateController.text.isNotEmpty &&
         _authorityController.text.isNotEmpty) {
       Map<String, String> requestData = {
-        "licenseName": licenseName!,
-        "licensePersonalNumber": licensePersonalNumber!,
-        "licenseType": licenseType!,
-        "licenseAddress": licenseAddress!,
-        "licenseNumber": licenseNumber!,
-        "licenseRenewStartDate": licenseRenewStartDate!,
-        "licenseRenewEndDate": licenseRenewEndDate!,
-        "licenseCondition": licenseCondition!,
-        "licenseCode": licenseCode!,
-        "licenseIssueDate": licenseIssueDate!,
-        "licenseAuthority": licenseAuthority!
+        "licenseName": _nameController.text,
+        "licensePersonalNumber": _personalNumberController.text,
+        "licenseType": _typeController.text,
+        "licenseAddress": _addressController.text,
+        "licenseNumber": _numberController.text,
+        "licenseRenewStartDate": _renewStartDateController.text,
+        "licenseRenewEndDate": _renewEndDateController.text,
+        "licenseCondition": _conditionController.text,
+        "licenseCode": _codeController.text,
+        "licenseIssueDate": _issueDateController.text,
+        "licenseAuthority": _authorityController.text
       };
       var bytes = await File(image.path).readAsBytes();
       final response = await apiService.postRequestWithFile(

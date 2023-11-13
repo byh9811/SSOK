@@ -40,6 +40,7 @@ dependencies:
   remedi_kopo: ^0.0.2
   http:
   file_picker: ^6.0.0
+  image_cropper: 
   flutter_naver_map: ^1.0.2
   location: ^5.0.3
   url_launcher: ^6.2.1
@@ -58,7 +59,9 @@ dependencies:
   path_provider: ^2.1.1
   http_parser: ^4.0.2
   dio: ^5.3.3
+  app_settings: ^5.1.1
   carousel_slider: ^4.2.1
+  loading_animation_widget: ^1.2.0+4
 
 dev_dependencies:
   flutter_test:

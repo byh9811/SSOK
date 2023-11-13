@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/ids/childrens/id_info_text.dart';
+
+import '../../http/http.dart';
+import '../../http/token_manager.dart';
 
 class IdDetailPage extends StatefulWidget {
   const IdDetailPage({super.key});
@@ -10,6 +15,39 @@ class IdDetailPage extends StatefulWidget {
 }
 
 class _IdDetailPageState extends State<IdDetailPage> {
+
+  ApiService apiService = ApiService();
+  late String registrationCardName = "";
+  late String registrationCardPersonalNumber = "";
+  late String registrationCardAddress = "";
+  late String registrationCardIssueDate = "";
+  late String registrationCardAuthority = "";
+  late String registrationCardImage = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getRegCard();
+  }
+
+  void getRegCard() async {
+    final response = await apiService.getRequest(
+        "idcard-service/registration", TokenManager().accessToken);
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 200) {
+      final tempRes = jsonData['response'];
+
+      setState(() {
+        registrationCardName = tempRes['registrationCardName'];
+        registrationCardPersonalNumber = tempRes['registrationCardPersonalNumber'];
+        registrationCardAddress = tempRes['registrationCardAddress'];
+        registrationCardIssueDate = tempRes['registrationCardIssueDate'];
+        registrationCardAuthority = tempRes['registrationCardAuthority'];
+        registrationCardImage = tempRes['registrationCardImage'];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -37,7 +75,7 @@ class _IdDetailPageState extends State<IdDetailPage> {
           Container(
             height: screenHeight * 0.21,
             width: screenWidth * 0.7,
-            color: Colors.blue,
+            child: Image.network(registrationCardImage, fit: BoxFit.fill),
           ),
           SizedBox(height: screenHeight * 0.05),
           contentBox(
@@ -86,9 +124,15 @@ class _IdDetailPageState extends State<IdDetailPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          idInfoText(context, "이름", "나종현"),
+                          idInfoText(context, "이름", registrationCardName),
                           SizedBox(height: screenHeight * 0.01),
-                          idInfoText(context, "주민번호", "980113-1******"),
+                          idInfoText(context, "주민번호", registrationCardPersonalNumber),
+                          SizedBox(height: screenHeight * 0.01),
+                          idInfoText(context, "주소", registrationCardAddress),
+                          SizedBox(height: screenHeight * 0.01),
+                          idInfoText(context, "발급일자", registrationCardIssueDate),
+                          SizedBox(height: screenHeight * 0.01),
+                          idInfoText(context, "인증기관", registrationCardAuthority),
                         ],
                       ),
                     ),

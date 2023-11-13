@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ssok/dto/business_card_data.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 
 class BusinessCardSendBluetoothPage extends StatefulWidget {
   const BusinessCardSendBluetoothPage({super.key});
@@ -273,6 +274,14 @@ class _BusinessCardSendBluetoothPageState
                       "수락",
                       () {
                         Navigator.pop(context);
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            opaque: false, // 배경이 투명해야 함을 나타냅니다
+                            pageBuilder: (BuildContext context, _, __) {
+                              return TransferLoadingPage();
+                            },
+                          ),
+                        );
                         setState(() {
                           endpointMap[id] = info;
                         });
@@ -301,6 +310,32 @@ class _BusinessCardSendBluetoothPageState
                             } else if (payloadTransferUpdate
                                     .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
                                 PayloadStatus.SUCCESS) {
+                              Navigator.of(context).pop();
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('명함 전송 성공'),
+                                    // content: Text('당신도 명함을 보내시겠습니까?'),
+                                    actions: [
+                                      // TextButton(
+                                      //   onPressed: () async {
+                                      //     transfer(namecardBSeq, namecardASeq);
+                                      //   },
+                                      //   child: Text('네'),
+                                      // ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context, '닫기');
+                                          Navigator.of(context)
+                                              .pushNamed('/main');
+                                        },
+                                        child: Text('닫기'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                               showSnackbar(
                                   "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
                             }
@@ -325,21 +360,6 @@ class _BusinessCardSendBluetoothPageState
                     ),
                   ),
                 ],
-              ),
-              ElevatedButton(
-                child: const Text("Accept Connection"),
-                onPressed: () {},
-              ),
-              ElevatedButton(
-                child: const Text("Reject Connection"),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  try {
-                    await Nearby().rejectConnection(id);
-                  } catch (e) {
-                    showSnackbar(e);
-                  }
-                },
               ),
             ],
           ),

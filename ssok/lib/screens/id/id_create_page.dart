@@ -78,7 +78,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
           bytes);
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData['success']) {
-        Navigator.of(context).pushReplacementNamed('/');
+        Navigator.of(context).pushReplacementNamed('/main');
       } else {
         throw Exception('Failed to load');
       }

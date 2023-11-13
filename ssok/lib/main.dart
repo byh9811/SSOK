@@ -22,7 +22,11 @@ import 'package:ssok/screens/id/id_detail_page.dart';
 import 'package:ssok/screens/login/login_page.dart';
 import 'package:ssok/screens/login/signin_page.dart';
 import 'package:ssok/screens/main_page.dart';
+<<<<<<< HEAD
 import 'package:ssok/screens/mainpage/business_card_page.dart';
+=======
+import 'package:ssok/screens/mainpage/credit_card_page.dart';
+>>>>>>> 8107ce6df02ed2026fac477c403962c6b4871d15
 import 'package:ssok/screens/pocket/pocket_account_create_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_page.dart';
 import 'package:ssok/screens/pocket/pocket_donation_send_page.dart';
@@ -58,7 +62,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginPage(),
         '/signin': (context) => SigninPage(),
         '/main': (context) => MainPage(),
+        // '/main' :(c ontext) => CreditCardPaymentPage(),
         '/id/create': (context) => IdCreatePage(),
+        '/creditcard/main' : (context) => CreditCardPage(),
         '/id/detail': (context) => IdDetailPage(),
         '/drive/id/create': (context) => DriveIdCreatePage(),
         '/drive/id/detail': (context) => DriveIdDetailPage(),
@@ -67,8 +73,8 @@ class MyApp extends StatelessWidget {
         '/businesscard/page': (context) => BusinessCardPage(),
         '/businesscard/detail': (context) => BusinessCardDetailPage(),
         '/businesscard/self/create': (context) => BusinessCardSelfCreatePage(),
-        '/businesscard/history':(context) => BusineessCardHistoryPage(),
-        '/businesscard/myhistory':(context) => BusineessCardMyHistoryPage(),
+        '/businesscard/history': (context) => BusineessCardHistoryPage(),
+        '/businesscard/myhistory': (context) => BusineessCardMyHistoryPage(),
         '/businesscard/camera/create': (context) =>
             BusinessCardCameraCreatePage(),
         '/businesscard/map': (context) => BusinessCardMapPage(),

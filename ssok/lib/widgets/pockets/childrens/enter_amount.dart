@@ -32,7 +32,7 @@ class _EnterAmountState extends State<EnterAmount> {
   }
 
   void sendMoneyToMyAccount()async{
-    final response = await apiService.postRequest('pocket-service/pocket/history',{"receiptSeq":"null","pocketHistoryType":"WITHDRAWAL","pocketHistoryTransAmt":withDrawMoney.toString()},TokenManager().accessToken);
+    final response = await apiService.postRequest('pocket-service/pocket/history',{"pocketHistoryType":"WITHDRAWAL","pocketHistoryTransAmt":withDrawMoney.toString()},TokenManager().accessToken);
     print(response.body);
     if (response.statusCode == 200) {
       print(response.body);
@@ -84,6 +84,7 @@ class _EnterAmountState extends State<EnterAmount> {
         ),
         SizedBox(height: screenHeight * 0.08),
         MainButton(
+          color: "0xFF00ADEF",
           title: widget.buttonTitle,
           onPressed: () {
             if(widget.donateSeq==0){

@@ -76,7 +76,7 @@ class _BusinessUpdateModalState extends State<BusinessUpdateModal> {
                   content: entry.value,
                   addressType: entry.key == '주소' ? true : false),
             SizedBox(height: screenHeight * 0.05),
-            MainButton(title: "수정", onPressed: () {}),
+            MainButton(title: "수정",color: "0xFF00ADEF",onPressed: () {}),
           ],
         ),
       ),

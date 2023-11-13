@@ -49,6 +49,7 @@ class _PocketPocketCreatePageState extends State<PocketPocketCreatePage> {
             MySamplePocket(),
             SizedBox(height: screenHeight * 0.15),
             MainButton(
+              color: "0xFF00ADEF",
               title: "메인으로",
               onPressed: () {
                 Navigator.of(context).pushReplacementNamed('/main');

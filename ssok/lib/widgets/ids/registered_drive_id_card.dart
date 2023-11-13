@@ -253,19 +253,21 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
                       color: Colors.white54,
                     ),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          "운전면허증",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ),
+                  Expanded(child: _driveIdContent(context)),
+                  // _driveIdContent(context),
+                  // Expanded(
+                  //   child: Align(
+                  //     alignment: Alignment.bottomLeft,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(15.0),
+                  //       child: Text(
+                  //         "운전면허증",
+                  //         style: TextStyle(
+                  //             fontSize: 25, fontWeight: FontWeight.w500),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             )),
@@ -274,6 +276,67 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
     );
   }
 
+  Widget _driveIdContent(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 간격을 균등하게 조절
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRotatedText('발급일: $licenseIssueDate', 18),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: _buildRotatedText('$licenseAuthority', 18),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              _buildRotatedText('코드: $licenseCode', 18),
+            ],
+          ),
+          Column(
+            children: [
+              _buildRotatedText('조건: $licenseCondition', 18),
+            ],
+          ),
+          Column(
+            children: [
+              _buildRotatedText('$licenseNumber', 25),
+            ],
+          ),
+
+          Column(
+            children: [
+              _buildRotatedText('$licensePersonalNumber', 20),
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRotatedText('$licenseName', 20),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: _buildRotatedText('$licenseType', 18),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRotatedText(String text, double fontSize) {
+    return RotatedBox(
+      quarterTurns: 1,
+      child: Text(
+        text,
+        style: TextStyle(fontSize: fontSize, color: Colors.black),
+      ),
+    );
+  }
 }
 
 

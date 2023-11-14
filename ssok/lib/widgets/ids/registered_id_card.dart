@@ -97,9 +97,11 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
       child: isFrontVisible
           ? _buildFrontContent(context)
           : Transform(
-              transform: Matrix4.identity()..rotateY(3.14159), // 180도 추가 회전
-              alignment: FractionalOffset.center,
-              child: _buildBackContent(context)),
+            transform: Matrix4.identity()..rotateY(3.14159), // 180도 추가 회전
+            alignment: FractionalOffset.center,
+            child: _buildBackContent(context))
+      ,
+
     );
   }
 
@@ -199,7 +201,8 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     );
   }
 
-  Widget _buildBackContent(BuildContext context) {
+  Widget _buildBackContent(BuildContext context){
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
@@ -214,41 +217,46 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
         padding: EdgeInsets.only(bottom: screenHeight * 0.01),
         child: contentBox(
           context,
-          Expanded(
-              child: Container(
-            width: screenWidth,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/registration_card_color.png'),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                topRight: Radius.circular(10.0),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Image.asset(
-                    'assets/logo.png',
-                    height: 45,
-                    color: Colors.white54,
+          Column( // Column 위젯을 이용하여 Expanded를 직접적인 자식으로 사용
+            children: [
+              Expanded(
+                child: Container(
+                  width: screenWidth,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/registration_card_color.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Image.asset(
+                          'assets/logo.png',
+                          height: 45,
+                          color: Colors.white54,
+                        ),
+                      ),
+                      Expanded(child: _driveIdContent(context)),
+                    ],
                   ),
                 ),
-                Expanded(child: _driveIdContent(context)),
-              ],
-            ),
-          )),
+              ),
+            ],
+          ),
           0.5,
         ),
       ),
     );
-
-    // return
   }
+
+
 
   Widget _driveIdContent(BuildContext context) {
     return Container(
@@ -268,7 +276,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
           ),
           Column(
             children: [
-              _buildRotatedText('$registrationCardAddress', 18),
+              _buildRotatedTextWithWrap('$registrationCardAddress', 15),
             ],
           ),
           Column(
@@ -297,126 +305,22 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
       ),
     );
   }
+  Widget _buildRotatedTextWithWrap(String text, double fontSize) {
+    List<String> lines = _splitTextIntoLines(text, 10); // 예: 10글자로 나누기
+
+    return Column(
+      children: lines.map((line) {
+        return _buildRotatedText(line, fontSize);
+      }).toList(),
+    );
+  }
+
+  List<String> _splitTextIntoLines(String text, int chunkSize) {
+    List<String> lines = [];
+    for (var i = 0; i < text.length; i += chunkSize) {
+      int end = (i + chunkSize < text.length) ? i + chunkSize : text.length;
+      lines.add(text.substring(i, end));
+    }
+    return lines;
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// class RegisteredIdCard extends StatefulWidget {
-//   const RegisteredIdCard({
-//     Key? key,
-//     this.registrationCard,
-//   }) : super(key: key);
-//   final RegistrationCard? registrationCard;
-//   @override
-//   State<RegisteredIdCard> createState() => _RegisteredIdCardState();
-// }
-//
-// class _RegisteredIdCardState extends State<RegisteredIdCard> {
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     double screenWidth = MediaQuery.of(context).size.width;
-//     double screenHeight = MediaQuery.of(context).size.height;
-//     return Padding(
-//       padding: EdgeInsets.only(bottom:screenHeight*0.01),
-//       child: contentBox(
-//         context,
-//         Column(
-//           children: [
-//             Expanded(
-//               child: Container(
-//                 width: screenWidth,
-//                 decoration: BoxDecoration(
-//                   image: DecorationImage(
-//                     image: AssetImage('assets/registration_card_color.png'),
-//                     fit: BoxFit.cover,
-//                   ),
-//                   borderRadius: BorderRadius.only(
-//                     topLeft: Radius.circular(10.0),
-//                     topRight: Radius.circular(10.0),
-//                   ),
-//                 ),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.end,
-//                   children: [
-//                     Padding(
-//                       padding: const EdgeInsets.all(15.0),
-//                       child: Image.asset(
-//                         'assets/logo.png',
-//                         height: 45,
-//                         color: Colors.white54,
-//                       ),
-//                     ),
-//                     Expanded(
-//                       child: Align(
-//                         alignment: Alignment.bottomLeft,
-//                         child: Padding(
-//                           padding: const EdgeInsets.all(15.0),
-//                           child: Text(
-//                             "주민등록증",
-//                             style: TextStyle(
-//                                 fontSize: 25, fontWeight: FontWeight.w500),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             Container(
-//               height: screenHeight * 0.19,
-//               width: screenWidth,
-//               decoration: BoxDecoration(
-//                 color: Colors.white,
-//                 borderRadius: BorderRadius.only(
-//                     bottomLeft: Radius.circular(10.0),
-//                     bottomRight: Radius.circular(10.0)),
-//               ),
-//               child: Padding(
-//                 padding: EdgeInsets.only(
-//                     left: screenWidth * 0.03, top: screenHeight * 0.01),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     idInfoText(context, "이름", widget.registrationCard!.registrationCardName),
-//                     SizedBox(height: screenHeight * 0.01),
-//                     idInfoText(context, "주민번호", widget.registrationCard!.registrationCardPersonalNumber),
-//                     Expanded(
-//                       child: Align(
-//                         alignment: Alignment.bottomRight,
-//                         child: TextButton(
-//                           onPressed: () {
-//                             Navigator.of(context).pushNamed('/id/detail');
-//                           },
-//                           child: Text(
-//                             "자세히",
-//                             style: TextStyle(fontSize: 20, color: Colors.grey),
-//                           ),
-//                         ),
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             )
-//           ],
-//         ),
-//         0.5,
-//       ),
-//     );
-//   }
-// }

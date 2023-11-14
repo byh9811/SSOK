@@ -266,7 +266,7 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                     options: CarouselOptions(
                       enableInfiniteScroll: false,
                       height: screenHeight * 0.18,
-                      aspectRatio: 9 / 5,
+                      aspectRatio: 5 / 3,
                       viewportFraction: 1.0,
                       onPageChanged: (index, reason) {
                         setState(() {
@@ -275,17 +275,17 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                       },
                     ),
                     items: widget.myNamecardItems.map((item) {
-                      // return CachedNetworkImage(
-                      //   imageUrl: item.namecardImg,
-                      //   placeholder: (context, url) => SkeletonLoader(),
-                      //   errorWidget: (context, url, error) =>
-                      //       Icon(Icons.error), //
-                      //   fit: BoxFit.cover,
-                      // );
-                      return Image.network(
-                        item.namecardImg,
+                      return CachedNetworkImage(
+                        imageUrl: item.namecardImg,
+                        placeholder: (context, url) => SkeletonLoader(),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.error), //
                         fit: BoxFit.cover,
                       );
+                      // return Image.network(
+                      //   item.namecardImg,
+                      //   fit: BoxFit.cover,
+                      // );
                     }).toList(),
                   ),
                   // 왼쪽 화살표

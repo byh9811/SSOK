@@ -218,71 +218,59 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
   }
 
   Widget _buildBackContent(BuildContext context){
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-        onTap: (){
-      if (_animationController.isCompleted) {
-        _animationController.reverse();
-      } else {
-        _animationController.forward();
-      }
-    },
-    child: Padding(
-      padding: EdgeInsets.only(bottom:screenHeight*0.01),
-      child: contentBox(
+      onTap: (){
+        if (_animationController.isCompleted) {
+          _animationController.reverse();
+        } else {
+          _animationController.forward();
+        }
+      },
+      child: Padding(
+        padding: EdgeInsets.only(bottom:screenHeight*0.01),
+        child: contentBox(
           context,
-        Expanded(
-            child: Container(width: screenWidth,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/license_card_color.png'),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Image.asset(
-                      'assets/logo.png',
-                      height: 45,
-                      color: Colors.white54,
+          Column( // Column 위젯을 이용하여 Expanded를 직접적인 자식으로 사용
+            children: [
+              Expanded(
+                child: Container(
+                  width: screenWidth,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/license_card_color.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
                     ),
                   ),
-                  Expanded(child: _driveIdContent(context)),
-                  // _driveIdContent(context),
-                  // Expanded(
-                  //   child: Align(
-                  //     alignment: Alignment.bottomLeft,
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.all(15.0),
-                  //       child: Text(
-                  //         "운전면허증",
-                  //         style: TextStyle(
-                  //             fontSize: 25, fontWeight: FontWeight.w500),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Image.asset(
+                          'assets/logo.png',
+                          height: 45,
+                          color: Colors.white54,
+                        ),
+                      ),
+                      Expanded(child: _driveIdContent(context)),
+                    ],
+                  ),
+                ),
               ),
-            )),
+            ],
+          ),
           0.5,
-        ),),
+        ),
+      ),
     );
   }
+
 
   Widget _driveIdContent(BuildContext context) {
     return Container(

@@ -275,11 +275,15 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                       },
                     ),
                     items: widget.myNamecardItems.map((item) {
-                      return CachedNetworkImage(
-                        imageUrl: item.namecardImg,
-                        placeholder: (context, url) => SkeletonLoader(),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.error), //
+                      // return CachedNetworkImage(
+                      //   imageUrl: item.namecardImg,
+                      //   placeholder: (context, url) => SkeletonLoader(),
+                      //   errorWidget: (context, url, error) =>
+                      //       Icon(Icons.error), //
+                      //   fit: BoxFit.cover,
+                      // );
+                      return Image.network(
+                        item.namecardImg,
                         fit: BoxFit.cover,
                       );
                     }).toList(),

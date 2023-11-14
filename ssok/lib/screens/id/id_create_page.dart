@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 
 import '../../http/http.dart';
 import 'package:http/http.dart' as http;
@@ -225,19 +226,28 @@ class _IdCreatePageState extends State<IdCreatePage> {
                         Row(children: [
                           Expanded(
                             child: ButtonTheme(
-                                height: 50.0,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    register();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blueAccent),
-                                  child: Icon(
-                                    Icons.accessibility,
-                                    color: Colors.white,
-                                    size: 35.0,
-                                  ),
-                                )),
+                              height: 50.0,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                      opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                      pageBuilder:
+                                          (BuildContext context, _, __) {
+                                        return TransferLoadingPage();
+                                      },
+                                    ),
+                                  );
+                                  register();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blueAccent),
+                                child: Text(
+                                  "등록",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                            ),
                           )
                         ]),
                       ],

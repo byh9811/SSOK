@@ -8,6 +8,8 @@ import 'package:ssok/dto/recognized_reg_card.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/identification/service_aggreement_page.dart';
+import 'package:ssok/screens/loading/basic_loading_page.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/register_button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -39,19 +41,15 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
     if (pickedFile != null) {
       final CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.ratio16x9
-        ],
+        aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
       );
 
       if (croppedFile != null) {
         setState(() {
           pickedImage = XFile(croppedFile.path);
         });
-
       }
     }
-
   }
 
   Future<RecognizedRegCard> ocrRC() async {
@@ -69,11 +67,11 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
       Map<String, dynamic> data = jsonData['response'];
       return RecognizedRegCard(
           registrationCardName: data["registrationCardName"],
-          registrationCardPersonalNumber: data["registrationCardPersonalNumber"],
+          registrationCardPersonalNumber:
+              data["registrationCardPersonalNumber"],
           registrationCardAddress: data["registrationCardAddress"],
           registrationCardIssueDate: data["registrationCardIssueDate"],
-          registrationCardAuthority: data["registrationCardAuthority"]
-      );
+          registrationCardAuthority: data["registrationCardAuthority"]);
     } else {
       throw Exception('Failed to load');
     }
@@ -85,7 +83,7 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.only(bottom:screenHeight*0.01),
+      padding: EdgeInsets.only(bottom: screenHeight * 0.01),
       child: contentBox(
         context,
         Column(
@@ -106,12 +104,21 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
                       builder: (context) => ServiceAggreementPage(
                         onTap: () async {
                           await pickAndCropImage();
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              opaque: false, // 배경이 투명해야 함을 나타냅니다
+                              pageBuilder: (BuildContext context, _, __) {
+                                return TransferLoadingPage();
+                              },
+                            ),
+                          );
                           final data = await ocrRC();
+                          Navigator.of(context).pop();
                           print("data:$data");
                           Navigator.of(context).pushReplacementNamed(
                             '/id/create',
-                            arguments:
-                                ImageAndRegData(image: pickedImage!, data: data),
+                            arguments: ImageAndRegData(
+                                image: pickedImage!, data: data),
                           );
                         },
                       ),

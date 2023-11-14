@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/widgets/ids/not_registered_drive_id_card.dart';
 
 import '../../http/http.dart';
@@ -340,6 +341,15 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
                                 height: 50.0,
                                 child: ElevatedButton(
                                   onPressed: () {
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                        pageBuilder:
+                                            (BuildContext context, _, __) {
+                                          return TransferLoadingPage();
+                                        },
+                                      ),
+                                    );
                                     register();
                                   },
                                   style: ElevatedButton.styleFrom(

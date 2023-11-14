@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/identification/service_aggreement_page.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/widgets/content_box.dart';
 import 'package:ssok/widgets/register_button.dart';
 
@@ -41,19 +42,15 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
     if (pickedFile != null) {
       final CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.ratio16x9
-        ],
+        aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
       );
 
       if (croppedFile != null) {
         setState(() {
           pickedImage = XFile(croppedFile.path);
         });
-
       }
     }
-
   }
 
   Future<RecognizedLicense> ocrLicense() async {
@@ -93,7 +90,7 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.only(bottom:screenHeight*0.01),
+      padding: EdgeInsets.only(bottom: screenHeight * 0.01),
       child: contentBox(
         context,
         Column(
@@ -113,8 +110,16 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
                     MaterialPageRoute(
                       builder: (context) => ServiceAggreementPage(
                         onTap: () async {
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              opaque: false, // 배경이 투명해야 함을 나타냅니다
+                              pageBuilder: (BuildContext context, _, __) {
+                                return TransferLoadingPage();
+                              },
+                            ),
+                          );
                           await pickAndCropImage();
-
+                          Navigator.of(context).pop();
                           print("2:$pickedImage");
                           final data = await ocrLicense();
                           Navigator.of(context).pushReplacementNamed(

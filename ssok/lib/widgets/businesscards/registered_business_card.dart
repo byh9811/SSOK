@@ -4,11 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/dto/business_card_data.dart';
-<<<<<<< HEAD
 import 'package:ssok/screens/loading/basic_loading_page.dart';
-=======
 import 'package:ssok/widgets/modals/business_create_modal.dart';
->>>>>>> 9ca3b858c887907547f6238f97433b50e9596236
 import 'package:ssok/widgets/modals/business_transfer_modal.dart';
 import 'package:ssok/http/http.dart';
 

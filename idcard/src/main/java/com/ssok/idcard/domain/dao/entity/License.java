@@ -48,7 +48,7 @@ public class License extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private LocalDate licenseRenewEndDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Size(max = 30)
     private String licenseCondition;
 

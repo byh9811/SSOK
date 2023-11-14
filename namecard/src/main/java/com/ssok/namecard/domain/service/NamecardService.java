@@ -149,6 +149,7 @@ public class NamecardService {
     }
 
     public void editMemo(String memberUuid, Long exchangeSeq, String content) {
+        if(content == null) content = "";
 
         Long memberSeq = memberServiceClient.getMemberSeq(memberUuid).getResponse();
 

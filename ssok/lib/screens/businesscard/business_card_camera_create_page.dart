@@ -16,10 +16,12 @@ class BusinessCardCameraCreatePage extends StatefulWidget {
   const BusinessCardCameraCreatePage({super.key});
 
   @override
-  State<BusinessCardCameraCreatePage> createState() => _BusinessCardCameraCreatePageState();
+  State<BusinessCardCameraCreatePage> createState() =>
+      _BusinessCardCameraCreatePageState();
 }
 
-class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreatePage> {
+class _BusinessCardCameraCreatePageState
+    extends State<BusinessCardCameraCreatePage> {
   ImageAndNamecardData? args;
   late XFile image;
   Map<String, dynamic> businessCardInfo = {};
@@ -56,12 +58,14 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
           bytes);
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData["success"]) {
-        Navigator.of(context).pushReplacementNamed('/main');
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
       } else {
         throw Exception('Failed to load');
       }
     }
   }
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
@@ -70,7 +74,6 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
 
       // 읽어온 데이터를 출력하거나 다른 초기화 작업을 수행할 수 있습니다.
       if (args != null) {
-
         print("데이터 읽음");
         print(args!.data); // 'value'
         print(args!.data.namecardName); // 'value'
@@ -79,22 +82,22 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
         setState(() {
           businessCardInfo["namecardName"] = args!.data.namecardName ?? "";
           businessCardInfo["namecardJob"] = args!.data.namecardJob ?? "";
-          businessCardInfo["namecardCompany"] = args!.data.namecardCompany ?? "";
-          businessCardInfo["namecardAddress"] = args!.data.namecardAddress ?? "";
+          businessCardInfo["namecardCompany"] =
+              args!.data.namecardCompany ?? "";
+          businessCardInfo["namecardAddress"] =
+              args!.data.namecardAddress ?? "";
           businessCardInfo["namecardPhone"] = args!.data.namecardPhone ?? "";
           businessCardInfo["namecardTel"] = args!.data.namecardTel ?? "";
           businessCardInfo["namecardFax"] = args!.data.namecardFax ?? "";
           businessCardInfo["namecardEmail"] = args!.data.namecardEmail ?? "";
-          businessCardInfo["namecardWebsite"] = args!.data.namecardWebsite ?? "";
+          businessCardInfo["namecardWebsite"] =
+              args!.data.namecardWebsite ?? "";
           image = args!.image;
         });
-
-
       } else {
         print("데이터 못읽음");
       }
     });
-
   }
 
   @override
@@ -128,7 +131,7 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
                 child: Padding(
                   padding: EdgeInsets.all(screenWidth * 0.04),
                   child: Container(
-                      child:Image.file(File(image!.path)),
+                    child: Image.file(File(image!.path)),
                   ),
                 ),
               ),
@@ -155,25 +158,26 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
                                 Dialog(
                                   shape: RoundedRectangleBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
+                                        BorderRadius.all(Radius.circular(15.0)),
                                   ),
                                   child: BusinessUpdateModal(
                                     selectedCardInfo: {
                                       '이름': businessCardInfo['namecardName'],
-                                      '직책':
-                                      businessCardInfo['namecardJob'],
-                                      '회사':
-                                      businessCardInfo['namecardCompany'],
-                                      '주소':
-                                      businessCardInfo['namecardAddress'],
+                                      '직책': businessCardInfo['namecardJob'],
+                                      '회사': businessCardInfo['namecardCompany'],
+                                      '주소': businessCardInfo['namecardAddress'],
                                     },
                                     onCardInfoChanged: (newValue) {
                                       print("newValue : $newValue");
                                       setState(() {
-                                        businessCardInfo['namecardName'] = newValue['이름'];
-                                        businessCardInfo['namecardJob'] = newValue['직책'];
-                                        businessCardInfo['namecardCompany'] = newValue['회사'];
-                                        businessCardInfo['namecardAddress'] = newValue['주소'];
+                                        businessCardInfo['namecardName'] =
+                                            newValue['이름'];
+                                        businessCardInfo['namecardJob'] =
+                                            newValue['직책'];
+                                        businessCardInfo['namecardCompany'] =
+                                            newValue['회사'];
+                                        businessCardInfo['namecardAddress'] =
+                                            newValue['주소'];
                                       });
                                     },
                                     heightSize: 0.63,
@@ -231,28 +235,32 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
                                 Dialog(
                                   shape: RoundedRectangleBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
+                                        BorderRadius.all(Radius.circular(15.0)),
                                   ),
                                   child: BusinessUpdateModal(
                                     selectedCardInfo: {
                                       '휴대폰':
-                                      businessCardInfo['namecardPhone'] ??
-                                          "",
+                                          businessCardInfo['namecardPhone'] ??
+                                              "",
                                       '회사번호':
-                                      businessCardInfo['namecardTel'] ?? "",
+                                          businessCardInfo['namecardTel'] ?? "",
                                       'FAX':
-                                      businessCardInfo['namecardFax'] ?? "",
+                                          businessCardInfo['namecardFax'] ?? "",
                                       '이메일':
-                                      businessCardInfo['namecardEmail'] ??
-                                          "",
+                                          businessCardInfo['namecardEmail'] ??
+                                              "",
                                     },
                                     onCardInfoChanged: (newValue) {
                                       print("newValue : $newValue");
                                       setState(() {
-                                        businessCardInfo['namecardPhone'] = newValue['휴대폰'];
-                                        businessCardInfo['namecardTel'] = newValue['회사번호'];
-                                        businessCardInfo['namecardFax'] = newValue['FAX'];
-                                        businessCardInfo['namecardEmail'] = newValue['이메일'];
+                                        businessCardInfo['namecardPhone'] =
+                                            newValue['휴대폰'];
+                                        businessCardInfo['namecardTel'] =
+                                            newValue['회사번호'];
+                                        businessCardInfo['namecardFax'] =
+                                            newValue['FAX'];
+                                        businessCardInfo['namecardEmail'] =
+                                            newValue['이메일'];
                                       });
                                     },
                                     heightSize: 0.63,
@@ -317,13 +325,14 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
                                     child: BusinessUpdateModal(
                                       selectedCardInfo: {
                                         '홈페이지': businessCardInfo[
-                                        'namecardWebsite'] ??
+                                                'namecardWebsite'] ??
                                             ""
                                       },
                                       onCardInfoChanged: (newValue) {
                                         print("newValue : $newValue");
                                         setState(() {
-                                          businessCardInfo['namecardWebsite'] = newValue['홈페이지'];
+                                          businessCardInfo['namecardWebsite'] =
+                                              newValue['홈페이지'];
                                         });
                                       },
                                       heightSize: 0.3,
@@ -347,11 +356,15 @@ class _BusinessCardCameraCreatePageState extends State<BusinessCardCameraCreateP
                   ),
                 ],
               ),
-              SizedBox(height:screenHeight*0.02),
-              MainButton(title: "등록", onPressed: (){
-                register();
-              }, color: "0xFF00ADEF",),
-              SizedBox(height:screenHeight*0.03),
+              SizedBox(height: screenHeight * 0.02),
+              MainButton(
+                title: "등록",
+                onPressed: () {
+                  register();
+                },
+                color: "0xFF00ADEF",
+              ),
+              SizedBox(height: screenHeight * 0.03),
             ],
           ),
         ),

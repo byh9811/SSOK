@@ -22,7 +22,8 @@ class _IntroductionPageState extends State<IntroductionPage> {
       );
       print(response.statusCode);
       if (response.statusCode == 200) {
-        Navigator.of(context).pushNamed('/main');
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false);
       } else {
         throw Exception('Failed to load');
       }

@@ -150,9 +150,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
                   actions: <Widget>[  
                     TextButton(
                       onPressed: () { 
-                        Navigator.of(context).pop();
-                        
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
                         },
                       child: Text("확인"),
                     ),
@@ -210,8 +208,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
             actions: <Widget>[  
               TextButton(
                 onPressed: () { 
-                  Navigator.of(context).pop();
-                  
+                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
                   },
                 child: Text("확인"),
               ),
@@ -234,8 +231,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
             actions: <Widget>[  
               TextButton(
                 onPressed: () { 
-                  Navigator.of(context).pop();
-                  
+                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
                   },
                 child: Text("확인"),
               ),
@@ -348,15 +344,14 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
                   await AppSettings.openAppSettings(type: AppSettingsType.nfc);
                   // await AppSettings.openAppSettings(type:AppSettingsType.nfc);
                   // Navigator.pop(context);
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
+                  // Navigator.of(context).pop();
                 },
                 child: Text("설정 "),
               ),
               TextButton(
                 onPressed: () { 
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
                   },
                 child: Text("확인"),
               ),
@@ -524,7 +519,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(authenticated ? '인증 완료' : '인증 안됨'),
-                const Icon(Icons.fingerprint),
+                const Icon(Icons.fingerprint), 
               ],
             ),
           ),

@@ -104,6 +104,9 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
     getNameCardDetail();
   }
 
+
+
+
   void getNameCardDetail() async {
     final response = await apiService.getRequest(
         "namecard-service/$exchangeSeq", TokenManager().accessToken);
@@ -162,7 +165,41 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
   bool _isBack = true;
   double _angle = 0;
   final NameCardHead nameCardHead;
+  late String nameCardMemo = "";
+  ApiService apiService = ApiService();
   _BusinessCardDetailHeaderState(this.nameCardHead);
+
+
+
+    
+  void getNameCardDetailMemo() async{
+    int? exchangeSeq = nameCardHead.exchangeSeq;
+    try {
+    final response = await apiService.getRequest(
+        "namecard-service/memo/$exchangeSeq", TokenManager().accessToken);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(utf8.decode(response.bodyBytes))["response"];
+      
+      // "response" 필드가 비어있을 경우에 대한 예외 처리
+      if (responseData != null) {
+        String data = responseData;
+        print(data);
+        setState(() {
+          nameCardMemo = data;
+          
+        });
+      } else {
+        print("응답값의 'response' 필드가 비어있습니다.");
+      }
+    } else {
+      print("통신실패@@@@");
+    }
+  } catch (e) {
+    print("에러 발생: $e");
+  }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,9 +211,11 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
         Padding(
           padding: EdgeInsets.only(top: screenHeight * 0.03),
           child: GestureDetector(
-            onTap: () => setState(() {
+            onTap: () => {
+            getNameCardDetailMemo(),
+            setState(() {
               _angle = (_angle + pi) % (2 * pi);
-            }),
+            })},
             child: TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: _angle),
               duration: Duration(milliseconds: 1000),
@@ -235,7 +274,7 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                                   return true; // true를 반환하면 뒤로가기 작업을 계속 수행, false를 반환하면 뒤로가기 작업을 무시
                                 },
                                 child: BusinessMemoModal(
-                                  closeOnPress: () {
+                                  closeOnPress: () {  
                                     Navigator.of(context).pop();
                                     setState(
                                       () {
@@ -243,7 +282,9 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                                       },
                                     );
                                   },
-                                  content: "안녕하십니까",
+                                  content: nameCardMemo,
+                                  exchangeSeq : nameCardHead.exchangeSeq!
+
                                 ),
                               ),
                             ),

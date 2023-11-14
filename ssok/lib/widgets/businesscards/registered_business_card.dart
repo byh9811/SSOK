@@ -116,6 +116,7 @@ class _MyFavoriteCard extends State<MyFavoriteCard> {
               String namecardCompany = data.company;
               String namecardDateTime = data.exchangeDate;
               int exchangeSeq = data.exchangeSeq;
+              String updateStatus = data.updateStatus;
               return Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: screenWidth * 0.01,
@@ -133,6 +134,7 @@ class _MyFavoriteCard extends State<MyFavoriteCard> {
                     dateTime: namecardDateTime,
                     favorite: true,
                     exchangeSeq: exchangeSeq,
+                    updateStatus: updateStatus,
                   ),
                 ),
               );
@@ -157,6 +159,8 @@ class MyBusinessCard extends StatefulWidget {
 
 class _MyBusinessCardState extends State<MyBusinessCard> {
   int _currentPage = 0;
+  final CarouselController _carouselController = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -241,22 +245,45 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                     arguments:
                         widget.myNamecardItems[_currentPage].namecardSeq);
               },
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  enableInfiniteScroll: false,
-                  height: screenHeight * 0.18,
-                  aspectRatio: 9 / 5,
-                  viewportFraction: 1.0,
-                  onPageChanged: (index, reason) {
-                    // 페이지가 변경될 때 호출되는 콜백
-                    setState(() {
-                      _currentPage = index;
-                    });
-                  },
-                ),
-                items: widget.myNamecardItems.map((item) {
-                  return Image.network(item.namecardImg, fit: BoxFit.cover);
-                }).toList(),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CarouselSlider(
+                    carouselController: _carouselController,
+                    options: CarouselOptions(
+                      enableInfiniteScroll: false,
+                      height: screenHeight * 0.18,
+                      aspectRatio: 9 / 5,
+                      viewportFraction: 1.0,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentPage = index;
+                        });
+                      },
+                    ),
+                    items: widget.myNamecardItems.map((item) {
+                      return Image.network(item.namecardImg, fit: BoxFit.cover);
+                    }).toList(),
+                  ),
+                  // 왼쪽 화살표
+                    Positioned(
+                      left: 1,
+                      child:_currentPage > 0 ?
+                      InkWell(
+                        onTap: () => _carouselController.previousPage(),
+                        child: Icon(Icons.arrow_back_ios, color: Colors.black),
+                        ) : SizedBox.shrink(),
+                    ),
+                  // 오른쪽 화살표
+                    Positioned(
+                      right: 1,
+                      child: _currentPage < widget.myNamecardItems.length - 1 ?
+                      InkWell(
+                        onTap: () => _carouselController.nextPage(),
+                        child: Icon(Icons.arrow_forward_ios, color: Colors.black),
+                        ) : SizedBox.shrink(),
+                  ),
+                ],
               ),
             ),
           ),
@@ -411,6 +438,8 @@ class _ExchangeCardListBodyState extends State<ExchangeCardListBody> {
           String namecardDateTime = data.exchangeDate;
           bool favorite = data.isFavorite;
           int exchangeSeq = data.exchangeSeq;
+          String updateStatus = data.updateStatus;
+
           return Padding(
             padding: EdgeInsets.symmetric(
               horizontal: screenHeight * 0.04,
@@ -429,6 +458,7 @@ class _ExchangeCardListBodyState extends State<ExchangeCardListBody> {
                 dateTime: namecardDateTime,
                 favorite: favorite,
                 exchangeSeq: exchangeSeq,
+                updateStatus: updateStatus
               ),
             ),
           );
@@ -447,7 +477,8 @@ class CustomListItem extends StatefulWidget {
     required this.company,
     required this.dateTime,
     required this.favorite,
-    required this.exchangeSeq
+    required this.exchangeSeq,
+    required this.updateStatus
   }) : super(key: key);
 
   final String name;
@@ -457,6 +488,7 @@ class CustomListItem extends StatefulWidget {
   final String dateTime;
   final bool favorite;
   final int exchangeSeq;
+  final String updateStatus;
 
   @override
   State<CustomListItem> createState()=>_CustomListItem();
@@ -464,11 +496,9 @@ class CustomListItem extends StatefulWidget {
 }
 class _CustomListItem extends State<CustomListItem> {
 
-
-
   ApiService apiService = ApiService();
 
-  void makeFavorite()async{
+  void makeFavorite() async {
     final response = await apiService.postRawRequest("namecard-service/like",widget.exchangeSeq.toString(),TokenManager().accessToken);
     print("_CustomListItem : makeFavorite");
     print(jsonDecode(response.body));
@@ -535,20 +565,35 @@ class _CustomListItem extends State<CustomListItem> {
             padding: const EdgeInsets.all(8.0),
             child: AspectRatio(
               aspectRatio: 9 / 5,
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(0, 2),
-                      blurRadius: 1.0,
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0, 2),
+                          blurRadius: 1.0,
+                        ),
+                      ],
                     ),
-                  ],
+                    child: Image.network(widget.image, fit: BoxFit.cover),),
+                  if(widget.updateStatus == "UPDATED" || widget.updateStatus == "NEWLY")
+                    Positioned(
+                      top: 1,
+                      left: 1,
+                      child: Container(
+                        width: 7,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.redAccent
+                        ),
+                      ),
+                    )]
                 ),
-                child: Image.network(widget.image, fit: BoxFit.cover),
               ),
             ),
-          )
         ],
       ),
     );

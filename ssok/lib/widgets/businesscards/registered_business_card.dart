@@ -58,6 +58,9 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
           child:
               MyBusinessCard(myNamecardItems: businessCardData.myNamecardItems),
         ),
+        SizedBox(
+          height: 20,
+        ),
         MyFavoriteCard(favorites: businessCardData.favorites),
         SizedBox(
           height: 30,

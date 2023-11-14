@@ -358,6 +358,8 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     late Uri toLaunch;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -378,7 +380,7 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
               iconSize: 22,
               onPressed: () {
                 Uri uri = Uri.parse(
-                    "https://" + nameCardBody.nameCardWebsite.toString());
+                    "https://${nameCardBody.nameCardWebsite}");
                 _launchURL(uri);
               },
               icon: Icon(Icons.home_repair_service_rounded),
@@ -386,12 +388,15 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
           )
         ]),
         SizedBox(height: screenHeight * 0.01),
-        Row(
+        Row( 
           children: [
-            Text(
+            SizedBox(
+              width: screenWidth*0.75,
+              child: Text(
               nameCardBody.nameCardAddress.toString(),
               style: TextStyle(
                 fontSize: 16,
+                ),
               ),
             ),
             Padding(
@@ -409,7 +414,7 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
                 },
                 icon: Icon(Icons.pin_drop),
               ),
-            )
+            ),
           ],
         ),
         SizedBox(height: screenHeight * 0.035),

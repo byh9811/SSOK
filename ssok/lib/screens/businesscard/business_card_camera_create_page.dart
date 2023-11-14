@@ -59,7 +59,7 @@ class _BusinessCardCameraCreatePageState
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData["success"]) {
         Navigator.of(context)
-            .pushNamedAndRemoveUntil("/main", (route) => false);
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
       } else {
         throw Exception('Failed to load');
       }

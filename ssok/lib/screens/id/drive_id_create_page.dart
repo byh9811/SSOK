@@ -118,7 +118,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData["success"]) {
         Navigator.of(context)
-            .pushNamedAndRemoveUntil("/main", (route) => false);
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
       } else {
         throw Exception('Failed to load');
       }
@@ -136,19 +136,6 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
         print("데이터 읽음");
         print(args); // 'value'
         print(args!.data.licenseAddress);
-
-        // licenseName = args!.data.licenseName;
-        // licensePersonalNumber = args!.data.licensePersonalNumber;
-        // licenseType = args!.data.licenseType;
-        // licenseAddress = args!.data.licenseAddress;
-        // licenseNumber = args!.data.licenseNumber;
-        // licenseRenewStartDate = args!.data.licenseRenewStartDate;
-        // licenseRenewEndDate = args!.data.licenseRenewEndDate;
-        // licenseCondition = args!.data.licenseCondition;
-        // licenseCode = args!.data.licenseCode;
-        // licenseIssueDate = args!.data.licenseIssueDate;
-        // licenseAuthority = args!.data.licenseAuthority;
-        // image = args!.image;
 
         _nameController.text = args!.data.licenseName ?? "";
         _personalNumberController.text = args!.data.licensePersonalNumber ?? "";

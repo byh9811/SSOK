@@ -157,7 +157,7 @@ class _BusinessCardSelfCreatePageState
     if (jsonData['success']) {
       print(jsonData);
       showSnackbar("명함이 생성되었습니다.");
-      Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
     } else {
       throw Exception('Failed to load');
     }

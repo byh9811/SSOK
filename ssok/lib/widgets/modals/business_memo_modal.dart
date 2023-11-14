@@ -1,24 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:ssok/http/http.dart';
+import 'package:ssok/http/token_manager.dart';
 
 class BusinessMemoModal extends StatefulWidget {
   const BusinessMemoModal({
     Key? key,
     required this.closeOnPress,
     required this.content,
+    required this.exchangeSeq
   }) : super(key: key);
 
   final Function() closeOnPress;
   final String content;
+  final int exchangeSeq;
+  
   @override
   State<BusinessMemoModal> createState() => _BusinessMemoModalState();
 }
 
 class _BusinessMemoModalState extends State<BusinessMemoModal> {
   final TextEditingController controller = TextEditingController();
+  ApiService apiService = ApiService();
+  late int exchangeSeq;
+
   @override
   void initState() {
     super.initState();
     controller.text = widget.content;
+    exchangeSeq = widget.exchangeSeq;
+  }
+
+
+  void updateNameCardMemo() async{
+    print(controller.text);
+    print(controller.text == "");
+    print(exchangeSeq);
+    
+    final response = await apiService.postRawRequest('namecard-service/memo/$exchangeSeq', controller.text, TokenManager().accessToken);
+    if (response.statusCode != 200) {
+      print("실패");
+      print(response.body);
+    }
+
+  }
+
+  Future<bool> isUpdateMemo() async{
+    bool res = true;
+    await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("메모 수정"),
+            content: Text(
+              "메모를 수정 하시겠습니까 ? ",
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
+            actions: <Widget>[  
+              TextButton(
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                },
+                child: Text("확인"),
+              ),
+              TextButton(
+                onPressed: () { 
+                  Navigator.of(context).pop();
+                  res = false;
+                  },
+                child: Text("취소"),
+              ),
+            ],
+          ),
+        );
+    return res;
+  }
+
+  void printFuc(String text){
+    print("text를 출력하겠습니다.");
+    print(text);
+
   }
 
   bool _update = true;
@@ -84,11 +143,14 @@ class _BusinessMemoModalState extends State<BusinessMemoModal> {
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      modalButton("등록", () {
-                        setState(() {
+                      modalButton("등록", () async {
+                        if(await isUpdateMemo()){
+                          updateNameCardMemo();
+                          setState(() {
                           _update = true;
                         });
-                        print(_update);
+                        }
+                        
                       }),
                       SizedBox(width: screenWidth * 0.08),
                       modalButton("초기화", () {

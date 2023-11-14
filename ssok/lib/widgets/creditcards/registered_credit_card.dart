@@ -5,9 +5,9 @@ import 'package:ssok/widgets/creditcards/childrens/my_credit_card.dart';
 import 'package:ssok/screens/creditcard/credit_card_payment_page.dart';
 
 class RegisteredCreditCard extends StatefulWidget {
-  
   final CreditCard creditCard;
-  const RegisteredCreditCard({required this.creditCard, Key? key}) : super(key: key);
+  const RegisteredCreditCard({required this.creditCard, Key? key})
+      : super(key: key);
 
   @override
   State<RegisteredCreditCard> createState() => _RegisteredCreditCardState();
@@ -25,7 +25,7 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
     // if(Navigator.of(context).canPop()){
     //   detector.stopListening();
     // }
-    
+
     // detector = ShakeDetector.autoStart(
     //   onPhoneShake: () {
     //     if (Navigator.of(context).canPop()) {
@@ -41,15 +41,16 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
     // );
   }
 
-void shake(){
+  void shake() {
     String cardNum = widget.creditCard.cardNum;
-    String ownerName = widget.creditCard.ownerName; 
+    String ownerName = widget.creditCard.ownerName;
     print(widget.creditCard.cardName);
     print(widget.creditCard.cardNum);
     detector = ShakeDetector.waitForStart(
       onPhoneShake: () {
         if (!Navigator.of(context).canPop()) {
-          Navigator.of(context).pushNamed('/creditcard/payment', arguments:{"ownerName":ownerName,"cardNum":cardNum});
+          Navigator.of(context).pushNamed('/creditcard/payment',
+              arguments: {"ownerName": ownerName, "cardNum": cardNum});
           // detector.stopListening();
         }
       },
@@ -59,7 +60,6 @@ void shake(){
       shakeThresholdGravity: 2.7,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +74,9 @@ void shake(){
           color: Colors.amber,
           alignment: Alignment.center,
           child: MyCreditCard(
-            vertical: true,
-            ownerName: widget.creditCard.ownerName,
-            cardNum: widget.creditCard.cardNum
-          ),
+              vertical: true,
+              ownerName: widget.creditCard.ownerName,
+              cardNum: widget.creditCard.cardNum),
         ),
         SizedBox(height: screenHeight * 0.12),
         Row(
@@ -90,7 +89,11 @@ void shake(){
                     if (Navigator.of(context).canPop()) {
                       Navigator.of(context).pop();
                     }
-                    Navigator.of(context).pushNamed('/creditcard/payment', arguments:{"ownerName":widget.creditCard.ownerName,"cardNum":widget.creditCard.cardNum});
+                    Navigator.of(context).pushNamed('/creditcard/payment',
+                        arguments: {
+                          "ownerName": widget.creditCard.ownerName,
+                          "cardNum": widget.creditCard.cardNum
+                        });
                   },
                   child: Text("결제")),
             ),
@@ -98,20 +101,22 @@ void shake(){
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
               child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/test');
+                    Navigator.of(context).pushNamed('/creditcard/history/list',
+                        arguments: {
+                          "ownerName": widget.creditCard.ownerName,
+                          "cardNum": widget.creditCard.cardNum
+                        });
                   },
                   child: Text("내역")),
             ),
           ],
         ),
-        ElevatedButton(
-          onPressed: (){
-            Navigator.of(context).pushNamed('/creditcard/history/list',
-            arguments: {"ownerName":widget.creditCard.ownerName,"cardNum":widget.creditCard.cardNum}
-            );
-          }, 
-          child: Text("거래내역"),
-        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     Navigator.of(context).pushNamed('/test');
+        //   },
+        //   child: Text("거래내역"),
+        // ),
       ],
     );
   }

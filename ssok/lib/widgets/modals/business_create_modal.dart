@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/widgets/businesscards/childrens/modal_type_button.dart';
 
 import '../../dto/recognized_namecard.dart';
@@ -18,11 +19,11 @@ class ImageAndNamecardData {
   final RecognizedNamecard data;
   final String apiUrl;
 
-  ImageAndNamecardData({required this.image, required this.data, required this.apiUrl});
+  ImageAndNamecardData(
+      {required this.image, required this.data, required this.apiUrl});
 }
 
 class BusinessCreateModal extends StatefulWidget {
-
   final String? apiUrl;
 
   const BusinessCreateModal({super.key, this.apiUrl});
@@ -32,7 +33,6 @@ class BusinessCreateModal extends StatefulWidget {
 }
 
 class _BusinessCreateModalState extends State<BusinessCreateModal> {
-
   ApiService apiService = ApiService();
   final picker = ImagePicker();
   late Map<String, Object?> jsonString = {};
@@ -46,9 +46,7 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
     if (pickedFile != null) {
       final CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.ratio16x9
-        ],
+        aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
       );
 
       if (croppedFile != null) {
@@ -64,10 +62,8 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
       File file = File(result.files.single.path!);
       XFile pickedFile = XFile(file.path);
       final CroppedFile? croppedFile = await ImageCropper().cropImage(
-          sourcePath: pickedFile.path,
-          aspectRatioPresets: [
-            CropAspectRatioPreset.ratio16x9
-          ],
+        sourcePath: pickedFile.path,
+        aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
       );
       if (croppedFile != null) {
         return XFile(croppedFile.path);
@@ -76,11 +72,7 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
     }
   }
 
-
-
-
   Future<RecognizedNamecard> ocrNC(File file) async {
-
     Uint8List uint8list = await file.readAsBytes();
     final response = await apiService.postRequestWithFile(
         'idcard-service/scan/namecard',
@@ -93,7 +85,7 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
     if (jsonData['success']) {
       Map<String, dynamic> data = jsonData['response'];
       return RecognizedNamecard(
-        /**
+          /**
          * "name": "한",
             "company": "(입북동 서수원레이크푸르지",
             "department": "경기도 린시 로 77번길 62 102동 404호",
@@ -113,13 +105,11 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
           namecardTel: data["tel"] ?? "",
           namecardFax: data["fax"] ?? "",
           namecardEmail: data["email"] ?? "",
-          namecardWebsite: data["homepage"] ?? ""
-      );
+          namecardWebsite: data["homepage"] ?? "");
     } else {
       throw Exception('Failed to load');
     }
   }
-
 
   @override
   void initState() {
@@ -127,7 +117,6 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
     apiUrl = widget.apiUrl ?? "namecard-service/";
     print("url입니다.............");
     print(apiUrl);
-
   }
 
   @override
@@ -170,16 +159,31 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                 icon: Icons.photo_camera,
                 ontap: () async {
                   XFile? cuttedImage = await pickAndCropImageByCamera();
-                  File file = File(cuttedImage!.path);
-                  final data = await ocrNC(file);
-                  print("data:$data");
-                  Navigator.of(context).pushReplacementNamed(
-                    '/businesscard/camera/create',
-                    arguments:
-                      ImageAndNamecardData(image: cuttedImage!, data: data, apiUrl: apiUrl),
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      opaque: false, // 배경이 투명해야 함을 나타냅니다
+                      pageBuilder: (BuildContext context, _, __) {
+                        return TransferLoadingPage();
+                      },
+                    ),
                   );
-                  // Navigator.of(context)
-                  //     .pushReplacementNamed('/businesscard/camera/create');
+                  File file = File(cuttedImage!.path);
+                  try {
+                    final data = await ocrNC(file);
+                    print("data:$data");
+                    Navigator.of(context).pushReplacementNamed(
+                      '/businesscard/camera/create',
+                      arguments: ImageAndNamecardData(
+                          image: cuttedImage!, data: data, apiUrl: apiUrl),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("OCR 인식 실패"),
+                    ));
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        "/main", (route) => false,
+                        arguments: 1);
+                  }
                 },
               ),
               ModalTypeButton(
@@ -188,22 +192,31 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                 ontap: () async {
                   XFile? cuttedImage = await pickAndCropImageByStorage();
                   File file = File(cuttedImage!.path);
-                  final data = await ocrNC(file);
-                  print("data:$data");
-                  Navigator.of(context).pushReplacementNamed(
-                  '/businesscard/camera/create',
-                  arguments:
-                  ImageAndNamecardData(image: cuttedImage!, data: data, apiUrl: apiUrl),
-                  );
+                  try {
+                    final data = await ocrNC(file);
+                    print("data:$data");
+                    Navigator.of(context).pushReplacementNamed(
+                      '/businesscard/camera/create',
+                      arguments: ImageAndNamecardData(
+                          image: cuttedImage!, data: data, apiUrl: apiUrl),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("OCR 인식 실패"),
+                    ));
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        "/main", (route) => false,
+                        arguments: 1);
+                  }
                 },
-
               ),
               ModalTypeButton(
                 title: "직접 생성",
                 icon: Icons.palette,
                 ontap: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed('/businesscard/self/create', arguments: apiUrl);
+                  Navigator.of(context).pushReplacementNamed(
+                      '/businesscard/self/create',
+                      arguments: apiUrl);
                 },
               ),
             ],

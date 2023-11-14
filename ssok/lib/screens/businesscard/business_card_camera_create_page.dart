@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/widgets/businesscards/childrens/content_by_card.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 import 'package:ssok/widgets/modals/business_create_modal.dart';
 import 'package:ssok/widgets/modals/business_update_modal.dart';
 
@@ -42,7 +44,7 @@ class _BusinessCardCameraCreatePageState
         // businessCardInfo["namecardFax"].isNotEmpty &&
         // businessCardInfo["namecardEmail"].isNotEmpty &&
         // businessCardInfo["namecardWebsite"].isNotEmpty
-    ) {
+        ) {
       Map<String, String> requestData = {
         "namecardName": businessCardInfo["namecardName"],
         "namecardJob": businessCardInfo["namecardJob"],
@@ -63,9 +65,17 @@ class _BusinessCardCameraCreatePageState
           bytes);
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData["success"]) {
+        // ignore: use_build_context_synchronously
+        showSuccessDialog(context, "명함", "명함이 생성되었습니다", () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("명함생성 실패"),
+        ));
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
-      } else {
         throw Exception('Failed to load');
       }
     }
@@ -365,6 +375,14 @@ class _BusinessCardCameraCreatePageState
               MainButton(
                 title: "등록",
                 onPressed: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      opaque: false, // 배경이 투명해야 함을 나타냅니다
+                      pageBuilder: (BuildContext context, _, __) {
+                        return TransferLoadingPage();
+                      },
+                    ),
+                  );
                   register();
                 },
                 color: "0xFF00ADEF",

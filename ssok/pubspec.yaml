@@ -64,6 +64,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   introduction_screen: ^3.1.12
   shimmer: ^2.0.0
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:

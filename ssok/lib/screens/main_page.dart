@@ -42,7 +42,7 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  void logOut() async {
+  void userLogOut() async {
     print(TokenManager().loginId);
     print(TokenManager().accessToken);
     final response = await apiService.postRequest(
@@ -50,9 +50,10 @@ class _MainPageState extends State<MainPage> {
         {"memberId": TokenManager().loginId.toString()},
         TokenManager().accessToken);
     print(response.body);
-    // if(response.statusCode==200){
-    Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
-    // }
+    if (response.statusCode == 200) {
+      TokenManager().logout();
+      Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
+    }
   }
 
   @override
@@ -129,7 +130,7 @@ class _MainPageState extends State<MainPage> {
                                     actions: [
                                       TextButton(
                                         onPressed: () {
-                                          logOut();
+                                          userLogOut();
                                         },
                                         child: const Text('네'),
                                       ),

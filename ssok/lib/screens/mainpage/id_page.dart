@@ -6,6 +6,7 @@ import 'package:ssok/dto/license.dart';
 
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
+import 'package:ssok/screens/loading/basic_loading_page.dart';
 
 import 'package:ssok/widgets/ids/not_registered_drive_id_card.dart';
 import 'package:ssok/widgets/ids/not_registered_id_card.dart';
@@ -29,6 +30,8 @@ class _IdPageState extends State<IDPage> {
   String? accessToken;
   bool isIdCardHave = false;
   bool isLicenseHave = false;
+  bool isLoadingById = true;
+  bool isLoadingByLicense = true;
   final picker = ImagePicker();
   late Map<String, Object?> jsonString = {};
   late RegistrationCard? registrationCard;
@@ -46,16 +49,25 @@ class _IdPageState extends State<IDPage> {
     final response = await apiService.getRequest(
         "idcard-service/summary/idcard", TokenManager().accessToken);
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    print(jsonData);
     if (response.statusCode == 200) {
       final tempRes = jsonData['response'];
       final idCardRes = tempRes['summaryRegistrationCard'];
       final licenseRes = tempRes['summaryLicense'];
       if (idCardRes != null) {
         registrationCard = getIdCardInfo(idCardRes);
+      } else {
+        setState(() {
+          isLoadingById = false;
+        });
       }
 
       if (licenseRes != null) {
         license = getDriveLicenseInfo(licenseRes);
+      } else {
+        setState(() {
+          isLoadingByLicense = false;
+        });
       }
     }
   }
@@ -64,6 +76,7 @@ class _IdPageState extends State<IDPage> {
     print("신분증이 있어연");
     setState(() {
       isIdCardHave = true;
+      isLoadingById = false;
     });
 
     return RegistrationCard(
@@ -76,6 +89,7 @@ class _IdPageState extends State<IDPage> {
     print("면허증이 있어연");
     setState(() {
       isLicenseHave = true;
+      isLoadingByLicense = false;
     });
 
     return License(
@@ -89,8 +103,16 @@ class _IdPageState extends State<IDPage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     List<Widget> imageSliders = [
-      isIdCardHave ? RegisteredIdCard(registrationCard: registrationCard) : NotRegisteredIdCard(),
-      isLicenseHave ? RegisteredDriveIdCard(license: license) : NotRegisteredDriveIdCard(),
+      isLoadingById
+          ? BasicLoadingPage()
+          : isIdCardHave
+              ? RegisteredIdCard(registrationCard: registrationCard)
+              : NotRegisteredIdCard(),
+      isLoadingByLicense
+          ? BasicLoadingPage()
+          : isLicenseHave
+              ? RegisteredDriveIdCard(license: license)
+              : NotRegisteredDriveIdCard(),
     ];
     return Column(
       children: [

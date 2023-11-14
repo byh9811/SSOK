@@ -1,14 +1,13 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/dto/business_card_data.dart';
-<<<<<<< HEAD
 import 'package:ssok/screens/loading/basic_loading_page.dart';
-=======
 import 'package:ssok/widgets/modals/business_create_modal.dart';
->>>>>>> 9ca3b858c887907547f6238f97433b50e9596236
 import 'package:ssok/widgets/modals/business_transfer_modal.dart';
 import 'package:ssok/http/http.dart';
 
@@ -175,7 +174,6 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
             children: [
               Row(
                 children: [
@@ -190,7 +188,8 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        minimumSize: Size(screenWidth * 0.06, screenHeight * 0.03),
+                        minimumSize:
+                            Size(screenWidth * 0.06, screenHeight * 0.03),
                         backgroundColor: Color(0xFF3B8CED),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15.0)),
@@ -202,7 +201,8 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                           builder: (context) {
                             return Dialog(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
                               ),
                               child: BusinessTransferModal(
                                   myNamecardItem:
@@ -215,7 +215,6 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                         "명함 교환",
                         style: TextStyle(fontSize: 10),
                       ),
-
                     ),
                   ),
                 ],
@@ -236,7 +235,10 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                       },
                     );
                   },
-                  child: Text('다른 직업도 있으신가요?', style: TextStyle(fontSize: 11, color: Color(0xFF00ADEF)),),
+                  child: Text(
+                    '다른 직업도 있으신가요?',
+                    style: TextStyle(fontSize: 11, color: Color(0xFF00ADEF)),
+                  ),
                 ),
               )
             ],
@@ -263,12 +265,32 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                   },
                 ),
                 items: widget.myNamecardItems.map((item) {
-                  return Image.network(item.namecardImg, fit: BoxFit.cover);
+                  return CachedNetworkImage(
+                    imageUrl: item.namecardImg,
+                    placeholder: (context, url) => SkeletonLoader(),
+                    errorWidget: (context, url, error) => Icon(Icons.error), //
+                    fit: BoxFit.cover,
+                  );
                 }).toList(),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget SkeletonLoader() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Shimmer.fromColors(
+      baseColor: Color.fromRGBO(240, 240, 240, 1),
+      highlightColor: Colors.white10,
+      child: Container(
+        width: screenWidth * 0.6,
+        height: screenWidth * 0.6 * (5 / 9),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5), color: Colors.grey),
       ),
     );
   }

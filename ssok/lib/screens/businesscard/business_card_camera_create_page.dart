@@ -29,15 +29,16 @@ class _BusinessCardCameraCreatePageState
   ApiService apiService = ApiService();
 
   void register() async {
-    if (businessCardInfo["namecardName"].isNotEmpty &&
-        businessCardInfo["namecardJob"].isNotEmpty &&
-        businessCardInfo["namecardCompany"].isNotEmpty &&
-        businessCardInfo["namecardAddress"].isNotEmpty &&
-        businessCardInfo["namecardPhone"].isNotEmpty &&
-        businessCardInfo["namecardTel"].isNotEmpty &&
-        businessCardInfo["namecardFax"].isNotEmpty &&
-        businessCardInfo["namecardEmail"].isNotEmpty &&
-        businessCardInfo["namecardWebsite"].isNotEmpty) {
+    if (businessCardInfo["namecardName"].isNotEmpty
+        // businessCardInfo["namecardJob"].isNotEmpty &&
+        // businessCardInfo["namecardCompany"].isNotEmpty &&
+        // businessCardInfo["namecardAddress"].isNotEmpty &&
+        // businessCardInfo["namecardPhone"].isNotEmpty &&
+        // businessCardInfo["namecardTel"].isNotEmpty &&
+        // businessCardInfo["namecardFax"].isNotEmpty &&
+        // businessCardInfo["namecardEmail"].isNotEmpty &&
+        // businessCardInfo["namecardWebsite"].isNotEmpty
+    ) {
       Map<String, String> requestData = {
         "namecardName": businessCardInfo["namecardName"],
         "namecardJob": businessCardInfo["namecardJob"],

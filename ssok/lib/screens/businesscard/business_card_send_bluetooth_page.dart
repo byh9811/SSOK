@@ -256,15 +256,15 @@ class _BusinessCardSendBluetoothPageState
           SizedBox(
             height: screenHeight * 0.02,
           ),
-          SizedBox(
-            height: screenHeight * 0.025,
-          ),
-          ElevatedButton(
-            child: const Text("명함 전송"),
-            onPressed: () async {
-              sendBusinessCard(myNamecardItem.namecardSeq);
-            },
-          ),
+          // SizedBox(
+          //   height: screenHeight * 0.025,
+          // ),
+          // ElevatedButton(
+          //   child: const Text("명함 전송"),
+          //   onPressed: () async {
+          //     sendBusinessCard(myNamecardItem.namecardSeq);
+          //   },
+          // ),
         ],
       ),
     );

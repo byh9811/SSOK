@@ -213,7 +213,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
                         TextField(
                           controller: _nameController,
                           decoration: InputDecoration(labelText: '이름'),
-                          keyboardType: TextInputType.name,
+                          keyboardType: TextInputType.text,
                           onChanged: (value) {
                             setState(() {
                               licenseName = value.trim();
@@ -250,7 +250,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
                         TextField(
                           controller: _addressController,
                           decoration: InputDecoration(labelText: '주소'),
-                          keyboardType: TextInputType.streetAddress,
+                          keyboardType: TextInputType.text,
                           onChanged: (value) {
                             setState(() {
                               licenseAddress = value.trim();
@@ -272,7 +272,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
                         TextField(
                           controller: _renewStartDateController,
                           decoration: InputDecoration(labelText: '갱신 시작일'),
-                          keyboardType: TextInputType.datetime,
+                          keyboardType: TextInputType.text,
                           onChanged: (value) {
                             licenseRenewStartDate = value.trim();
                             checkLicenseRenewStartDate =
@@ -283,7 +283,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
                         TextField(
                           controller: _renewEndDateController,
                           decoration: InputDecoration(labelText: '갱신 종료일'),
-                          keyboardType: TextInputType.datetime,
+                          keyboardType: TextInputType.text,
                           onChanged: (value) {
                             licenseRenewEndDate = value.trim();
                             checkLicenseRenewEndDate =
@@ -314,7 +314,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
                         TextField(
                           controller: _issueDateController,
                           decoration: InputDecoration(labelText: '발급일자'),
-                          keyboardType: TextInputType.datetime,
+                          keyboardType: TextInputType.text,
                           onChanged: (value) {
                             licenseIssueDate = value.trim();
                             checkLicenseIssueDate = licenseIssueDate != null &&

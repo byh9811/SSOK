@@ -22,7 +22,6 @@ class RegisteredIdCard extends StatefulWidget {
 
 class _RegisteredIdCardState extends State<RegisteredIdCard>
     with SingleTickerProviderStateMixin {
-
   late AnimationController _animationController;
   late Animation<double> _animation;
 
@@ -59,7 +58,8 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
 
       setState(() {
         registrationCardName = tempRes['registrationCardName'];
-        registrationCardPersonalNumber = tempRes['registrationCardPersonalNumber'];
+        registrationCardPersonalNumber =
+            tempRes['registrationCardPersonalNumber'];
         registrationCardAddress = tempRes['registrationCardAddress'];
         registrationCardIssueDate = tempRes['registrationCardIssueDate'];
         registrationCardAuthority = tempRes['registrationCardAuthority'];
@@ -82,14 +82,12 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     bool isFrontVisible = _animation.value < 3.14 / 2;
-
 
     return Transform(
       transform: Matrix4.identity()
@@ -99,24 +97,17 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
       child: isFrontVisible
           ? _buildFrontContent(context)
           : Transform(
-          transform: Matrix4.identity()..rotateY(3.14159), // 180도 추가 회전
-          alignment: FractionalOffset.center,
-          child: _buildBackContent(context))
-      ,
+              transform: Matrix4.identity()..rotateY(3.14159), // 180도 추가 회전
+              alignment: FractionalOffset.center,
+              child: _buildBackContent(context)),
     );
   }
 
-  Widget _buildFrontContent(BuildContext context){
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+  Widget _buildFrontContent(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: EdgeInsets.only(bottom:screenHeight*0.01),
+      padding: EdgeInsets.only(bottom: screenHeight * 0.01),
       child: contentBox(
         context,
         Column(
@@ -177,9 +168,14 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    idInfoText(context, "이름", widget.registrationCard!.registrationCardName),
+                    idInfoText(context, "이름",
+                        widget.registrationCard!.registrationCardName),
                     SizedBox(height: screenHeight * 0.01),
-                    idInfoText(context, "주민번호", widget.registrationCard!.registrationCardPersonalNumber),
+                    idInfoText(
+                        context,
+                        "주민번호",
+                        widget
+                            .registrationCard!.registrationCardPersonalNumber),
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomRight,
@@ -203,17 +199,11 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     );
   }
 
-  Widget _buildBackContent(BuildContext context){
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+  Widget _buildBackContent(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         if (_animationController.isCompleted) {
           _animationController.reverse();
         } else {
@@ -221,36 +211,37 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
         }
       },
       child: Padding(
-        padding: EdgeInsets.only(bottom:screenHeight*0.01),
+        padding: EdgeInsets.only(bottom: screenHeight * 0.01),
         child: contentBox(
           context,
           Expanded(
-              child: Container(width: screenWidth,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/registration_card_color.png'),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
+              child: Container(
+            width: screenWidth,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/registration_card_color.png'),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                topRight: Radius.circular(10.0),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Image.asset(
+                    'assets/logo.png',
+                    height: 45,
+                    color: Colors.white54,
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Image.asset(
-                        'assets/logo.png',
-                        height: 45,
-                        color: Colors.white54,
-                      ),
-                    ),
-                    Expanded(child: _driveIdContent(context)),
-                  ],
-                ),
-              )),
+                Expanded(child: _driveIdContent(context)),
+              ],
+            ),
+          )),
           0.5,
         ),
       ),
@@ -280,7 +271,6 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
               _buildRotatedText('$registrationCardAddress', 18),
             ],
           ),
-
           Column(
             children: [
               _buildRotatedText('$registrationCardPersonalNumber', 18),
@@ -307,9 +297,6 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
       ),
     );
   }
-
-
-
 }
 
 

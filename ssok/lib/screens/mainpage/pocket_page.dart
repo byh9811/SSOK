@@ -89,12 +89,16 @@ class _PocketPageState extends State<PocketPage> {
       print("pocket_page getPocket()");
       final jsonData = jsonDecode("${utf8.decode(response.bodyBytes)}");
       print(jsonDecode(utf8.decode(response.bodyBytes)));
-      if (jsonData['success']) {
+      if (response.statusCode == 200) {
         setState(() {
           pocketMoney = jsonData['response']['pocketSaving'];
           pocketTotalDonate = jsonData['response']['pocketTotalDonate'];
           pocketTotalPoint = jsonData['response']['pocketTotalPoint'];
           pocketIsChangeSaving = jsonData['response']['pocketIsChangeSaving'];
+          isLoading = false;
+        });
+      } else if (response.statusCode == 500) {
+        setState(() {
           isLoading = false;
         });
       } else {

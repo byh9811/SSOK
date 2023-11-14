@@ -4,6 +4,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/dto/business_card_data.dart';
+<<<<<<< HEAD
+import 'package:ssok/screens/loading/basic_loading_page.dart';
+=======
+import 'package:ssok/widgets/modals/business_create_modal.dart';
+>>>>>>> 9ca3b858c887907547f6238f97433b50e9596236
 import 'package:ssok/widgets/modals/business_transfer_modal.dart';
 import 'package:ssok/http/http.dart';
 
@@ -27,6 +32,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
       print(jsonData["response"]);
       setState(() {
         businessCardData = BusinessCardData.fromJson(jsonData['response']);
+        // Navigator.of(context).pop();
       });
     } else {
       throw Exception('Failed to load');
@@ -36,6 +42,7 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
   @override
   void initState() {
     super.initState();
+
     businessCardData = BusinessCardData(
         favorites: [], memberSeq: 0, myExchangeItems: [], myNamecardItems: []);
     bringBusinessCardList();
@@ -46,14 +53,16 @@ class _RegisteredBusinessCardState extends State<RegisteredBusinessCard> {
     print(businessCardData.myExchangeItems.length);
 
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
+      child: Column(children: <Widget>[
         SizedBox(
           height: 230,
-          child: MyBusinessCard(myNamecardItems: businessCardData.myNamecardItems),
+          child:
+              MyBusinessCard(myNamecardItems: businessCardData.myNamecardItems),
         ),
         MyFavoriteCard(favorites: businessCardData.favorites),
-        SizedBox(height: 30,),
+        SizedBox(
+          height: 30,
+        ),
         ExchangeCardList(myExchangeItems: businessCardData.myExchangeItems),
       ]),
     );
@@ -165,24 +174,55 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
       child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
             children: [
-              Text(
-                "내 명함",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(screenWidth * 0.06, screenHeight * 0.03),
-                    backgroundColor: Color(0xFF3B8CED),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+              Row(
+                children: [
+                  Text(
+                    "내 명함",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(screenWidth * 0.06, screenHeight * 0.03),
+                        backgroundColor: Color(0xFF3B8CED),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                              ),
+                              child: BusinessTransferModal(
+                                  myNamecardItem:
+                                      widget.myNamecardItems[_currentPage]),
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        "명함 교환",
+                        style: TextStyle(fontSize: 10),
+                      ),
+
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 30),
+                child: TextButton(
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -191,17 +231,12 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                           ),
-                          child: BusinessTransferModal(
-                              myNamecardItem:
-                                  widget.myNamecardItems[_currentPage]),
+                          child: BusinessCreateModal(),
                         );
                       },
                     );
                   },
-                  child: Text(
-                    "명함 교환",
-                    style: TextStyle(fontSize: 10),
-                  ),
+                  child: Text('다른 직업도 있으신가요?', style: TextStyle(fontSize: 11, color: Color(0xFF00ADEF)),),
                 ),
               )
             ],
@@ -276,7 +311,7 @@ class _ExchangeCardListHeaderState extends State<ExchangeCardListHeader> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print("교환 명함 갯수 : "+widget.namecardCnt.toString());
+    print("교환 명함 갯수 : " + widget.namecardCnt.toString());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
       child: Column(
@@ -299,40 +334,42 @@ class _ExchangeCardListHeaderState extends State<ExchangeCardListHeader> {
                   ],
                 ),
               ),
-              if(widget.namecardCnt!=0)Padding(
-                padding: EdgeInsets.only(left: screenWidth * 0.01),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/businesscard/map');
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xFFCCCCCC),
-                        borderRadius: BorderRadius.all(Radius.circular(30.0))),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.025,
-                        vertical: screenHeight * 0.007,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.map,
-                            size: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 2.0),
-                            child: Text(
-                              "지도로 보기",
-                              style: TextStyle(fontSize: 13),
+              if (widget.namecardCnt != 0)
+                Padding(
+                  padding: EdgeInsets.only(left: screenWidth * 0.01),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/businesscard/map');
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFFCCCCCC),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(30.0))),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.025,
+                          vertical: screenHeight * 0.007,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.map,
+                              size: 20,
                             ),
-                          )
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.only(left: 2.0),
+                              child: Text(
+                                "지도로 보기",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
           SizedBox(height: screenHeight * 0.005),
@@ -368,60 +405,59 @@ class _ExchangeCardListBodyState extends State<ExchangeCardListBody> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     print("_ExchangeCardListBodyState");
-    print("교환 명함 길이"+widget.myExchangeItems.length.toString());
+    print("교환 명함 길이" + widget.myExchangeItems.length.toString());
 
     return Container(
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: widget.myExchangeItems.length,
-        itemBuilder: (context, index) {
-          NameCard data = widget.myExchangeItems[index];
-          String namecardName = data.name;
-          String namecardJob = data.job;
-          String namecardImage = data.namecardImg;
-          String namecardCompany = data.company;
-          String namecardDateTime = data.exchangeDate;
-          bool favorite = data.isFavorite;
-          int exchangeSeq = data.exchangeSeq;
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: screenHeight * 0.04,
-              vertical: screenWidth * 0.01,
+        child: ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: widget.myExchangeItems.length,
+      itemBuilder: (context, index) {
+        NameCard data = widget.myExchangeItems[index];
+        String namecardName = data.name;
+        String namecardJob = data.job;
+        String namecardImage = data.namecardImg;
+        String namecardCompany = data.company;
+        String namecardDateTime = data.exchangeDate;
+        bool favorite = data.isFavorite;
+        int exchangeSeq = data.exchangeSeq;
+        return Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: screenHeight * 0.04,
+            vertical: screenWidth * 0.01,
+          ),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed('/businesscard/detail',
+                  arguments: data.exchangeSeq);
+            },
+            child: CustomListItem(
+              name: namecardName,
+              image: namecardImage,
+              job: namecardJob,
+              company: namecardCompany,
+              dateTime: namecardDateTime,
+              favorite: favorite,
+              exchangeSeq: exchangeSeq,
             ),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed('/businesscard/detail',
-                    arguments: data.exchangeSeq);
-              },
-              child: CustomListItem(
-                name: namecardName,
-                image: namecardImage,
-                job: namecardJob,
-                company: namecardCompany,
-                dateTime: namecardDateTime,
-                favorite: favorite,
-                exchangeSeq: exchangeSeq,
-              ),
-            ),
-          );
-        },
-      )
-    );
+          ),
+        );
+      },
+    ));
   }
 }
 
 class CustomListItem extends StatefulWidget {
-  const CustomListItem({
-    Key? key,
-    required this.name,
-    required this.image,
-    required this.job,
-    required this.company,
-    required this.dateTime,
-    required this.favorite,
-    required this.exchangeSeq
-  }) : super(key: key);
+  const CustomListItem(
+      {Key? key,
+      required this.name,
+      required this.image,
+      required this.job,
+      required this.company,
+      required this.dateTime,
+      required this.favorite,
+      required this.exchangeSeq})
+      : super(key: key);
 
   final String name;
   final String image;
@@ -432,17 +468,15 @@ class CustomListItem extends StatefulWidget {
   final int exchangeSeq;
 
   @override
-  State<CustomListItem> createState()=>_CustomListItem();
-
+  State<CustomListItem> createState() => _CustomListItem();
 }
+
 class _CustomListItem extends State<CustomListItem> {
-
-
-
   ApiService apiService = ApiService();
 
-  void makeFavorite()async{
-    final response = await apiService.postRawRequest("namecard-service/like",widget.exchangeSeq.toString(),TokenManager().accessToken);
+  void makeFavorite() async {
+    final response = await apiService.postRawRequest("namecard-service/like",
+        widget.exchangeSeq.toString(), TokenManager().accessToken);
     print("_CustomListItem : makeFavorite");
     print(jsonDecode(response.body));
   }

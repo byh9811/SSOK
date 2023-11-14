@@ -90,7 +90,8 @@ class _BusinessCardSendBluetoothPageState
               TextButton(
                 onPressed: () async {
                   Navigator.pop(context, '닫기');
-                  Navigator.of(context).pushNamed('/main');
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil("/main", (route) => false);
                 },
                 child: Text('닫기'),
               ),
@@ -216,11 +217,14 @@ class _BusinessCardSendBluetoothPageState
           Container(
               alignment: Alignment.center,
               child: Container(
-                width: 200,
-                height: 400,
-                color: Colors.amber,
+                width: 400,
+                height: 500,
+                child: Transform.rotate(
+                  angle: -pi / 2, // 반시계 방향으로 90도 회전
+                  child: Image.network(myNamecardItem.namecardImg),
+                ),
               )),
-          SizedBox(height: screenHeight * 0.04),
+              SizedBox(height: screenHeight * 0.04),
           Text(
             "User : ${myNamecardItem.namecardName}",
             style: TextStyle(color: Colors.white),

@@ -183,7 +183,8 @@ class _BusinessCardReceiveBluetoothPageState
               TextButton(
                 onPressed: () async {
                   Navigator.pop(context, '아니요');
-                  Navigator.of(context).pushNamed('/main');
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil("/main", (route) => false);
                 },
                 child: Text('아니요'),
               ),

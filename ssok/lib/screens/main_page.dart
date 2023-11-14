@@ -51,7 +51,7 @@ class _MainPageState extends State<MainPage> {
         TokenManager().accessToken);
     print(response.body);
     // if(response.statusCode==200){
-    Navigator.of(context).pushNamed("/");
+    Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
     // }
   }
 
@@ -155,23 +155,23 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "잔돈 저금 활성화",
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    Switch(
-                      value: _isCheckedChanges,
-                      onChanged: (value) {
-                        setState(() {
-                          _isCheckedChanges = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    "잔돈 저금 활성화",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Switch(
+                    value: _isCheckedChanges,
+                    onChanged: (value) {
+                      setState(() {
+                        _isCheckedChanges = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),

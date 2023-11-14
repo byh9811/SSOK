@@ -61,7 +61,7 @@ public class NamecardController {
     @PostMapping("/update/{preNamecardSeq}")
     public ApiResponse<Long> updateNamecardRequest(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
-        @RequestPart NamecardCreateRequest namecardUpdateRequest,
+        @RequestPart(name = "namecardCreateRequest") NamecardCreateRequest namecardUpdateRequest,
         @RequestPart(name = "image") MultipartFile multipartFile,
         @PathVariable Long preNamecardSeq
     ){

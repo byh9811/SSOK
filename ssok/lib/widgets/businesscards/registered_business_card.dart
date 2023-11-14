@@ -476,6 +476,12 @@ class _CustomListItem extends State<CustomListItem> {
         widget.exchangeSeq.toString(), TokenManager().accessToken);
     print("_CustomListItem : makeFavorite");
     print(jsonDecode(response.body));
+    if (response.statusCode==200) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+    } else {
+      throw Exception('Failed to load');
+    }
   }
 
   @override

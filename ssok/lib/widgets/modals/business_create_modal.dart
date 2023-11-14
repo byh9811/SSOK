@@ -16,12 +16,16 @@ import '../content_box.dart';
 class ImageAndNamecardData {
   final XFile image;
   final RecognizedNamecard data;
+  final String apiUrl;
 
-  ImageAndNamecardData({required this.image, required this.data});
+  ImageAndNamecardData({required this.image, required this.data, required this.apiUrl});
 }
 
 class BusinessCreateModal extends StatefulWidget {
-  const BusinessCreateModal({super.key});
+
+  final String? apiUrl;
+
+  const BusinessCreateModal({super.key, this.apiUrl});
 
   @override
   State<BusinessCreateModal> createState() => _BusinessCreateModalState();
@@ -32,6 +36,7 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
   ApiService apiService = ApiService();
   final picker = ImagePicker();
   late Map<String, Object?> jsonString = {};
+  late String apiUrl;
   // late XFile? pickedImage;
 
   Future<XFile?> pickAndCropImageByCamera() async {
@@ -116,7 +121,14 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
   }
 
 
+  @override
+  void initState() {
+    super.initState();
+    apiUrl = widget.apiUrl ?? "namecard-service/";
+    print("url입니다.............");
+    print(apiUrl);
 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +176,7 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                   Navigator.of(context).pushReplacementNamed(
                     '/businesscard/camera/create',
                     arguments:
-                    ImageAndNamecardData(image: cuttedImage!, data: data),
+                      ImageAndNamecardData(image: cuttedImage!, data: data, apiUrl: apiUrl),
                   );
                   // Navigator.of(context)
                   //     .pushReplacementNamed('/businesscard/camera/create');
@@ -181,7 +193,7 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                   Navigator.of(context).pushReplacementNamed(
                   '/businesscard/camera/create',
                   arguments:
-                  ImageAndNamecardData(image: cuttedImage!, data: data),
+                  ImageAndNamecardData(image: cuttedImage!, data: data, apiUrl: apiUrl),
                   );
                 },
 
@@ -191,7 +203,7 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                 icon: Icons.palette,
                 ontap: () {
                   Navigator.of(context)
-                      .pushReplacementNamed('/businesscard/self/create');
+                      .pushReplacementNamed('/businesscard/self/create', arguments: apiUrl);
                 },
               ),
             ],

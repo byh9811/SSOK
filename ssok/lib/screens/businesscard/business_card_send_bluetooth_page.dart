@@ -90,8 +90,9 @@ class _BusinessCardSendBluetoothPageState
               TextButton(
                 onPressed: () async {
                   // Navigator.pop(context, '닫기');
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      "/main", (route) => false,
+                      arguments: 1);
                 },
                 child: Text('닫기'),
               ),
@@ -224,7 +225,7 @@ class _BusinessCardSendBluetoothPageState
                   child: Image.network(myNamecardItem.namecardImg),
                 ),
               )),
-              SizedBox(height: screenHeight * 0.04),
+          SizedBox(height: screenHeight * 0.04),
           Text(
             "User : ${myNamecardItem.namecardName}",
             style: TextStyle(color: Colors.white),
@@ -277,88 +278,92 @@ class _BusinessCardSendBluetoothPageState
 
   void onConnectionInit(String id, ConnectionInfo info) {
     double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     showModalBottomSheet(
       context: context,
       builder: (builder) {
-        return Center(
-          child: Column(
-            children: <Widget>[
-              Text("id: $id"),
-              Text("Token: ${info.authenticationToken}"),
-              Text("Name${info.endpointName}"),
-              Text("Incoming: ${info.isIncomingConnection}"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-                    child: button(
-                      "수락",
-                      () {
-                        Navigator.pop(context);
-                        Navigator.of(context).push(
-                          PageRouteBuilder(
-                            opaque: false, // 배경이 투명해야 함을 나타냅니다
-                            pageBuilder: (BuildContext context, _, __) {
-                              return TransferLoadingPage();
+        return SizedBox(
+          height: screenHeight * 0.3,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Text("id: $id"),
+                Text("Token: ${info.authenticationToken}"),
+                Text("Name${info.endpointName}"),
+                Text("Incoming: ${info.isIncomingConnection}"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+                      child: button(
+                        "수락",
+                        () {
+                          Navigator.pop(context);
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              opaque: false, // 배경이 투명해야 함을 나타냅니다
+                              pageBuilder: (BuildContext context, _, __) {
+                                return TransferLoadingPage();
+                              },
+                            ),
+                          );
+                          setState(() {
+                            endpointMap[id] = info;
+                          });
+                          Nearby().acceptConnection(
+                            // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
+                            id,
+                            onPayLoadRecieved: (endid, payload) async {
+                              // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
+                              if (payload.type == PayloadType.BYTES) {
+                                String str = String.fromCharCodes(
+                                    payload.bytes!); // 바이트 데이터를 문자열로 반환
+                                showSnackbar("$endid: $str");
+                              }
                             },
-                          ),
-                        );
-                        setState(() {
-                          endpointMap[id] = info;
-                        });
-                        Nearby().acceptConnection(
-                          // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
-                          id,
-                          onPayLoadRecieved: (endid, payload) async {
-                            // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
-                            if (payload.type == PayloadType.BYTES) {
-                              String str = String.fromCharCodes(
-                                  payload.bytes!); // 바이트 데이터를 문자열로 반환
-                              showSnackbar("$endid: $str");
-                            }
-                          },
-                          onPayloadTransferUpdate:
-                              (endid, payloadTransferUpdate) {
-                            if (payloadTransferUpdate
-                                    .status == // 상태 == IN_PROGRESS인 경우 전송 중인 데이터 양 등을 업데이트
-                                PayloadStatus.IN_PROGRESS) {
-                              print(payloadTransferUpdate.bytesTransferred);
-                            } else if (payloadTransferUpdate.status ==
-                                PayloadStatus.FAILURE) {
-                              // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
-                              print("failed");
-                              showSnackbar("$endid 명함 전송 실패");
-                            } else if (payloadTransferUpdate
-                                    .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
-                                PayloadStatus.SUCCESS) {
-                              showSnackbar(
-                                  "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
-                            }
-                          },
-                        );
-                      },
+                            onPayloadTransferUpdate:
+                                (endid, payloadTransferUpdate) {
+                              if (payloadTransferUpdate
+                                      .status == // 상태 == IN_PROGRESS인 경우 전송 중인 데이터 양 등을 업데이트
+                                  PayloadStatus.IN_PROGRESS) {
+                                print(payloadTransferUpdate.bytesTransferred);
+                              } else if (payloadTransferUpdate.status ==
+                                  PayloadStatus.FAILURE) {
+                                // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
+                                print("failed");
+                                showSnackbar("$endid 명함 전송 실패");
+                              } else if (payloadTransferUpdate
+                                      .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
+                                  PayloadStatus.SUCCESS) {
+                                showSnackbar(
+                                    "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
+                              }
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-                    child: button(
-                      "거절",
-                      () async {
-                        Navigator.pop(context);
-                        try {
-                          await Nearby().rejectConnection(id);
-                        } catch (e) {
-                          showSnackbar(e);
-                        }
-                      },
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+                      child: button(
+                        "거절",
+                        () async {
+                          Navigator.pop(context);
+                          try {
+                            await Nearby().rejectConnection(id);
+                          } catch (e) {
+                            showSnackbar(e);
+                          }
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -22,17 +22,29 @@ class ApiService {
   }
 
   Future<http.Response> postRequest(
-      String endpoint, Map<String, dynamic> data, String? accessToken) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/$endpoint'),
-      headers: {
-        'content-type': 'application/json',
-        'accept': 'application/json',
-        'ACCESS-TOKEN': accessToken ?? ""
-      },
-      body: jsonEncode(data),
-    );
-    return response;
+      String endpoint, Map<String, dynamic>? data, String? accessToken) async {
+    if(data==null) {
+      final response = await http.post(
+        Uri.parse('$baseUrl/$endpoint'),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+          'ACCESS-TOKEN': accessToken ?? ""
+        },
+      );
+      return response;
+    } else {
+      final response = await http.post(
+        Uri.parse('$baseUrl/$endpoint'),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+          'ACCESS-TOKEN': accessToken ?? ""
+        },
+        body: jsonEncode(data),
+      );
+      return response;
+    }
   }
 
   Future<http.Response> postRawRequest(

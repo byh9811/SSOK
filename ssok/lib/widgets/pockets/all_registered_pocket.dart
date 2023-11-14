@@ -79,6 +79,12 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
         ),
         actions: <Widget>[
           TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("취소"),
+          ),
+          TextButton(
             onPressed: () async {
               // Navigator.pop(context);
               // _isCheckedChanges = !_isCheckedChanges;
@@ -93,12 +99,6 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
               }
             },
             child: Text("확인 "),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("취소"),
           ),
         ],
       ),

@@ -22,7 +22,9 @@ import 'package:ssok/widgets/frequents/main_button.dart';
 import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 class BusinessCardSelfCreatePage extends StatefulWidget {
-  const BusinessCardSelfCreatePage({super.key});
+
+  final String? apiUrl;
+  const BusinessCardSelfCreatePage({super.key, String? this.apiUrl});
 
   @override
   State<BusinessCardSelfCreatePage> createState() =>
@@ -62,6 +64,7 @@ class _BusinessCardSelfCreatePageState
     false,
   ];
   late ApiService apiService = ApiService();
+  String apiUrl = 'namecard-service/';
 
   void isCheckedChange() {
     int temp = currentOffsetIndex;
@@ -148,7 +151,7 @@ class _BusinessCardSelfCreatePageState
     };
 
     final response = await apiService.postRequestWithFile(
-        'namecard-service/',
+        apiUrl,
         "namecardCreateRequest",
         jsonEncode(namecardCreateRequest),
         TokenManager().accessToken,
@@ -186,6 +189,27 @@ class _BusinessCardSelfCreatePageState
     super.initState();
     apiService = ApiService();
     globalKey = GlobalKey();
+
+    Future.delayed(Duration.zero, ()
+    {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (ModalRoute
+            .of(context)
+            ?.settings
+            .arguments != null) {
+          apiUrl = ModalRoute
+              .of(context)!
+              .settings
+              .arguments as String;
+        } else {
+          apiUrl = 'namecard-service/'; // 기본값 설정
+        }
+        print("===================================");
+        print(apiUrl);
+      });
+    });
+
+
   }
 
   @override

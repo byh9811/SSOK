@@ -15,7 +15,10 @@ import '../../http/http.dart';
 import '../../http/token_manager.dart';
 
 class BusinessCardCameraCreatePage extends StatefulWidget {
-  const BusinessCardCameraCreatePage({super.key});
+
+  final String? apiUrl;
+
+  const BusinessCardCameraCreatePage({super.key, String? this.apiUrl});
 
   @override
   State<BusinessCardCameraCreatePage> createState() =>
@@ -27,6 +30,7 @@ class _BusinessCardCameraCreatePageState
   ImageAndNamecardData? args;
   late XFile image;
   Map<String, dynamic> businessCardInfo = {};
+  String? apiUrl = 'namecard-service/';
 
   ApiService apiService = ApiService();
 
@@ -54,7 +58,7 @@ class _BusinessCardCameraCreatePageState
       };
       var bytes = await File(image.path).readAsBytes();
       final response = await apiService.postRequestWithFile(
-          'namecard-service/',
+          args!.apiUrl,
           'namecardCreateRequest',
           jsonEncode(requestData),
           TokenManager().accessToken,

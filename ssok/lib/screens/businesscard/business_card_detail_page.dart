@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/modals/business_memo_modal.dart';
@@ -379,13 +380,23 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
     }
   }
 
-  // _launchURL 함수는 주어진 URL을 엽니다.
-  void _launchURL(Uri url) async {
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  // // _launchURL 함수는 주어진 URL을 엽니다.
+  // void _launchURL(Uri url) async {
+  //   if (await canLaunchUrl(url)) {
+  //     await launchUrl(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
+
+  void copyToClipboard(Uri url) {
+    Clipboard.setData(ClipboardData(text: url.toString())).then((_) {
+      // 클립보드에 복사가 성공적으로 완료되었을 때의 처리
+      // 예를 들어 사용자에게 알림을 표시할 수 있습니다.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('URL이 클립보드에 복사되었습니다: $url')),
+      );
+    });
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
@@ -422,9 +433,9 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
               onPressed: () {
                 Uri uri = Uri.parse(
                     "https://${nameCardBody.nameCardWebsite}");
-                _launchURL(uri);
+                copyToClipboard(uri);
               },
-              icon: Icon(Icons.home_repair_service_rounded),
+              icon: Icon(Icons.content_copy),
             ),
           )
         ]),

@@ -17,12 +17,16 @@ import '../content_box.dart';
 class ImageAndNamecardData {
   final XFile image;
   final RecognizedNamecard data;
+  final String apiUrl;
 
-  ImageAndNamecardData({required this.image, required this.data});
+  ImageAndNamecardData(
+      {required this.image, required this.data, required this.apiUrl});
 }
 
 class BusinessCreateModal extends StatefulWidget {
-  const BusinessCreateModal({super.key});
+  final String? apiUrl;
+
+  const BusinessCreateModal({super.key, this.apiUrl});
 
   @override
   State<BusinessCreateModal> createState() => _BusinessCreateModalState();
@@ -32,6 +36,7 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
   ApiService apiService = ApiService();
   final picker = ImagePicker();
   late Map<String, Object?> jsonString = {};
+  late String apiUrl;
   // late XFile? pickedImage;
 
   Future<XFile?> pickAndCropImageByCamera() async {
@@ -107,6 +112,14 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    apiUrl = widget.apiUrl ?? "namecard-service/";
+    print("url입니다.............");
+    print(apiUrl);
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -160,8 +173,8 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                     print("data:$data");
                     Navigator.of(context).pushReplacementNamed(
                       '/businesscard/camera/create',
-                      arguments:
-                          ImageAndNamecardData(image: cuttedImage!, data: data),
+                      arguments: ImageAndNamecardData(
+                          image: cuttedImage!, data: data, apiUrl: apiUrl),
                     );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -184,8 +197,8 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                     print("data:$data");
                     Navigator.of(context).pushReplacementNamed(
                       '/businesscard/camera/create',
-                      arguments:
-                          ImageAndNamecardData(image: cuttedImage!, data: data),
+                      arguments: ImageAndNamecardData(
+                          image: cuttedImage!, data: data, apiUrl: apiUrl),
                     );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -201,8 +214,9 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                 title: "직접 생성",
                 icon: Icons.palette,
                 ontap: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed('/businesscard/self/create');
+                  Navigator.of(context).pushReplacementNamed(
+                      '/businesscard/self/create',
+                      arguments: apiUrl);
                 },
               ),
             ],

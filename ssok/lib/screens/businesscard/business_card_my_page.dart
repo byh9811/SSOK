@@ -5,6 +5,7 @@ import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/businesscards/childrens/content_by_card.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
+import 'package:ssok/widgets/modals/business_create_modal.dart';
 
 class BusinessCardMyPage extends StatefulWidget {
   const BusinessCardMyPage({super.key});
@@ -52,6 +53,11 @@ class _BusinessCardMyPage extends State<BusinessCardMyPage> {
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    String namecardSeqString = mycardInfo["namecardSeq"].toString();
+
+
+    String updateApiUrl = "namecard-service/update/$namecardSeqString";
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -84,7 +90,19 @@ class _BusinessCardMyPage extends State<BusinessCardMyPage> {
               ),
               Align(
                 alignment: Alignment.center,
-                child: updateButton("명함 갱신", () {}, context),
+                child: updateButton("명함 갱신", () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        child: BusinessCreateModal(apiUrl: updateApiUrl),
+                      );
+                    },
+                  );
+                }, context),
               ),
               Align(
                 alignment: Alignment.centerRight,

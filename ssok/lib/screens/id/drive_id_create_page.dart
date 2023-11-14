@@ -167,6 +167,8 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -344,33 +346,29 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
                             });
                           },
                         ),
-                        Row(children: [
-                          Expanded(
-                            child: ButtonTheme(
-                                height: 50.0,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      PageRouteBuilder(
-                                        opaque: false, // 배경이 투명해야 함을 나타냅니다
-                                        pageBuilder:
-                                            (BuildContext context, _, __) {
-                                          return TransferLoadingPage();
-                                        },
-                                      ),
-                                    );
-                                    register();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blueAccent),
-                                  child: Icon(
-                                    Icons.accessibility,
-                                    color: Colors.white,
-                                    size: 35.0,
-                                  ),
-                                )),
-                          )
-                        ]),
+                        SizedBox(height: screenHeight * 0.03),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                pageBuilder: (BuildContext context, _, __) {
+                                  return TransferLoadingPage();
+                                },
+                              ),
+                            );
+                            register();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            fixedSize:
+                                Size(screenWidth * 0.8, screenHeight * 0.06),
+                          ),
+                          child: Text(
+                            "등록",
+                            style: TextStyle(fontSize: 19),
+                          ),
+                        ),
                       ],
                     ),
                   )),

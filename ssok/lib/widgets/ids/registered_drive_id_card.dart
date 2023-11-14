@@ -78,7 +78,6 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
     }
   }
 
-
   @override
   void dispose() {
     _animationController.dispose();
@@ -95,16 +94,9 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     bool isFrontVisible = _animation.value < 3.14 / 2;
-
 
     return Transform(
       transform: Matrix4.identity()
@@ -112,70 +104,65 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
         ..rotateY(_animation.value), // Y축을 중심으로 회전
       alignment: FractionalOffset.center,
       child: isFrontVisible
-      ? _buildFrontContent(context)
-      : Transform(
-          transform: Matrix4.identity()..rotateY(3.14159), // 180도 추가 회전
-          alignment: FractionalOffset.center,
-          child: _buildBackContent(context))
-      ,
+          ? _buildFrontContent(context)
+          : Transform(
+              transform: Matrix4.identity()..rotateY(3.14159), // 180도 추가 회전
+              alignment: FractionalOffset.center,
+              child: _buildBackContent(context)),
     );
   }
 
-  Widget _buildFrontContent(BuildContext context){
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+  Widget _buildFrontContent(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: EdgeInsets.only(bottom:screenHeight*0.01),
+      padding: EdgeInsets.only(bottom: screenHeight * 0.01),
       child: contentBox(
         context,
         Column(
           children: [
             Expanded(
-                child: Container(width: screenWidth,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/license_card_color.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
+                child: Container(
+              width: screenWidth,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/license_card_color.png'),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Image.asset(
+                      'assets/logo.png',
+                      height: 45,
+                      color: Colors.white54,
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: Image.asset(
-                          'assets/logo.png',
-                          height: 45,
-                          color: Colors.white54,
+                        child: Text(
+                          "운전면허증",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w500),
                         ),
                       ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              "운전면허증",
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                )),
-            Container(height: screenHeight * 0.19,
+                ],
+              ),
+            )),
+            Container(
+              height: screenHeight * 0.19,
               width: screenWidth,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -186,12 +173,11 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
               child: Padding(
                 padding: EdgeInsets.only(
                     left: screenWidth * 0.03, top: screenHeight * 0.01),
-
-
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     idInfoText(context, "이름", widget.license!.licenseName),
+                    SizedBox(height: screenHeight * 0.01),
                     idInfoText(
                         context, "주민번호", widget.license!.licensePersonalNumber),
                     SizedBox(height: screenHeight * 0.01),
@@ -202,14 +188,15 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
                           onPressed: _toggleAnimation,
                           child: Text(
                             "자세히",
-                            style: TextStyle(fontSize: 20, color: Colors.grey),
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
                           ),
                         ),
                       ),
                     )
                   ],
                 ),
-              ),)
+              ),
+            )
           ],
         ),
         0.5,
@@ -217,11 +204,11 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
     );
   }
 
-  Widget _buildBackContent(BuildContext context){
+  Widget _buildBackContent(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         if (_animationController.isCompleted) {
           _animationController.reverse();
         } else {
@@ -229,10 +216,11 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
         }
       },
       child: Padding(
-        padding: EdgeInsets.only(bottom:screenHeight*0.01),
+        padding: EdgeInsets.only(bottom: screenHeight * 0.01),
         child: contentBox(
           context,
-          Column( // Column 위젯을 이용하여 Expanded를 직접적인 자식으로 사용
+          Column(
+            // Column 위젯을 이용하여 Expanded를 직접적인 자식으로 사용
             children: [
               Expanded(
                 child: Container(
@@ -271,7 +259,6 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
     );
   }
 
-
   Widget _driveIdContent(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -303,7 +290,6 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
               _buildRotatedText('$licenseNumber', 25),
             ],
           ),
-
           Column(
             children: [
               _buildRotatedText('$licensePersonalNumber', 20),
@@ -334,6 +320,3 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
     );
   }
 }
-
-
-

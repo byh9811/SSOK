@@ -8,14 +8,13 @@ class BusineessCardMyHistoryPage extends StatefulWidget {
   const BusineessCardMyHistoryPage({Key? key}) : super(key: key);
 
   @override
-  State<BusineessCardMyHistoryPage> createState() => _BusineessCardMyHistoryPage();
+  State<BusineessCardMyHistoryPage> createState() =>
+      _BusineessCardMyHistoryPage();
 }
 
 class _BusineessCardMyHistoryPage extends State<BusineessCardMyHistoryPage> {
-  
   @override
   Widget build(BuildContext context) {
-
     final args = ModalRoute.of(context)!.settings.arguments as int;
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -38,25 +37,28 @@ class _BusineessCardMyHistoryPage extends State<BusineessCardMyHistoryPage> {
           color: Colors.black, // 원하는 색상으로 변경
         ),
       ),
-      body: Column(children: [          Divider(
-            height: 1,
-            color: Colors.black,
-            thickness: 1,
-          ),BusinessCardHistory(namecardSeq: args)]),
+      body: Column(children: [
+        Divider(
+          height: 1,
+          color: Colors.black,
+          thickness: 1,
+        ),
+        BusinessCardHistory(namecardSeq: args)
+      ]),
     );
   }
 }
 
-class BusinessCardHistory extends StatefulWidget{
+class BusinessCardHistory extends StatefulWidget {
   final int namecardSeq;
-  const BusinessCardHistory({Key? key, required this.namecardSeq}) : super(key: key);
+  const BusinessCardHistory({Key? key, required this.namecardSeq})
+      : super(key: key);
 
   @override
   State<BusinessCardHistory> createState() => _BusinessCardHistory(namecardSeq);
 }
 
-class _BusinessCardHistory extends State<BusinessCardHistory>{
-
+class _BusinessCardHistory extends State<BusinessCardHistory> {
   final int namecardSeq;
   _BusinessCardHistory(this.namecardSeq);
 
@@ -64,7 +66,7 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
 
   late List<dynamic> imageList;
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -72,10 +74,12 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
     getHistory();
   }
 
-  void getHistory()async{
-    final response = await apiService.getRequest("namecard-service/my/timeline/${namecardSeq}", TokenManager().accessToken);
+  void getHistory() async {
+    final response = await apiService.getRequest(
+        "namecard-service/my/timeline/${namecardSeq}",
+        TokenManager().accessToken);
     final jsonData = jsonDecode(response.body);
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       setState(() {
         imageList = jsonData["response"];
       });
@@ -89,83 +93,86 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return SizedBox(
-      height: screenHeight * 0.9,
+      height: screenHeight * 0.8,
       child: ListView.builder(
         itemCount: imageList.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: screenWidth *0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children:[
-                  Stack(
-                  alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(
+                vertical: screenWidth * 0,
+              ),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    if(imageList.length==1)Container(
-                      width:100,
-                      height:230,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/1.PNG'),
-                          fit: BoxFit.cover,
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        if (imageList.length == 1)
+                          Container(
+                            width: 100,
+                            height: 230,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/1.PNG'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        if (imageList.length != 1 && index == 0)
+                          Container(
+                            width: 100,
+                            height: 230,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/2.PNG'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        if (imageList.length >= 3 &&
+                            index != 0 &&
+                            index != imageList.length - 1)
+                          Container(
+                            width: 100,
+                            height: 230,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/3.PNG'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        if (index != 0 && index == imageList.length - 1)
+                          Container(
+                            width: 100,
+                            height: 230,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/4.PNG'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        Text(
+                          imageList[index]["date"],
                         ),
-                      ),
+                      ],
                     ),
-                    if(imageList.length!=1 && index==0)Container(
-                      width:100,
-                      height:230,
+                    Container(
                       decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/2.PNG'),
-                          fit: BoxFit.cover,
-                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2), // 그림자 색상과 투명도
+                            spreadRadius: 5, // 그림자 확산 정도
+                            blurRadius: 3, // 그림자 흐림 정도
+                            offset: Offset(3, 5), // 그림자의 위치 (가로, 세로)
+                          ),
+                        ],
                       ),
-                    ),
-                    if(imageList.length>=3 && index!=0 && index!=imageList.length-1)Container(
-                      width:100,
-                      height:230,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/3.PNG'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    if(index!=0 && index==imageList.length-1)Container(
-                      width:100,
-                      height:230,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/4.PNG'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-
-                    Text(
-                      imageList[index]["date"],
-                    ),
-                  ],
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2), // 그림자 색상과 투명도
-                        spreadRadius: 5, // 그림자 확산 정도
-                        blurRadius: 3, // 그림자 흐림 정도
-                        offset: Offset(3, 5), // 그림자의 위치 (가로, 세로)
-                      ),
-                    ],                    
-                  ),
-                  child:
-                    Image.network(imageList[index]["imgUrl"] ?? '',width: screenWidth*0.6, height: screenHeight*0.2),
-                )
-              ]
-            )
-          );
+                      child: Image.network(imageList[index]["imgUrl"] ?? '',
+                          width: screenWidth * 0.6, height: screenHeight * 0.2),
+                    )
+                  ]));
         },
       ),
     );

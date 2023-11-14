@@ -121,6 +121,8 @@ class _IdCreatePageState extends State<IdCreatePage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -232,33 +234,29 @@ class _IdCreatePageState extends State<IdCreatePage> {
                             });
                           },
                         ),
-                        Row(children: [
-                          Expanded(
-                            child: ButtonTheme(
-                              height: 50.0,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    PageRouteBuilder(
-                                      opaque: false, // 배경이 투명해야 함을 나타냅니다
-                                      pageBuilder:
-                                          (BuildContext context, _, __) {
-                                        return TransferLoadingPage();
-                                      },
-                                    ),
-                                  );
-                                  register();
+                        SizedBox(height: screenHeight * 0.03),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                pageBuilder: (BuildContext context, _, __) {
+                                  return TransferLoadingPage();
                                 },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blueAccent),
-                                child: Text(
-                                  "등록",
-                                  style: TextStyle(fontSize: 18),
-                                ),
                               ),
-                            ),
-                          )
-                        ]),
+                            );
+                            register();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            fixedSize:
+                                Size(screenWidth * 0.8, screenHeight * 0.06),
+                          ),
+                          child: Text(
+                            "등록",
+                            style: TextStyle(fontSize: 19),
+                          ),
+                        ),
                       ],
                     ),
                   )),

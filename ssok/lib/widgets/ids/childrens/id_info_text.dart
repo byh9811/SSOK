@@ -5,7 +5,10 @@ Widget idInfoText(context, String title, String content) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(title),
+      Text(
+        title,
+        style: TextStyle(fontSize: 12),
+      ),
       Padding(
         padding: EdgeInsets.only(left: screenWidth * 0.01, top: 4.0),
         child: Text(

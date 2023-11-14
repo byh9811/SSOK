@@ -97,11 +97,9 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
       child: isFrontVisible
           ? _buildFrontContent(context)
           : Transform(
-            transform: Matrix4.identity()..rotateY(3.14159), // 180도 추가 회전
-            alignment: FractionalOffset.center,
-            child: _buildBackContent(context))
-      ,
-
+              transform: Matrix4.identity()..rotateY(3.14159), // 180도 추가 회전
+              alignment: FractionalOffset.center,
+              child: _buildBackContent(context)),
     );
   }
 
@@ -178,6 +176,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
                         "주민번호",
                         widget
                             .registrationCard!.registrationCardPersonalNumber),
+                    SizedBox(height: screenHeight * 0.01),
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomRight,
@@ -185,7 +184,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
                           onPressed: _toggleAnimation,
                           child: Text(
                             "자세히",
-                            style: TextStyle(fontSize: 20, color: Colors.grey),
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
                           ),
                         ),
                       ),
@@ -201,8 +200,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     );
   }
 
-  Widget _buildBackContent(BuildContext context){
-
+  Widget _buildBackContent(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
@@ -217,7 +215,8 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
         padding: EdgeInsets.only(bottom: screenHeight * 0.01),
         child: contentBox(
           context,
-          Column( // Column 위젯을 이용하여 Expanded를 직접적인 자식으로 사용
+          Column(
+            // Column 위젯을 이용하여 Expanded를 직접적인 자식으로 사용
             children: [
               Expanded(
                 child: Container(
@@ -255,8 +254,6 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
       ),
     );
   }
-
-
 
   Widget _driveIdContent(BuildContext context) {
     return Container(
@@ -305,6 +302,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
       ),
     );
   }
+
   Widget _buildRotatedTextWithWrap(String text, double fontSize) {
     List<String> lines = _splitTextIntoLines(text, 10); // 예: 10글자로 나누기
 

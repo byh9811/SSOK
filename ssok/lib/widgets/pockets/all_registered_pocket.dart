@@ -154,75 +154,95 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Column(children: [
-      // SizedBox(height: screenHeight * 0.03),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            width: 108,
-          ),
-          Row(children: [
-            Text(
-              "잔돈 저금하기",
-              style: TextStyle(fontSize: 15),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              width: 108,
             ),
-            Switch(
-              value: _isCheckedChanges,
-              onChanged: (value) async {
-                if (await switchPocketIsChangeSaving()) {
-                  setState(() {
-                    _isCheckedChanges = value;
-                  });
-                }
-              },
-            )
-          ]),
-        ],
-      ),
-      MyAccount(),
-      SizedBox(height: screenHeight * 0.02),
-      MyPocket(
-        onTap: () {
-          Navigator.of(context).pushNamed('/pocket/history/list');
-        },
-      ),
-      SizedBox(height: screenHeight * 0.03),
-      Divider(
-        height: 1,
-        indent: screenWidth * 0.1,
-        endIndent: screenWidth * 0.1,
-        color: Color(0xFFB2B2B2),
-      ),
-      SizedBox(height: screenHeight * 0.02),
-      Image.asset(
-        "assets/level_number${level}.png",
-        height: 100,
-      ),
-      // SizedBox(height: screenHeight * 0.02),
-      // Text(name, style: TextStyle(fontSize: 30)),
-      Image.asset(
-        "assets/level${level}.png",
-        height: 180,
-      ),
-      SizedBox(height: screenHeight * 0.02),
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text("EXP ", style: TextStyle(fontSize: 18)),
-        SizedBox(
-            width: 200,
-            child: LinearProgressIndicator(
-              value: exp, // 진행 상태를 나타내는 값
-              minHeight: 20, // 프로그레스 바의 높이
-              backgroundColor: Colors.grey[300], // 배경 색상
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue), // 진행 바 색상
-            )),
-        // Icon(
-        //   Icons.help_center,
-        //   color: Colors.blue,
-        // ),
-        Text("  ${((exp * 100).toInt()).toString()}%",
-            style: TextStyle(fontSize: 18)),
-      ]),
-    ]);
+            Row(children: [
+              Text(
+                "잔돈 저금하기",
+                style: TextStyle(fontSize: 15),
+              ),
+              Switch(
+                value: _isCheckedChanges,
+                onChanged: (value) async {
+                  if (await switchPocketIsChangeSaving()) {
+                    setState(() {
+                      _isCheckedChanges = value;
+                    });
+                  }
+                },
+              )
+            ]),
+          ],
+        ),
+        MyAccount(),
+        SizedBox(height: screenHeight * 0.02),
+        MyPocket(
+          onTap: () {
+            Navigator.of(context).pushNamed('/pocket/history/list');
+          },
+        ),
+        SizedBox(height: screenHeight * 0.03),
+        Divider(
+          height: 1,
+          indent: screenWidth * 0.1,
+          endIndent: screenWidth * 0.1,
+          color: Color(0xFFB2B2B2),
+        ),
+        // SizedBox(height: screenHeight * 0.02),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Image.asset(
+                "assets/level_number${level}.png",
+                height: 57,
+              ),
+              SizedBox(height: screenHeight * 0.015),
+              // Text(name, style: TextStyle(fontSize: 30)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/level${level}.png",
+                    height: 180,
+                  ),
+                  Icon(Icons.info, color: Colors.grey),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("EXP ", style: TextStyle(fontSize: 18)),
+                  SizedBox(
+                      width: 200,
+                      child: LinearProgressIndicator(
+                        value: exp, // 진행 상태를 나타내는 값
+                        minHeight: 20, // 프로그레스 바의 높이
+                        backgroundColor: Colors.grey[300], // 배경 색상
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.blue), // 진행 바 색상
+                      )),
+                  // Icon(
+                  //   Icons.help_center,
+                  //   color: Colors.blue,
+                  // ),
+                  Text("  ${((exp * 100).toInt()).toString()}%",
+                      style: TextStyle(fontSize: 18)),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.04),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -22,7 +22,6 @@ class RegisteredIdCard extends StatefulWidget {
 
 class _RegisteredIdCardState extends State<RegisteredIdCard>
     with SingleTickerProviderStateMixin {
-
   late AnimationController _animationController;
   late Animation<double> _animation;
 
@@ -59,7 +58,8 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
 
       setState(() {
         registrationCardName = tempRes['registrationCardName'];
-        registrationCardPersonalNumber = tempRes['registrationCardPersonalNumber'];
+        registrationCardPersonalNumber =
+            tempRes['registrationCardPersonalNumber'];
         registrationCardAddress = tempRes['registrationCardAddress'];
         registrationCardIssueDate = tempRes['registrationCardIssueDate'];
         registrationCardAuthority = tempRes['registrationCardAuthority'];
@@ -82,14 +82,12 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     bool isFrontVisible = _animation.value < 3.14 / 2;
-
 
     return Transform(
       transform: Matrix4.identity()
@@ -103,20 +101,15 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
             alignment: FractionalOffset.center,
             child: _buildBackContent(context))
       ,
+
     );
   }
 
-  Widget _buildFrontContent(BuildContext context){
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+  Widget _buildFrontContent(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: EdgeInsets.only(bottom:screenHeight*0.01),
+      padding: EdgeInsets.only(bottom: screenHeight * 0.01),
       child: contentBox(
         context,
         Column(
@@ -177,9 +170,14 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    idInfoText(context, "이름", widget.registrationCard!.registrationCardName),
+                    idInfoText(context, "이름",
+                        widget.registrationCard!.registrationCardName),
                     SizedBox(height: screenHeight * 0.01),
-                    idInfoText(context, "주민번호", widget.registrationCard!.registrationCardPersonalNumber),
+                    idInfoText(
+                        context,
+                        "주민번호",
+                        widget
+                            .registrationCard!.registrationCardPersonalNumber),
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomRight,
@@ -204,10 +202,11 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
   }
 
   Widget _buildBackContent(BuildContext context){
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         if (_animationController.isCompleted) {
           _animationController.reverse();
         } else {
@@ -215,7 +214,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
         }
       },
       child: Padding(
-        padding: EdgeInsets.only(bottom:screenHeight*0.01),
+        padding: EdgeInsets.only(bottom: screenHeight * 0.01),
         child: contentBox(
           context,
           Column( // Column 위젯을 이용하여 Expanded를 직접적인 자식으로 사용
@@ -280,7 +279,6 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
               _buildRotatedTextWithWrap('$registrationCardAddress', 15),
             ],
           ),
-
           Column(
             children: [
               _buildRotatedText('$registrationCardPersonalNumber', 18),
@@ -307,7 +305,6 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
       ),
     );
   }
-
   Widget _buildRotatedTextWithWrap(String text, double fontSize) {
     List<String> lines = _splitTextIntoLines(text, 10); // 예: 10글자로 나누기
 
@@ -326,5 +323,4 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     }
     return lines;
   }
-
 }

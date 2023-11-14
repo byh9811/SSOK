@@ -68,10 +68,13 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
     return Column(
       children: [
         SizedBox(height: screenHeight * 0.15),
-        Text(widget.creditCard.cardName),
-        SizedBox(height: screenHeight * 0.1),
+        Text(
+          widget.creditCard.cardName,
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: screenHeight * 0.09),
         Container(
-          color: Colors.amber,
+          // color: Colors.amber,
           alignment: Alignment.center,
           child: MyCreditCard(
               vertical: true,
@@ -95,6 +98,9 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
                           "cardNum": widget.creditCard.cardNum
                         });
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF00ADEF),
+                  ),
                   child: Text("결제")),
             ),
             Padding(
@@ -107,6 +113,9 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
                           "cardNum": widget.creditCard.cardNum
                         });
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF00ADEF),
+                  ),
                   child: Text("내역")),
             ),
           ],

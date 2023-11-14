@@ -167,7 +167,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
                         TextField(
                           controller: _nameController,
                           decoration: InputDecoration(labelText: '이름'),
-                          keyboardType: TextInputType.name,
+                          keyboardType: TextInputType.text,
                           onChanged: (value) {
                             setState(() {
                               registrationCardName = value.trim();
@@ -191,7 +191,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
                         TextField(
                           controller: _addressController,
                           decoration: InputDecoration(labelText: '주소'),
-                          keyboardType: TextInputType.streetAddress,
+                          keyboardType: TextInputType.text,
                           onChanged: (value) {
                             setState(() {
                               registrationCardAddress = value.trim();
@@ -203,7 +203,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
                         TextField(
                           controller: _issueDateController,
                           decoration: InputDecoration(labelText: '발급일자'),
-                          keyboardType: TextInputType.datetime,
+                          keyboardType: TextInputType.text,
                           onChanged: (value) {
                             registrationCardIssueDate = value.trim();
                             checkRegistrationCardIssueDate =

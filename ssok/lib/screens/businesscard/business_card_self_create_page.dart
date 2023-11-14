@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
+import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/screens/main_page.dart';
 
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_down.dart';
@@ -17,6 +19,7 @@ import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_left.da
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_right.dart';
 import 'package:ssok/widgets/businesscards/childrens/keyboard_controller_up.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 class BusinessCardSelfCreatePage extends StatefulWidget {
   const BusinessCardSelfCreatePage({super.key});
@@ -156,9 +159,17 @@ class _BusinessCardSelfCreatePageState
     print(jsonData['success'].runtimeType);
     if (jsonData['success']) {
       print(jsonData);
-      showSnackbar("명함이 생성되었습니다.");
-      Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+      // ignore: use_build_context_synchronously
+      showSuccessDialog(context, "명함", "명함이 생성되었습니다", () {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+      });
     } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("명함생성 실패"),
+      ));
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
       throw Exception('Failed to load');
     }
   }
@@ -439,6 +450,15 @@ class _BusinessCardSelfCreatePageState
                               actions: [
                                 TextButton(
                                   onPressed: () async {
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                        pageBuilder:
+                                            (BuildContext context, _, __) {
+                                          return TransferLoadingPage();
+                                        },
+                                      ),
+                                    );
                                     Uint8List bytes = await capturePng();
                                     createBusinessCard(bytes);
                                   },
@@ -526,6 +546,24 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
     });
   }
 
+  int _currentPage = 0;
+
+  final CarouselController _carouselController = CarouselController();
+  List<Widget> templates = [
+    Image.asset(
+      'assets/business_card_templete1.png',
+      fit: BoxFit.cover,
+    ),
+    Image.asset(
+      'assets/business_card_templete2.png',
+      fit: BoxFit.cover,
+    ),
+    Image.asset(
+      'assets/business_card_templete3.png',
+      fit: BoxFit.cover,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -564,9 +602,14 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: _currentPage == 0
+                  ? null
+                  : () {
+                      _carouselController.previousPage();
+                    },
               icon: Icon(
                 Icons.chevron_left,
+                color: _currentPage == 0 ? Colors.grey : Colors.black,
                 size: 38,
               ),
             ),
@@ -577,7 +620,27 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                   Container(
                     width: screenWidth * 0.65,
                     height: screenHeight * 0.18,
-                    color: Colors.amber,
+                    child: CarouselSlider(
+                      carouselController: _carouselController,
+                      options: CarouselOptions(
+                        enableInfiniteScroll: false,
+                        height: screenHeight * 0.18,
+                        aspectRatio: 5 / 3,
+                        viewportFraction: 1.0,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentPage = index;
+                          });
+                        },
+                      ),
+                      items: templates.map((template) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return template;
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
                   DraggableText(
                     name: widget.name,
@@ -664,9 +727,16 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: _currentPage == templates.length - 1
+                  ? null
+                  : () {
+                      _carouselController.nextPage();
+                    },
               icon: Icon(
                 Icons.chevron_right,
+                color: _currentPage == templates.length - 1
+                    ? Colors.grey
+                    : Colors.black,
                 size: 38,
               ),
             ),
@@ -804,7 +874,10 @@ class DraggableTextState extends State<DraggableText> {
       left: widget.offset.dx,
       top: widget.offset.dy,
       child: GestureDetector(
-        child: Text(widget.name),
+        child: Text(
+          widget.name,
+          style: TextStyle(fontSize: 15),
+        ),
         onPanUpdate: (details) {
           final newOffset = Offset(
             (widget.offset.dx + details.delta.dx).clamp(0, maxWidth),

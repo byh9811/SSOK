@@ -73,6 +73,9 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
           registrationCardIssueDate: data["registrationCardIssueDate"],
           registrationCardAuthority: data["registrationCardAuthority"]);
     } else {
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text("OCR 인식 실패"),
+      // ));
       throw Exception('Failed to load');
     }
   }
@@ -89,9 +92,23 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
         Column(
           children: [
             Expanded(
-              child: Text(
-                "등록된 주민등록증이 없습니다.",
-                style: TextStyle(color: Color(0xFF989898)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.contact_mail,
+                    size: 70,
+                    color: Color.fromARGB(255, 206, 205, 205),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight * 0.02),
+                    child: Text(
+                      "등록된 주민등록증이 없습니다.",
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 206, 205, 205)),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -106,20 +123,28 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
                           await pickAndCropImage();
                           Navigator.of(context).push(
                             PageRouteBuilder(
-                              opaque: false, // 배경이 투명해야 함을 나타냅니다
+                              opaque: false,
                               pageBuilder: (BuildContext context, _, __) {
                                 return TransferLoadingPage();
                               },
                             ),
                           );
-                          final data = await ocrRC();
-                          Navigator.of(context).pop();
-                          print("data:$data");
-                          Navigator.of(context).pushReplacementNamed(
-                            '/id/create',
-                            arguments: ImageAndRegData(
-                                image: pickedImage!, data: data),
-                          );
+                          try {
+                            final data = await ocrRC();
+                            print("data:$data");
+                            Navigator.of(context).pushReplacementNamed(
+                              '/id/create',
+                              arguments: ImageAndRegData(
+                                  image: pickedImage!, data: data),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("OCR 인식 실패"),
+                            ));
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                "/main", (route) => false,
+                                arguments: 0);
+                          }
                         },
                       ),
                     ),

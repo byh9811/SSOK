@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ssok/screens/loading/transfer_loading_page.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 import 'package:ssok/widgets/ids/not_registered_drive_id_card.dart';
 
 import '../../http/http.dart';
@@ -118,9 +119,17 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
           bytes);
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData["success"]) {
+        // ignore: use_build_context_synchronously
+        showSuccessDialog(context, "운전면허증", "등록에 성공했습니다", () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("등록 실패"),
+        ));
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
-      } else {
         throw Exception('Failed to load');
       }
     }

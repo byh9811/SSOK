@@ -80,6 +80,9 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
           licenseIssueDate: data["licenseIssueDate"],
           licenseAuthority: data["licenseAuthority"]);
     } else {
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text("OCR 인식 실패"),
+      // ));
       throw Exception('Failed to load');
     }
   }
@@ -96,9 +99,23 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
         Column(
           children: [
             Expanded(
-              child: Text(
-                "등록된 운전면허증이 없습니다.",
-                style: TextStyle(color: Color(0xFF989898)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.garage,
+                    size: 70,
+                    color: Color.fromARGB(255, 206, 205, 205),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight * 0.02),
+                    child: Text(
+                      "등록된 운전면허증이 없습니다.",
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 206, 205, 205)),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -119,14 +136,22 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
                             ),
                           );
                           await pickAndCropImage();
-                          Navigator.of(context).pop();
                           print("2:$pickedImage");
-                          final data = await ocrLicense();
-                          Navigator.of(context).pushReplacementNamed(
-                            '/drive/id/create',
-                            arguments: ImageAndLicenseData(
-                                image: pickedImage!, data: data),
-                          );
+                          try {
+                            final data = await ocrLicense();
+                            Navigator.of(context).pushReplacementNamed(
+                              '/drive/id/create',
+                              arguments: ImageAndLicenseData(
+                                  image: pickedImage!, data: data),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("OCR 인식 실패"),
+                            ));
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                "/main", (route) => false,
+                                arguments: 0);
+                          }
                         },
                       ),
                     ),

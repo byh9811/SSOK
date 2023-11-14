@@ -45,11 +45,13 @@ class DriveIdCreatePage extends StatefulWidget {
 class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
   ImageAndLicenseData? args;
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _personalNumberController = TextEditingController();
+  final TextEditingController _personalNumberController =
+      TextEditingController();
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
-  final TextEditingController _renewStartDateController = TextEditingController();
+  final TextEditingController _renewStartDateController =
+      TextEditingController();
   final TextEditingController _renewEndDateController = TextEditingController();
   final TextEditingController _conditionController = TextEditingController();
   final TextEditingController _codeController = TextEditingController();
@@ -90,7 +92,6 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
         _numberController.text.isNotEmpty &&
         _renewStartDateController.text.isNotEmpty &&
         _renewEndDateController.text.isNotEmpty &&
-        _conditionController.text.isNotEmpty &&
         _codeController.text.isNotEmpty &&
         _issueDateController.text.isNotEmpty &&
         _authorityController.text.isNotEmpty) {
@@ -116,7 +117,8 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
           bytes);
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData["success"]) {
-        Navigator.of(context).pushReplacementNamed('/main');
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
       } else {
         throw Exception('Failed to load');
       }
@@ -131,23 +133,9 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
 
       // 읽어온 데이터를 출력하거나 다른 초기화 작업을 수행할 수 있습니다.
       if (args != null) {
-
         print("데이터 읽음");
         print(args); // 'value'
         print(args!.data.licenseAddress);
-
-        // licenseName = args!.data.licenseName;
-        // licensePersonalNumber = args!.data.licensePersonalNumber;
-        // licenseType = args!.data.licenseType;
-        // licenseAddress = args!.data.licenseAddress;
-        // licenseNumber = args!.data.licenseNumber;
-        // licenseRenewStartDate = args!.data.licenseRenewStartDate;
-        // licenseRenewEndDate = args!.data.licenseRenewEndDate;
-        // licenseCondition = args!.data.licenseCondition;
-        // licenseCode = args!.data.licenseCode;
-        // licenseIssueDate = args!.data.licenseIssueDate;
-        // licenseAuthority = args!.data.licenseAuthority;
-        // image = args!.image;
 
         _nameController.text = args!.data.licenseName ?? "";
         _personalNumberController.text = args!.data.licensePersonalNumber ?? "";
@@ -165,7 +153,6 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
         print("데이터 못읽음");
       }
     });
-
   }
 
   @override
@@ -211,159 +198,164 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
             ),
             Form(
                 child: Theme(
-                  data: ThemeData(
-                      primaryColor: Colors.grey,
-                      inputDecorationTheme: InputDecorationTheme(
-                          labelStyle: TextStyle(color: Colors.teal, fontSize: 15.0))),
-                  child: Container(
-                      padding: EdgeInsets.all(40.0),
-                      // 키보드가 올라와서 만약 스크린 영역을 차지하는 경우 스크롤이 되도록
-                      // SingleChildScrollView으로 감싸 줌
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            TextField(
-                              controller: _nameController,
-                              decoration: InputDecoration(labelText: '이름'),
-                              keyboardType: TextInputType.name,
-                              onChanged: (value) {
-                                setState(() {
-                                  licenseName = value.trim();
-                                  checkLicenseName =
-                                      licenseName!=null && licenseName!.isNotEmpty;
-                                });
-                              },
-                            ),
-                            TextField(
-                              controller: _personalNumberController,
-                              decoration: InputDecoration(labelText: '주민등록번호'),
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                setState(() {
-                                  licensePersonalNumber = value.trim();
-                                  checkLicensePersonalNumber =
-                                      licensePersonalNumber!=null && licensePersonalNumber!.isNotEmpty;
-                                });
-                              },
-                            ),
-                            TextField(
-                              controller: _typeController,
-                              decoration: InputDecoration(labelText: '타입'),
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                setState(() {
-                                  licenseType = value.trim();
-                                  checkLicenseType =
-                                      licenseType!=null && licenseType!.isNotEmpty;
-                                });
-                              },
-                            ),
-                            TextField(
-                              controller: _addressController,
-                              decoration: InputDecoration(labelText: '주소'),
-                              keyboardType: TextInputType.streetAddress,
-                              onChanged: (value) {
-                                setState(() {
-                                  licenseAddress = value.trim();
-                                  checkLicenseAddress =
-                                      licenseAddress!=null && licenseAddress!.isNotEmpty;
-                                });
-                              },
-                            ),
-                            TextField(
-                              controller: _numberController,
-                              decoration: InputDecoration(labelText: '면허 번호'),
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                licenseNumber = value.trim();
-                                checkLicenseNumber =
-                                    licenseNumber!=null && licenseNumber!.isNotEmpty;
-                              },
-                            ),
-                            TextField(
-                              controller: _renewStartDateController,
-                              decoration: InputDecoration(labelText: '갱신 시작일'),
-                              keyboardType: TextInputType.datetime,
-                              onChanged: (value) {
-                                licenseRenewStartDate = value.trim();
-                                checkLicenseRenewStartDate =
-                                    licenseRenewStartDate!=null && licenseRenewStartDate!.isNotEmpty;
-                              },
-                            ),
-                            TextField(
-                              controller: _renewEndDateController,
-                              decoration: InputDecoration(labelText: '갱신 종료일'),
-                              keyboardType: TextInputType.datetime,
-                              onChanged: (value) {
-                                licenseRenewEndDate = value.trim();
-                                checkLicenseRenewEndDate =
-                                    licenseRenewEndDate!=null && licenseRenewEndDate!.isNotEmpty;
-                              },
-                            ),
-                            TextField(
-                              controller: _conditionController,
-                              decoration: InputDecoration(labelText: '조건'),
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                licenseCondition = value.trim();
-                                checkLicenseCondition =
-                                    licenseCondition!=null && licenseCondition!.isNotEmpty;
-                              },
-                            ),
-                            TextField(
-                              controller: _codeController,
-                              decoration: InputDecoration(labelText: '코드'),
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                licenseCode = value.trim();
-                                checkLicenseCode =
-                                    licenseCode!=null && licenseCode!.isNotEmpty;
-                              },
-                            ),
-                            TextField(
-                              controller: _issueDateController,
-                              decoration: InputDecoration(labelText: '발급일자'),
-                              keyboardType: TextInputType.datetime,
-                              onChanged: (value) {
-                                licenseIssueDate = value.trim();
-                                checkLicenseIssueDate =
-                                    licenseIssueDate!=null && licenseIssueDate!.isNotEmpty;
-                              },
-                            ),
-                            TextField(
-                              controller: _authorityController,
-                              decoration: InputDecoration(labelText: '인증기관'),
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                setState(() {
-                                  licenseAuthority = value.trim();
-                                  checkLicenseAuthority =
-                                      licenseAuthority!=null && licenseAuthority!.isNotEmpty;
-                                });
-                              },
-                            ),
-                            Row(children: [
-                              Expanded(
-                                child: ButtonTheme(
-                                    height: 50.0,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        register();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.blueAccent),
-                                      child: Icon(
-                                        Icons.accessibility,
-                                        color: Colors.white,
-                                        size: 35.0,
-                                      ),
-                                    )),
-                              )
-                            ]),
-                          ],
+              data: ThemeData(
+                  primaryColor: Colors.grey,
+                  inputDecorationTheme: InputDecorationTheme(
+                      labelStyle:
+                          TextStyle(color: Colors.teal, fontSize: 15.0))),
+              child: Container(
+                  padding: EdgeInsets.all(40.0),
+                  // 키보드가 올라와서 만약 스크린 영역을 차지하는 경우 스크롤이 되도록
+                  // SingleChildScrollView으로 감싸 줌
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        TextField(
+                          controller: _nameController,
+                          decoration: InputDecoration(labelText: '이름'),
+                          keyboardType: TextInputType.name,
+                          onChanged: (value) {
+                            setState(() {
+                              licenseName = value.trim();
+                              checkLicenseName = licenseName != null &&
+                                  licenseName!.isNotEmpty;
+                            });
+                          },
                         ),
-                      )),
-                ))
+                        TextField(
+                          controller: _personalNumberController,
+                          decoration: InputDecoration(labelText: '주민등록번호'),
+                          keyboardType: TextInputType.text,
+                          onChanged: (value) {
+                            setState(() {
+                              licensePersonalNumber = value.trim();
+                              checkLicensePersonalNumber =
+                                  licensePersonalNumber != null &&
+                                      licensePersonalNumber!.isNotEmpty;
+                            });
+                          },
+                        ),
+                        TextField(
+                          controller: _typeController,
+                          decoration: InputDecoration(labelText: '타입'),
+                          keyboardType: TextInputType.text,
+                          onChanged: (value) {
+                            setState(() {
+                              licenseType = value.trim();
+                              checkLicenseType = licenseType != null &&
+                                  licenseType!.isNotEmpty;
+                            });
+                          },
+                        ),
+                        TextField(
+                          controller: _addressController,
+                          decoration: InputDecoration(labelText: '주소'),
+                          keyboardType: TextInputType.streetAddress,
+                          onChanged: (value) {
+                            setState(() {
+                              licenseAddress = value.trim();
+                              checkLicenseAddress = licenseAddress != null &&
+                                  licenseAddress!.isNotEmpty;
+                            });
+                          },
+                        ),
+                        TextField(
+                          controller: _numberController,
+                          decoration: InputDecoration(labelText: '면허 번호'),
+                          keyboardType: TextInputType.text,
+                          onChanged: (value) {
+                            licenseNumber = value.trim();
+                            checkLicenseNumber = licenseNumber != null &&
+                                licenseNumber!.isNotEmpty;
+                          },
+                        ),
+                        TextField(
+                          controller: _renewStartDateController,
+                          decoration: InputDecoration(labelText: '갱신 시작일'),
+                          keyboardType: TextInputType.datetime,
+                          onChanged: (value) {
+                            licenseRenewStartDate = value.trim();
+                            checkLicenseRenewStartDate =
+                                licenseRenewStartDate != null &&
+                                    licenseRenewStartDate!.isNotEmpty;
+                          },
+                        ),
+                        TextField(
+                          controller: _renewEndDateController,
+                          decoration: InputDecoration(labelText: '갱신 종료일'),
+                          keyboardType: TextInputType.datetime,
+                          onChanged: (value) {
+                            licenseRenewEndDate = value.trim();
+                            checkLicenseRenewEndDate =
+                                licenseRenewEndDate != null &&
+                                    licenseRenewEndDate!.isNotEmpty;
+                          },
+                        ),
+                        TextField(
+                          controller: _conditionController,
+                          decoration: InputDecoration(labelText: '조건'),
+                          keyboardType: TextInputType.text,
+                          onChanged: (value) {
+                            licenseCondition = value.trim();
+                            checkLicenseCondition = licenseCondition != null &&
+                                licenseCondition!.isNotEmpty;
+                          },
+                        ),
+                        TextField(
+                          controller: _codeController,
+                          decoration: InputDecoration(labelText: '코드'),
+                          keyboardType: TextInputType.text,
+                          onChanged: (value) {
+                            licenseCode = value.trim();
+                            checkLicenseCode =
+                                licenseCode != null && licenseCode!.isNotEmpty;
+                          },
+                        ),
+                        TextField(
+                          controller: _issueDateController,
+                          decoration: InputDecoration(labelText: '발급일자'),
+                          keyboardType: TextInputType.datetime,
+                          onChanged: (value) {
+                            licenseIssueDate = value.trim();
+                            checkLicenseIssueDate = licenseIssueDate != null &&
+                                licenseIssueDate!.isNotEmpty;
+                          },
+                        ),
+                        TextField(
+                          controller: _authorityController,
+                          decoration: InputDecoration(labelText: '인증기관'),
+                          keyboardType: TextInputType.text,
+                          onChanged: (value) {
+                            setState(() {
+                              licenseAuthority = value.trim();
+                              checkLicenseAuthority =
+                                  licenseAuthority != null &&
+                                      licenseAuthority!.isNotEmpty;
+                            });
+                          },
+                        ),
+                        Row(children: [
+                          Expanded(
+                            child: ButtonTheme(
+                                height: 50.0,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    register();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blueAccent),
+                                  child: Icon(
+                                    Icons.accessibility,
+                                    color: Colors.white,
+                                    size: 35.0,
+                                  ),
+                                )),
+                          )
+                        ]),
+                      ],
+                    ),
+                  )),
+            ))
           ],
         ),
       ),

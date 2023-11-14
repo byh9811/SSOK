@@ -22,8 +22,9 @@ class _PocketPocketCreatePageState extends State<PocketPocketCreatePage> {
     createPocket();
   }
 
-  void createPocket()async{
-    final response = await apiService.postRequest('pocket-service/pocket',{}, TokenManager().accessToken);
+  void createPocket() async {
+    final response = await apiService.postRequest(
+        'pocket-service/pocket', {}, TokenManager().accessToken);
     print("pocket 생성");
     print(response.body);
     if (response.statusCode == 200) {
@@ -32,8 +33,7 @@ class _PocketPocketCreatePageState extends State<PocketPocketCreatePage> {
     } else {
       throw Exception('Failed to load');
     }
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,8 @@ class _PocketPocketCreatePageState extends State<PocketPocketCreatePage> {
               color: "0xFF00ADEF",
               title: "메인으로",
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/main');
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil("/main", (route) => false);
               },
             ),
           ],

@@ -23,7 +23,6 @@ class NotRegisteredBusinessCard extends StatefulWidget {
 }
 
 class _NotRegisteredBusinessCardState extends State<NotRegisteredBusinessCard> {
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

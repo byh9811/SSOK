@@ -53,7 +53,8 @@ class _LoginPageState extends State<LoginPage> {
       print(jsonData["response"]["loginId"]);
       print(jsonData["response"]["memberName"]);
       if (state) {
-        Navigator.of(context).pushReplacementNamed('/main');
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false);
       } else {
         Navigator.of(context).pushReplacementNamed('/intro');
       }

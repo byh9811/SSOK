@@ -78,7 +78,8 @@ class _IdCreatePageState extends State<IdCreatePage> {
           bytes);
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData['success']) {
-        Navigator.of(context).pushReplacementNamed('/main');
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
       } else {
         throw Exception('Failed to load');
       }
@@ -96,7 +97,8 @@ class _IdCreatePageState extends State<IdCreatePage> {
         print(args);
 
         _nameController.text = args!.data.registrationCardName ?? "";
-        _personalNumberController.text = args!.data.registrationCardPersonalNumber ?? "";
+        _personalNumberController.text =
+            args!.data.registrationCardPersonalNumber ?? "";
         _addressController.text = args!.data.registrationCardAddress ?? "";
         _issueDateController.text = args!.data.registrationCardIssueDate ?? "";
         _authorityController.text = args!.data.registrationCardAuthority ?? "";
@@ -105,12 +107,10 @@ class _IdCreatePageState extends State<IdCreatePage> {
         print("데이터 못읽음");
       }
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -155,7 +155,8 @@ class _IdCreatePageState extends State<IdCreatePage> {
               data: ThemeData(
                   primaryColor: Colors.grey,
                   inputDecorationTheme: InputDecorationTheme(
-                      labelStyle: TextStyle(color: Colors.teal, fontSize: 15.0))),
+                      labelStyle:
+                          TextStyle(color: Colors.teal, fontSize: 15.0))),
               child: Container(
                   padding: EdgeInsets.all(40.0),
                   // 키보드가 올라와서 만약 스크린 영역을 차지하는 경우 스크롤이 되도록

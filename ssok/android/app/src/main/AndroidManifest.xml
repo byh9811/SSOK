@@ -19,6 +19,7 @@
     <!-- Optional: only required for FILE payloads-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="ssok"
         android:name="${applicationName}"

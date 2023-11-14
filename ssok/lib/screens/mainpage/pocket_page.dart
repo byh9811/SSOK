@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:ssok/screens/loading/basic_loading_page.dart';
 import 'package:ssok/widgets/pockets/all_registered_pocket.dart';
 import 'package:ssok/widgets/pockets/not_registered_pocket.dart';
 import 'package:ssok/widgets/pockets/registered_pocket.dart';
@@ -22,15 +23,18 @@ class _PocketPageState extends State<PocketPage> {
   int? pocketTotalDonate;
   int? pocketTotalPoint;
   bool? pocketIsChangeSaving;
-
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     getUuid();
   }
-void getUuid()async{
-    final response = await apiService.getRequest('member-service/temp?refresh-token=${TokenManager().refreshToken}', TokenManager().accessToken);
+
+  void getUuid() async {
+    final response = await apiService.getRequest(
+        'member-service/temp?refresh-token=${TokenManager().refreshToken}',
+        TokenManager().accessToken);
     print("uuid가져옴");
     print(response.body);
     if (response.statusCode == 200) {
@@ -42,10 +46,12 @@ void getUuid()async{
     } else {
       throw Exception('Failed to load');
     }
-}
+  }
 
-void getSeq()async{
-    final response = await apiService.getRequest('member-service/member/seq?member-uuid=${uuid}', TokenManager().accessToken);
+  void getSeq() async {
+    final response = await apiService.getRequest(
+        'member-service/member/seq?member-uuid=${uuid}',
+        TokenManager().accessToken);
     print("seq가져옴");
     print(response.body);
     if (response.statusCode == 200) {
@@ -57,10 +63,12 @@ void getSeq()async{
     } else {
       throw Exception('Failed to load');
     }
-}
+  }
 
-void getAccountStatus()async{
-    final response = await apiService.getRequest('member-service/member/account?member-seq=${seq}', TokenManager().accessToken);
+  void getAccountStatus() async {
+    final response = await apiService.getRequest(
+        'member-service/member/account?member-seq=${seq}',
+        TokenManager().accessToken);
     print("계좌가져옴");
     print(response.body);
     if (response.statusCode == 200) {
@@ -72,37 +80,56 @@ void getAccountStatus()async{
     } else {
       throw Exception('Failed to load');
     }
-}
+  }
 
-void getPocket()async{
-    final response = await apiService.getRequest('pocket-service/pocket', TokenManager().accessToken);
-    print("pocket_page getPocket()");
-    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-    if (response.statusCode == 200) {
+  void getPocket() async {
+    if (accountNum != null) {
+      final response = await apiService.getRequest(
+          'pocket-service/pocket', TokenManager().accessToken);
+      print("pocket_page getPocket()");
+      final jsonData = jsonDecode("${utf8.decode(response.bodyBytes)}");
       print(jsonDecode(utf8.decode(response.bodyBytes)));
-      setState(() {
-        pocketMoney = jsonData['response']['pocketSaving'];
-        pocketTotalDonate = jsonData['response']['pocketTotalDonate'];
-        pocketTotalPoint = jsonData['response']['pocketTotalPoint'];
-        pocketIsChangeSaving = jsonData['response']['pocketIsChangeSaving'];
-      });
+      if (jsonData['success']) {
+        setState(() {
+          pocketMoney = jsonData['response']['pocketSaving'];
+          pocketTotalDonate = jsonData['response']['pocketTotalDonate'];
+          pocketTotalPoint = jsonData['response']['pocketTotalPoint'];
+          pocketIsChangeSaving = jsonData['response']['pocketIsChangeSaving'];
+          isLoading = false;
+        });
+      } else {
+        print("pocket_page getPocket() 오류 발생");
+        print(jsonDecode(utf8.decode(response.bodyBytes))['error']['message']);
+        setState(() {
+          isLoading = false;
+        });
+        throw Exception('Failed to load');
+      }
     } else {
-      print("pocket_page getPocket() 오류 발생");
-      print(jsonDecode(utf8.decode(response.bodyBytes))['error']['message']);
-      throw Exception('Failed to load');
+      setState(() {
+        isLoading = false;
+      });
     }
-}
+  }
 
   @override
   Widget build(BuildContext context) {
     // return accountNum==null?NotRegisteredPocket():RegisteredPocket();
-    if(accountNum==null){
-      return NotRegisteredPocket();
-    }else if(pocketMoney==null){
-      return RegisteredPocket();
-    }else{
-      return AllRegisteredPocket(pocketTotalDonate: pocketTotalDonate,
-  pocketTotalPoint: pocketTotalPoint, pocketIsChangeSaving: pocketIsChangeSaving,);
+    if (isLoading) {
+      return Center(child: BasicLoadingPage());
+    } else {
+      // 모든 데이터가 로딩된 후에는 해당 화면을 보여줌
+      if (accountNum == null) {
+        return NotRegisteredPocket();
+      } else if (pocketMoney == null) {
+        return RegisteredPocket();
+      } else {
+        return AllRegisteredPocket(
+          pocketTotalDonate: pocketTotalDonate,
+          pocketTotalPoint: pocketTotalPoint,
+          pocketIsChangeSaving: pocketIsChangeSaving,
+        );
+      }
     }
   }
 }

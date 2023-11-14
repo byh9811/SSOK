@@ -17,7 +17,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 2; // 현재 보여주려는 index
+  int? currentIndex; // 현재 보여주려는 index
   bool _isCheckedChanges = false;
   final List<Widget> navPages = [
     // 각 위젯 페이지들
@@ -37,12 +37,31 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      memberName = TokenManager().memberName ?? "회원";
+    Future.delayed(Duration.zero, ()
+    {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (ModalRoute
+            .of(context)
+            ?.settings
+            .arguments != null) {
+          currentIndex = ModalRoute
+              .of(context)!
+              .settings
+              .arguments as int;
+        } else {
+          currentIndex = 2; // 기본값 설정
+        }
+
+        setState(() {
+          memberName = TokenManager().memberName ?? "회원";
+        });
+
+        print(currentIndex);
+      });
     });
   }
 
-  void logOut() async {
+  void userLogOut() async {
     print(TokenManager().loginId);
     print(TokenManager().accessToken);
     final response = await apiService.postRequest(
@@ -50,9 +69,10 @@ class _MainPageState extends State<MainPage> {
         {"memberId": TokenManager().loginId.toString()},
         TokenManager().accessToken);
     print(response.body);
-    // if(response.statusCode==200){
-    Navigator.of(context).pushNamed("/");
-    // }
+    if (response.statusCode == 200) {
+      TokenManager().logout();
+      Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
+    }
   }
 
   @override
@@ -89,7 +109,7 @@ class _MainPageState extends State<MainPage> {
               height: 2.0,
             )),
       ),
-      body: navPages.elementAt(currentIndex),
+      body: navPages.elementAt(currentIndex!),
       endDrawer: SizedBox(
         width: screenWidth * 0.6,
         child: Drawer(
@@ -129,7 +149,7 @@ class _MainPageState extends State<MainPage> {
                                     actions: [
                                       TextButton(
                                         onPressed: () {
-                                          logOut();
+                                          userLogOut();
                                         },
                                         child: const Text('네'),
                                       ),
@@ -155,23 +175,23 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "잔돈 저금 활성화",
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    Switch(
-                      value: _isCheckedChanges,
-                      onChanged: (value) {
-                        setState(() {
-                          _isCheckedChanges = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    "잔돈 저금 활성화",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Switch(
+                    value: _isCheckedChanges,
+                    onChanged: (value) {
+                      setState(() {
+                        _isCheckedChanges = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -179,7 +199,7 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: SizedBox(
         height: 60.0,
         child: BottomNavigationBar(
-          currentIndex: currentIndex, // 현재 보여주는 탭
+          currentIndex: currentIndex!, // 현재 보여주는 탭
           onTap: (newIndex) {
             setState(() {
               // 보여주려는 index 변경

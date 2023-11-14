@@ -32,6 +32,7 @@ class _BusinessUpdateModalState extends State<BusinessUpdateModal> {
       print("변경값 : ${_editableCardInfo[key]}");
     });
   }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -91,16 +92,19 @@ class _BusinessUpdateModalState extends State<BusinessUpdateModal> {
                   title: entry.key,
                   content: entry.value,
                   change: (newValue) {
-                    _updateCardInfo(entry.key, newValue);// 여기에서 newValue를 사용하여 상태를 업데이트합니다.
+                    _updateCardInfo(entry.key,
+                        newValue); // 여기에서 newValue를 사용하여 상태를 업데이트합니다.
                   },
                   addressType: entry.key == '주소' ? true : false),
             SizedBox(height: screenHeight * 0.05),
-
-            MainButton(title: "수정", onPressed: () {
-              widget.onCardInfoChanged(_editableCardInfo);
-              Navigator.of(context).pop();
-            }, color: '',),
-
+            MainButton(
+              title: "수정",
+              onPressed: () {
+                widget.onCardInfoChanged(_editableCardInfo);
+                Navigator.of(context).pop();
+              },
+              color: '0xFF00ADEF',
+            ),
           ],
         ),
       ),
@@ -149,11 +153,10 @@ class _ContentByCardUpdateState extends State<ContentByCardUpdate> {
       if (model != null) {
         final address = model.address ?? '';
 
-          controller.value = TextEditingValue(
-            text: address,
-          );
+        controller.value = TextEditingValue(
+          text: address,
+        );
         widget.change(controller.value.text);
-
       }
     }
 

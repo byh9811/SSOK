@@ -6,7 +6,6 @@ import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/creditcards/childrens/my_credit_card.dart';
 
-
 class CreditCardHistory {
   final String date;
   final List<CreditCardDetail> creditCardDetail;
@@ -74,7 +73,8 @@ class CreditCardHistoryListPage extends StatefulWidget {
   const CreditCardHistoryListPage({super.key});
 
   @override
-  State<CreditCardHistoryListPage> createState() => _CreditCardHistoryListPageState();
+  State<CreditCardHistoryListPage> createState() =>
+      _CreditCardHistoryListPageState();
 }
 
 class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
@@ -82,7 +82,7 @@ class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
   int selectedYear = DateTime.now().year;
 
   ApiService apiService = ApiService();
-  late Map<String, Object?> jsonString={};
+  late Map<String, Object?> jsonString = {};
   late List<CreditCardHistory> creditCardHistories;
 
   @override
@@ -93,8 +93,9 @@ class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
     print(creditCardHistories);
   }
 
-  void getCardHistory()async{
-    final response = await apiService.getRequest('receipt-service/card/history/list', TokenManager().accessToken);
+  void getCardHistory() async {
+    final response = await apiService.getRequest(
+        'receipt-service/card/history/list', TokenManager().accessToken);
     print("카드 전체 내역 가져옴");
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
@@ -109,7 +110,8 @@ class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
 
   @override
   Widget build(BuildContext context) {
-    CreditCardHistory selectedCreditCardHistory = creditCardHistories.firstWhere((history) {
+    CreditCardHistory selectedCreditCardHistory =
+        creditCardHistories.firstWhere((history) {
       final dateParts = history.date.split('-');
       final year = int.parse(dateParts[0]);
       final month = int.parse(dateParts[1]);
@@ -122,41 +124,45 @@ class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
         creditCardDetail: [],
       );
     });
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     var numberFormat = NumberFormat('###,###,###,###');
-    
+
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: true,
-        title: Text(
-          "카드 내역",
-          style: TextStyle(
-            fontSize: 19,
-            color: Colors.black,
+        appBar: AppBar(
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          title: Text(
+            "카드 내역",
+            style: TextStyle(
+              fontSize: 19,
+              color: Colors.black,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.black, // 원하는 색상으로 변경
           ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Colors.black, // 원하는 색상으로 변경
-        ),
-      ),
-      body:Column(
-        children: [
-        SizedBox(height: screenHeight * 0.01),
-        Container(
-          alignment: Alignment.center,
-          child: MyCreditCard(
-            vertical: false,
-            ownerName: args["ownerName"],
-            cardNum: args["cardNum"]
-          ),
-        ),
-        SizedBox(height: screenHeight * 0.02),
-        Column(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(top: screenHeight * 0.01),
+                  child: MyCreditCard(
+                      vertical: false,
+                      ownerName: args["ownerName"],
+                      cardNum: args["cardNum"]),
+                ),
+              ),
+            ),
+            Column(
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.07),
@@ -195,115 +201,122 @@ class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: screenHeight * 0.01, left: screenWidth * 0.01),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: screenHeight * 0.01, left: screenWidth * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
-                            icon: Icon(Icons.arrow_left),
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                            iconSize: 35,
-                            onPressed: () {
-                              if (selectedMonth == 1) {
-                                setState(() {
-                                  selectedYear--;
-                                  selectedMonth = 12;
-                                });
-                              } else {
-                                setState(() {
-                                  selectedMonth--;
-                                });
-                              }
-                            },
-                          ),
-                          Text(
-                            selectedYear != DateTime.now().year
-                                ? "$selectedYear  $selectedMonth월"
-                                : "$selectedMonth월",
-                            style: TextStyle(fontSize: 17),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.arrow_right),
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                            iconSize: 35,
-                            disabledColor: Color(0xFFC9C9C9),
-                            onPressed: selectedYear == DateTime.now().year &&
-                                    selectedMonth == DateTime.now().month
-                                ? null
-                                : () {
-                                    if (selectedMonth == 12) {
-                                      setState(() {
-                                        selectedYear++;
-                                        selectedMonth = 1;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        selectedMonth++;
-                                      });
-                                    }
-                                  },
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.arrow_left),
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                iconSize: 35,
+                                onPressed: () {
+                                  if (selectedMonth == 1) {
+                                    setState(() {
+                                      selectedYear--;
+                                      selectedMonth = 12;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedMonth--;
+                                    });
+                                  }
+                                },
+                              ),
+                              Text(
+                                selectedYear != DateTime.now().year
+                                    ? "$selectedYear  $selectedMonth월"
+                                    : "$selectedMonth월",
+                                style: TextStyle(fontSize: 17),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.arrow_right),
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                iconSize: 35,
+                                disabledColor: Color(0xFFC9C9C9),
+                                onPressed: selectedYear ==
+                                            DateTime.now().year &&
+                                        selectedMonth == DateTime.now().month
+                                    ? null
+                                    : () {
+                                        if (selectedMonth == 12) {
+                                          setState(() {
+                                            selectedYear++;
+                                            selectedMonth = 1;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            selectedMonth++;
+                                          });
+                                        }
+                                      },
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                Divider(height: 1, color: Colors.black, thickness: 1),
-                SizedBox(height: screenHeight * 0.01),
-                SizedBox(
-                  height: screenHeight * 0.57,
-                  child: ListView.builder(
-                    itemCount:
-                        selectedCreditCardHistory.creditCardDetail.length,
-                    itemBuilder: (context, index) {
-                      CreditCardDetail detailData =
-                          selectedCreditCardHistory.creditCardDetail[index];
-                      String? receiptDetailDocumentId = detailData.receiptDetailDocumentId;
-                      String approvedDate = detailData.approvedDate;
-                      int payAmt =detailData.payAmt;
-                      String? shopName = detailData.shopName;
+                    ),
+                    Divider(height: 1, color: Colors.black, thickness: 1),
+                    SizedBox(height: screenHeight * 0.01),
+                    SizedBox(
+                      height: screenHeight * 0.51,
+                      child: ListView.builder(
+                        itemCount:
+                            selectedCreditCardHistory.creditCardDetail.length,
+                        itemBuilder: (context, index) {
+                          CreditCardDetail detailData =
+                              selectedCreditCardHistory.creditCardDetail[index];
+                          String? receiptDetailDocumentId =
+                              detailData.receiptDetailDocumentId;
+                          String approvedDate = detailData.approvedDate;
+                          int payAmt = detailData.payAmt;
+                          String? shopName = detailData.shopName;
 
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: screenHeight * 0.04),
-                        child: ListTile(
-                          onTap: () {
-                            receiptDetailDocumentId != null? 
-                            Navigator.pushNamed(
-                              context,
-                              '/receipt/detail', //해당 영수증 페이지로 이동해야해
-                              arguments: receiptDetailDocumentId,
-                            ): (print("영수증 없는거임 뭐라도 해줘"));
-                          },
-                          title: Text(shopName),
-                          subtitle: Text(
-                            approvedDate.substring(0,10),
-                            style: TextStyle(
-                              color: Color(0xFFC9C9C9),
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: screenHeight * 0.04),
+                            child: ListTile(
+                              onTap: () {
+                                receiptDetailDocumentId != null
+                                    ? Navigator.pushNamed(
+                                        context,
+                                        '/receipt/detail', //해당 영수증 페이지로 이동해야해
+                                        arguments: receiptDetailDocumentId,
+                                      )
+                                    : (print("영수증 없는거임 뭐라도 해줘"));
+                              },
+                              title: Text(shopName),
+                              subtitle: Text(
+                                approvedDate.substring(0, 10),
+                                style: TextStyle(
+                                  color: Color(0xFFC9C9C9),
+                                ),
+                              ),
+                              trailing: Text(
+                                '${numberFormat.format(payAmt)}원',
+                                style: TextStyle(
+                                    // color: receiptSeq == null
+                                    //     ? Color(0xFFC72929)
+                                    //     : Color(0xFF00168A),
+                                    ),
+                              ),
                             ),
-                          ),
-                          trailing: Text(
-                            '${numberFormat.format(payAmt)}원',
-                            style: TextStyle(
-                              // color: receiptSeq == null
-                              //     ? Color(0xFFC72929)
-                              //     : Color(0xFF00168A),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-        ],
-      ));
+          ],
+        ));
   }
 }

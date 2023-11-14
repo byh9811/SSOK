@@ -79,7 +79,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData['success']) {
         Navigator.of(context)
-            .pushNamedAndRemoveUntil("/main", (route) => false);
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
       } else {
         throw Exception('Failed to load');
       }

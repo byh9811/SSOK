@@ -184,7 +184,7 @@ class _BusinessCardReceiveBluetoothPageState
                 onPressed: () async {
                   Navigator.pop(context, '아니요');
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil("/main", (route) => false);
+                      .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
                 },
                 child: Text('아니요'),
               ),
@@ -230,7 +230,8 @@ class _BusinessCardReceiveBluetoothPageState
               TextButton(
                 onPressed: () async {
                   Navigator.pop(context, '닫기');
-                  Navigator.of(context).pushNamed('/main');
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
                 },
                 child: Text('닫기'),
               ),

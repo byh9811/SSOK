@@ -31,8 +31,8 @@ class _EnterAmountState extends State<EnterAmount> {
         TokenManager().accessToken);
     print(response.body);
     if (response.statusCode == 200) {
-      print(response.body);
-      Navigator.of(context).pushReplacementNamed('/main');
+      print(response.body);Navigator.of(context)
+          .pushNamedAndRemoveUntil("/main", (route) => false);
     } else if (response.statusCode == 400) {
       // 금액이 부족할떄
       if (jsonDecode(response.body)['error']['status'] == 400) {
@@ -55,7 +55,8 @@ class _EnterAmountState extends State<EnterAmount> {
     print(response.body);
     if (response.statusCode == 200) {
       print(response.body);
-      Navigator.of(context).pushReplacementNamed('/main');
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil("/main", (route) => false);
     } else if (response.statusCode == 400) {
       // 금액이 부족할떄
       if (jsonDecode(response.body)['error']['status'] == 400) {

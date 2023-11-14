@@ -144,7 +144,7 @@ public class NamecardService {
                        .exchangeLongitude(lon)
                        .exchangeNote(Strings.EMPTY)
                        .exchangeIsFavorite(Boolean.FALSE)
-                       .updateStatus(UpdateStatus.CHECKED)
+                       .updateStatus(UpdateStatus.NEWLY)
                        .build();
     }
 

@@ -49,6 +49,10 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   ApiService apiService = ApiService();
   Map<String, dynamic>? args;
   CreditCardPaymentTimer te = CreditCardPaymentTimer();
+
+  bool NFCFlag = true;
+
+
   // 요청 변수
   String cardNum = "";
   String cardType = "01";
@@ -113,11 +117,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
 
   check() async {
     print("check 함수 시작");
-    
     bool isLocalAuth;
     isLocalAuth = await LocalAuthentication().canCheckBiometrics;
     print(isLocalAuth);
-
 
     setState(() {
       authenticated = true;
@@ -128,51 +130,54 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
     } else {
       print("할 수 없음");
     }
+
     Future<bool> biometricsFlag = _authenticateWithBiometrics();
+    
     biometricsFlag.then((bool isAuthenticated){
+      
       if(isAuthenticated){
-        Future<bool> NFCFlag = checkNFCAvailability();
-        NFCFlag.then((bool isNFCAvailable){
-          if(isNFCAvailable){
-            
+        // Future<bool> NFCFlag = checkNFCAvailability();
+        checkNFCAvailability();
+        // NFCFlag.then((bool isNFCAvailable){
+          print("142줄 NFCFlag Error");
+          print(NFCFlag);
+          if(NFCFlag){
             Future.delayed(Duration(seconds: 60), () async {
               if(!_isPaymentDone){
                 await NfcManager.instance.stopSession();
-            await showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text("시간 초과"),
-                  content: Text(
-                    "결제 시간이 초과했습니다. 다시 시도해주세요.",
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                  ),
-                  actions: <Widget>[  
-                    TextButton(
-                      onPressed: () { 
-                        Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
-                        },
-                      child: Text("확인"),
+                // ignore: use_build_context_synchronously
+                await showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("시간 초과"),
+                      content: Text(
+                        "결제 시간이 초과했습니다. 다시 시도해주세요.",
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                      ),
+                      actions: <Widget>[  
+                        TextButton(
+                          onPressed: () { 
+                            Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
+                            },
+                          child: Text("확인"),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            print("60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@");
-            
+                  );
+                  print("60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@");
               }
               return;
-            
-          });
-            _tagRead();
+              });
+          }
+          print("들어왔습니다.");
+          _tagRead();
             // _ndefWrite();
           }
-        });
-      }
-      
-      
-    });
-  
-  }
+        }
+        );
+      }      
+
   void createPayment () async {
     print("생성@@@@@@@@@@@@@@@@생성");
 
@@ -193,7 +198,6 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       "pos/payment-service/payment",
        paymentCreatRequest,
         TokenManager().accessToken);
-    print("결과십년아");
     if(response.statusCode == 200){
       // ignore: use_build_context_synchronously
       await showDialog(
@@ -208,7 +212,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
             actions: <Widget>[  
               TextButton(
                 onPressed: () { 
-                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
+                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
                   },
                 child: Text("확인"),
               ),
@@ -219,6 +223,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       // Navigator.of(context).pop();
     }else{
       print(response.statusCode);
+      // ignore: use_build_context_synchronously
       await showDialog(
           context: context,
           barrierDismissible: false,
@@ -231,7 +236,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
             actions: <Widget>[  
               TextButton(
                 onPressed: () { 
-                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
+                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments:  3);
                   },
                 child: Text("확인"),
               ),
@@ -326,7 +331,6 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
   Future<bool> checkNFCAvailability() async{
     print("@@?@??");
     if (!(await NfcManager.instance.isAvailable())) { 
-    
       print("gege");
         // ignore: use_build_context_synchronously
         await showDialog(
@@ -340,18 +344,24 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
             actions: <Widget>[  
               TextButton(
                 onPressed: () async {
-                  // Navigator.pop(context);
                   await AppSettings.openAppSettings(type: AppSettingsType.nfc);
-                  // await AppSettings.openAppSettings(type:AppSettingsType.nfc);
-                  // Navigator.pop(context);
-                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
-                  // Navigator.of(context).pop();
+                  setState(() {
+                    NFCFlag = false;
+                  });
+                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
+                  
                 },
                 child: Text("설정 "),
               ),
               TextButton(
                 onPressed: () { 
-                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 4);
+                  setState(() {
+                    NFCFlag = false;
+                  });
+                  Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
+                  // Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
                   },
                 child: Text("확인"),
               ),
@@ -364,6 +374,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
     }else{
       setState(() {
         _isNFC = true;
+        NFCFlag = true;
       });
       print("good");
       return true;
@@ -446,7 +457,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       // 읽어온 데이터를 출력하거나 다른 초기화 작업을 수행할 수 있습니다.
       if (args != null) {
         print("cardcardcardcardcardcardcardcardcard");
+        
         print(args!['cardNum']); // 'value'
+        print("3이 나왔니 ?..");
       }
     });
   

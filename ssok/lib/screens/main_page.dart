@@ -17,7 +17,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int? currentIndex; // 현재 보여주려는 index
+  int currentIndex = 2; // 현재 보여주려는 index
   bool _isCheckedChanges = false;
   final List<Widget> navPages = [
     // 각 위젯 페이지들
@@ -32,7 +32,7 @@ class _MainPageState extends State<MainPage> {
 
   ApiService apiService = ApiService();
 
-  late String memberName;
+  late String memberName = "회원";
 
   @override
   void initState() {
@@ -109,7 +109,7 @@ class _MainPageState extends State<MainPage> {
               height: 2.0,
             )),
       ),
-      body: navPages.elementAt(currentIndex!),
+      body: navPages.elementAt(currentIndex),
       endDrawer: SizedBox(
         width: screenWidth * 0.6,
         child: Drawer(
@@ -199,7 +199,7 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: SizedBox(
         height: 60.0,
         child: BottomNavigationBar(
-          currentIndex: currentIndex!, // 현재 보여주는 탭
+          currentIndex: currentIndex, // 현재 보여주는 탭  
           onTap: (newIndex) {
             setState(() {
               // 보여주려는 index 변경

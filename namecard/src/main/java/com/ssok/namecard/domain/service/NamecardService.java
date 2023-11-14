@@ -22,6 +22,7 @@ import com.ssok.namecard.domain.service.dto.NamecardCreateRequest;
 import com.ssok.namecard.global.exception.ErrorCode;
 import com.ssok.namecard.global.service.GCSService;
 import java.sql.Time;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -244,7 +245,7 @@ public class NamecardService {
         //내 명함들 중 대표 명함만 뽑음
         List<Namecard> myRepNamecards = findByMemberSeqFromNamecardRepository(memberSeq).stream().filter(
             namecard -> namecard.getIsRepNamecard().equals(Boolean.TRUE)
-        ).collect(Collectors.toList());
+        ).sorted(Comparator.comparingLong(Namecard::getRootNamecardSeq)).collect(Collectors.toList());
 
         //내가 등록한 명함들에 해당하는 모든 교환들
         List<Exchange> exchanges = findAllExchangesByMemberSeq(memberSeq);

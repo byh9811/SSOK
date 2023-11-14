@@ -19,6 +19,7 @@ import 'package:ssok/screens/id/drive_id_detail_page.dart';
 import 'package:ssok/screens/id/id_create_page.dart';
 import 'package:ssok/screens/id/id_detail_page.dart';
 import 'package:ssok/screens/intro/incroduction_page.dart';
+import 'package:ssok/screens/loading/basic_loading_page.dart';
 
 import 'package:ssok/screens/login/login_page.dart';
 import 'package:ssok/screens/login/signin_page.dart';
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(                                                
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
         '/pocket/donation/send': (context) => PocketDonationSendPage(),
         '/pocket/transfer': (context) => PocketTransferPage(),
         '/test': (context) => Test2(),
+        '/loading': (context) => BasicLoadingPage(),
       },
     );
   }

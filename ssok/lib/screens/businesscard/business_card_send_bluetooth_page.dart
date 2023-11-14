@@ -90,7 +90,8 @@ class _BusinessCardSendBluetoothPageState
               TextButton(
                 onPressed: () async {
                   Navigator.pop(context, '닫기');
-                  Navigator.of(context).pushNamed('/main');
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil("/main", (route) => false);
                 },
                 child: Text('닫기'),
               ),

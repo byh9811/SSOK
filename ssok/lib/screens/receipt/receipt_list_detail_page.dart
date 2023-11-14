@@ -350,9 +350,9 @@ class MenuByReceipt extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: screenWidth * 0.25),
+            padding: EdgeInsets.only(left: screenWidth * 0.03),
             child: Text(
-              "$amount",
+              "$amount개",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,

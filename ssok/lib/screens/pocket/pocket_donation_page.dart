@@ -206,7 +206,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                         )
                       :
                       MainButton(
-                          title: "종료된 기부 입니다",
+                          title: "종료된 기부",
                           color: "0xFFD8D8D8",
                           onPressed: () {
                           },

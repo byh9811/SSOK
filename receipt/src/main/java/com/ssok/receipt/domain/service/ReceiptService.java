@@ -55,7 +55,7 @@ public class ReceiptService {
         List<InnerPaymentItem> paymentItemList = receiptCreateServiceDto.paymentItemList();
         List<PurchaseItem> purchaseItemList = new ArrayList<>();
         List<EcoItem> carbonNeutralItemList = ecoItemRepository.findAll();     // DB or Enum에서 읽기
-        Long earnedCNP = 0L;
+        Long earnedCNP = 100L;
         for (InnerPaymentItem innerPaymentItem : paymentItemList) {
             boolean isCNI = false;
             for (EcoItem carbonNeutralItem : carbonNeutralItemList) {
@@ -72,19 +72,16 @@ public class ReceiptService {
 
         String savedDocId = eventHandler.createReceipt(card, memberSeq, receiptCreateServiceDto);
 
-        if (earnedCNP > 0) {
-            PocketHistoryCreateRequest request = PocketHistoryCreateRequest.builder()
-                    .memberSeq(memberSeq)
-                    .receiptDocumentId(savedDocId)
-                    .pocketHistoryType("CARBON")
-                    .pocketHistoryTransAmt(earnedCNP)
-                    .build();
-            try {
-                pocketClient.createPocketHistory(request);
-            } catch(Exception e) {
-                log.info("포켓이 없어서 기록은 안했습니다~");
-            }
-
+        PocketHistoryCreateRequest carbonRequest = PocketHistoryCreateRequest.builder()
+                .memberSeq(memberSeq)
+                .receiptDocumentId(savedDocId)
+                .pocketHistoryType("CARBON")
+                .pocketHistoryTransAmt(earnedCNP)
+                .build();
+        try {
+            pocketClient.createPocketHistory(carbonRequest);
+        } catch(Exception e) {
+            log.info("포켓이 없어서 기록은 안했습니다~");
         }
 
         try {
@@ -96,13 +93,13 @@ public class ReceiptService {
             // 잔금 적립 기능 활성화 여부 && 잔금 발생 여부 && 통장 잔액 존재 여부
             if (pocketClient.getPocketSaving(memberSeq).getResponse() && remain > 0 && balance >= remain) {
                 bankAccessUtil.pay(mdToken, account, remain);
-                PocketHistoryCreateRequest request = PocketHistoryCreateRequest.builder()
+                PocketHistoryCreateRequest changeRequest = PocketHistoryCreateRequest.builder()
                         .memberSeq(memberSeq)
                         .receiptDocumentId(savedDocId)
                         .pocketHistoryType("CHANGE")
                         .pocketHistoryTransAmt(remain)
                         .build();
-                pocketClient.createPocketHistory(request);
+                pocketClient.createPocketHistory(changeRequest);
             }
 
         } catch(Exception e) {

@@ -89,7 +89,7 @@ public class NamecardController {
     public ApiResponse<String> editMemo(
         @RequestHeader(name = "MEMBER-UUID") String memberUuid,
         @PathVariable Long exchangeSeq,
-        @RequestBody String content
+        @RequestBody(required = false) String content
     ){
         namecardService.editMemo(memberUuid, exchangeSeq, content);
         return OK("메모 등록 완료");

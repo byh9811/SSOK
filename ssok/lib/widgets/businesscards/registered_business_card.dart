@@ -492,7 +492,11 @@ class _ExchangeCardListBodyState extends State<ExchangeCardListBody> {
           child: InkWell(
             onTap: () {
               Navigator.of(context).pushNamed('/businesscard/detail',
-                  arguments: data.exchangeSeq);
+                  arguments: {
+                'exchangeSeq': data.exchangeSeq,
+                'additionalData': data.updateStatus,
+                },
+              );
             },
             child: CustomListItem(
                 name: namecardName,

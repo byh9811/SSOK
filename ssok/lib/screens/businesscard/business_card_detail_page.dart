@@ -11,6 +11,8 @@ import 'dart:math';
 
 import 'package:http/http.dart' as http;
 
+import '../../widgets/frequents/confirm.dart';
+
 class BusinessCardDetailPage extends StatefulWidget {
   const BusinessCardDetailPage({super.key});
 
@@ -21,7 +23,7 @@ class BusinessCardDetailPage extends StatefulWidget {
 class _BusinessCardDetailPage extends State<BusinessCardDetailPage> {
   @override
   Widget build(BuildContext context) {
-    final exchangeSeq = ModalRoute.of(context)!.settings.arguments as int;
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     return Scaffold(
       appBar: AppBar(
@@ -40,17 +42,17 @@ class _BusinessCardDetailPage extends State<BusinessCardDetailPage> {
           color: Colors.black, // 원하는 색상으로 변경
         ),
       ),
-      body: BusinessCardDetail(exchangeSeq: exchangeSeq),
+      body: BusinessCardDetail(args: args),
     );
   }
 }
 
 class BusinessCardDetail extends StatefulWidget {
-  final int exchangeSeq;
-  const BusinessCardDetail({super.key, required this.exchangeSeq});
+  final Map<String, dynamic> args;
+  const BusinessCardDetail({super.key, required this.args});
 
   @override
-  State<BusinessCardDetail> createState() => _BusinessCardDetail(exchangeSeq);
+  State<BusinessCardDetail> createState() => _BusinessCardDetail(args);
 }
 
 class NameCardHead {
@@ -59,9 +61,10 @@ class NameCardHead {
   late String? nameCardJob;
   late int? nameCardMemberSeq;
   late int? exchangeSeq;
+  late String? updateStatus;
 
   NameCardHead(this.nameCardImage, this.nameCardName, this.nameCardJob,
-      this.nameCardMemberSeq, this.exchangeSeq);
+      this.nameCardMemberSeq, this.exchangeSeq, this.updateStatus);
 }
 
 class NameCardBody {
@@ -90,12 +93,12 @@ class NameCardPos {
 }
 
 class _BusinessCardDetail extends State<BusinessCardDetail> {
-  final int exchangeSeq;
+  final Map<String, dynamic> args;
   late NameCardHead nameCardHead;
   late NameCardBody nameCardBody;
   late NameCardPos nameCardPos;
 
-  _BusinessCardDetail(this.exchangeSeq);
+  _BusinessCardDetail(this.args);
   ApiService apiService = ApiService();
 
   @override
@@ -110,7 +113,7 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
 
   void getNameCardDetail() async {
     final response = await apiService.getRequest(
-        "namecard-service/$exchangeSeq", TokenManager().accessToken);
+        "namecard-service/${args["exchangeSeq"]}", TokenManager().accessToken);
     final data = jsonDecode(utf8.decode(response.bodyBytes))["response"];
     print("getNameCardDetail");
     print(data);
@@ -118,7 +121,7 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
     if (response.statusCode == 200) {
       setState(() {
         nameCardHead = NameCardHead(data["namecardImage"], data["namecardName"],
-            data["namecardJob"], data["memberSeq"], data["exchangeSeq"]);
+            data["namecardJob"], data["memberSeq"], data["exchangeSeq"], args["additionalData"]);
         nameCardBody = NameCardBody(
             data["namecardCompany"],
             data["namecardWebsite"],
@@ -170,9 +173,25 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
   ApiService apiService = ApiService();
   _BusinessCardDetailHeaderState(this.nameCardHead);
 
+  void updateStatus() async{
+    int? exchangeSeq = nameCardHead.exchangeSeq;
+    try {
+      final response = await apiService.postRequest(
+          "namecard-service/$exchangeSeq", null, TokenManager().accessToken);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        // final responseData = jsonDecode(utf8.decode(response.bodyBytes))["response"];
 
+        Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+      } else {
+        print("통신실패@@@@");
+      }
+    } catch (e) {
+      print("에러 발생: $e");
+    }
 
-    
+  }
+
   void getNameCardDetailMemo() async{
     int? exchangeSeq = nameCardHead.exchangeSeq;
     try {
@@ -351,6 +370,14 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                 ),
               ),
             ),
+            if (nameCardHead.updateStatus == "UPDATED")
+              IconButton(
+                icon: Icon(Icons.update),
+                onPressed: () {
+                  confirmDialog(
+                      context, "명함 업데이트", "해당 명함을 최신화하시겠습니까?", updateStatus);
+                },
+              ),
           ],
         )
       ],

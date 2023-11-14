@@ -24,7 +24,9 @@ class _BusinessCardDetailPage extends State<BusinessCardDetailPage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
+    print(args);
+    print(args["exchangeSeq"]);
+    print(args["additionalData"]);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -112,6 +114,10 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
 
 
   void getNameCardDetail() async {
+    print(args);
+    print(args["exchangeSeq"]);
+    print(args["additionalData"]);
+
     final response = await apiService.getRequest(
         "namecard-service/${args["exchangeSeq"]}", TokenManager().accessToken);
     final data = jsonDecode(utf8.decode(response.bodyBytes))["response"];
@@ -174,6 +180,9 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
   _BusinessCardDetailHeaderState(this.nameCardHead);
 
   void updateStatus() async{
+    print(nameCardHead);
+    print(nameCardHead.exchangeSeq);
+    print(nameCardHead.updateStatus);
     int? exchangeSeq = nameCardHead.exchangeSeq;
     try {
       final response = await apiService.postRequest(
@@ -223,6 +232,11 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
 
   @override
   Widget build(BuildContext context) {
+    print("build--------------------------------");
+    print(nameCardHead);
+    print(nameCardHead.exchangeSeq);
+    print(nameCardHead.updateStatus);
+    print(nameCardHead.updateStatus == "UPDATED");
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -327,6 +341,19 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                 Navigator.of(context).pushNamed("/businesscard/history",
                     arguments: nameCardHead.exchangeSeq);
               },
+            //   Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     Icon(Icons.timeline),
+            //     Padding(
+            //       padding: const EdgeInsets.only(left: 3.0),
+            //       child: Text(
+            //         "타임라인",
+            //         style: TextStyle(fontSize: 14),
+            //       ),
+            //     )
+            //   ],
+            // ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -337,7 +364,19 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                       "타임라인",
                       style: TextStyle(fontSize: 14),
                     ),
-                  )
+                  ),
+                  if (nameCardHead.updateStatus == "UPDATED")
+                    IconButton(
+                      constraints: BoxConstraints(),
+                      padding: EdgeInsets.zero,
+                      iconSize: 22,
+                      color: Colors.red,
+                      onPressed: () {
+                        confirmDialog(
+                            context, "명함 업데이트", "해당 명함을 최신화하시겠습니까?", updateStatus);
+                      },
+                      icon: Icon(Icons.refresh),
+                    ),
                 ],
               ),
             ),
@@ -370,14 +409,6 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                 ),
               ),
             ),
-            if (nameCardHead.updateStatus == "UPDATED")
-              IconButton(
-                icon: Icon(Icons.update),
-                onPressed: () {
-                  confirmDialog(
-                      context, "명함 업데이트", "해당 명함을 최신화하시겠습니까?", updateStatus);
-                },
-              ),
           ],
         )
       ],

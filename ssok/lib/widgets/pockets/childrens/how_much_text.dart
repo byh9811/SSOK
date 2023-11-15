@@ -8,7 +8,7 @@ class HowMuchText extends StatefulWidget {
     required this.imgUrl,
     required this.pocketSaving,
     required this.urlType,
-   }) : super(key: key);
+  }) : super(key: key);
 
   final String title;
   final String? subTitle;
@@ -20,9 +20,6 @@ class HowMuchText extends StatefulWidget {
 }
 
 class _HowMuchTextState extends State<HowMuchText> {
-
-
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -36,7 +33,7 @@ class _HowMuchTextState extends State<HowMuchText> {
               Text(
                 widget.title,
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 27,
                 ),
               ),
               Padding(
@@ -56,15 +53,15 @@ class _HowMuchTextState extends State<HowMuchText> {
           ),
         ),
         SizedBox(height: screenHeight * 0.03),
-        widget.urlType=="network" ? Image.network(
+        widget.urlType == "network"
+            ? Image.network(
                 widget.imgUrl, // 이미지 링크 필드로 변경
                 fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 조절
               )
-        :
-        Image.asset(
-          widget.imgUrl,
-          height: screenHeight * 0.18,
-        ),
+            : Image.asset(
+                widget.imgUrl,
+                height: screenHeight * 0.18,
+              ),
         SizedBox(height: screenHeight * 0.05),
         Padding(
           padding: EdgeInsets.only(right: screenWidth * 0.05),

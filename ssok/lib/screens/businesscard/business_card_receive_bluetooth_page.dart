@@ -324,10 +324,10 @@ class _BusinessCardReceiveBluetoothPageState
               color: Colors.white,
             ),
           ),
-          Text(
-            "User: ${myNamecardItem.namecardName}",
-            style: TextStyle(color: Colors.white),
-          ),
+          // Text(
+          //   "User: ${myNamecardItem.namecardName}",
+          //   style: TextStyle(color: Colors.white),
+          // ),
           SizedBox(height: screenHeight * 0.01),
           if (!scanning)
             ElevatedButton(

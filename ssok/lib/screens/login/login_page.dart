@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+      print(jsonData);
       await tokenManager.setAccessToken(jsonData["response"]["accessToken"]);
       await tokenManager.setRefreshToken(jsonData["response"]["refreshToken"]);
       await tokenManager.setLoginId(jsonData["response"]["loginId"]);

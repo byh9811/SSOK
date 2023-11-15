@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
+import 'package:ssok/screens/loading/namecard_detail_loading_page.dart';
 import 'package:ssok/widgets/modals/business_memo_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -58,7 +59,7 @@ class BusinessCardDetail extends StatefulWidget {
   State<BusinessCardDetail> createState() => _BusinessCardDetail(args);
 }
 
-class NameCardTotal{
+class NameCardTotal {
   late NameCardHead nameCardHead;
   late NameCardBody nameCardBody;
   late NameCardPos nameCardPos;
@@ -106,14 +107,16 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
   late NameCardHead nameCardHead;
   late NameCardBody nameCardBody;
   late NameCardPos nameCardPos;
-
+  bool isLoading = true;
   _BusinessCardDetail(this.args);
   ApiService apiService = ApiService();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // nameCardHead = NameCardHead("", "", "", 0, 0, "");
+    // nameCardBody = NameCardBody("", "", "", "", "", "", "");
+    // nameCardPos = NameCardPos(0.0, 0.0);
     getNameCardDetail();
   }
 
@@ -146,6 +149,7 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
             data["namecardFax"],
             data["namecardEmail"]);
         nameCardPos = NameCardPos(data["lat"], data["lon"]);
+        isLoading = false;
       });
     }
   }
@@ -154,20 +158,22 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
-        child: Column(
-          children: [
-            BusinessCardDetailHeader(nameCardHead: nameCardHead),
-            SizedBox(height: screenHeight * 0.03),
-            BusinessCardDetailBody(nameCardBody: nameCardBody),
-            SizedBox(height: screenHeight * 0.02),
-            BusinessCardDetailMap(nameCardPos: nameCardPos),
-          ],
-        ),
-      ),
-    );
+    return isLoading
+        ? NamecardDetailLoadingPage()
+        : SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
+              child: Column(
+                children: [
+                  BusinessCardDetailHeader(nameCardHead: nameCardHead),
+                  SizedBox(height: screenHeight * 0.03),
+                  BusinessCardDetailBody(nameCardBody: nameCardBody),
+                  SizedBox(height: screenHeight * 0.02),
+                  BusinessCardDetailMap(nameCardPos: nameCardPos),
+                ],
+              ),
+            ),
+          );
   }
 }
 
@@ -176,7 +182,8 @@ class BusinessCardDetailHeader extends StatefulWidget {
   const BusinessCardDetailHeader({super.key, required this.nameCardHead});
 
   @override
-  State<BusinessCardDetailHeader> createState() =>_BusinessCardDetailHeaderState(nameCardHead);
+  State<BusinessCardDetailHeader> createState() =>
+      _BusinessCardDetailHeaderState(nameCardHead);
 }
 
 class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
@@ -186,7 +193,7 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
   late String nameCardMemo = "";
 
   ApiService apiService = ApiService();
-  
+
   _BusinessCardDetailHeaderState(this.nameCardHead);
 
   void updateStatus() async {
@@ -343,38 +350,34 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
         Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: EdgeInsets.only(top: screenHeight * 0.006),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed("/businesscard/history",
-                    arguments: nameCardHead.exchangeSeq);
-              },
-              //   Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     Icon(Icons.timeline),
-              //     Padding(
-              //       padding: const EdgeInsets.only(left: 3.0),
-              //       child: Text(
-              //         "타임라인",
-              //         style: TextStyle(fontSize: 14),
-              //       ),
-              //     )
-              //   ],
-              // ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(Icons.timeline),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 3.0),
-                    child: Text(
-                      "타임라인",
-                      style: TextStyle(fontSize: 14),
-                    ),
+            padding: EdgeInsets.only(
+              top: screenHeight * 0.006,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/businesscard/history",
+                        arguments: nameCardHead.exchangeSeq);
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.timeline),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 3.0),
+                        child: Text(
+                          "타임라인",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ],
                   ),
-                  if (nameCardHead.updateStatus == "UPDATED")
-                    IconButton(
+                ),
+                if (nameCardHead.updateStatus == "UPDATED")
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: IconButton(
                       constraints: BoxConstraints(),
                       padding: EdgeInsets.zero,
                       iconSize: 22,
@@ -385,8 +388,8 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                       },
                       icon: Icon(Icons.refresh),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
         ),

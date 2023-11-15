@@ -116,7 +116,7 @@ class _BusinessCardReceiveBluetoothPageState
               "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
         },
       );
-      showSnackbar("스캔 시작: $a");
+      showSnackbar("스캔을 시작합니다.");
       setState(() {
         scanning = true;
       });
@@ -167,6 +167,15 @@ class _BusinessCardReceiveBluetoothPageState
             actions: [
               TextButton(
                 onPressed: () async {
+                  Navigator.pop(context, '아니요');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      "/main", (route) => false,
+                      arguments: 1);
+                },
+                child: Text('아니요'),
+              ),
+              TextButton(
+                onPressed: () async {
                   Navigator.pop(context, '네');
                   Navigator.of(context).push(
                     PageRouteBuilder(
@@ -179,15 +188,6 @@ class _BusinessCardReceiveBluetoothPageState
                   transferReverse(namecardBSeq, namecardASeq);
                 },
                 child: Text('네'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context, '아니요');
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      "/main", (route) => false,
-                      arguments: 1);
-                },
-                child: Text('아니요'),
               ),
             ],
           );
@@ -313,15 +313,14 @@ class _BusinessCardReceiveBluetoothPageState
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: screenHeight * 0.04),
+          SizedBox(height: screenHeight * 0.1),
           RippleWave(
             color: Color(0xFF00ADEF),
             repeat: false,
             animationController: animationController,
-            child: const Icon(
-              Icons.emoji_emotions,
-              size: 100,
-              color: Colors.white,
+            child: Image.asset(
+              'assets/card_receive.png',
+              width: 160,
             ),
           ),
           // Text(
@@ -330,42 +329,56 @@ class _BusinessCardReceiveBluetoothPageState
           // ),
           SizedBox(height: screenHeight * 0.01),
           if (!scanning)
-            ElevatedButton(
-              onPressed: () {
-                start();
-                pointClear();
-                scanningStart();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF00ADEF),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.radar,
-                    size: 20,
+            Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    start();
+                    pointClear();
+                    scanningStart();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF00ADEF),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 3.0),
-                    child: Text("스캔"),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.radar,
+                        size: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 3.0),
+                        child: Text("스캔"),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.1,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+                  child: Text(
+                    "※ 스캔버튼을 눌러 주변의 명함 전송과 통신하여 명함을 밭을 수 있어요",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          SizedBox(
-            height: screenHeight * 0.1,
-          ),
           Container(
             height: screenHeight * 0.4,
-            color: Color.fromARGB(255, 54, 54, 54),
+            color: Color.fromARGB(255, 24, 24, 24),
             child: Column(
               children: discoveredEndpoints.map((endpoint) {
                 return ListTile(
                   title: Text("${endpoint.name}님 발견!",
                       style: TextStyle(fontSize: 19, color: Colors.white)),
-                  subtitle: Text("ID: ${endpoint.id}",
-                      style: TextStyle(fontSize: 14, color: Colors.white)),
+                  // subtitle: Text("ID: ${endpoint.id}",
+                  //     style: TextStyle(fontSize: 14, color: Colors.white)),
                   trailing: ElevatedButton(
                     onPressed: () {
                       // Navigator.pop(context);
@@ -419,7 +432,11 @@ class _BusinessCardReceiveBluetoothPageState
 
   void showSnackbar(dynamic a) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(a.toString()),
+      content: Text(
+        a.toString(),
+        style: TextStyle(fontSize: 16),
+      ),
+      backgroundColor: Color(0xFF00496F),
     ));
   }
 
@@ -428,75 +445,97 @@ class _BusinessCardReceiveBluetoothPageState
     double screenHeight = MediaQuery.of(context).size.height;
     showModalBottomSheet(
       context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+      ),
       builder: (builder) {
         return SizedBox(
           height: screenHeight * 0.3,
           child: Center(
             child: Column(
               children: <Widget>[
-                Text("id: $id"),
-                Text("Token: ${info.authenticationToken}"),
-                Text("Name${info.endpointName}"),
-                Text("Incoming: ${info.isIncomingConnection}"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-                      child: button(
-                        "수락",
-                        () {
-                          Navigator.pop(context);
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              opaque: false, // 배경이 투명해야 함을 나타냅니다
-                              pageBuilder: (BuildContext context, _, __) {
-                                return TransferLoadingPage();
-                              },
-                            ),
-                          );
-                          setState(() {
-                            endpointMap[id] = info;
-                          });
-                          Nearby().acceptConnection(
-                            // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
-                            id,
-                            onPayLoadRecieved: (endid, payload) async {
-                              // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
-                              if (payload.type == PayloadType.BYTES) {
-                                String str = String.fromCharCodes(
-                                    payload.bytes!); // 바이트 데이터를 문자열로 반환
-                                showSnackbar("$endid: $str");
-                                int seq = int.parse(str);
-                                print(
-                                    "namecardSeqA :  ${myNamecardItem.namecardSeq} , namecardSeqB : $seq");
-                                transfer(myNamecardItem.namecardSeq, seq);
-
-                                // 모달을 띄워서 너도 보낼래????? 해줌
-                                // 확인 누르면 나도 보내는 api 호출
+                // Text("id: $id"),
+                // Text("Token: ${info.authenticationToken}"),
+                // Text("Name${info.endpointName}"),
+                // Text("Incoming: ${info.isIncomingConnection}"),
+                SizedBox(height: screenHeight * 0.04),
+                Text(
+                  "${info.endpointName}님께 요청을 보냈습니다",
+                  style: TextStyle(fontSize: 25),
+                ),
+                SizedBox(height: screenHeight * 0.04),
+                Text(
+                  "명함을 받기 위해 연결 하시겠습니까?",
+                  style: TextStyle(fontSize: 20, color: Color(0xFF00496F)),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: screenHeight * 0.05),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.06),
+                          child: button(
+                            "취소",
+                            () async {
+                              Navigator.pop(context);
+                              try {
+                                await Nearby().rejectConnection(id);
+                              } catch (e) {
+                                showSnackbar(e);
                               }
                             },
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.06),
+                          child: button(
+                            "연결",
+                            () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                  pageBuilder: (BuildContext context, _, __) {
+                                    return TransferLoadingPage();
+                                  },
+                                ),
+                              );
+                              setState(() {
+                                endpointMap[id] = info;
+                              });
+                              Nearby().acceptConnection(
+                                // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
+                                id,
+                                onPayLoadRecieved: (endid, payload) async {
+                                  // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
+                                  if (payload.type == PayloadType.BYTES) {
+                                    String str = String.fromCharCodes(
+                                        payload.bytes!); // 바이트 데이터를 문자열로 반환
+                                    showSnackbar("$endid: $str");
+                                    int seq = int.parse(str);
+                                    print(
+                                        "namecardSeqA :  ${myNamecardItem.namecardSeq} , namecardSeqB : $seq");
+                                    transfer(myNamecardItem.namecardSeq, seq);
+
+                                    // 모달을 띄워서 너도 보낼래????? 해줌
+                                    // 확인 누르면 나도 보내는 api 호출
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-                      child: button(
-                        "거절",
-                        () async {
-                          Navigator.pop(context);
-                          try {
-                            await Nearby().rejectConnection(id);
-                          } catch (e) {
-                            showSnackbar(e);
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),

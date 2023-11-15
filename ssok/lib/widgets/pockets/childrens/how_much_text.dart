@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HowMuchText extends StatefulWidget {
   const HowMuchText({
@@ -18,6 +19,8 @@ class HowMuchText extends StatefulWidget {
   @override
   State<HowMuchText> createState() => _HowMuchTextState();
 }
+
+var numberFormat = NumberFormat('###,###,###,###');
 
 class _HowMuchTextState extends State<HowMuchText> {
   @override
@@ -68,7 +71,8 @@ class _HowMuchTextState extends State<HowMuchText> {
           child: Align(
             alignment: Alignment.centerRight,
             child: Text(
-              "보유 포켓머니 : ${widget.pocketSaving}원",
+              "보유 포켓머니 : ${numberFormat.format(widget.pocketSaving)}원",
+              // "보유 포켓머니 : ${widget.pocketSaving}원",
               style: TextStyle(
                 fontSize: 17,
               ),

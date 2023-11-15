@@ -16,12 +16,11 @@ class MyPocket extends StatefulWidget {
 }
 
 class _MyPocketState extends State<MyPocket> {
-
   ApiService apiService = ApiService();
-  late int pocketSaving=0;
-  late int pocketTotalDonate=0;
-  late int pocketTotalPoint=0;
-  late int pocketTotalChange=0;
+  late int pocketSaving = 0;
+  late int pocketTotalDonate = 0;
+  late int pocketTotalPoint = 0;
+  late int pocketTotalChange = 0;
 
   @override
   void initState() {
@@ -29,20 +28,26 @@ class _MyPocketState extends State<MyPocket> {
     super.initState();
     getPocketInfo();
   }
-  void getPocketInfo()async{
-    final response = await apiService.getRequest('pocket-service/pocket',TokenManager().accessToken);
+
+  void getPocketInfo() async {
+    final response = await apiService.getRequest(
+        'pocket-service/pocket', TokenManager().accessToken);
     if (response.statusCode == 200) {
       print(response.body);
       setState(() {
-        pocketSaving= jsonDecode(response.body)['response']['pocketSaving'];
-        pocketTotalDonate= jsonDecode(response.body)['response']['pocketTotalDonate'];
-        pocketTotalPoint= jsonDecode(response.body)['response']['pocketTotalPoint'];
-        pocketTotalChange= jsonDecode(response.body)['response']['pocketTotalChange'];
+        pocketSaving = jsonDecode(response.body)['response']['pocketSaving'];
+        pocketTotalDonate =
+            jsonDecode(response.body)['response']['pocketTotalDonate'];
+        pocketTotalPoint =
+            jsonDecode(response.body)['response']['pocketTotalPoint'];
+        pocketTotalChange =
+            jsonDecode(response.body)['response']['pocketTotalChange'];
       });
       // Navigator.of(context).pushReplacementNamed('/pocket/account/create');
     }
   }
-    var numberFormat = NumberFormat('###,###,###,###');
+
+  var numberFormat = NumberFormat('###,###,###,###');
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +96,9 @@ class _MyPocketState extends State<MyPocket> {
                 child: Row(
                   children: [
                     Text(
-                      "${numberFormat.format(pocketSaving)}원",
+                      "${numberFormat.format(pocketSaving.toDouble())}원",
+                      // "${numberFormat.format(double.parse(pocketSaving))}원"
+                      // "${numberFormat.format(pocketSaving)}원",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -124,8 +131,9 @@ class _MyPocketState extends State<MyPocket> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed('/pocket/donation',arguments: pocketSaving);
+                              Navigator.of(context).pushNamed(
+                                  '/pocket/donation',
+                                  arguments: pocketSaving);
                             },
                             style: TextButton.styleFrom(
                               minimumSize: Size.zero,

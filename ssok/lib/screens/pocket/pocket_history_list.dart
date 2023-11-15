@@ -11,14 +11,21 @@ class PocketHistory {
   final int totalHistory;
   final int deposit;
   final int withdrawal;
+  final int change;
+  final int carbon;
+  final int donate;
+  final int transfer;
 
-  PocketHistory({
-    required this.date,
-    required this.pocketDetailResponses,
-    required this.totalHistory,
-    required this.deposit,
-    required this.withdrawal,
-  });
+  PocketHistory(
+      {required this.date,
+      required this.pocketDetailResponses,
+      required this.totalHistory,
+      required this.deposit,
+      required this.withdrawal,
+      required this.change,
+      required this.carbon,
+      required this.donate,
+      required this.transfer});
 }
 
 class PocketDetail {
@@ -64,6 +71,10 @@ List<PocketHistory> parsePocketHistory(Map<String, Object?> jsonStr) {
       final totalHistory = value["totalHistory"];
       final deposit = value["deposit"];
       final withdrawal = value["withdrawal"];
+      final carbon = value["carbon"];
+      final change = value["change"];
+      final donate = value["donate"];
+      final transfer = value["transfer"];
 
       pocketHistories.add(PocketHistory(
         date: key,
@@ -71,6 +82,10 @@ List<PocketHistory> parsePocketHistory(Map<String, Object?> jsonStr) {
         totalHistory: totalHistory,
         deposit: deposit,
         withdrawal: withdrawal,
+        carbon: carbon,
+        change: change,
+        donate: donate,
+        transfer: transfer,
       ));
     });
   }
@@ -176,6 +191,10 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
         totalHistory: 0,
         deposit: 0,
         withdrawal: 0,
+        carbon: 0,
+        change: 0,
+        donate: 0,
+        transfer: 0,
         pocketDetailResponses: [],
       );
     });

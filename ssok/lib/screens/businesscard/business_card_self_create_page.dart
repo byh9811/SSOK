@@ -537,15 +537,15 @@ class BusinessCardBox extends StatefulWidget {
 class _BusinessCardBoxState extends State<BusinessCardBox> {
   late List<String> values;
   List<Offset> offsets = [
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
+    Offset(60, 40),
+    Offset(60, 60),
+    Offset(60, 80),
+    Offset(60, 100),
+    Offset(60, 120),
+    Offset(120, 40),
+    Offset(120, 60),
+    Offset(120, 80),
+    Offset(120, 100),
   ];
   late double maxWidth;
   late double maxHeight;
@@ -894,7 +894,7 @@ class DraggableTextState extends State<DraggableText> {
       child: GestureDetector(
         child: Text(
           widget.name,
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 11),
         ),
         onPanUpdate: (details) {
           final newOffset = Offset(

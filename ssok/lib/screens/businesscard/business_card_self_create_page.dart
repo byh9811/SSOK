@@ -543,6 +543,23 @@ class BusinessCardBox extends StatefulWidget {
 }
 
 class _BusinessCardBoxState extends State<BusinessCardBox> {
+
+  int _draggingIndex = -1; // 드래그 중인 위젯의 인덱스를 추적하기 위한 변수
+
+  // 드래그 시작 시 호출될 메서드
+  void _onDragStarted(int index) {
+    setState(() {
+      _draggingIndex = index;
+    });
+  }
+
+  // 드래그 종료 시 호출될 메서드
+  void _onDragEnded() {
+    setState(() {
+      _draggingIndex = -1;
+    });
+  }
+
   late List<String> values;
   List<Offset> offsets = [
     Offset(60, 40),
@@ -561,6 +578,7 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
   @override
   void initState() {
     super.initState();
+
     // 화면의 최대 너비와 높이를 가져옵니다.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       maxWidth = MediaQuery.of(context).size.width * 0.54;
@@ -594,6 +612,23 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    // DraggableText 위젯을 생성하는 메서드
+    Widget _buildDraggableText(String text, int index) {
+      return DraggableText(
+        name: text,
+        offset: offsets[index],
+        decoration: _draggingIndex == index ? BoxDecoration(border: Border.all(color: Colors.blue, width: 2.0)) : null,
+        onDragStarted: () => _onDragStarted(index),
+        onDragEnded: _onDragEnded,
+        onPositionChanged: (newOffset) {
+          setState(() {
+            offsets[index] = newOffset;
+          });
+        },
+        // 다른 필요한 파라미터들...
+      );
+    }
 
     List<String> titleList = [
       "이름",
@@ -668,87 +703,15 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                       }).toList(),
                     ),
                   ),
-                  DraggableText(
-                    name: widget.name,
-                    offset: offsets[0],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[0] = newOffset;
-                      });
-                    },
-                  ),
-                  DraggableText(
-                    name: widget.job,
-                    offset: offsets[1],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[1] = newOffset;
-                      });
-                    },
-                  ),
-                  DraggableText(
-                    name: widget.company,
-                    offset: offsets[2],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[2] = newOffset;
-                      });
-                    },
-                  ),
-                  DraggableText(
-                    name: widget.address,
-                    offset: offsets[3],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[3] = newOffset;
-                      });
-                    },
-                  ),
-                  DraggableText(
-                    name: widget.phone,
-                    offset: offsets[4],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[4] = newOffset;
-                      });
-                    },
-                  ),
-                  DraggableText(
-                    name: widget.tel,
-                    offset: offsets[5],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[5] = newOffset;
-                      });
-                    },
-                  ),
-                  DraggableText(
-                    name: widget.fax,
-                    offset: offsets[6],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[6] = newOffset;
-                      });
-                    },
-                  ),
-                  DraggableText(
-                    name: widget.email,
-                    offset: offsets[7],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[7] = newOffset;
-                      });
-                    },
-                  ),
-                  DraggableText(
-                    name: widget.website,
-                    offset: offsets[8],
-                    onPositionChanged: (newOffset) {
-                      setState(() {
-                        offsets[8] = newOffset;
-                      });
-                    },
-                  ),
+                  _buildDraggableText(widget.name, 0),
+                  _buildDraggableText(widget.job, 1),
+                  _buildDraggableText(widget.company, 2),
+                  _buildDraggableText(widget.address, 3),
+                  _buildDraggableText(widget.phone, 4),
+                  _buildDraggableText(widget.tel, 5),
+                  _buildDraggableText(widget.fax, 6),
+                  _buildDraggableText(widget.email, 7),
+                  _buildDraggableText(widget.website, 8),
                 ],
               ),
             ),
@@ -866,15 +829,22 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
 }
 
 class DraggableText extends StatefulWidget {
-  const DraggableText({
+  final String name;
+  final Offset offset;
+  final BoxDecoration? decoration; // 추가한 매개변수
+  final Function()? onDragStarted; // 추가한 매개변수
+  final Function()? onDragEnded; // 추가한 매개변수
+  final Function(Offset)? onPositionChanged; // 필요한 매개변수
+
+  DraggableText({
     Key? key,
     required this.name,
     required this.offset,
+    this.decoration, // 추가
+    this.onDragStarted, // 추가
+    this.onDragEnded, // 추가
     required this.onPositionChanged,
   }) : super(key: key);
-  final String name;
-  final Offset offset;
-  final Function(Offset newOffset) onPositionChanged;
 
   @override
   State<DraggableText> createState() => DraggableTextState();
@@ -900,16 +870,19 @@ class DraggableTextState extends State<DraggableText> {
       left: widget.offset.dx,
       top: widget.offset.dy,
       child: GestureDetector(
-        child: Text(
-          widget.name,
-          style: TextStyle(fontSize: 11),
+        child: Container(
+          decoration: widget.decoration, // 여기에 decoration 속성을 적용
+          child: Text(
+            widget.name,
+            style: TextStyle(fontSize: 11),
+          ),
         ),
         onPanUpdate: (details) {
           final newOffset = Offset(
             (widget.offset.dx + details.delta.dx).clamp(0, maxWidth),
             (widget.offset.dy + details.delta.dy).clamp(0, maxHeight),
           );
-          widget.onPositionChanged(newOffset);
+          widget.onPositionChanged!(newOffset);
         },
       ),
     );

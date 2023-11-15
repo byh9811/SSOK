@@ -86,15 +86,36 @@ class _MainPageState extends State<MainPage> {
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Color(0xFF676767),
-              size: 30.0,
-            ),
-            onPressed: () {
-              _key.currentState?.openEndDrawer();
+            onPressed: () async {
+              final result = await showDialog<String>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('로그아웃'),
+                    content: const Text('로그아웃 하시겠습니까?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          userLogOut();
+                        },
+                        child: const Text('네'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, '아니오');
+                        },
+                        child: const Text('아니오'),
+                      ),
+                    ],
+                  );
+                },
+              );
+              if (result == '네') {}
             },
-          )
+            icon: Icon(Icons.logout),
+            color: Color.fromARGB(255, 225, 225, 225),
+            iconSize: 35,
+          ),
         ],
         title: Image.asset(
           'assets/logo.png',
@@ -110,92 +131,6 @@ class _MainPageState extends State<MainPage> {
             )),
       ),
       body: navPages.elementAt(currentIndex),
-      endDrawer: SizedBox(
-        width: screenWidth * 0.6,
-        child: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              SizedBox(
-                height: screenHeight * 0.15,
-                child: DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Color(0xFF00ADEF),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        memberName,
-                        style: TextStyle(fontSize: 22, color: Colors.white),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5.0, left: 4.0),
-                        child: Text(
-                          '님 환영합니다',
-                          style: TextStyle(fontSize: 14, color: Colors.white),
-                        ),
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: IconButton(
-                            onPressed: () async {
-                              final result = await showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('로그아웃'),
-                                    content: const Text('로그아웃 하시겠습니까?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          userLogOut();
-                                        },
-                                        child: const Text('네'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context, '아니오');
-                                        },
-                                        child: const Text('아니오'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              if (result == '네') {}
-                            },
-                            icon: Icon(Icons.logout),
-                            color: Color.fromARGB(255, 225, 225, 225),
-                            iconSize: 25,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     Text(
-              //       "잔돈 저금 활성화",
-              //       style: TextStyle(fontSize: 15),
-              //     ),
-              //     Switch(
-              //       value: _isCheckedChanges,
-              //       onChanged: (value) {
-              //         setState(() {
-              //           _isCheckedChanges = value;
-              //         });
-              //       },
-              //     ),
-              //   ],
-              // ),
-            ],
-          ),
-        ),
-      ),
       bottomNavigationBar: SizedBox(
         height: 60.0,
         child: BottomNavigationBar(

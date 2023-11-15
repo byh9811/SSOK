@@ -48,7 +48,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
   late String registrationCardAddress = "";
   late String registrationCardIssueDate = "";
   late String registrationCardAuthority = "";
-  late XFile image;
+  late XFile image = XFile("assets/horizonLogo.png");
 
   bool checkRegistrationCardName = false;
   bool checkRegistrationCardPersonalNumber = false;
@@ -106,13 +106,15 @@ class _IdCreatePageState extends State<IdCreatePage> {
         print("데이터 읽음");
         print(args);
 
-        _nameController.text = args!.data.registrationCardName ?? "";
-        _personalNumberController.text =
-            args!.data.registrationCardPersonalNumber ?? "";
-        _addressController.text = args!.data.registrationCardAddress ?? "";
-        _issueDateController.text = args!.data.registrationCardIssueDate ?? "";
-        _authorityController.text = args!.data.registrationCardAuthority ?? "";
-        image = args!.image;
+        setState(() {
+          _nameController.text = args!.data.registrationCardName ?? "";
+          _personalNumberController.text =
+              args!.data.registrationCardPersonalNumber ?? "";
+          _addressController.text = args!.data.registrationCardAddress ?? "";
+          _issueDateController.text = args!.data.registrationCardIssueDate ?? "";
+          _authorityController.text = args!.data.registrationCardAuthority ?? "";
+          image = args!.image;
+        });
       } else {
         print("데이터 못읽음");
       }
@@ -157,10 +159,7 @@ class _IdCreatePageState extends State<IdCreatePage> {
           children: [
             Padding(padding: EdgeInsets.only(top: 10)),
             Center(
-              child: Image(
-                image: AssetImage('assets/horizonLogo.png'),
-                width: 200.0,
-              ),
+              child: Image.file(File(image.path), width: 280),
             ),
             Form(
                 child: Theme(

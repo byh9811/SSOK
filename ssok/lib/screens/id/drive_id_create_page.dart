@@ -72,7 +72,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
   late String? licenseCode = "";
   late String? licenseIssueDate = "";
   late String? licenseAuthority = "";
-  late XFile image;
+  late XFile image = XFile("assets/horizonLogo.png");
 
   bool checkLicenseName = false;
   bool checkLicensePersonalNumber = false;
@@ -146,19 +146,20 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
         print("데이터 읽음");
         print(args); // 'value'
         print(args!.data.licenseAddress);
-
-        _nameController.text = args!.data.licenseName ?? "";
-        _personalNumberController.text = args!.data.licensePersonalNumber ?? "";
-        _typeController.text = args!.data.licenseType ?? "";
-        _addressController.text = args!.data.licenseAddress ?? "";
-        _numberController.text = args!.data.licenseNumber ?? "";
-        _renewStartDateController.text = args!.data.licenseRenewStartDate ?? "";
-        _renewEndDateController.text = args!.data.licenseRenewEndDate ?? "";
-        _conditionController.text = args!.data.licenseCondition ?? "";
-        _codeController.text = args!.data.licenseCode ?? "";
-        _issueDateController.text = args!.data.licenseIssueDate ?? "";
-        _authorityController.text = args!.data.licenseAuthority ?? "";
-        image = args!.image;
+        setState(() {
+          _nameController.text = args!.data.licenseName ?? "";
+          _personalNumberController.text = args!.data.licensePersonalNumber ?? "";
+          _typeController.text = args!.data.licenseType ?? "";
+          _addressController.text = args!.data.licenseAddress ?? "";
+          _numberController.text = args!.data.licenseNumber ?? "";
+          _renewStartDateController.text = args!.data.licenseRenewStartDate ?? "";
+          _renewEndDateController.text = args!.data.licenseRenewEndDate ?? "";
+          _conditionController.text = args!.data.licenseCondition ?? "";
+          _codeController.text = args!.data.licenseCode ?? "";
+          _issueDateController.text = args!.data.licenseIssueDate ?? "";
+          _authorityController.text = args!.data.licenseAuthority ?? "";
+          image = args!.image;
+        });
       } else {
         print("데이터 못읽음");
       }
@@ -203,10 +204,7 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
           children: [
             Padding(padding: EdgeInsets.only(top: 10)),
             Center(
-              child: Image(
-                image: AssetImage('assets/horizonLogo.png'),
-                width: 200.0,
-              ),
+              child: Image.file(File(image.path), width: 280,),
             ),
             Form(
                 child: Theme(

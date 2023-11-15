@@ -116,7 +116,7 @@ class _SigninPage extends State<SigninPage> {
     }
   }
 
-  void signIn() async {
+  Future<bool> signIn() async {
 
     if (name == "") {
       _showAlertDialog("회원 가입 실패", "이름을 입력해주세요.");
@@ -137,7 +137,6 @@ class _SigninPage extends State<SigninPage> {
     }else if (!isSimplePasswordMismatch) {
       _showAlertDialog("회원 가입 실패", "2차 비밀번호가 일치하지 않습니다.");
     }
-
     else if (name != "" &&
         isCheckSms &&
         isPosId &&
@@ -156,16 +155,17 @@ class _SigninPage extends State<SigninPage> {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         print(jsonData);
-        _showAlertDialog("회원가입이 완료되었습니다.", "환영합니다!");
-        Navigator.of(context).pushReplacementNamed('/');
+        _endSignIn("회원가입이 완료되었습니다!", "환영합니다!");
+        return true;
       } else {
-        throw Exception('Failed to load');
+        _showAlertDialog("회원가입에 실패했습니다.", "회원가입에 실패했습니다.");
       }
     }
+    return false;
   }
 
-  void _showAlertDialog(String title, String content) {
-    showDialog(
+  void _showAlertDialog(String title, String content) async{
+    await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -183,7 +183,25 @@ class _SigninPage extends State<SigninPage> {
       },
     );
   }
-
+  void _endSignIn(String title, String content) async{
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/');
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -326,7 +344,7 @@ class _SigninPage extends State<SigninPage> {
                         ),
                         SizedBox(height: screenHeight * 0.02),
                         TextField(
-                          decoration: InputDecoration(labelText: '비밀번호'),
+                          decoration: InputDecoration(labelText: '비밀번호(영문, 숫자, 특수문자 포함 8자리 이상)'),
                           keyboardType: TextInputType.text,
                           obscureText: true, // 비밀번호 안보이도록 하는 것
                           maxLength: 25,
@@ -365,7 +383,7 @@ class _SigninPage extends State<SigninPage> {
                         ),
                         SizedBox(height: screenHeight * 0.02),
                         TextField(
-                          decoration: InputDecoration(labelText: '2차 비밀번호'),
+                          decoration: InputDecoration(labelText: '2차 비밀번호(6자리)'),
                           keyboardType: TextInputType.text,
                           obscureText: true, // 비밀번호 안보이도록 하는 것
                           maxLength: 6,
@@ -412,7 +430,7 @@ class _SigninPage extends State<SigninPage> {
                             minWidth: 100.0,
                             height: 50.0,
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: (){
                                 signIn();
                               },
                               style: ElevatedButton.styleFrom(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 
@@ -16,9 +17,9 @@ final formKey = GlobalKey<FormState>();
 class _SigninPage extends State<SigninPage> {
   ApiService apiService = ApiService();
   late String name = "";
-  late String phone;
-  late String sms;
-  late String id;
+  late String phone="";
+  late String sms="";
+  late String id="";
   late String password = "";
   late String checkPassword = "";
   late String simplePassword = "";
@@ -33,14 +34,14 @@ class _SigninPage extends State<SigninPage> {
   Color idColor = Colors.blue;
 
   void sendSms() async {
-    final response = await apiService.postRequest(
-        'member-service/sms/send', {"to": phone}, TokenManager().accessToken);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      _showAlertDialog("인증 문자를 전송했습니다.", "인증번호를 입력해주세요");
-    } else {
-      throw Exception('Failed to load');
-    }
+      final response = await apiService.postRequest(
+          'member-service/sms/send', {"to": phone}, TokenManager().accessToken);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        _showAlertDialog("인증 문자를 전송했습니다.", "인증번호를 입력해주세요");
+      } else {
+        throw Exception('Failed to load');
+      }
   }
 
   void checkSms() async {
@@ -190,6 +191,11 @@ class _SigninPage extends State<SigninPage> {
                                 readOnly: isCheckSms,
                                 decoration: InputDecoration(labelText: '전화번호'),
                                 keyboardType: TextInputType.phone,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  // 추가로 필요한 경우 다른 형식 지정기를 여기에 추가할 수 있습니다.
+                                ],
+                                maxLength: 11,
                                 onChanged: (value) {
                                   phone = value;
                                 },

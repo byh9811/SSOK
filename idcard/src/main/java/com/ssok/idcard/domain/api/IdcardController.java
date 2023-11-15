@@ -93,29 +93,36 @@ public class IdcardController {
     }
 
     @PostMapping(path = "/scan/registration", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ApiResponse<RecognizedRegistrationCardResponse> ocrRegistration(
+    public ApiResponse<?> ocrRegistration(
             @RequestPart(value="img") MultipartFile file
     ) {
         log.info("controller entered method ocrRegistration");
         RecognizedRegistrationCardResponse result = analysisService.analysisRegistration(file);
+        if(result ==  null) return ERROR("주민등록증을 다시 촬영해주세요", HttpStatus.BAD_REQUEST);
         return OK(result);
     }
 
     @PostMapping(path = "/scan/license", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ApiResponse<RecognizedLicenseResponse> ocrLicense(
+    public ApiResponse<?> ocrLicense(
             @RequestPart(value="img") MultipartFile file
     ) {
         log.info("controller entered method ocrLicense");
         RecognizedLicenseResponse result = analysisService.analysisLicense(file);
+        if(result ==  null){
+            return ERROR("운전명허증을 다시 촬영해주세요", HttpStatus.BAD_REQUEST);
+        }
         return OK(result);
     }
 
     @PostMapping(path = "/scan/namecard", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ApiResponse<RecognizedNameCardResponse> ocrNameCard(
+    public ApiResponse<?> ocrNameCard(
             @RequestPart(value="img") MultipartFile file
     ) {
         log.info("controller entered method ocrNameCard");
         RecognizedNameCardResponse result = analysisService.analysisNameCard(file);
+        if(result ==  null){
+            return ERROR("명함을 다시 촬영해주세요", HttpStatus.BAD_REQUEST);
+        }
         return OK(result);
     }
 

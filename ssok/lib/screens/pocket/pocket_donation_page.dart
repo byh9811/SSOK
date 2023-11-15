@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
@@ -13,8 +14,7 @@ class PocketDonationPage extends StatefulWidget {
 }
 
 class _PocketDonationPageState extends State<PocketDonationPage> {
-
-
+    
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -62,7 +62,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
   
   ApiService apiService = ApiService();
   late List donateList;
-
+    var numberFormat = NumberFormat('###,###,###,###');
   @override
   void initState() {
     // TODO: implement initState
@@ -120,6 +120,15 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                 width: screenWidth,
                 height: screenHeight * 0.46,
                 decoration: BoxDecoration(
+                  color:  Color.fromRGBO(255, 255, 255, 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,  // 그림자 색상
+                      offset: Offset(0.0, 2.0),  // 그림자 위치 (가로, 세로)
+                      blurRadius: 8.0,  // 그림자의 흐림 정도
+                      spreadRadius: 2.0,  // 그림자의 전체 크기
+                    ),
+                  ],
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   border: Border.all(
                     color: Color(0xFF787878), // 테두리 색상
@@ -178,7 +187,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                             ),
                           ),
                           Text(
-                            item['donateTotalDonation'].toString()+"원", // 원하는 필드로 변경
+                            numberFormat.format(item['donateTotalDonation']).toString()+"원", // 원하는 필드로 변경
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -203,7 +212,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                             ),
                           ),
                           Text(
-                            item['donateTotalDonator'].toString()+"명", // 원하는 필드로 변경
+                            numberFormat.format(item['donateTotalDonator']).toString()+"명", // 원하는 필드로 변경
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -217,7 +226,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "나의 기부 금액 : "+item['memberTotalDonateAmt'].toString()+"원", // 원하는 필드로 변경
+                          "나의 기부 금액 : "+numberFormat.format(item['memberTotalDonateAmt']).toString()+"원", // 원하는 필드로 변경
                           style: TextStyle(
                             fontSize: 14,
                             color: Color(0xFF818181),

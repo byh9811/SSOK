@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ssok/widgets/pockets/childrens/enter_amount.dart';
 import 'package:ssok/widgets/pockets/childrens/how_much_text.dart';
 
@@ -15,7 +16,7 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
     // double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-
+    var numberFormat = NumberFormat('###,###,###,###');
     final args = ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
     print(args);
     return Scaffold(
@@ -69,7 +70,7 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child:Text(
-                      "현재 누적 기부금 : ${args["donateTotalDonation"]}원",
+                      "현재 누적 기부금 : ${numberFormat.format(args["donateTotalDonation"])}원",
                       style: TextStyle(
                         fontSize: 20,
                       ),
@@ -82,7 +83,7 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
                     alignment: Alignment.centerLeft,
                     child:
                       Text(
-                        "현재 누적 기부자 : ${args["donateTotalDonator"]}명",
+                        "현재 누적 기부자 : ${numberFormat.format(args["donateTotalDonator"])}명",
                         style: TextStyle(
                         fontSize: 20,
                       ),
@@ -96,7 +97,7 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
                     alignment: Alignment.centerLeft,
                     child:
                       Text(
-                        "나의 누적 기부 금액 : ${args["memberTotalDonateAmt"]}원",
+                        "나의 누적 기부 금액 : ${numberFormat.format(args["memberTotalDonateAmt"])}원",
                         style: TextStyle(
                         fontSize: 20,
                       ),
@@ -109,7 +110,7 @@ class _PocketDonationSendPageState extends State<PocketDonationSendPage> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "보유 포켓머니 : ${args["pocketSaving"]}원",
+                      "보유 포켓머니 : ${numberFormat.format(args["pocketSaving"])}원",
                       style: TextStyle(
                         fontSize: 20,
                       ),

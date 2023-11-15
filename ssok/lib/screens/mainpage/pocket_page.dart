@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ssok/screens/loading/basic_loading_page.dart';
 import 'package:ssok/widgets/pockets/all_registered_pocket.dart';
+import 'package:ssok/widgets/pockets/can_not_registered_pocket.dart';
 import 'package:ssok/widgets/pockets/not_registered_pocket.dart';
 import 'package:ssok/widgets/pockets/registered_pocket.dart';
 import 'package:ssok/http/http.dart';
@@ -24,6 +25,7 @@ class _PocketPageState extends State<PocketPage> {
   int? pocketTotalPoint;
   bool? pocketIsChangeSaving;
   bool isLoading = true;
+  bool idcardRegistered = false;
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _PocketPageState extends State<PocketPage> {
         TokenManager().accessToken);
     print("uuid가져옴");
     print(response.body);
+
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       setState(() {
@@ -59,10 +62,35 @@ class _PocketPageState extends State<PocketPage> {
       setState(() {
         seq = jsonData['response'];
       });
-      getAccountStatus();
+      getRequestInfo();
     } else {
       throw Exception('Failed to load');
     }
+  }
+
+  void getRequestInfo() async {
+    final authResponse = await apiService.getRequest(
+        'idcard-service/summary/idcard',
+        TokenManager().accessToken);
+    print("authResponse 가져옴");
+    print(authResponse.body);
+    if (authResponse.statusCode == 200) {
+      final idcards = jsonDecode(authResponse.body);
+      if(idcards["response"]["summaryRegistrationCard"]!=null || idcards["response"]["summaryLicense"]!=null) {
+        setState(() {
+          idcardRegistered = true;
+        });
+        getAccountStatus();
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      print("hellO:;:::$idcardRegistered");
+    } else {
+      throw Exception('Failed to load');
+    }
+
   }
 
   void getAccountStatus() async {
@@ -123,7 +151,10 @@ class _PocketPageState extends State<PocketPage> {
       return Center(child: BasicLoadingPage());
     } else {
       // 모든 데이터가 로딩된 후에는 해당 화면을 보여줌
-      if (accountNum == null) {
+      print(";asldjfl;sjdafl;jasdkjf;l:;:::$idcardRegistered");
+      if (!idcardRegistered) {
+        return CanNotRegisteredPocket();
+      } else if (accountNum == null) {
         return NotRegisteredPocket();
       } else if (pocketMoney == null) {
         return RegisteredPocket();

@@ -98,7 +98,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
           child: Text(
             "진행중인 기부목록",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 25,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -118,28 +118,35 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
               ),
               child: Container(
                 width: screenWidth,
-                height: screenHeight * 0.38,
+                height: screenHeight * 0.44,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   border: Border.all(
                     color: Color(0xFF787878), // 테두리 색상
-                    width: 0.5, // 테두리 두께
+                    width: 2, // 테두리 두께
                   ),
                 ),
                 child: Column(
                   children: [
                     Container(
-                      height: screenHeight * 0.2,
+                      height: screenHeight * 0.23,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25.0),
-                          topRight: Radius.circular(25.0),
+                          topLeft: Radius.circular(23.0),
+                          topRight: Radius.circular(23.0),
                         ),
                       ),
-                      child: Image.network(
-                        item['donateImage'], // 이미지 링크 필드로 변경
-                        fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 조절
-                      ),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(23.0),
+                            topRight: Radius.circular(23.0),
+                          ),
+                          child: Image.network(
+                            item['donateImage'], // 이미지 링크 필드로 변경
+                            fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 조절
+                            width: screenWidth,
+                          ),
+                        )
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -150,19 +157,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                         children: [
                           Text(
                             item['donateTitle'], // 원하는 필드로 변경
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                "나의 기부 금액 : "+item['memberTotalDonateAmt'].toString(), // 원하는 필드로 변경
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xFF818181),
-                                ),
-                              ),
-                            ),
+                            style: TextStyle(fontSize: 25),
                           ),
                         ],
                       ),
@@ -170,26 +165,39 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                     Padding(
                       padding: EdgeInsets.only(
                         right: screenWidth * 0.04,
-                        top: screenHeight * 0.01,
+
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(right: screenWidth * 0.04),
+                            padding: EdgeInsets.only(left: screenWidth * 0.04),
                             child: Text(
-                              "현재 누적 기부금", // 원하는 텍스트로 변경
+                              "현재 누적 기부금 : ", // 원하는 텍스트로 변경
                               style: TextStyle(fontSize: 16),
                             ),
                           ),
                           Text(
-                            item['donateTotalDonation'].toString(), // 원하는 필드로 변경
+                            item['donateTotalDonation'].toString()+"원", // 원하는 필드로 변경
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: screenWidth*0.04, top:screenHeight*0.005),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "나의 기부 금액 : "+item['memberTotalDonateAmt'].toString()+"원", // 원하는 필드로 변경
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF818181),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.02),

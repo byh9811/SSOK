@@ -63,7 +63,6 @@ class _IntroductionPageState extends State<IntroductionPage> {
               image: Image.asset('assets/logo.png'),
               decoration: pageDecoration,
             ),
-
             // 페이지2
             PageViewModel(
               title: "지갑",
@@ -71,6 +70,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                 "SSOK은 OCR 서비스을 이용한 신분증, 마이데이터을 활용한 카드 뿐만아니라 명함, 전자영수증까지 한번에 관리할 수있어요",
                 style: TextStyle(fontSize: 18),
               ),
+              image: Image.asset('assets/wallet.PNG'),
               decoration: pageDecoration,
             ),
             PageViewModel(

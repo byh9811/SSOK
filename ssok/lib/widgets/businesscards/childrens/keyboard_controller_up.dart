@@ -29,7 +29,7 @@ class _KeyboardControllerUpState extends State<KeyboardControllerUp> {
     super.initState();
     // 화면의 최대 너비와 높이를 가져옵니다.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      maxWidth = MediaQuery.of(context).size.width * 0.54;
+      maxWidth = MediaQuery.of(context).size.width * 0.72;
       maxHeight = MediaQuery.of(context).size.height * 0.16;
     });
   }

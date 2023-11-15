@@ -15,7 +15,6 @@ import '../../http/http.dart';
 import '../../http/token_manager.dart';
 
 class BusinessCardCameraCreatePage extends StatefulWidget {
-
   final String? apiUrl;
 
   const BusinessCardCameraCreatePage({super.key, String? this.apiUrl});
@@ -124,7 +123,7 @@ class _BusinessCardCameraCreatePageState
         elevation: 0,
         automaticallyImplyLeading: true,
         title: Text(
-          "명함 상세",
+          "명함 ${args!.type}",
           style: TextStyle(
             fontSize: 19,
             color: Colors.black,
@@ -373,7 +372,7 @@ class _BusinessCardCameraCreatePageState
               ),
               SizedBox(height: screenHeight * 0.02),
               MainButton(
-                title: "등록",
+                title: args!.type,
                 onPressed: () {
                   Navigator.of(context).push(
                     PageRouteBuilder(

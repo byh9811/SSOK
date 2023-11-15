@@ -359,9 +359,9 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
                     NFCFlag = false;
                   });
                   Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
-                  // Navigator.of(context).pop();
-                  // Navigator.of(context).pop();
-                  // Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                   },
                 child: Text("확인"),
               ),

@@ -31,16 +31,17 @@ class _EnterAmountState extends State<EnterAmount> {
         TokenManager().accessToken);
     print(response.body);
     if (response.statusCode == 200) {
-      print(response.body);Navigator.of(context)
-          .pushNamedAndRemoveUntil("/main", (route) => false);
+      showAlet("기부 완료", "기부가 처리되었습니다.", true);
+      print(response.body);
+      // Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false);
     } else if (response.statusCode == 400) {
       // 금액이 부족할떄
       if (jsonDecode(response.body)['error']['status'] == 400) {
         // ignore: use_build_context_synchronously
-        showAlet("기부");
+        showAlet("기부", "보유 포켓머니가 부족합니다.", false);
       }
     } else {
-      showAlet("", msg2: "오류발생", msg3: "잠시후 다시 시도 해주세요.");
+      showAlet("", "", false, msg2: "오류발생", msg3: "잠시후 다시 시도 해주세요.");
     }
   }
 
@@ -54,36 +55,43 @@ class _EnterAmountState extends State<EnterAmount> {
         TokenManager().accessToken);
     print(response.body);
     if (response.statusCode == 200) {
+      showAlet("이체 완료", "이체 처리되었습니다.", true);
       print(response.body);
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil("/main", (route) => false);
+      // Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false);
     } else if (response.statusCode == 400) {
       // 금액이 부족할떄
       if (jsonDecode(response.body)['error']['status'] == 400) {
         // ignore: use_build_context_synchronously
-        showAlet("이체");
+        showAlet("이체", "보유 포켓머니가 부족합니다.", false);
       }
     } else {
-      showAlet("", msg2: "오류발생", msg3: "잠시후 다시 시도 해주세요.");
+      showAlet("", "", false, msg2: "오류발생", msg3: "잠시후 다시 시도 해주세요.");
     }
   }
 
-  void showAlet(String msg, {String? msg2, String? msg3}) async {
+  void showAlet(String msg, String bodyMsg, bool isSuccess,
+      {String? msg2, String? msg3}) async {
     await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          msg2 != null ? msg2 : msg + "실패",
+          msg2 != null ? msg2 : msg,
         ),
         content: Text(
-          msg3 != null ? msg3 : "보유 포켓머니가 부족합니다.",
+          msg3 != null ? msg3 : bodyMsg,
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              if (isSuccess) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    "/main", (route) => false,
+                    arguments: 2);
+              } else {
+                Navigator.of(context).pop();
+              }
             },
             child: Text("확인"),
           ),

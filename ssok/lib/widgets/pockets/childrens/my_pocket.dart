@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 
@@ -41,7 +42,7 @@ class _MyPocketState extends State<MyPocket> {
       // Navigator.of(context).pushReplacementNamed('/pocket/account/create');
     }
   }
-
+    var numberFormat = NumberFormat('###,###,###,###');
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,7 @@ class _MyPocketState extends State<MyPocket> {
           height: screenHeight * 0.115,
           decoration: BoxDecoration(
             color: Color(0xFF00496F),
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(13.0),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +91,7 @@ class _MyPocketState extends State<MyPocket> {
                 child: Row(
                   children: [
                     Text(
-                      "${pocketSaving}원",
+                      "${numberFormat.format(pocketSaving)}원",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,

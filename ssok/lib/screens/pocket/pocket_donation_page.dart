@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
@@ -13,8 +14,7 @@ class PocketDonationPage extends StatefulWidget {
 }
 
 class _PocketDonationPageState extends State<PocketDonationPage> {
-
-
+    
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -62,7 +62,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
   
   ApiService apiService = ApiService();
   late List donateList;
-
+    var numberFormat = NumberFormat('###,###,###,###');
   @override
   void initState() {
     // TODO: implement initState
@@ -98,7 +98,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
           child: Text(
             "진행중인 기부목록",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 25,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -118,28 +118,44 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
               ),
               child: Container(
                 width: screenWidth,
-                height: screenHeight * 0.38,
+                height: screenHeight * 0.46,
                 decoration: BoxDecoration(
+                  color:  Color.fromRGBO(255, 255, 255, 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,  // 그림자 색상
+                      offset: Offset(0.0, 2.0),  // 그림자 위치 (가로, 세로)
+                      blurRadius: 8.0,  // 그림자의 흐림 정도
+                      spreadRadius: 2.0,  // 그림자의 전체 크기
+                    ),
+                  ],
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   border: Border.all(
                     color: Color(0xFF787878), // 테두리 색상
-                    width: 0.5, // 테두리 두께
+                    width: 2, // 테두리 두께
                   ),
                 ),
                 child: Column(
                   children: [
                     Container(
-                      height: screenHeight * 0.2,
+                      height: screenHeight * 0.23,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25.0),
-                          topRight: Radius.circular(25.0),
+                          topLeft: Radius.circular(23.0),
+                          topRight: Radius.circular(23.0),
                         ),
                       ),
-                      child: Image.network(
-                        item['donateImage'], // 이미지 링크 필드로 변경
-                        fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 조절
-                      ),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(23.0),
+                            topRight: Radius.circular(23.0),
+                          ),
+                          child: Image.network(
+                            item['donateImage'], // 이미지 링크 필드로 변경
+                            fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 조절
+                            width: screenWidth,
+                          ),
+                        )
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -150,18 +166,31 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                         children: [
                           Text(
                             item['donateTitle'], // 원하는 필드로 변경
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 25),
                           ),
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                "나의 기부 금액 : "+item['memberTotalDonateAmt'].toString(), // 원하는 필드로 변경
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xFF818181),
-                                ),
-                              ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: screenWidth * 0.04,
+
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: screenWidth * 0.035),
+                            child: Text(
+                              "현재 누적 기부금 : ", // 원하는 텍스트로 변경
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          Text(
+                            numberFormat.format(item['donateTotalDonation']).toString()+"원", // 원하는 필드로 변경
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
@@ -170,26 +199,39 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                     Padding(
                       padding: EdgeInsets.only(
                         right: screenWidth * 0.04,
-                        top: screenHeight * 0.01,
+
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(right: screenWidth * 0.04),
+                            padding: EdgeInsets.only(left: screenWidth * 0.035),
                             child: Text(
-                              "현재 누적 기부금", // 원하는 텍스트로 변경
+                              "현재 누적 기부자 : ", // 원하는 텍스트로 변경
                               style: TextStyle(fontSize: 16),
                             ),
                           ),
                           Text(
-                            item['donateTotalDonation'].toString(), // 원하는 필드로 변경
+                            numberFormat.format(item['donateTotalDonator']).toString()+"명", // 원하는 필드로 변경
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: screenWidth*0.035, top:screenHeight*0.005),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "나의 기부 금액 : "+numberFormat.format(item['memberTotalDonateAmt']).toString()+"원", // 원하는 필드로 변경
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF818181),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.02),
@@ -198,7 +240,6 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                           title: "기부하기",
                           color: "0xFF00ADEF",
                           onPressed: () {
-                            print(item);
                             item["pocketSaving"]=args;
                             print(item);
                             Navigator.of(context).pushNamed('/pocket/donation/send',arguments: item);

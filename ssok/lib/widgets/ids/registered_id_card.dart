@@ -5,6 +5,7 @@ import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/identification/service_aggreement_page.dart';
 import 'package:ssok/widgets/content_box.dart';
+import 'package:ssok/widgets/frequents/confirm.dart';
 import 'package:ssok/widgets/ids/childrens/id_info_text.dart';
 import 'package:ssok/widgets/register_button.dart';
 
@@ -68,6 +69,16 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     }
   }
 
+  void removeIdCard() async {
+    print("신분증을 삭제합니다.");
+    final response = await apiService.postRequest(
+        "idcard-service/registration/remove", null, TokenManager().accessToken);
+    if (response.statusCode == 200) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
+    }
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -106,96 +117,111 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
   Widget _buildFrontContent(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: EdgeInsets.only(bottom: screenHeight * 0.01),
-      child: contentBox(
-        context,
-        Column(
-          children: [
-            Expanded(
-              child: Container(
+    return GestureDetector(
+      onTap: () {
+        _toggleAnimation();
+      },
+      child: Padding(
+        padding: EdgeInsets.only(bottom: screenHeight * 0.01),
+        child: contentBox(
+          context,
+          Column(
+            children: [
+              Expanded(
+                child: Container(
+                  width: screenWidth,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/registration_card_color.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(
+                              'assets/logo.png',
+                              height: 45,
+                              color: Colors.white54,
+                            ),
+                            IconButton(onPressed: () {
+                              confirmDialog(context, "주민등록증 삭제", "주민등록증을 삭제하시겠습니까?",(){removeIdCard();});
+                              // updateStatus
+                            }, icon: Icon(Icons.remove_circle), color: Colors.pink,),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              "주민등록증",
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: screenHeight * 0.19,
                 width: screenWidth,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/registration_card_color.png'),
-                    fit: BoxFit.cover,
-                  ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0)),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: screenWidth * 0.03, top: screenHeight * 0.01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      idInfoText(context, "이름",
+                          widget.registrationCard!.registrationCardName),
+                      SizedBox(height: screenHeight * 0.01),
+                      idInfoText(
+                          context,
+                          "주민번호",
+                          widget
+                              .registrationCard!.registrationCardPersonalNumber),
+                      SizedBox(height: screenHeight * 0.01),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            onPressed: _toggleAnimation,
+                            child: Text(
+                              "자세히",
+                              style: TextStyle(fontSize: 18, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Image.asset(
-                        'assets/logo.png',
-                        height: 45,
-                        color: Colors.white54,
-                      ),
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            "주민등록증",
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: screenHeight * 0.19,
-              width: screenWidth,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10.0),
-                    bottomRight: Radius.circular(10.0)),
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: screenWidth * 0.03, top: screenHeight * 0.01),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    idInfoText(context, "이름",
-                        widget.registrationCard!.registrationCardName),
-                    SizedBox(height: screenHeight * 0.01),
-                    idInfoText(
-                        context,
-                        "주민번호",
-                        widget
-                            .registrationCard!.registrationCardPersonalNumber),
-                    SizedBox(height: screenHeight * 0.01),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: TextButton(
-                          onPressed: _toggleAnimation,
-                          child: Text(
-                            "자세히",
-                            style: TextStyle(fontSize: 18, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
+          0.5,
         ),
-        0.5,
       ),
     );
   }
@@ -273,7 +299,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
           ),
           Column(
             children: [
-              _buildRotatedTextWithWrap(registrationCardAddress, 15),
+              _buildRotatedTextWithWrap(registrationCardAddress, 14),
             ],
           ),
           Column(
@@ -323,3 +349,5 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     return lines;
   }
 }
+
+

@@ -120,6 +120,15 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                 width: screenWidth,
                 height: screenHeight * 0.46,
                 decoration: BoxDecoration(
+                  color:  Color.fromRGBO(255, 255, 255, 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,  // 그림자 색상
+                      offset: Offset(0.0, 2.0),  // 그림자 위치 (가로, 세로)
+                      blurRadius: 8.0,  // 그림자의 흐림 정도
+                      spreadRadius: 2.0,  // 그림자의 전체 크기
+                    ),
+                  ],
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   border: Border.all(
                     color: Color(0xFF787878), // 테두리 색상

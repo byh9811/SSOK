@@ -34,7 +34,8 @@ class _SigninPage extends State<SigninPage> {
   Color idColor = Colors.blue;
 
   void sendSms() async {
-    if(phone.length!=11||phone.substring(0,4)!="010"){
+    if(phone.length!=11 || phone.substring(0,3)!="010"){
+      print(phone);
       _showAlertDialog("인증 문자 전송 실패", "올바른 전화번호를 입력해주세요.");
     }
     else{
@@ -51,7 +52,7 @@ class _SigninPage extends State<SigninPage> {
 
   void checkSms() async {
 
-    if(checkPassword.length!=5){
+    if(sms.length!=5){
       _showAlertDialog("잘못된 인증번호입니다.", "인증번호를 확인해주세요.");      
     }else{
       final response = await apiService.postRequest('member-service/sms/check',
@@ -89,7 +90,9 @@ class _SigninPage extends State<SigninPage> {
   }
 
   void checkId() async {
-    if(!checkEnglish(id)){
+    if(id==""){
+      _showAlertDialog("잘못된 형식의 아이디입니다.", "아이디를 입력해주세요.");      
+    }else if(!checkEnglish(id)){
       _showAlertDialog("잘못된 형식의 아이디입니다.", "영문을 포함해주세요.");
     }else if(id.length<6){
       _showAlertDialog("잘못된 형식의 아이디입니다.", "6자리 이상 입력해주세요.");
@@ -301,7 +304,7 @@ class _SigninPage extends State<SigninPage> {
                                 decoration: InputDecoration(labelText: '아이디'),
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) {
-                                  phone = value;
+                                  id = value;
                                 },
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
@@ -328,9 +331,9 @@ class _SigninPage extends State<SigninPage> {
                           obscureText: true, // 비밀번호 안보이도록 하는 것
                           maxLength: 25,
                           onChanged: (value) {
-                            setState(
-                              () {
+                            setState(() {
                                 password = value;
+                                isPasswordMismatch = password == checkPassword;
                               },
                             );
                           },
@@ -369,6 +372,8 @@ class _SigninPage extends State<SigninPage> {
                           onChanged: (value) {
                             setState(() {
                               simplePassword = value;
+                              isSimplePasswordMismatch =
+                                  simplePassword == checkSimplePassword;
                             });
                           },
                           inputFormatters: <TextInputFormatter>[

@@ -8,6 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/widgets/businesscards/childrens/modal_type_button.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 import '../../dto/recognized_namecard.dart';
 import '../../http/http.dart';
@@ -188,13 +189,19 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                             type: titleType),
                       );
                     } catch (e) {
-                      print("왜 안됌?? :  $e");
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("OCR 인식 실패"),
-                      ));
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          "/main", (route) => false,
-                          arguments: 1);
+                      // ignore: use_build_context_synchronously
+                      showSuccessDialog(
+                          context, "OCR인식 실패", "운전면허증이 제대로 식별되지 않았습니다.", () {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            "/main", (route) => false,
+                            arguments: 1);
+                      });
+                      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //   content: Text("OCR 인식 실패"),
+                      // ));
+                      // Navigator.of(context).pushNamedAndRemoveUntil(
+                      //     "/main", (route) => false,
+                      //     arguments: 1);
                     }
                   } else {
                     Navigator.of(context).pop();
@@ -220,12 +227,19 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                             type: titleType),
                       );
                     } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("OCR 인식 실패"),
-                      ));
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          "/main", (route) => false,
-                          arguments: 1);
+                      // ignore: use_build_context_synchronously
+                      showSuccessDialog(
+                          context, "OCR인식 실패", "운전면허증이 제대로 식별되지 않았습니다.", () {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            "/main", (route) => false,
+                            arguments: 1);
+                      });
+                      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //   content: Text("OCR 인식 실패"),
+                      // ));
+                      // Navigator.of(context).pushNamedAndRemoveUntil(
+                      //     "/main", (route) => false,
+                      //     arguments: 1);
                     }
                   } else {
                     Navigator.of(context).pop();

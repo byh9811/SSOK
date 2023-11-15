@@ -92,10 +92,9 @@ class _BusinessCardHistory extends State<BusinessCardHistory> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      color: Colors.white,
-      child: SizedBox(
-        height: screenHeight * 0.9,
+    return Expanded(
+      child: Container(
+        color: Colors.white,
         child: ListView.builder(
           itemCount: imageList.length,
           itemBuilder: (context, index) {

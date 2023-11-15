@@ -107,15 +107,13 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
               child: ElevatedButton(
                   onPressed: () {
-                    // Navigator.of(context).pushNamed(
-                    //   '/creditcard/history/list',
-                    //   arguments: {
-                    //     "ownerName": widget.creditCard.ownerName,
-                    //     "cardNum": widget.creditCard.cardNum
-                    //   },
-                    // );
-                    Navigator.of(context)
-                        .pushNamed('/creditcard/payment/password');
+                    Navigator.of(context).pushNamed(
+                      '/creditcard/history/list',
+                      arguments: {
+                        "ownerName": widget.creditCard.ownerName,
+                        "cardNum": widget.creditCard.cardNum
+                      },
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF00ADEF),

@@ -85,10 +85,10 @@ public record LicenseCreateRequest(
 
         // license Number은 숫자와 하이픈을 제외한 문자가 들어갈 수 없음
         if (licenseNumber == null) {
-            return "licensePersonalNumber cannot be null";
+            return "licenseNumber cannot be null";
         }
         if (!licenseNumber.matches("[0-9-]+")) {
-            return "licensePersonalNumber can only contain digits and '-'";
+            return "licenseNumber can only contain digits and '-'";
         }
 
         // 면허 갱신기간의 타입을 맞춰주어야하며, null일 수 없음

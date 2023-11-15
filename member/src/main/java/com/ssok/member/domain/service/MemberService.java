@@ -1,14 +1,12 @@
 package com.ssok.member.domain.service;
 
+import com.ssok.member.domain.api.dto.request.MemberSimplePasswordCheckRequest;
 import com.ssok.member.domain.api.dto.response.MemberAccountResponse;
 import com.ssok.member.domain.api.dto.response.MemberSeqResponse;
 import com.ssok.member.domain.api.dto.response.TokenResponse;
 import com.ssok.member.domain.entity.Member;
 import com.ssok.member.domain.repository.MemberRepository;
-import com.ssok.member.domain.service.dto.MemberAccountUpdateDto;
-import com.ssok.member.domain.service.dto.MemberCreateDto;
-import com.ssok.member.domain.service.dto.MemberLoginDto;
-import com.ssok.member.domain.service.dto.MemberMydataAccessTokenUpdateDto;
+import com.ssok.member.domain.service.dto.*;
 import com.ssok.member.domain.token.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -150,6 +148,15 @@ public class MemberService {
         }
     }
 
+    public boolean checkSimplePassword(MemberSimplePasswordCheckDto memberSimplePasswordCheckDto) {
+        Member member = memberRepository.findMemberByMemberId(memberSimplePasswordCheckDto.getLoginId()).orElse(null);
+        if(member!=null){
+            if(member.getMemberSimplePassword().equals(memberSimplePasswordCheckDto.getSimplePassword())){
+                return true;
+            }
+        }
+        return false;
+    }
 
 //    public Member findById(Long id) {
 //        return memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());

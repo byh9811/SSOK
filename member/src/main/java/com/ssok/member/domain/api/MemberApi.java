@@ -158,10 +158,18 @@ public class MemberApi {
         return OK(tokenResponse);
     }
 
+    //약관 동의
     @PostMapping("/member/agreement")
     public ApiResponse<?> agreement(@RequestBody String loginId){
         memberService.editAgreement(loginId);
         return OK(null);
+    }
+
+    //간편 비밀번호
+    @PostMapping("/member/simplepassword")
+    public ApiResponse<Boolean> checkSimplePassword(@RequestBody MemberSimplePasswordCheckRequest memberSimplePasswordCheckRequest){
+        boolean checkSimplePassword = memberService.checkSimplePassword(MemberSimplePasswordCheckDto.of(memberSimplePasswordCheckRequest));
+        return OK(checkSimplePassword);
     }
 
 //    // 비밀번호 검사

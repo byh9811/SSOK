@@ -19,11 +19,20 @@ public class PocketDetailResponses {
     //출금 총액
     private Long withdrawal;
 
+    private Long change;
+    private Long carbon;
+    private Long donate;
+    private Long transfer;
+
     @Builder
-    public PocketDetailResponses(List<PocketDetailResponse> pocketDetailResponses, Integer totalHistory, Long deposit, Long withdrawal) {
+    public PocketDetailResponses(List<PocketDetailResponse> pocketDetailResponses, Integer totalHistory, Long deposit, Long withdrawal, Long change, Long carbon, Long donate, Long transfer) {
         this.pocketDetailResponses = pocketDetailResponses;
         this.totalHistory = totalHistory;
         this.deposit = deposit;
         this.withdrawal = withdrawal;
+        this.change = change;
+        this.carbon = carbon;
+        this.donate = donate;
+        this.transfer = transfer;
     }
 }

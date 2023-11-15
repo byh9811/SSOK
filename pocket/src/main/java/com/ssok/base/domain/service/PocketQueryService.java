@@ -120,18 +120,27 @@ public class PocketQueryService {
             List<PocketDetailResponse> value = entry.getValue();
             Long deposit = 0L;
             Long withdrawal = 0L;
+            Long change = 0L;
+            Long carbon = 0L;
+            Long donate = 0L;
+            Long transfer  = 0L;
+
             for(PocketDetailResponse response : value){
                 if(response.getPocketHistoryType().equals(PocketHistoryType.CARBON)){
                     deposit += response.getPocketHistoryTransAmt();
+                    carbon += response.getPocketHistoryTransAmt();
                 }
                 if(response.getPocketHistoryType().equals(PocketHistoryType.CHANGE)){
                     deposit += response.getPocketHistoryTransAmt();
+                    change += response.getPocketHistoryTransAmt();
                 }
                 if(response.getPocketHistoryType().equals(PocketHistoryType.DONATION)){
                     withdrawal += response.getPocketHistoryTransAmt();
+                    donate += response.getPocketHistoryTransAmt();
                 }
                 if(response.getPocketHistoryType().equals(PocketHistoryType.WITHDRAWAL)){
                     withdrawal += response.getPocketHistoryTransAmt();
+                    transfer += response.getPocketHistoryTransAmt();
                 }
             }
             result.put(key, PocketDetailResponses.builder()
@@ -139,6 +148,10 @@ public class PocketQueryService {
                     .totalHistory(value.size())
                     .deposit(deposit)
                     .withdrawal(withdrawal)
+                    .carbon(carbon)
+                    .change(change)
+                    .donate(donate)
+                    .transfer(transfer)
                     .build());
         }
         return PocketDetailAllResponse.builder()

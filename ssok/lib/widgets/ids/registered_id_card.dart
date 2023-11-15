@@ -106,96 +106,103 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
   Widget _buildFrontContent(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: EdgeInsets.only(bottom: screenHeight * 0.01),
-      child: contentBox(
-        context,
-        Column(
-          children: [
-            Expanded(
-              child: Container(
+    return GestureDetector(
+      onTap: () {
+        _toggleAnimation();
+        // 여기에 클릭 시 호출할 함수를 넣습니다.
+        print('Padding 클릭됨!');
+      },
+      child: Padding(
+        padding: EdgeInsets.only(bottom: screenHeight * 0.01),
+        child: contentBox(
+          context,
+          Column(
+            children: [
+              Expanded(
+                child: Container(
+                  width: screenWidth,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/registration_card_color.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Image.asset(
+                          'assets/logo.png',
+                          height: 45,
+                          color: Colors.white54,
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              "주민등록증",
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: screenHeight * 0.19,
                 width: screenWidth,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/registration_card_color.png'),
-                    fit: BoxFit.cover,
-                  ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0)),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: screenWidth * 0.03, top: screenHeight * 0.01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      idInfoText(context, "이름",
+                          widget.registrationCard!.registrationCardName),
+                      SizedBox(height: screenHeight * 0.01),
+                      idInfoText(
+                          context,
+                          "주민번호",
+                          widget
+                              .registrationCard!.registrationCardPersonalNumber),
+                      SizedBox(height: screenHeight * 0.01),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            onPressed: _toggleAnimation,
+                            child: Text(
+                              "자세히",
+                              style: TextStyle(fontSize: 18, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Image.asset(
-                        'assets/logo.png',
-                        height: 45,
-                        color: Colors.white54,
-                      ),
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            "주민등록증",
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: screenHeight * 0.19,
-              width: screenWidth,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10.0),
-                    bottomRight: Radius.circular(10.0)),
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: screenWidth * 0.03, top: screenHeight * 0.01),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    idInfoText(context, "이름",
-                        widget.registrationCard!.registrationCardName),
-                    SizedBox(height: screenHeight * 0.01),
-                    idInfoText(
-                        context,
-                        "주민번호",
-                        widget
-                            .registrationCard!.registrationCardPersonalNumber),
-                    SizedBox(height: screenHeight * 0.01),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: TextButton(
-                          onPressed: _toggleAnimation,
-                          child: Text(
-                            "자세히",
-                            style: TextStyle(fontSize: 18, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
+          0.5,
         ),
-        0.5,
       ),
     );
   }
@@ -273,7 +280,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
           ),
           Column(
             children: [
-              _buildRotatedTextWithWrap(registrationCardAddress, 15),
+              _buildRotatedTextWithWrap(registrationCardAddress, 14),
             ],
           ),
           Column(

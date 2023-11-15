@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 
@@ -16,9 +17,9 @@ final formKey = GlobalKey<FormState>();
 class _SigninPage extends State<SigninPage> {
   ApiService apiService = ApiService();
   late String name = "";
-  late String phone;
-  late String sms;
-  late String id;
+  late String phone="";
+  late String sms="";
+  late String id="";
   late String password = "";
   late String checkPassword = "";
   late String simplePassword = "";
@@ -33,57 +34,108 @@ class _SigninPage extends State<SigninPage> {
   Color idColor = Colors.blue;
 
   void sendSms() async {
-    final response = await apiService.postRequest(
-        'member-service/sms/send', {"to": phone}, TokenManager().accessToken);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      _showAlertDialog("인증 문자를 전송했습니다.", "인증번호를 입력해주세요");
-    } else {
-      throw Exception('Failed to load');
+    if(phone.length!=11||phone.substring(0,4)!="010"){
+      _showAlertDialog("인증 문자 전송 실패", "올바른 전화번호를 입력해주세요.");
+    }
+    else{
+      final response = await apiService.postRequest(
+          'member-service/sms/send', {"to": phone}, TokenManager().accessToken);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        _showAlertDialog("인증 문자를 전송했습니다.", "인증번호를 입력해주세요");
+      } else {
+        throw Exception('Failed to load');
+      }
     }
   }
 
   void checkSms() async {
-    final response = await apiService.postRequest('member-service/sms/check',
-        {"phone": phone, "sms": sms}, TokenManager().accessToken);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      print(jsonData);
-      setState(() {
-        isCheckSms = jsonData['response'];
-        if (isCheckSms) {
-          smsColor = Colors.grey;
-          _showAlertDialog("인증이 완료되었습니다.", "다음 절차를 진행해주세요.");
-        } else {
-          _showAlertDialog("인증에 실패했습니다.", "인증번호를 확인해주세요");
-        }
-      });
-    } else {
-      throw Exception('Failed to load');
+
+    if(checkPassword.length!=5){
+      _showAlertDialog("잘못된 인증번호입니다.", "인증번호를 확인해주세요.");      
+    }else{
+      final response = await apiService.postRequest('member-service/sms/check',
+          {"phone": phone, "sms": sms}, TokenManager().accessToken);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        print(jsonData);
+        setState(() {
+          isCheckSms = jsonData['response'];
+          if (isCheckSms) {
+            smsColor = Colors.grey;
+            _showAlertDialog("인증이 완료되었습니다.", "다음 절차를 진행해주세요.");
+          } else {
+            _showAlertDialog("인증에 실패했습니다.", "인증번호를 확인해주세요");
+          }
+        });
+      } else {
+        throw Exception('Failed to load');
+      }
     }
   }
 
+  bool checkEnglish(String input) {
+    RegExp regExp = RegExp(r'[a-zA-Z]'); // 영어(알파벳)를 나타내는 정규 표현식
+    return regExp.hasMatch(input);
+  }
+
+  bool checkChar(String input) {
+    RegExp regExp = RegExp(r'[^\w\s]'); // 영문자, 숫자, 공백을 제외한 모든 문자를 특수문자로 취급
+    return regExp.hasMatch(input);
+  }
+
+  bool containsNumber(String input) {
+    return RegExp(r'\d').hasMatch(input);
+  }
+
   void checkId() async {
-    final response = await apiService.getRequest(
-        'member-service/member/check?id=${id}', TokenManager().accessToken);
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      print(jsonData);
-      setState(() {
-        isPosId = jsonData['response'];
-        if (isPosId) {
-          _showAlertDialog("사용 가능한 아이디입니다", "다음 절차를 진행해주세요.");
-        } else {
-          _showAlertDialog("사용이 불가능한 아이디입니다..", "다른 아이디를 이용해주세요");
-        }
-      });
-    } else {
-      throw Exception('Failed to load');
+    if(!checkEnglish(id)){
+      _showAlertDialog("잘못된 형식의 아이디입니다.", "영문을 포함해주세요.");
+    }else if(id.length<6){
+      _showAlertDialog("잘못된 형식의 아이디입니다.", "6자리 이상 입력해주세요.");
+    }else{
+      final response = await apiService.getRequest(
+          'member-service/member/check?id=${id}', TokenManager().accessToken);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        print(jsonData);
+        setState(() {
+          isPosId = jsonData['response'];
+          if (isPosId) {
+            _showAlertDialog("사용 가능한 아이디입니다", "다음 절차를 진행해주세요.");
+          } else {
+            _showAlertDialog("사용이 불가능한 아이디입니다..", "다른 아이디를 이용해주세요");
+          }
+        });
+      } else {
+        throw Exception('Failed to load');
+      }
     }
   }
 
   void signIn() async {
-    if (name != "" &&
+
+    if (name == "") {
+      _showAlertDialog("회원 가입 실패", "이름을 입력해주세요.");
+    } else if (!isCheckSms) {
+      _showAlertDialog("회원 가입 실패", "문자 인증을 진행해주세요.");
+    } else if (!isPosId) {
+      _showAlertDialog("회원 가입 실패", "아이디 중복검사를 진행해주세요.");
+    } else if (password == "") {
+      _showAlertDialog("회원 가입 실패", "비밀번호를 입력해주세요.");
+    } else if(password.length<8 || !checkChar(password) || !containsNumber(password)){
+      _showAlertDialog("잘못된 비밀번호입니다.", "알파벳, 숫자, 특수문자를 포함하여 8자리 이상의 비밀번호를 사용해주세요.");      
+    }else if (!isPasswordMismatch) {
+      _showAlertDialog("회원 가입 실패", "비밀번호가 일치하지 않습니다.");
+    } else if (simplePassword == "") {
+      _showAlertDialog("회원 가입 실패", "2차 비밀번호를 입력해주세요.");
+    } else if (simplePassword.length!=6) {
+      _showAlertDialog("잘못된 간편 비밀번호입니다.", "간편 비밀번호 6자리를 입력해주세요.");
+    }else if (!isSimplePasswordMismatch) {
+      _showAlertDialog("회원 가입 실패", "2차 비밀번호가 일치하지 않습니다.");
+    }
+
+    else if (name != "" &&
         isCheckSms &&
         isPosId &&
         isPasswordMismatch &&
@@ -106,21 +158,6 @@ class _SigninPage extends State<SigninPage> {
       } else {
         throw Exception('Failed to load');
       }
-    }
-    if (name == "") {
-      _showAlertDialog("회원 가입 실패", "이름을 입력해주세요.");
-    } else if (!isCheckSms) {
-      _showAlertDialog("회원 가입 실패", "문자 인증을 진행해주세요.");
-    } else if (!isPosId) {
-      _showAlertDialog("회원 가입 실패", "아이디 중복검사를 진행해주세요.");
-    } else if (password == "") {
-      _showAlertDialog("회원 가입 실패", "비밀번호를 입력해주세요.");
-    } else if (!isPasswordMismatch) {
-      _showAlertDialog("회원 가입 실패", "비밀번호가 일치하지 않습니다.");
-    } else if (simplePassword == "") {
-      _showAlertDialog("회원 가입 실패", "2차 비밀번호를 입력해주세요.");
-    } else if (!isSimplePasswordMismatch) {
-      _showAlertDialog("회원 가입 실패", "2차 비밀번호가 일치하지 않습니다.");
     }
   }
 
@@ -181,6 +218,12 @@ class _SigninPage extends State<SigninPage> {
                           onChanged: (value) {
                             name = value;
                           },
+                          maxLength: 10,
+                          buildCounter: (BuildContext context, { int? currentLength, int? maxLength, bool? isFocused }) => null,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z가-힣]')),// 영어와 한글만 허용
+                            FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
+                          ],
                         ),
                         SizedBox(height: screenHeight * 0.02),
                         Row(
@@ -190,9 +233,16 @@ class _SigninPage extends State<SigninPage> {
                                 readOnly: isCheckSms,
                                 decoration: InputDecoration(labelText: '전화번호'),
                                 keyboardType: TextInputType.phone,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  // 추가로 필요한 경우 다른 형식 지정기를 여기에 추가할 수 있습니다.
+                                ],
+                                maxLength: 11,
                                 onChanged: (value) {
-                                  phone = value;
+                                  String trimmedValue = value.replaceAll(' ', '');
+                                  phone = trimmedValue;
                                 },
+                                buildCounter: (BuildContext context, { int? currentLength, int? maxLength, bool? isFocused }) => null,
                               ),
                             ),
                             Padding(
@@ -215,12 +265,18 @@ class _SigninPage extends State<SigninPage> {
                               child: TextField(
                                 readOnly: isCheckSms,
                                 decoration: InputDecoration(labelText: '인증번호'),
-                                keyboardType: TextInputType.phone,
+                                keyboardType: TextInputType.number,
+                                maxLength: 5,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  // 추가로 필요한 경우 다른 형식 지정기를 여기에 추가할 수 있습니다.
+                                ],
                                 onChanged: (value) {
                                   setState(() {
                                     sms = value;
                                   });
                                 },
+                                buildCounter: (BuildContext context, { int? currentLength, int? maxLength, bool? isFocused }) => null,
                               ),
                             ),
                             Padding(
@@ -245,8 +301,12 @@ class _SigninPage extends State<SigninPage> {
                                 decoration: InputDecoration(labelText: '아이디'),
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) {
-                                  id = value;
+                                  phone = value;
                                 },
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
+                                  FilteringTextInputFormatter.deny(RegExp(r'[!@#%^&*(),.?":{}|<>]')), //특수문자를 거부하는
+                                ],
                               ),
                             ),
                             Padding(
@@ -266,6 +326,7 @@ class _SigninPage extends State<SigninPage> {
                           decoration: InputDecoration(labelText: '비밀번호'),
                           keyboardType: TextInputType.text,
                           obscureText: true, // 비밀번호 안보이도록 하는 것
+                          maxLength: 25,
                           onChanged: (value) {
                             setState(
                               () {
@@ -273,18 +334,27 @@ class _SigninPage extends State<SigninPage> {
                               },
                             );
                           },
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
+                          ],
+                          buildCounter: (BuildContext context, { int? currentLength, int? maxLength, bool? isFocused }) => null,
                         ),
                         SizedBox(height: screenHeight * 0.02),
                         TextField(
                           decoration: InputDecoration(labelText: '비밀번호 확인'),
                           keyboardType: TextInputType.text,
                           obscureText: true, // 비밀번호 안보이도록 하는 것
+                          maxLength: 25,
                           onChanged: (value) {
                             setState(() {
                               checkPassword = value;
                               isPasswordMismatch = password == checkPassword;
                             });
                           },
+                          buildCounter: (BuildContext context, { int? currentLength, int? maxLength, bool? isFocused }) => null,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
+                          ],
                           style: TextStyle(
                               color: isPasswordMismatch
                                   ? Colors.black
@@ -295,11 +365,17 @@ class _SigninPage extends State<SigninPage> {
                           decoration: InputDecoration(labelText: '2차 비밀번호'),
                           keyboardType: TextInputType.text,
                           obscureText: true, // 비밀번호 안보이도록 하는 것
+                          maxLength: 6,
                           onChanged: (value) {
                             setState(() {
                               simplePassword = value;
                             });
                           },
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          buildCounter: (BuildContext context, { int? currentLength, int? maxLength, bool? isFocused }) => null,
                         ),
                         SizedBox(height: screenHeight * 0.02),
                         TextField(
@@ -308,6 +384,7 @@ class _SigninPage extends State<SigninPage> {
                           ),
                           keyboardType: TextInputType.text,
                           obscureText: true, // 비밀번호 안보이도록 하는 것
+                          maxLength: 6,
                           onChanged: (value) {
                             setState(() {
                               checkSimplePassword = value;
@@ -315,6 +392,11 @@ class _SigninPage extends State<SigninPage> {
                                   simplePassword == checkSimplePassword;
                             });
                           },
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          buildCounter: (BuildContext context, { int? currentLength, int? maxLength, bool? isFocused }) => null,
                           style: TextStyle(
                               color: isSimplePasswordMismatch
                                   ? Colors.black

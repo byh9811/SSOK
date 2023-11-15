@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
+import 'package:ssok/screens/loading/namecard_detail_loading_page.dart';
 import 'package:ssok/widgets/modals/business_memo_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -100,14 +101,16 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
   late NameCardHead nameCardHead;
   late NameCardBody nameCardBody;
   late NameCardPos nameCardPos;
-
+  bool isLoading = true;
   _BusinessCardDetail(this.args);
   ApiService apiService = ApiService();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // nameCardHead = NameCardHead("", "", "", 0, 0, "");
+    // nameCardBody = NameCardBody("", "", "", "", "", "", "");
+    // nameCardPos = NameCardPos(0.0, 0.0);
     getNameCardDetail();
   }
 
@@ -140,6 +143,7 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
             data["namecardFax"],
             data["namecardEmail"]);
         nameCardPos = NameCardPos(data["lat"], data["lon"]);
+        isLoading = false;
       });
     }
   }
@@ -148,20 +152,22 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
-        child: Column(
-          children: [
-            BusinessCardDetailHeader(nameCardHead: nameCardHead),
-            SizedBox(height: screenHeight * 0.03),
-            BusinessCardDetailBody(nameCardBody: nameCardBody),
-            SizedBox(height: screenHeight * 0.02),
-            BusinessCardDetailMap(nameCardPos: nameCardPos),
-          ],
-        ),
-      ),
-    );
+    return isLoading
+        ? NamecardDetailLoadingPage()
+        : SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
+              child: Column(
+                children: [
+                  BusinessCardDetailHeader(nameCardHead: nameCardHead),
+                  SizedBox(height: screenHeight * 0.03),
+                  BusinessCardDetailBody(nameCardBody: nameCardBody),
+                  SizedBox(height: screenHeight * 0.02),
+                  BusinessCardDetailMap(nameCardPos: nameCardPos),
+                ],
+              ),
+            ),
+          );
   }
 }
 

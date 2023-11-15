@@ -18,6 +18,7 @@ import 'package:ssok/screens/id/drive_id_create_page.dart';
 import 'package:ssok/screens/id/drive_id_detail_page.dart';
 import 'package:ssok/screens/id/id_create_page.dart';
 import 'package:ssok/screens/id/id_detail_page.dart';
+import 'package:ssok/screens/identification/simple_password_page.dart';
 import 'package:ssok/screens/intro/incroduction_page.dart';
 import 'package:ssok/screens/loading/basic_loading_page.dart';
 
@@ -64,10 +65,10 @@ class MyApp extends StatelessWidget {
         '/main': (context) => MainPage(),
         // '/main' :(c ontext) => CreditCardPaymentPage(),
         '/id/create': (context) => IdCreatePage(),
-        '/creditcard/main': (context) => CreditCardPage(),
         '/id/detail': (context) => IdDetailPage(),
         '/drive/id/create': (context) => DriveIdCreatePage(),
         '/drive/id/detail': (context) => DriveIdDetailPage(),
+        '/creditcard/main': (context) => CreditCardPage(),
         '/creditcard/payment': (context) => CreditCardPaymentPage(),
         '/businesscard/my': (context) => BusinessCardMyPage(),
         '/businesscard/page': (context) => BusinessCardPage(),

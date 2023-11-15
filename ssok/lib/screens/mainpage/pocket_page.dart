@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ssok/screens/loading/basic_loading_page.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 import 'package:ssok/widgets/pockets/all_registered_pocket.dart';
 import 'package:ssok/widgets/pockets/not_registered_pocket.dart';
 import 'package:ssok/widgets/pockets/registered_pocket.dart';
@@ -43,7 +44,13 @@ class _PocketPageState extends State<PocketPage> {
         uuid = jsonData['response'];
       });
       getSeq();
-    } else {
+    } else if (response.statusCode == 401) {
+      // ignore: use_build_context_synchronously
+      showSuccessDialog(context, "로그인 세션 만료", "다시 로그인 해주세요", () {
+        Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
+      });
+    }
+    {
       throw Exception('Failed to load');
     }
   }

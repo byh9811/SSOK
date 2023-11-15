@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:ssok/http/http.dart';
@@ -152,6 +154,8 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
@@ -206,20 +210,39 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
               ),
               SizedBox(height: screenHeight * 0.015),
               // Text(name, style: TextStyle(fontSize: 30)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/level${level}.png",
-                    height: 180,
-                  ),
-                  Icon(Icons.info, color: Colors.grey),
-                ],
+
+              Image.asset(
+                "assets/level${level}.png",
+                height: 180,
+              ),
+              Tooltip(
+                key: tooltipkey,
+                triggerMode: TooltipTriggerMode.tap,
+                margin: EdgeInsets.only(
+                    right: screenWidth * 0.25, bottom: screenHeight * 0.10),
+                padding: EdgeInsets.symmetric(
+                    vertical: screenHeight * 0.012,
+                    horizontal: screenWidth * 0.02),
+                height: 30,
+                showDuration: Duration(seconds: 1),
+                message:
+                    '안녕하세요. 쏙이에요~ \n저는 기부를 하거나 탄소 중립 포인트 \n획득 시 경험치를 얻을 수 있어요!',
               ),
               SizedBox(height: screenHeight * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Padding(
+                      padding: const EdgeInsets.only(right: 5.0),
+                      child: IconButton(
+                        onPressed: () {
+                          tooltipkey.currentState?.ensureTooltipVisible();
+                          Future.delayed(Duration(seconds: 2), () {
+                            // tooltipkey.currentState?.hideTooltip();
+                          });
+                        },
+                        icon: Icon(Icons.info_outline, color: Colors.grey),
+                      )),
                   Text("EXP ", style: TextStyle(fontSize: 18)),
                   SizedBox(
                       width: 200,
@@ -230,12 +253,10 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
                         valueColor: AlwaysStoppedAnimation<Color>(
                             Colors.blue), // 진행 바 색상
                       )),
-                  // Icon(
-                  //   Icons.help_center,
-                  //   color: Colors.blue,
-                  // ),
-                  Text("  ${((exp * 100).toInt()).toString()}%",
-                      style: TextStyle(fontSize: 18)),
+                  Text(
+                    "  ${((exp * 100).toInt()).toString()}%",
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ],
               ),
               SizedBox(height: screenHeight * 0.04),

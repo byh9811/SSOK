@@ -23,6 +23,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class IdcardService {
 
     private final LicenseRepository licenseRepository;

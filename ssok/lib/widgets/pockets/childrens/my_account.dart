@@ -73,8 +73,9 @@ class _MyAccountState extends State<MyAccount> {
         width: screenWidth,
         height: screenHeight * 0.12,
         decoration: BoxDecoration(
-          color: Color(0xFF8B8B8B),
-          borderRadius: BorderRadius.circular(20.0),
+          color: Color.fromARGB(255, 255, 255, 255),
+          borderRadius: BorderRadius.circular(13),
+          border: Border.all(color:  Color.fromARGB(255, 17, 23, 71))
         ),
         child: isLoading
             ? Center(
@@ -92,7 +93,7 @@ class _MyAccountState extends State<MyAccount> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: screenWidth * 0.01),
+                          padding: EdgeInsets.only(left: screenWidth * 0.04),
                           child: Row(
                             children: [
                               Image.asset('assets/account_icon.png', width: 35),
@@ -102,9 +103,9 @@ class _MyAccountState extends State<MyAccount> {
                                 child: Text(
                                   "${accountData.name}님의 통장",
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Color.fromARGB(255, 17, 23, 71),
                                     fontSize: 15,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                               ),
@@ -118,8 +119,8 @@ class _MyAccountState extends State<MyAccount> {
                           child: Text(
                             "${accountData.accNum} (${accountData.bank})",
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
+                              color: Color.fromARGB(255, 17, 23, 71),
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -130,7 +131,7 @@ class _MyAccountState extends State<MyAccount> {
                             child: Text(
                               "${numberFormat.format(double.parse(accountData.balance))}원",
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Color.fromARGB(255, 17, 23, 71),
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500),
                             ),

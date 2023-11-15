@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 class EnterAmount extends StatefulWidget {
   const EnterAmount(
@@ -55,17 +56,25 @@ class _EnterAmountState extends State<EnterAmount> {
         TokenManager().accessToken);
     print(response.body);
     if (response.statusCode == 200) {
-      showAlet("이체 완료", "이체 처리되었습니다.", true);
+      showSuccessDialog(context, "이체 성공", "이체가 완료되었습니다.", () {
+        Navigator.of(context).pop();
+      });
+
       print(response.body);
       // Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false);
     } else if (response.statusCode == 400) {
       // 금액이 부족할떄
       if (jsonDecode(response.body)['error']['status'] == 400) {
         // ignore: use_build_context_synchronously
-        showAlet("이체", "보유 포켓머니가 부족합니다.", false);
+        // showAlet("이체", "보유 포켓머니가 부족합니다.", false);
+        showSuccessDialog(context, "이체 실패", "보유 포켓머니가 부족합니다.", () {
+          Navigator.of(context).pop();
+        });
       }
     } else {
-      showAlet("", "", false, msg2: "오류발생", msg3: "잠시후 다시 시도 해주세요.");
+      showSuccessDialog(context, "이체 실패", "잠시후 다시 시도 해주세요.", () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -112,7 +121,7 @@ class _EnterAmountState extends State<EnterAmount> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        SizedBox(height: screenHeight * 0.03),
+        SizedBox(height: screenHeight * 0.02),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.1),
           child: Row(
@@ -143,7 +152,7 @@ class _EnterAmountState extends State<EnterAmount> {
             ],
           ),
         ),
-        SizedBox(height: screenHeight * 0.08),
+        SizedBox(height: screenHeight * 0.05),
         MainButton(
             color: "0xFF00ADEF",
             title: widget.buttonTitle,

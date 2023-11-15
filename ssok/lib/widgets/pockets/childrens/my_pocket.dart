@@ -57,7 +57,7 @@ class _MyPocketState extends State<MyPocket> {
           height: screenHeight * 0.115,
           decoration: BoxDecoration(
             color: Color(0xFF00496F),
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(13.0),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

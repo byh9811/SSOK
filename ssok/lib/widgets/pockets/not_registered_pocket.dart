@@ -40,7 +40,7 @@ class _NotRegisteredPocketState extends State<NotRegisteredPocket> {
                   padding: EdgeInsets.only(top: 8.0, left: screenWidth * 0.13),
                   child: importantText(
                     text: "※ 잔금/환경 포인트를 적립할 수 있어요",
-                    widthSize: 0.25,
+                    widthSize: 0.5,
                   ),
                 )
               ],
@@ -62,7 +62,7 @@ class _NotRegisteredPocketState extends State<NotRegisteredPocket> {
             padding: EdgeInsets.only(right: screenWidth * 0.1),
             child: importantText(
               text: "※ 포켓을 만들기 위해서 계좌연동이 필요해요",
-              widthSize: 0.28,
+              widthSize: 0.6,
             ),
           ),
         ),
@@ -135,7 +135,7 @@ class _NotRegisteredPocketState extends State<NotRegisteredPocket> {
       width: screenWidth * widthSize,
       child: Text(
         text,
-        style: TextStyle(fontSize: 10, color: Color(0xFFBABABA)),
+        style: TextStyle(fontSize: 12, color: Color(0xFFBABABA)),
       ),
     );
   }

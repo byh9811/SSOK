@@ -22,7 +22,6 @@ import 'package:ssok/widgets/frequents/main_button.dart';
 import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 class BusinessCardSelfCreatePage extends StatefulWidget {
-
   final String? apiUrl;
   const BusinessCardSelfCreatePage({super.key, String? this.apiUrl});
 
@@ -190,17 +189,10 @@ class _BusinessCardSelfCreatePageState
     apiService = ApiService();
     globalKey = GlobalKey();
 
-    Future.delayed(Duration.zero, ()
-    {
+    Future.delayed(Duration.zero, () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (ModalRoute
-            .of(context)
-            ?.settings
-            .arguments != null) {
-          apiUrl = ModalRoute
-              .of(context)!
-              .settings
-              .arguments as String;
+        if (ModalRoute.of(context)?.settings.arguments != null) {
+          apiUrl = ModalRoute.of(context)!.settings.arguments as String;
         } else {
           apiUrl = 'namecard-service/'; // 기본값 설정
         }
@@ -208,8 +200,6 @@ class _BusinessCardSelfCreatePageState
         print(apiUrl);
       });
     });
-
-
   }
 
   @override
@@ -547,15 +537,15 @@ class BusinessCardBox extends StatefulWidget {
 class _BusinessCardBoxState extends State<BusinessCardBox> {
   late List<String> values;
   List<Offset> offsets = [
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
-    Offset(0, 0),
+    Offset(60, 40),
+    Offset(60, 60),
+    Offset(60, 80),
+    Offset(60, 100),
+    Offset(60, 120),
+    Offset(120, 40),
+    Offset(120, 60),
+    Offset(120, 80),
+    Offset(120, 100),
   ];
   late double maxWidth;
   late double maxHeight;
@@ -574,6 +564,10 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
 
   final CarouselController _carouselController = CarouselController();
   List<Widget> templates = [
+    Image.asset(
+      'assets/business_card_templete0.png',
+      fit: BoxFit.cover,
+    ),
     Image.asset(
       'assets/business_card_templete1.png',
       fit: BoxFit.cover,
@@ -900,7 +894,7 @@ class DraggableTextState extends State<DraggableText> {
       child: GestureDetector(
         child: Text(
           widget.name,
-          style: TextStyle(fontSize: 15),
+          style: TextStyle(fontSize: 11),
         ),
         onPanUpdate: (details) {
           final newOffset = Offset(

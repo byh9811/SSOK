@@ -68,7 +68,7 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
         TokenManager().accessToken,
         uint8list);
     Map<String, dynamic> jsonData = jsonDecode(response);
-
+    print(jsonData);
     if (jsonData['success']) {
       Map<String, dynamic> data = jsonData['response'];
       return RecognizedRegCard(
@@ -127,29 +127,34 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
                       builder: (context) => ServiceAggreementPage(
                         onTap: () async {
                           await pickAndCropImage();
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) {
-                                return TransferLoadingPage();
-                              },
-                            ),
-                          );
-                          try {
-                            final data = await ocrRC();
-                            print("data:$data");
-                            Navigator.of(context).pushReplacementNamed(
-                              '/id/create',
-                              arguments: ImageAndRegData(
-                                  image: pickedImage!, data: data),
+                          if (pickedImage != null) {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                opaque: false,
+                                pageBuilder: (BuildContext context, _, __) {
+                                  return TransferLoadingPage();
+                                },
+                              ),
                             );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("OCR 인식 실패"),
-                            ));
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                "/main", (route) => false,
-                                arguments: 0);
+                            try {
+                              final data = await ocrRC();
+                              print("data:$data");
+                              Navigator.of(context).pushReplacementNamed(
+                                '/id/create',
+                                arguments: ImageAndRegData(
+                                    image: pickedImage!, data: data),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("OCR 인식 실패"),
+                              ));
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  "/main", (route) => false,
+                                  arguments: 0);
+                            }
+                          } else {
+                            Navigator.of(context).pop();
                           }
                         },
                       ),

@@ -164,15 +164,18 @@ class _BusinessCardHistory extends State<BusinessCardHistory> {
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.09), // 그림자 색상과 투명도
+                              color:
+                                  Colors.black.withOpacity(0.09), // 그림자 색상과 투명도
                               spreadRadius: -8, // 그림자 확산 정도
                               blurRadius: 10, // 그림자 흐림 정도
-                              offset: Offset(0, 0), // 그림자의 위치 (가로, 세로) - 오른쪽 아래 방향
+                              offset:
+                                  Offset(0, 0), // 그림자의 위치 (가로, 세로) - 오른쪽 아래 방향
                             ),
                           ],
                         ),
                         child: Image.network(imageList[index]["imgUrl"] ?? '',
-                            width: screenWidth * 0.6, height: screenHeight * 0.2),
+                            width: screenWidth * 0.6,
+                            height: screenHeight * 0.2),
                       )
                     ]));
           },

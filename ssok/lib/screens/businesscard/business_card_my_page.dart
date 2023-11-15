@@ -100,7 +100,10 @@ class _BusinessCardMyPage extends State<BusinessCardMyPage> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15)),
                               ),
-                              child: BusinessCreateModal(apiUrl: updateApiUrl),
+                              child: BusinessCreateModal(
+                                apiUrl: updateApiUrl,
+                                titleType: "갱신",
+                              ),
                             );
                           },
                         );
@@ -154,10 +157,14 @@ class _BusinessCardMyPage extends State<BusinessCardMyPage> {
                         title: "주소",
                         content: mycardInfo['namecardAddress'],
                       ),
-                    Divider(
-                      height: 1,
-                      color: Colors.black,
-                    ),
+                    if (mycardInfo['namecardPhone'] != "" ||
+                        mycardInfo['namecardTel'] != "" ||
+                        mycardInfo['namecardFax'] != "" ||
+                        mycardInfo['namecardEmail'] != "")
+                      Divider(
+                        height: 1,
+                        color: Colors.black,
+                      ),
                     SizedBox(height: screenHeight * 0.02),
                     if (mycardInfo['namecardPhone'] != "")
                       ContentByCard(

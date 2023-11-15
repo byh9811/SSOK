@@ -28,7 +28,7 @@ class ContentByCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(
-                top: screenHeight * 0.008, left: screenWidth * 0.01),
+                top: screenHeight * 0.01, left: screenWidth * 0.01),
             child: Text(
               content,
               style: TextStyle(

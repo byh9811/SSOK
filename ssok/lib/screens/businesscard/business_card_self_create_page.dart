@@ -275,28 +275,6 @@ class _BusinessCardSelfCreatePageState
                       isChecked: isCheckedList[0],
                     ),
                     BusinessCardText(
-                      title: "직책(업무)",
-                      hintContent: "직책(업무) 입력",
-                      updateValue: (newValue) {
-                        setState(() {
-                          job = newValue;
-                        });
-                      },
-                      onTap: () {
-                        setState(() {
-                          isCheckedList[1] = !isCheckedList[1];
-                          if (!isCheckedList[1]) {
-                            registeredJob = "";
-                            isCheckedChange();
-                          } else {
-                            registeredJob = job;
-                            isCheckedFocus(1);
-                          }
-                        });
-                      },
-                      isChecked: isCheckedList[1],
-                    ),
-                    BusinessCardText(
                       title: "회사",
                       hintContent: "회사 입력",
                       updateValue: (newValue) {
@@ -317,6 +295,28 @@ class _BusinessCardSelfCreatePageState
                         });
                       },
                       isChecked: isCheckedList[2],
+                    ),
+                    BusinessCardText(
+                      title: "직책(업무)",
+                      hintContent: "직책(업무) 입력",
+                      updateValue: (newValue) {
+                        setState(() {
+                          job = newValue;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isCheckedList[1] = !isCheckedList[1];
+                          if (!isCheckedList[1]) {
+                            registeredJob = "";
+                            isCheckedChange();
+                          } else {
+                            registeredJob = job;
+                            isCheckedFocus(1);
+                          }
+                        });
+                      },
+                      isChecked: isCheckedList[1],
                     ),
                     BusinessCardText(
                       title: "주소",
@@ -464,17 +464,25 @@ class _BusinessCardSelfCreatePageState
                               actions: [
                                 TextButton(
                                   onPressed: () async {
-                                    Navigator.of(context).push(
-                                      PageRouteBuilder(
-                                        opaque: false, // 배경이 투명해야 함을 나타냅니다
-                                        pageBuilder:
-                                            (BuildContext context, _, __) {
-                                          return TransferLoadingPage();
-                                        },
-                                      ),
-                                    );
-                                    Uint8List bytes = await capturePng();
-                                    createBusinessCard(bytes);
+
+                                    if(registeredName.isEmpty || registeredCompany.isEmpty) {
+                                      showSuccessDialog(context, "명함 생성", "이름과 회사명은 필수입니다!", () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      });
+                                    } else {
+                                      Navigator.of(context).push(
+                                        PageRouteBuilder(
+                                          opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                          pageBuilder:
+                                              (BuildContext context, _, __) {
+                                            return TransferLoadingPage();
+                                          },
+                                        ),
+                                      );
+                                      Uint8List bytes = await capturePng();
+                                      createBusinessCard(bytes);
+                                    }
                                   },
                                   child: Text('생성'),
                                 ),

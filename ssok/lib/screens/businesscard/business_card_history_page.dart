@@ -156,9 +156,9 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2), // 그림자 색상과 투명도
-                        spreadRadius: 5, // 그림자 확산 정도
+                        spreadRadius: 1, // 그림자 확산 정도
                         blurRadius: 3, // 그림자 흐림 정도
-                        offset: Offset(3, 5), // 그림자의 위치 (가로, 세로)
+                        offset: Offset(1, 1), // 그림자의 위치 (가로, 세로)
                       ),
                     ],                    
                   ),

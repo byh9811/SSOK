@@ -92,88 +92,91 @@ class _BusinessCardHistory extends State<BusinessCardHistory> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return SizedBox(
-      height: screenHeight * 0.8,
-      child: ListView.builder(
-        itemCount: imageList.length,
-        itemBuilder: (context, index) {
-          return Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: screenWidth * 0,
-              ),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        if (imageList.length == 1)
-                          Container(
-                            width: 100,
-                            height: 230,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/1.PNG'),
-                                fit: BoxFit.cover,
+    return Container(
+      color: Colors.white,
+      child: SizedBox(
+        height: screenHeight * 0.9,
+        child: ListView.builder(
+          itemCount: imageList.length,
+          itemBuilder: (context, index) {
+            return Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: screenWidth * 0,
+                ),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          if (imageList.length == 1)
+                            Container(
+                              width: 100,
+                              height: 230,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/1.PNG'),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        if (imageList.length != 1 && index == 0)
-                          Container(
-                            width: 100,
-                            height: 230,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/2.PNG'),
-                                fit: BoxFit.cover,
+                          if (imageList.length != 1 && index == 0)
+                            Container(
+                              width: 100,
+                              height: 230,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/2.PNG'),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        if (imageList.length >= 3 &&
-                            index != 0 &&
-                            index != imageList.length - 1)
-                          Container(
-                            width: 100,
-                            height: 230,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/3.PNG'),
-                                fit: BoxFit.cover,
+                          if (imageList.length >= 3 &&
+                              index != 0 &&
+                              index != imageList.length - 1)
+                            Container(
+                              width: 100,
+                              height: 230,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/3.PNG'),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        if (index != 0 && index == imageList.length - 1)
-                          Container(
-                            width: 100,
-                            height: 230,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/4.PNG'),
-                                fit: BoxFit.cover,
+                          if (index != 0 && index == imageList.length - 1)
+                            Container(
+                              width: 100,
+                              height: 230,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/4.PNG'),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        Text(
-                          imageList[index]["date"],
-                        ),
-                      ],
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2), // 그림자 색상과 투명도
-                            spreadRadius: 5, // 그림자 확산 정도
-                            blurRadius: 3, // 그림자 흐림 정도
-                            offset: Offset(3, 5), // 그림자의 위치 (가로, 세로)
+                          Text(
+                            imageList[index]["date"],
                           ),
                         ],
                       ),
-                      child: Image.network(imageList[index]["imgUrl"] ?? '',
-                          width: screenWidth * 0.6, height: screenHeight * 0.2),
-                    )
-                  ]));
-        },
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.09), // 그림자 색상과 투명도
+                              spreadRadius: -8, // 그림자 확산 정도
+                              blurRadius: 10, // 그림자 흐림 정도
+                              offset: Offset(0, 0), // 그림자의 위치 (가로, 세로) - 오른쪽 아래 방향
+                            ),
+                          ],
+                        ),
+                        child: Image.network(imageList[index]["imgUrl"] ?? '',
+                            width: screenWidth * 0.6, height: screenHeight * 0.2),
+                      )
+                    ]));
+          },
+        ),
       ),
     );
   }

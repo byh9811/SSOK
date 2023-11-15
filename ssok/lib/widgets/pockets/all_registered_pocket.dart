@@ -72,7 +72,7 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
         content: Text(
           _isCheckedChanges
               ? "더이상 결제 시 잔돈이 저금되지 않습니다."
-              : "1000원 이하의 잔돈이 포켓머니에 저금 됩니다.\n\n예) 1,700 결제 시 300원 저금",
+              : "카드 결제 시 1000원 이하의 잔돈이 포켓머니에 저금 됩니다.\n\n예) 1,700 결제 시 300원 저금",
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
         actions: <Widget>[

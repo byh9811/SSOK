@@ -7,6 +7,7 @@ import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/identification/service_aggreement_page.dart';
 import 'package:ssok/widgets/content_box.dart';
+import 'package:ssok/widgets/frequents/confirm.dart';
 import 'package:ssok/widgets/register_button.dart';
 import 'childrens/id_info_text.dart';
 
@@ -141,10 +142,19 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: Image.asset(
-                        'assets/logo.png',
-                        height: 45,
-                        color: Colors.white54,
+                      child:
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.asset(
+                            'assets/logo.png',
+                            height: 45,
+                            color: Colors.white54,
+                          ),
+                          IconButton(onPressed: (){
+                            confirmDialog(context, "주민등록증 삭제", "주민등록증을 삭제하시겠습니까?",(){removeLicenseCard();});
+                          }, icon: Icon(Icons.remove_circle), color: Colors.pink,)
+                        ],
                       ),
                     ),
                     Expanded(
@@ -321,5 +331,15 @@ class _RegisteredDriveIdCardState extends State<RegisteredDriveIdCard>
         style: TextStyle(fontSize: fontSize, color: Colors.black),
       ),
     );
+  }
+
+  void removeLicenseCard() async {
+    print("운전면허증을 삭제합니다.");
+    final response = await apiService.postRequest(
+        "idcard-service/license/remove", null, TokenManager().accessToken);
+    if (response.statusCode == 200) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
+    }
   }
 }

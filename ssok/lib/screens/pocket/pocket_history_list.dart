@@ -90,7 +90,7 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
   int selectedYear = DateTime.now().year;
 
   ApiService apiService = ApiService();
-  late Map<String, Object?> jsonString={};
+  late Map<String, Object?> jsonString = {};
   late List<PocketHistory> pocketHistories;
 
   @override
@@ -100,8 +100,10 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
     pocketHistories = parsePocketHistory(jsonString);
   }
 
-void getPocketHistory()async{
-    final response = await apiService.getRequest('pocket-service/pocket/detail?detailType=0', TokenManager().accessToken);
+  void getPocketHistory() async {
+    final response = await apiService.getRequest(
+        'pocket-service/pocket/detail?detailType=0',
+        TokenManager().accessToken);
     print("포켓 전체 내역 가져옴");
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     // print(jsonData['response']);
@@ -115,10 +117,12 @@ void getPocketHistory()async{
     } else {
       throw Exception('Failed to load');
     }
-}
+  }
 
-void getDepositHistory()async{
-    final response = await apiService.getRequest('pocket-service/pocket/detail?detailType=1', TokenManager().accessToken);
+  void getDepositHistory() async {
+    final response = await apiService.getRequest(
+        'pocket-service/pocket/detail?detailType=1',
+        TokenManager().accessToken);
     print("포켓 입금 내역 가져옴");
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     // print(jsonData['response']);
@@ -131,14 +135,16 @@ void getDepositHistory()async{
       print(jsonString);
     } else {
       setState(() {
-        pocketHistories=[];
+        pocketHistories = [];
       });
       throw Exception('Failed to load');
     }
-}
+  }
 
-void getWithdrawHistory()async{
-    final response = await apiService.getRequest('pocket-service/pocket/detail?detailType=2', TokenManager().accessToken);
+  void getWithdrawHistory() async {
+    final response = await apiService.getRequest(
+        'pocket-service/pocket/detail?detailType=2',
+        TokenManager().accessToken);
     print("포켓 출금 내역 가져옴");
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     // print(jsonData['response']);
@@ -150,12 +156,12 @@ void getWithdrawHistory()async{
       print("zz");
       print(jsonString);
     } else {
-        setState(() {
-          pocketHistories=[];
-        });
+      setState(() {
+        pocketHistories = [];
+      });
       throw Exception('Failed to load');
     }
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,6 +243,9 @@ void getWithdrawHistory()async{
                           Padding(
                             padding: EdgeInsets.only(top: screenHeight * 0.02),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end, // 진식 추가
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.end, // 진식 추가
                               children: [
                                 Text(
                                   "적립 + ${numberFormat.format(selectedPocketHistory.deposit)}원",
@@ -383,35 +392,54 @@ void getWithdrawHistory()async{
                       String createTime = detailData.createTime;
                       int pocketHistoryTransAmt =
                           detailData.pocketHistoryTransAmt;
+                      int pocketHistoryResultAmt =
+                          detailData.pocketHistoryResultAmt;
                       String? receiptDocumentId = detailData.receiptDocumentId;
 
                       return Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: screenHeight * 0.04),
                         child: ListTile(
-                          onTap: () {
-                            if(receiptDocumentId!=null) {Navigator.pushNamed(
-                              context,
-                              '/receipt/detail',
-                              arguments: receiptDocumentId,
-                            );};
-                          },
-                          title: Text(pocketHistoryTitle),
-                          subtitle: Text(
-                            '$createTime | ${receiptDocumentId == null ? "출금" : "입금"}',
-                            style: TextStyle(
-                              color: Color(0xFFC9C9C9),
+                            onTap: () {
+                              if (receiptDocumentId != null) {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/receipt/detail',
+                                  arguments: receiptDocumentId,
+                                );
+                              }
+                              ;
+                            },
+                            title: Text(pocketHistoryTitle),
+                            subtitle: Text(
+                              '$createTime | ${receiptDocumentId == null ? "출금" : "입금"}',
+                              style: TextStyle(
+                                color: Color(0xFFC9C9C9),
+                              ),
                             ),
-                          ),
-                          trailing: Text(
-                            '${numberFormat.format(pocketHistoryTransAmt)}원',
-                            style: TextStyle(
-                              color: receiptDocumentId == null
-                                  ? Color(0xFFC72929)
-                                  : Color(0xFF00168A),
-                            ),
-                          ),
-                        ),
+                            trailing: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  '${numberFormat.format(pocketHistoryTransAmt)}원',
+                                  style: TextStyle(
+                                    color: receiptDocumentId == null
+                                        ? Color(0xFFC72929)
+                                        : Color(0xFF00168A),
+                                  ),
+                                ),
+                                Text(
+                                  '${numberFormat.format(pocketHistoryResultAmt)}원',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color:
+                                          Color.fromARGB(255, 136, 131, 131)),
+                                ),
+                              ],
+                            )),
                       );
                     },
                   ),

@@ -152,7 +152,8 @@ class _PocketPageState extends State<PocketPage> {
     } else {
       // 모든 데이터가 로딩된 후에는 해당 화면을 보여줌
       print(";asldjfl;sjdafl;jasdkjf;l:;:::$idcardRegistered");
-      if (!idcardRegistered) {
+      // if (!idcardRegistered) {
+      if (false) {
         return CanNotRegisteredPocket();
       } else if (accountNum == null) {
         return NotRegisteredPocket();

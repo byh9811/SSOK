@@ -11,14 +11,21 @@ class PocketHistory {
   final int totalHistory;
   final int deposit;
   final int withdrawal;
+  final int change;
+  final int carbon;
+  final int donate;
+  final int transfer;
 
-  PocketHistory({
-    required this.date,
-    required this.pocketDetailResponses,
-    required this.totalHistory,
-    required this.deposit,
-    required this.withdrawal,
-  });
+  PocketHistory(
+      {required this.date,
+      required this.pocketDetailResponses,
+      required this.totalHistory,
+      required this.deposit,
+      required this.withdrawal,
+      required this.change,
+      required this.carbon,
+      required this.donate,
+      required this.transfer});
 }
 
 class PocketDetail {
@@ -64,6 +71,10 @@ List<PocketHistory> parsePocketHistory(Map<String, Object?> jsonStr) {
       final totalHistory = value["totalHistory"];
       final deposit = value["deposit"];
       final withdrawal = value["withdrawal"];
+      final carbon = value["carbon"];
+      final change = value["change"];
+      final donate = value["donate"];
+      final transfer = value["transfer"];
 
       pocketHistories.add(PocketHistory(
         date: key,
@@ -71,6 +82,10 @@ List<PocketHistory> parsePocketHistory(Map<String, Object?> jsonStr) {
         totalHistory: totalHistory,
         deposit: deposit,
         withdrawal: withdrawal,
+        carbon: carbon,
+        change: change,
+        donate: donate,
+        transfer: transfer,
       ));
     });
   }
@@ -165,6 +180,8 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<TooltipState> tooltipkeyDeposit = GlobalKey<TooltipState>();
+    final GlobalKey<TooltipState> tooltipkeyWith = GlobalKey<TooltipState>();
     PocketHistory selectedPocketHistory = pocketHistories.firstWhere((history) {
       final dateParts = history.date.split('-');
       final year = int.parse(dateParts[0]);
@@ -176,6 +193,10 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
         totalHistory: 0,
         deposit: 0,
         withdrawal: 0,
+        carbon: 0,
+        change: 0,
+        donate: 0,
+        transfer: 0,
         pocketDetailResponses: [],
       );
     });
@@ -247,22 +268,106 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
                               crossAxisAlignment:
                                   CrossAxisAlignment.end, // 진식 추가
                               children: [
-                                Text(
-                                  "적립 + ${numberFormat.format(selectedPocketHistory.deposit)}원",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Color(0xFF00168A),
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                Row(
+                                  children: [
+                                    Tooltip(
+                                        key: tooltipkeyDeposit,
+                                        preferBelow: true,
+                                        triggerMode: TooltipTriggerMode.tap,
+                                        margin: EdgeInsets.only(
+                                            right: screenWidth * 0.05,
+                                            bottom: screenHeight * 0.10),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: screenHeight * 0.012,
+                                            horizontal: screenWidth * 0.02),
+                                        height: 30,
+                                        showDuration: Duration(seconds: 1),
+                                        message:
+                                            '잔돈 저금 : ${numberFormat.format(selectedPocketHistory.change)}원 \n탄소중립포인트 : ${numberFormat.format(selectedPocketHistory.carbon)}원',
+                                        decoration: BoxDecoration(
+                                          color: Colors.white, // 배경색
+                                          border: Border.all(
+                                              color: Colors.blue), // 테두리 색
+                                        ),
+                                        textStyle: TextStyle(
+                                            color:
+                                                Color.fromRGBO(0, 22, 138, 1))),
+                                    Text(
+                                      "적립 + ${numberFormat.format(selectedPocketHistory.deposit)}원",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Color.fromRGBO(0, 22, 138, 1),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: BoxConstraints(),
+                                      onPressed: () {
+                                        tooltipkeyDeposit.currentState
+                                            ?.ensureTooltipVisible();
+                                        Future.delayed(Duration(seconds: 2),
+                                            () {
+                                          // tooltipkey.currentState?.hideTooltip();
+                                        });
+                                      },
+                                      icon: Icon(Icons.info_outline,
+                                          color: Colors.grey,
+                                          size: 15.0), // 아이콘 크기 조절
+                                    ),
+                                    // SizedBox(width: 5.0), // 간격 조절
+                                  ],
                                 ),
-                                SizedBox(height: screenHeight * 0.005),
-                                Text(
-                                  "사용 - ${numberFormat.format(selectedPocketHistory.withdrawal)}원",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Color(0xFFC72929),
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                // SizedBox(height: screenHeight * 0.005),
+                                Row(
+                                  children: [
+                                    Tooltip(
+                                        key: tooltipkeyWith,
+                                        preferBelow: true,
+                                        triggerMode: TooltipTriggerMode.tap,
+                                        margin: EdgeInsets.only(
+                                            right: screenWidth * 0.05,
+                                            bottom: screenHeight * 0.10),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: screenHeight * 0.012,
+                                            horizontal: screenWidth * 0.02),
+                                        height: 30,
+                                        showDuration: Duration(seconds: 1),
+                                        message:
+                                            '이체 : ${numberFormat.format(selectedPocketHistory.transfer)}원 \n기부 : ${numberFormat.format(selectedPocketHistory.donate)}원',
+                                        decoration: BoxDecoration(
+                                          color: Colors.white, // 배경색
+                                          border: Border.all(
+                                              color: Colors.red), // 테두리 색
+                                        ),
+                                        textStyle: TextStyle(
+                                            color: Color.fromRGBO(
+                                                199, 41, 41, 1))),
+                                    Text(
+                                      "사용 - ${numberFormat.format(selectedPocketHistory.withdrawal)}원",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Color.fromRGBO(199, 41, 41, 1),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: BoxConstraints(),
+                                      onPressed: () {
+                                        tooltipkeyWith.currentState
+                                            ?.ensureTooltipVisible();
+                                        Future.delayed(Duration(seconds: 2),
+                                            () {
+                                          // tooltipkey.currentState?.hideTooltip();
+                                        });
+                                      },
+                                      icon: Icon(Icons.info_outline,
+                                          color: Colors.grey,
+                                          size: 15.0), // 아이콘 크기 조절
+                                    ),
+                                    // SizedBox(width: 5.0), // 간격 조절
+                                  ],
                                 ),
                               ],
                             ),

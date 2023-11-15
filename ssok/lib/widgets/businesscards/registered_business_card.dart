@@ -133,8 +133,11 @@ class _MyFavoriteCard extends State<MyFavoriteCard> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamed('/businesscard/detail',
-                        arguments: data.exchangeSeq);
+                    Navigator.of(context)
+                        .pushNamed('/businesscard/detail', arguments: {
+                      'exchangeSeq': data.exchangeSeq,
+                      'additionalData': data.updateStatus,
+                    });
                   },
                   child: CustomListItem(
                     name: namecardName,
@@ -491,10 +494,11 @@ class _ExchangeCardListBodyState extends State<ExchangeCardListBody> {
           ),
           child: InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed('/businesscard/detail',
-                  arguments: {
-                'exchangeSeq': data.exchangeSeq,
-                'additionalData': data.updateStatus,
+              Navigator.of(context).pushNamed(
+                '/businesscard/detail',
+                arguments: {
+                  'exchangeSeq': data.exchangeSeq,
+                  'additionalData': data.updateStatus,
                 },
               );
             },

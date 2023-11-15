@@ -12,9 +12,7 @@ class CreditCardCreatePage extends StatefulWidget {
   State<CreditCardCreatePage> createState() => _CreditCardCreatePage();
 }
 
-
-class _CreditCardCreatePage extends State<CreditCardCreatePage>{
-
+class _CreditCardCreatePage extends State<CreditCardCreatePage> {
   ApiService apiService = ApiService();
 
   @override
@@ -25,21 +23,19 @@ class _CreditCardCreatePage extends State<CreditCardCreatePage>{
   }
 
   void makeCard() async {
-      final response = await apiService.postRequest('receipt-service/card',{}, TokenManager().accessToken);
-      final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      if (response.statusCode == 200) {
-        print("카드 연동 여부");
-        print(jsonData);
-        setState(() {
-        });
-      }else if(response.statusCode == 500){
-        print(jsonData);
-      }
-      else {
-        throw Exception('Failed to load');
-      }
+    final response = await apiService.postRequest(
+        'receipt-service/card', {}, TokenManager().accessToken);
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 200) {
+      print("카드 연동 여부");
+      print(jsonData);
+      setState(() {});
+    } else if (response.statusCode == 500) {
+      print(jsonData);
+    } else {
+      throw Exception('Failed to load');
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {

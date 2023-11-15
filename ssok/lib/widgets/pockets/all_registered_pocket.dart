@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 import 'package:ssok/widgets/pockets/childrens/my_account.dart';
 import 'package:ssok/widgets/pockets/childrens/my_pocket.dart';
 
@@ -18,6 +19,12 @@ class AllRegisteredPocket extends StatefulWidget {
 
   @override
   State<AllRegisteredPocket> createState() => _AllRegisteredPocketState();
+}
+
+class Constants {
+  Constants._();
+  static const double padding = 20;
+  static const double avatarRadius = 45;
 }
 
 class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
@@ -39,25 +46,10 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
   }
 
   void showAlet() async {
-    await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("잔돈 저금하기 변경 실패"),
-        content: Text(
-          "잔돈 저금하기 변경에 실패했습니다. 다시 시도해주세요.",
-          style: TextStyle(color: Colors.black, fontSize: 16),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("확인"),
-          ),
-        ],
-      ),
-    );
+    showSuccessDialog(context, "변경 실패", "잔돈 저금하기 변경에 실패했습니다. \n 다시 시도해주세요.",
+        () {
+      Navigator.of(context).pop();
+    });
   }
 
   Future<bool> switchPocketIsChangeSaving() async {
@@ -67,14 +59,20 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text(_isCheckedChanges
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Constants.padding),
+        ),
+        elevation: 0,
+        title: Text(
+            _isCheckedChanges
                 ? "잔돈 저금하기 취소" // 잔돈 저금하기 -> 저금 안하기
                 : "잔돈 저금하기" // 잔돈 저금 안하기 -> 저금하기
-            ),
+            ,
+            style: TextStyle(fontWeight: FontWeight.bold)),
         content: Text(
           _isCheckedChanges
               ? "더이상 결제 시 잔돈이 저금되지 않습니다."
-              : "1000원 이하이의 잔돈이 포켓머니에 \n저금 됩니다.\n\n예) 1700 결제 시 300원 저금",
+              : "1000원 이하의 잔돈이 포켓머니에 저금 됩니다.\n\n예) 1,700 결제 시 300원 저금",
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
         actions: <Widget>[
@@ -82,7 +80,15 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text("취소"),
+            child: Text(
+              "취소",
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Color(0xFFF5F5F6)),
+            ),
           ),
           TextButton(
             onPressed: () async {
@@ -98,7 +104,15 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
                 showAlet();
               }
             },
-            child: Text("확인 "),
+            child: Text(
+              "확인",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Color(0xFF00ADEF)),
+            ),
           ),
         ],
       ),

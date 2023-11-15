@@ -34,9 +34,9 @@ class _BusinessCardCameraCreatePageState
   ApiService apiService = ApiService();
 
   void register() async {
-    if (businessCardInfo["namecardName"].isNotEmpty
+    if (businessCardInfo["namecardName"].isNotEmpty &&
+        businessCardInfo["namecardCompany"].isNotEmpty
         // businessCardInfo["namecardJob"].isNotEmpty &&
-        // businessCardInfo["namecardCompany"].isNotEmpty &&
         // businessCardInfo["namecardAddress"].isNotEmpty &&
         // businessCardInfo["namecardPhone"].isNotEmpty &&
         // businessCardInfo["namecardTel"].isNotEmpty &&
@@ -77,6 +77,10 @@ class _BusinessCardCameraCreatePageState
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
         throw Exception('Failed to load');
       }
+    } else {
+      showSuccessDialog(context, "명함 생성", "이름과 회사명은 필수입니다!", () {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -177,8 +181,8 @@ class _BusinessCardCameraCreatePageState
                                   child: BusinessUpdateModal(
                                     selectedCardInfo: {
                                       '이름': businessCardInfo['namecardName'],
-                                      '직책': businessCardInfo['namecardJob'],
                                       '회사': businessCardInfo['namecardCompany'],
+                                      '직책': businessCardInfo['namecardJob'],
                                       '주소': businessCardInfo['namecardAddress'],
                                     },
                                     onCardInfoChanged: (newValue) {
@@ -186,10 +190,10 @@ class _BusinessCardCameraCreatePageState
                                       setState(() {
                                         businessCardInfo['namecardName'] =
                                             newValue['이름'];
-                                        businessCardInfo['namecardJob'] =
-                                            newValue['직책'];
                                         businessCardInfo['namecardCompany'] =
                                             newValue['회사'];
+                                        businessCardInfo['namecardJob'] =
+                                            newValue['직책'];
                                         businessCardInfo['namecardAddress'] =
                                             newValue['주소'];
                                       });

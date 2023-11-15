@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 class Constants {
   Constants._();
@@ -21,7 +22,7 @@ void confirmDialog(
         elevation: 0,
         // backgroundColor: Colors.transparent,
         title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        content: Text(content),
+        content: Container(height: 100, child: WrappedKoreanText(content)),
         actions: [
           TextButton(
             onPressed: () {

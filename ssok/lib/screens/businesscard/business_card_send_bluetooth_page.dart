@@ -56,7 +56,7 @@ class _BusinessCardSendBluetoothPageState
           });
         },
       );
-      showSnackbar("어필 : $a");
+      showSnackbar("연결하기 : $a");
       setState(() {
         advertising = true;
       });
@@ -248,7 +248,7 @@ class _BusinessCardSendBluetoothPageState
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 3.0),
-                  child: Text(advertising ? "어필 중" : "어필시작"),
+                  child: Text(advertising ? "연결 중" : "연결 시작"),
                 ),
               ],
             ),

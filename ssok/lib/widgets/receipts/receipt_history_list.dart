@@ -273,7 +273,7 @@ class _ReceiptHistoryListState extends State<ReceiptHistoryList> {
                           String receiptDetailDocumentId = detailData
                               .receiptDetailDocumentId;
                           String shopName = detailData.shopName;
-                          String approvedDate = detailData.approvedDate;
+                          String approvedDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.parse(detailData.approvedDate));
                           int payAmt = detailData.payAmt;
 
                           return Padding(

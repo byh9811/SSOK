@@ -42,7 +42,13 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
     if (pickedFile != null) {
       final CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
-        aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
+        aspectRatioPresets: [
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio5x3,
+          CropAspectRatioPreset.ratio7x5
+        ],
       );
 
       if (croppedFile != null) {

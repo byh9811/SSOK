@@ -14,13 +14,29 @@ class PocketPocketCreatePage extends StatefulWidget {
 
 class _PocketPocketCreatePageState extends State<PocketPocketCreatePage> {
   ApiService apiService = ApiService();
+  double yOffset = 0.0; // 초기 Y 위치
+  double speed = 0.3; // 애니메이션 속도
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    startAnimation();
     createPocket();
   }
+
+  void startAnimation() {
+    Future.delayed(Duration(milliseconds: 16)).then((_) {
+      setState(() {
+        yOffset += speed;
+        if (yOffset >= 10.0) {
+          yOffset = -10.0;
+        }
+        startAnimation();
+      });
+    });
+  }
+
 
   void createPocket() async {
     final response = await apiService.postRequest(
@@ -43,11 +59,21 @@ class _PocketPocketCreatePageState extends State<PocketPocketCreatePage> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: screenHeight * 0.18),
+            SizedBox(height: screenHeight * 0.14),
             introText(),
-            SizedBox(height: screenHeight * 0.05),
+            SizedBox(height: screenHeight * 0.1),
             MySamplePocket(),
-            SizedBox(height: screenHeight * 0.15),
+            SizedBox(height: screenHeight * 0.08),
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300), // 애니메이션 지속 시간
+              height: 90,
+              transform: Matrix4.translationValues(0, yOffset, 0), // Y 위치 변경
+              child: Image.asset(
+                'assets/point.png',
+                height: 100,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.06),
             MainButton(
               color: "0xFF00ADEF",
               title: "메인으로",

@@ -98,7 +98,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
           child: Text(
             "진행중인 기부목록",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 25,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -118,7 +118,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
               ),
               child: Container(
                 width: screenWidth,
-                height: screenHeight * 0.38,
+                height: screenHeight * 0.45,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   border: Border.all(
@@ -129,17 +129,24 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                 child: Column(
                   children: [
                     Container(
-                      height: screenHeight * 0.2,
+                      height: screenHeight * 0.23,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(25.0),
                           topRight: Radius.circular(25.0),
                         ),
                       ),
-                      child: Image.network(
-                        item['donateImage'], // 이미지 링크 필드로 변경
-                        fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 조절
-                      ),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25.0),
+                            topRight: Radius.circular(25.0),
+                          ),
+                          child: Image.network(
+                            item['donateImage'], // 이미지 링크 필드로 변경
+                            fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 조절
+                            width: screenWidth,
+                          ),
+                        )
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -150,7 +157,7 @@ class _OutgoingDonationListState extends State<OutgoingDonationList> {
                         children: [
                           Text(
                             item['donateTitle'], // 원하는 필드로 변경
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 25),
                           ),
                           Expanded(
                             child: Align(

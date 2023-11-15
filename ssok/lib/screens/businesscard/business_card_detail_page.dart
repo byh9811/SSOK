@@ -23,7 +23,8 @@ class BusinessCardDetailPage extends StatefulWidget {
 class _BusinessCardDetailPage extends State<BusinessCardDetailPage> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     print(args);
     print(args["exchangeSeq"]);
     print(args["additionalData"]);
@@ -110,9 +111,6 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
     getNameCardDetail();
   }
 
-
-
-
   void getNameCardDetail() async {
     print(args);
     print(args["exchangeSeq"]);
@@ -126,8 +124,13 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
 
     if (response.statusCode == 200) {
       setState(() {
-        nameCardHead = NameCardHead(data["namecardImage"], data["namecardName"],
-            data["namecardJob"], data["memberSeq"], data["exchangeSeq"], args["additionalData"]);
+        nameCardHead = NameCardHead(
+            data["namecardImage"],
+            data["namecardName"],
+            data["namecardJob"],
+            data["memberSeq"],
+            data["exchangeSeq"],
+            args["additionalData"]);
         nameCardBody = NameCardBody(
             data["namecardCompany"],
             data["namecardWebsite"],
@@ -179,7 +182,7 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
   ApiService apiService = ApiService();
   _BusinessCardDetailHeaderState(this.nameCardHead);
 
-  void updateStatus() async{
+  void updateStatus() async {
     print(nameCardHead);
     print(nameCardHead.exchangeSeq);
     print(nameCardHead.updateStatus);
@@ -191,43 +194,42 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
       if (response.statusCode == 200) {
         // final responseData = jsonDecode(utf8.decode(response.bodyBytes))["response"];
 
-        Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
       } else {
         print("통신실패@@@@");
       }
     } catch (e) {
       print("에러 발생: $e");
     }
-
   }
 
-  void getNameCardDetailMemo() async{
+  void getNameCardDetailMemo() async {
     int? exchangeSeq = nameCardHead.exchangeSeq;
     try {
-    final response = await apiService.getRequest(
-        "namecard-service/memo/$exchangeSeq", TokenManager().accessToken);
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(utf8.decode(response.bodyBytes))["response"];
-      
-      // "response" 필드가 비어있을 경우에 대한 예외 처리
-      if (responseData != null) {
-        String data = responseData;
-        print(data);
-        setState(() {
-          nameCardMemo = data;
-          
-        });
-      } else {
-        print("응답값의 'response' 필드가 비어있습니다.");
-      }
-    } else {
-      print("통신실패@@@@");
-    }
-  } catch (e) {
-    print("에러 발생: $e");
-  }
+      final response = await apiService.getRequest(
+          "namecard-service/memo/$exchangeSeq", TokenManager().accessToken);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final responseData =
+            jsonDecode(utf8.decode(response.bodyBytes))["response"];
 
+        // "response" 필드가 비어있을 경우에 대한 예외 처리
+        if (responseData != null) {
+          String data = responseData;
+          print(data);
+          setState(() {
+            nameCardMemo = data;
+          });
+        } else {
+          print("응답값의 'response' 필드가 비어있습니다.");
+        }
+      } else {
+        print("통신실패@@@@");
+      }
+    } catch (e) {
+      print("에러 발생: $e");
+    }
   }
 
   @override
@@ -246,10 +248,11 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
           padding: EdgeInsets.only(top: screenHeight * 0.03),
           child: GestureDetector(
             onTap: () => {
-            getNameCardDetailMemo(),
-            setState(() {
-              _angle = (_angle + pi) % (2 * pi);
-            })},
+              getNameCardDetailMemo(),
+              setState(() {
+                _angle = (_angle + pi) % (2 * pi);
+              })
+            },
             child: TweenAnimationBuilder(
               tween: Tween<double>(begin: 0, end: _angle),
               duration: Duration(milliseconds: 1000),
@@ -308,18 +311,16 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                                   return true; // true를 반환하면 뒤로가기 작업을 계속 수행, false를 반환하면 뒤로가기 작업을 무시
                                 },
                                 child: BusinessMemoModal(
-                                  closeOnPress: () {  
-                                    Navigator.of(context).pop();
-                                    setState(
-                                      () {
-                                        _angle = 0;
-                                      },
-                                    );
-                                  },
-                                  content: nameCardMemo,
-                                  exchangeSeq : nameCardHead.exchangeSeq!
-
-                                ),
+                                    closeOnPress: () {
+                                      Navigator.of(context).pop();
+                                      setState(
+                                        () {
+                                          _angle = 0;
+                                        },
+                                      );
+                                    },
+                                    content: nameCardMemo,
+                                    exchangeSeq: nameCardHead.exchangeSeq!),
                               ),
                             ),
                           ],
@@ -341,19 +342,19 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                 Navigator.of(context).pushNamed("/businesscard/history",
                     arguments: nameCardHead.exchangeSeq);
               },
-            //   Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     Icon(Icons.timeline),
-            //     Padding(
-            //       padding: const EdgeInsets.only(left: 3.0),
-            //       child: Text(
-            //         "타임라인",
-            //         style: TextStyle(fontSize: 14),
-            //       ),
-            //     )
-            //   ],
-            // ),
+              //   Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Icon(Icons.timeline),
+              //     Padding(
+              //       padding: const EdgeInsets.only(left: 3.0),
+              //       child: Text(
+              //         "타임라인",
+              //         style: TextStyle(fontSize: 14),
+              //       ),
+              //     )
+              //   ],
+              // ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -372,8 +373,8 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                       iconSize: 22,
                       color: Colors.red,
                       onPressed: () {
-                        confirmDialog(
-                            context, "명함 업데이트", "해당 명함을 최신화하시겠습니까?", updateStatus);
+                        confirmDialog(context, "명함 업데이트", "해당 명함을 최신화하시겠습니까?",
+                            updateStatus);
                       },
                       icon: Icon(Icons.refresh),
                     ),
@@ -489,8 +490,7 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
               padding: EdgeInsets.zero,
               iconSize: 22,
               onPressed: () {
-                Uri uri = Uri.parse(
-                    "https://${nameCardBody.nameCardWebsite}");
+                Uri uri = Uri.parse("https://${nameCardBody.nameCardWebsite}");
                 copyToClipboard(uri);
               },
               icon: Icon(Icons.content_copy),
@@ -498,14 +498,14 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
           )
         ]),
         SizedBox(height: screenHeight * 0.01),
-        Row( 
+        Row(
           children: [
             SizedBox(
-              width: screenWidth*0.75,
+              width: screenWidth * 0.75,
               child: Text(
-              nameCardBody.nameCardAddress.toString(),
-              style: TextStyle(
-                fontSize: 16,
+                nameCardBody.nameCardAddress.toString(),
+                style: TextStyle(
+                  fontSize: 16,
                 ),
               ),
             ),
@@ -623,10 +623,10 @@ Future<String> getAddressFromLatLng(double lat, double lon) async {
   print("getAddressFromLatLng");
   if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
-    if (jsonData["status"]["code"] == 0){
+    if (jsonData["status"]["code"] == 0) {
       return parseAddress(jsonData); // 위에서 정의한 parseAddress 함수 사용
     }
-      return "위치 정보를 파악할 수 없습니다.";
+    return "위치 정보를 파악할 수 없습니다.";
   } else {
     throw Exception('Failed to get address from Naver API');
   }

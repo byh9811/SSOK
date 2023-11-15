@@ -22,7 +22,6 @@ import 'package:ssok/widgets/frequents/main_button.dart';
 import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 class BusinessCardSelfCreatePage extends StatefulWidget {
-
   final String? apiUrl;
   const BusinessCardSelfCreatePage({super.key, String? this.apiUrl});
 
@@ -190,17 +189,10 @@ class _BusinessCardSelfCreatePageState
     apiService = ApiService();
     globalKey = GlobalKey();
 
-    Future.delayed(Duration.zero, ()
-    {
+    Future.delayed(Duration.zero, () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (ModalRoute
-            .of(context)
-            ?.settings
-            .arguments != null) {
-          apiUrl = ModalRoute
-              .of(context)!
-              .settings
-              .arguments as String;
+        if (ModalRoute.of(context)?.settings.arguments != null) {
+          apiUrl = ModalRoute.of(context)!.settings.arguments as String;
         } else {
           apiUrl = 'namecard-service/'; // 기본값 설정
         }
@@ -208,8 +200,6 @@ class _BusinessCardSelfCreatePageState
         print(apiUrl);
       });
     });
-
-
   }
 
   @override
@@ -574,6 +564,10 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
 
   final CarouselController _carouselController = CarouselController();
   List<Widget> templates = [
+    Image.asset(
+      'assets/business_card_templete0.png',
+      fit: BoxFit.cover,
+    ),
     Image.asset(
       'assets/business_card_templete1.png',
       fit: BoxFit.cover,

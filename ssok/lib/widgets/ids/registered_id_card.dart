@@ -263,7 +263,7 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
         children: [
           Column(
             children: [
-              _buildRotatedText('$registrationCardAuthority', 20),
+              _buildRotatedText(registrationCardAuthority, 20),
             ],
           ),
           Column(
@@ -273,18 +273,18 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
           ),
           Column(
             children: [
-              _buildRotatedTextWithWrap('$registrationCardAddress', 15),
+              _buildRotatedTextWithWrap(registrationCardAddress, 15),
             ],
           ),
           Column(
             children: [
-              _buildRotatedText('$registrationCardPersonalNumber', 18),
+              _buildRotatedText(registrationCardPersonalNumber, 18),
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildRotatedText('$registrationCardName', 25),
+              _buildRotatedText(registrationCardName, 25),
               // Padding(
             ],
           ),
@@ -295,18 +295,19 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
 
   Widget _buildRotatedText(String text, double fontSize) {
     return RotatedBox(
-      quarterTurns: 1,
+      quarterTurns: 1, // 90도 회전 (세로 텍스트로 만들기)
       child: Text(
         text,
-        style: TextStyle(fontSize: fontSize, color: Colors.black),
+        style: TextStyle(fontSize: fontSize),
       ),
     );
   }
 
   Widget _buildRotatedTextWithWrap(String text, double fontSize) {
-    List<String> lines = _splitTextIntoLines(text, 10); // 예: 10글자로 나누기
+    List<String> lines = _splitTextIntoLines(text, 35).reversed.toList();
 
-    return Column(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: lines.map((line) {
         return _buildRotatedText(line, fontSize);
       }).toList(),

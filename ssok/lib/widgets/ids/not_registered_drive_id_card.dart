@@ -64,6 +64,7 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
         TokenManager().accessToken,
         uint8list);
     Map<String, dynamic> jsonData = jsonDecode(response);
+    print("뭐뭐나와? : $jsonData");
     if (jsonData['success']) {
       Map<String, dynamic> data = jsonData['response'];
 
@@ -127,30 +128,34 @@ class _NotRegisteredDriveIdCardState extends State<NotRegisteredDriveIdCard> {
                     MaterialPageRoute(
                       builder: (context) => ServiceAggreementPage(
                         onTap: () async {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              opaque: false, // 배경이 투명해야 함을 나타냅니다
-                              pageBuilder: (BuildContext context, _, __) {
-                                return TransferLoadingPage();
-                              },
-                            ),
-                          );
                           await pickAndCropImage();
-                          print("2:$pickedImage");
-                          try {
-                            final data = await ocrLicense();
-                            Navigator.of(context).pushReplacementNamed(
-                              '/drive/id/create',
-                              arguments: ImageAndLicenseData(
-                                  image: pickedImage!, data: data),
+                          if (pickedImage != null) {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                pageBuilder: (BuildContext context, _, __) {
+                                  return TransferLoadingPage();
+                                },
+                              ),
                             );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("OCR 인식 실패"),
-                            ));
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                "/main", (route) => false,
-                                arguments: 0);
+                            try {
+                              final data = await ocrLicense();
+                              Navigator.of(context).pushReplacementNamed(
+                                '/drive/id/create',
+                                arguments: ImageAndLicenseData(
+                                    image: pickedImage!, data: data),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("OCR 인식 실패"),
+                              ));
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  "/main", (route) => false,
+                                  arguments: 0);
+                            }
+                          } else {
+                            Navigator.of(context).pop();
                           }
                         },
                       ),

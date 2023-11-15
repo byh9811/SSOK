@@ -96,4 +96,18 @@ public class IdcardService {
 
         return new SummaryIdcardGetResponse(summaryRegistrationCardDto, summaryLicenseDto);
     }
+
+    public void deleteRegistrationCard(Long memberSeq) {
+        log.info("entered service method deleteRegistrationCard(Long memberSeq), memberSeq --> ");
+        log.info(String.valueOf(memberSeq));
+
+        registrationCardRepository.deleteByMemberSeq(memberSeq);
+    }
+
+    public void deleteLicenseCard(Long memberSeq) {
+        log.info("entered Service method deleteLicense(Long memberSeq), member Seq --> ");
+        log.info(String.valueOf(memberSeq));
+
+        licenseRepository.deleteByMemberSeq(memberSeq);
+    }
 }

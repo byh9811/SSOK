@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 public interface LicenseRepository extends JpaRepository<License, Long> {
 
     License findByMemberSeq(Long memberSeq);
+
+    void deleteByMemberSeq(Long memberSeq);
 }

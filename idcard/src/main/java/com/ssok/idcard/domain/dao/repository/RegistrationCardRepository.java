@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RegistrationCardRepository extends JpaRepository<RegistrationCard, Long> {
     RegistrationCard findByMemberSeq(Long memberSeq);
+    void deleteByMemberSeq(Long memberSeq);
 }

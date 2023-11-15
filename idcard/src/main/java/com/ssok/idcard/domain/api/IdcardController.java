@@ -60,6 +60,15 @@ public class IdcardController {
         return OK(null);
     }
 
+    @PostMapping(path = "/license/remove")
+    public ApiResponse<?> deleteLicense(@RequestHeader("MEMBER-UUID") String memberUUID){
+
+        Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
+        idcardService.deleteLicenseCard(memberSeq);
+
+        return OK(null);
+    }
+
     @GetMapping("/registration")
     public ApiResponse<RegistrationGetResponse> getRegistrationCard(
             @RequestHeader("MEMBER-UUID") String memberUUID
@@ -89,6 +98,13 @@ public class IdcardController {
         }
 
         idcardService.createRegistrationCard(RegistrationCreateDto.fromRequest(memberSeq, request), multipartFile);
+        return OK(null);
+    }
+    @PostMapping(path = "/registration/remove")
+    public ApiResponse<?> deleteRegistrationCard(@RequestHeader("MEMBER-UUID") String memberUUID){
+
+        Long memberSeq = memberServiceClient.getMemberseq(memberUUID).getResponse();
+        idcardService.deleteRegistrationCard(memberSeq);
         return OK(null);
     }
 

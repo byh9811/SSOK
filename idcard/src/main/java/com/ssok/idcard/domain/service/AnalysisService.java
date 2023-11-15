@@ -37,7 +37,7 @@ public class AnalysisService {
         log.info("service entered method analysisLicense");
         LicenseOcrResponse ocrDto = licenseOCR(file);
 
-        if(ocrDto.getImages().get(0) == null) return null;
+        if(ocrDto.getImages() == null) return null;
 
         log.info("ocrDto =============");
         log.info(ocrDto.toString());
@@ -48,7 +48,7 @@ public class AnalysisService {
         log.info("service entered method analysisLRegistration");
         RegistrationCardOcrResponse ocrDto = registrationCardOCR(file);
 
-        if(ocrDto.getImages().get(0) == null) return null;
+        if(ocrDto.getImages() == null) return null;
         log.info("ocrDto =============");
         log.info(ocrDto.toString());
         return RecognizedRegistrationCardResponse.from(ocrDto.getImages().get(0).getIdCard().getResult().getIc());
@@ -58,7 +58,7 @@ public class AnalysisService {
         log.info("service entered method analysisNameCard");
         NameCardOcrResponse ocrDto = nameCardOCR(file);
 
-        if(ocrDto.getImages().get(0) == null) return null;
+        if(ocrDto.getImages() == null) return null;
         return RecognizedNameCardResponse.from(ocrDto.getImages().get(0).getNameCard().getResult());
     }
 

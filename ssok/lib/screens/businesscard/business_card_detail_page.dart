@@ -57,6 +57,12 @@ class BusinessCardDetail extends StatefulWidget {
   State<BusinessCardDetail> createState() => _BusinessCardDetail(args);
 }
 
+class NameCardTotal{
+  late NameCardHead nameCardHead;
+  late NameCardBody nameCardBody;
+  late NameCardPos nameCardPos;
+}
+
 class NameCardHead {
   late String? nameCardImage;
   late String? nameCardName;
@@ -109,9 +115,6 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
     super.initState();
     getNameCardDetail();
   }
-
-
-
 
   void getNameCardDetail() async {
     print(args);
@@ -167,8 +170,7 @@ class BusinessCardDetailHeader extends StatefulWidget {
   const BusinessCardDetailHeader({super.key, required this.nameCardHead});
 
   @override
-  State<BusinessCardDetailHeader> createState() =>
-      _BusinessCardDetailHeaderState(nameCardHead);
+  State<BusinessCardDetailHeader> createState() =>_BusinessCardDetailHeaderState(nameCardHead);
 }
 
 class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
@@ -176,7 +178,9 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
   double _angle = 0;
   final NameCardHead nameCardHead;
   late String nameCardMemo = "";
+
   ApiService apiService = ApiService();
+  
   _BusinessCardDetailHeaderState(this.nameCardHead);
 
   void updateStatus() async{

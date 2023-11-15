@@ -5,6 +5,7 @@ import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 import 'package:ssok/widgets/pockets/childrens/my_account.dart';
 import 'package:ssok/widgets/pockets/childrens/my_pocket.dart';
+import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 class AllRegisteredPocket extends StatefulWidget {
   const AllRegisteredPocket({
@@ -69,11 +70,14 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
                 : "잔돈 저금하기" // 잔돈 저금 안하기 -> 저금하기
             ,
             style: TextStyle(fontWeight: FontWeight.bold)),
-        content: Text(
-          _isCheckedChanges
-              ? "더이상 결제 시 잔돈이 저금되지 않습니다."
-              : "카드 결제 시 1000원 이하의 잔돈이 포켓머니에 저금 됩니다.\n\n예) 1,700 결제 시 300원 저금",
-          style: TextStyle(color: Colors.black, fontSize: 16),
+        content: Container(
+          height: 100,
+          child: WrappedKoreanText(
+            _isCheckedChanges
+                ? "더이상 결제 시 잔돈이 저금되지 않습니다."
+                : "카드 결제 시 1000원 이하의 잔돈이 포켓머니에 저금 됩니다.\n\n예) 1,700 결제 시 300원 저금",
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
         ),
         actions: <Widget>[
           TextButton(

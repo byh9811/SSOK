@@ -11,6 +11,7 @@ void confirmDialog(
     BuildContext context, String title, String content, Function() onPressed) {
   showDialog(
     context: context,
+    barrierDismissible: false,
     // transitionDuration: Duration(milliseconds: 700),
     builder: (BuildContext context) {
       return AlertDialog(
@@ -19,7 +20,7 @@ void confirmDialog(
         ),
         elevation: 0,
         // backgroundColor: Colors.transparent,
-        title: Text(title),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
         content: Text(content),
         actions: [
           TextButton(

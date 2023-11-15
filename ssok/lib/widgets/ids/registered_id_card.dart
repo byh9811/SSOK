@@ -5,6 +5,7 @@ import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/identification/service_aggreement_page.dart';
 import 'package:ssok/widgets/content_box.dart';
+import 'package:ssok/widgets/frequents/confirm.dart';
 import 'package:ssok/widgets/ids/childrens/id_info_text.dart';
 import 'package:ssok/widgets/register_button.dart';
 
@@ -68,6 +69,16 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     }
   }
 
+  void removeIdCard() async {
+    print("신분증을 삭제합니다.");
+    final response = await apiService.postRequest(
+        "idcard-service/registration/remove", null, TokenManager().accessToken);
+    if (response.statusCode == 200) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
+    }
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -109,8 +120,6 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     return GestureDetector(
       onTap: () {
         _toggleAnimation();
-        // 여기에 클릭 시 호출할 함수를 넣습니다.
-        print('Padding 클릭됨!');
       },
       child: Padding(
         padding: EdgeInsets.only(bottom: screenHeight * 0.01),
@@ -136,10 +145,20 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: Image.asset(
-                          'assets/logo.png',
-                          height: 45,
-                          color: Colors.white54,
+                        child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(
+                              'assets/logo.png',
+                              height: 45,
+                              color: Colors.white54,
+                            ),
+                            IconButton(onPressed: () {
+                              confirmDialog(context, "주민등록증 삭제", "주민등록증을 삭제하시겠습니까?",(){removeIdCard();});
+                              // updateStatus
+                            }, icon: Icon(Icons.remove_circle), color: Colors.pink,),
+                          ],
                         ),
                       ),
                       Expanded(
@@ -330,3 +349,5 @@ class _RegisteredIdCardState extends State<RegisteredIdCard>
     return lines;
   }
 }
+
+

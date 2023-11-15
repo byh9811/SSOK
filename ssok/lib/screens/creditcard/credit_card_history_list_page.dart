@@ -50,7 +50,7 @@ List<CreditCardHistory> parseCreditCardHistory(Map<String, Object?> jsonStr) {
                 receiptDetailDocumentId: item['receiptDetailDocumentId'],
                 shopName: item['shopName'],
                 payAmt: item['payAmt'],
-                approvedDate: item['approvedDate'],
+                approvedDate: DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.parse(item['approvedDate'])),
                 transactionType: item['transactionType'],
               ))
           .toList();
@@ -294,7 +294,7 @@ class _CreditCardHistoryListPageState extends State<CreditCardHistoryListPage> {
                               },
                               title: Text(shopName),
                               subtitle: Text(
-                                approvedDate.substring(0, 10),
+                                approvedDate,
                                 style: TextStyle(
                                   color: Color(0xFFC9C9C9),
                                 ),

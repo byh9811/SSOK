@@ -121,7 +121,7 @@ class _EnterAmountState extends State<EnterAmount> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        SizedBox(height: screenHeight * 0.03),
+        SizedBox(height: screenHeight * 0.02),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.1),
           child: Row(
@@ -152,7 +152,7 @@ class _EnterAmountState extends State<EnterAmount> {
             ],
           ),
         ),
-        SizedBox(height: screenHeight * 0.08),
+        SizedBox(height: screenHeight * 0.05),
         MainButton(
             color: "0xFF00ADEF",
             title: widget.buttonTitle,

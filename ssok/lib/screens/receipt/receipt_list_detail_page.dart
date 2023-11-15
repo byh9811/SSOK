@@ -176,7 +176,7 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
             ),
             ContentByReceipt(
               title: "승인 일시",
-              content: receiptDetail!.approvedDate,
+              content: DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.parse(receiptDetail!.approvedDate)),
             ),
             ContentByReceipt(
               title: "승인 번호",

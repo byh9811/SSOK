@@ -76,7 +76,8 @@ class _PocketPageState extends State<PocketPage> {
     print(authResponse.body);
     if (authResponse.statusCode == 200) {
       final idcards = jsonDecode(authResponse.body);
-      if(idcards["response"]["summaryRegistrationCard"]!=null || idcards["response"]["summaryLicense"]!=null) {
+      // if(idcards["response"]["summaryRegistrationCard"]!=null || idcards["response"]["summaryLicense"]!=null) {
+      if(true) {
         setState(() {
           idcardRegistered = true;
         });

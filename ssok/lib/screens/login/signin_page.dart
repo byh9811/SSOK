@@ -15,7 +15,7 @@ final formKey = GlobalKey<FormState>();
 
 class _SigninPage extends State<SigninPage> {
   ApiService apiService = ApiService();
-  late String name="";
+  late String name = "";
   late String phone;
   late String sms;
   late String id;
@@ -32,13 +32,12 @@ class _SigninPage extends State<SigninPage> {
   Color smsColor = Colors.blue;
   Color idColor = Colors.blue;
 
-
   void sendSms() async {
     final response = await apiService.postRequest(
         'member-service/sms/send', {"to": phone}, TokenManager().accessToken);
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
-      _showAlertDialog("인증 문자를 전송했습니다.","인증번호를 입력해주세요");
+      _showAlertDialog("인증 문자를 전송했습니다.", "인증번호를 입력해주세요");
     } else {
       throw Exception('Failed to load');
     }
@@ -52,11 +51,11 @@ class _SigninPage extends State<SigninPage> {
       print(jsonData);
       setState(() {
         isCheckSms = jsonData['response'];
-        if(isCheckSms){
+        if (isCheckSms) {
           smsColor = Colors.grey;
-          _showAlertDialog("인증이 완료되었습니다.","다음 절차를 진행해주세요.");
-        }else{
-          _showAlertDialog("인증에 실패했습니다.","인증번호를 확인해주세요");
+          _showAlertDialog("인증이 완료되었습니다.", "다음 절차를 진행해주세요.");
+        } else {
+          _showAlertDialog("인증에 실패했습니다.", "인증번호를 확인해주세요");
         }
       });
     } else {
@@ -72,10 +71,10 @@ class _SigninPage extends State<SigninPage> {
       print(jsonData);
       setState(() {
         isPosId = jsonData['response'];
-        if(isPosId){
-          _showAlertDialog("사용 가능한 아이디입니다","다음 절차를 진행해주세요.");
-        }else{
-          _showAlertDialog("사용이 불가능한 아이디입니다..","다른 아이디를 이용해주세요");
+        if (isPosId) {
+          _showAlertDialog("사용 가능한 아이디입니다", "다음 절차를 진행해주세요.");
+        } else {
+          _showAlertDialog("사용이 불가능한 아이디입니다..", "다른 아이디를 이용해주세요");
         }
       });
     } else {
@@ -84,7 +83,8 @@ class _SigninPage extends State<SigninPage> {
   }
 
   void signIn() async {
-    if (name!="" && isCheckSms &&
+    if (name != "" &&
+        isCheckSms &&
         isPosId &&
         isPasswordMismatch &&
         isSimplePasswordMismatch) {
@@ -101,31 +101,28 @@ class _SigninPage extends State<SigninPage> {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         print(jsonData);
-        _showAlertDialog("회원가입이 완료되었습니다.","환영합니다!");
+        _showAlertDialog("회원가입이 완료되었습니다.", "환영합니다!");
         Navigator.of(context).pushReplacementNamed('/');
       } else {
         throw Exception('Failed to load');
       }
     }
-    if(name==""){
-      _showAlertDialog("회원 가입 실패","이름을 입력해주세요.");
-    }else if(!isCheckSms){
-      _showAlertDialog("회원 가입 실패","문자 인증을 진행해주세요.");
-    }else if(!isPosId){
-      _showAlertDialog("회원 가입 실패","아이디 중복검사를 진행해주세요.");
-    }else if(password==""){
-      _showAlertDialog("회원 가입 실패","비밀번호를 입력해주세요.");
-    }else if(!isPasswordMismatch){
-      _showAlertDialog("회원 가입 실패","비밀번호가 일치하지 않습니다.");
-    }else if(simplePassword==""){
-      _showAlertDialog("회원 가입 실패","2차 비밀번호를 입력해주세요.");
-    }else if(!isSimplePasswordMismatch){
-      _showAlertDialog("회원 가입 실패","2차 비밀번호가 일치하지 않습니다.");
+    if (name == "") {
+      _showAlertDialog("회원 가입 실패", "이름을 입력해주세요.");
+    } else if (!isCheckSms) {
+      _showAlertDialog("회원 가입 실패", "문자 인증을 진행해주세요.");
+    } else if (!isPosId) {
+      _showAlertDialog("회원 가입 실패", "아이디 중복검사를 진행해주세요.");
+    } else if (password == "") {
+      _showAlertDialog("회원 가입 실패", "비밀번호를 입력해주세요.");
+    } else if (!isPasswordMismatch) {
+      _showAlertDialog("회원 가입 실패", "비밀번호가 일치하지 않습니다.");
+    } else if (simplePassword == "") {
+      _showAlertDialog("회원 가입 실패", "2차 비밀번호를 입력해주세요.");
+    } else if (!isSimplePasswordMismatch) {
+      _showAlertDialog("회원 가입 실패", "2차 비밀번호가 일치하지 않습니다.");
     }
-
-
   }
-
 
   void _showAlertDialog(String title, String content) {
     showDialog(
@@ -147,47 +144,37 @@ class _SigninPage extends State<SigninPage> {
     );
   }
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     Color color = Theme.of(context).primaryColor;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('회원 가입'),
         elevation: 0.0,
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Color(0xFF00ADEF),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.only(top: 10)),
-            Center(
-              child: Image(
-                image: AssetImage('assets/horizonLogo.png'),
-                width: 200.0,
-              ),
-            ),
             Form(
                 child: Theme(
               data: ThemeData(
                   primaryColor: Colors.grey,
                   inputDecorationTheme: InputDecorationTheme(
                       labelStyle:
-                          TextStyle(color: Colors.teal, fontSize: 15.0))),
+                          TextStyle(color: Color(0xFF10298E), fontSize: 15.0))),
               child: Container(
-                  padding: EdgeInsets.all(40.0),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                   // 키보드가 올라와서 만약 스크린 영역을 차지하는 경우 스크롤이 되도록
                   // SingleChildScrollView으로 감싸 줌
                   child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
+                        SizedBox(height: screenHeight * 0.01),
                         TextField(
                           decoration: InputDecoration(labelText: '이름'),
                           keyboardType: TextInputType.name,
@@ -195,72 +182,99 @@ class _SigninPage extends State<SigninPage> {
                             name = value;
                           },
                         ),
-                        Row(children: [
-                          Expanded(
-                            child: TextField(
-                              readOnly: isCheckSms,
-                              decoration: InputDecoration(labelText: '전화번호'),
-                              keyboardType: TextInputType.phone,
-                              onChanged: (value) {
-                                phone = value;
-                              },
-                            ),
-                          ),
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: sendColor, // 원하는 색상으로 변경
+                        SizedBox(height: screenHeight * 0.02),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                readOnly: isCheckSms,
+                                decoration: InputDecoration(labelText: '전화번호'),
+                                keyboardType: TextInputType.phone,
+                                onChanged: (value) {
+                                  phone = value;
+                                },
                               ),
-                              onPressed: !isCheckSms ? ()=>sendSms():null,
-                              child: Text("문자 전송")),
-                        ]),
-                        Row(children: [
-                          Expanded(
-                            child: TextField(
-                              readOnly: isCheckSms,
-                              decoration: InputDecoration(labelText: '인증번호'),
-                              keyboardType: TextInputType.phone,
-                              onChanged: (value) {
-                                setState(() {
-                                  sms = value;
-                                });
-                              },
                             ),
-                          ),
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: sendColor, // 원하는 색상으로 변경
-                              ),
-                              onPressed: !isCheckSms ? ()=>checkSms():null,
-                              child: Text("인증 확인")),
-                        ]),
-                        Row(children: [
-                          Expanded(
-                            child: TextField(
-                              readOnly: isPosId,
-                              decoration: InputDecoration(labelText: '아이디'),
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                id = value;
-                              },
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(top: screenHeight * 0.02),
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: sendColor, // 원하는 색상으로 변경
+                                  ),
+                                  onPressed:
+                                      !isCheckSms ? () => sendSms() : null,
+                                  child: Text("문자 전송")),
                             ),
-                          ),
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: idColor, // 원하는 색상으로 변경
+                          ],
+                        ),
+                        SizedBox(height: screenHeight * 0.02),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                readOnly: isCheckSms,
+                                decoration: InputDecoration(labelText: '인증번호'),
+                                keyboardType: TextInputType.phone,
+                                onChanged: (value) {
+                                  setState(() {
+                                    sms = value;
+                                  });
+                                },
                               ),
-                              onPressed: !isPosId ? ()=>checkId():null,
-                              child: Text("중복 확인")),
-                        ]),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(top: screenHeight * 0.02),
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: sendColor, // 원하는 색상으로 변경
+                                  ),
+                                  onPressed:
+                                      !isCheckSms ? () => checkSms() : null,
+                                  child: Text("인증 확인")),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: screenHeight * 0.02),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                readOnly: isPosId,
+                                decoration: InputDecoration(labelText: '아이디'),
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+                                  id = value;
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(top: screenHeight * 0.02),
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: idColor, // 원하는 색상으로 변경
+                                  ),
+                                  onPressed: !isPosId ? () => checkId() : null,
+                                  child: Text("중복 확인")),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: screenHeight * 0.02),
                         TextField(
                           decoration: InputDecoration(labelText: '비밀번호'),
                           keyboardType: TextInputType.text,
                           obscureText: true, // 비밀번호 안보이도록 하는 것
                           onChanged: (value) {
-                            setState(() {
-                              password = value;
-                            });
+                            setState(
+                              () {
+                                password = value;
+                              },
+                            );
                           },
                         ),
+                        SizedBox(height: screenHeight * 0.02),
                         TextField(
                           decoration: InputDecoration(labelText: '비밀번호 확인'),
                           keyboardType: TextInputType.text,
@@ -276,6 +290,7 @@ class _SigninPage extends State<SigninPage> {
                                   ? Colors.black
                                   : Colors.red),
                         ),
+                        SizedBox(height: screenHeight * 0.02),
                         TextField(
                           decoration: InputDecoration(labelText: '2차 비밀번호'),
                           keyboardType: TextInputType.text,
@@ -286,10 +301,11 @@ class _SigninPage extends State<SigninPage> {
                             });
                           },
                         ),
+                        SizedBox(height: screenHeight * 0.02),
                         TextField(
                           decoration: InputDecoration(
                             labelText: '2차 비밀번호 확인',
-                          ), // 비활성 상태 테두리 스타일),
+                          ),
                           keyboardType: TextInputType.text,
                           obscureText: true, // 비밀번호 안보이도록 하는 것
                           onChanged: (value) {
@@ -304,7 +320,7 @@ class _SigninPage extends State<SigninPage> {
                                   ? Colors.black
                                   : Colors.red),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: screenHeight * 0.03),
                         ButtonTheme(
                             minWidth: 100.0,
                             height: 50.0,
@@ -313,8 +329,15 @@ class _SigninPage extends State<SigninPage> {
                                 signIn();
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.orangeAccent),
-                              child: Text("회원가입"),
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 239, 137, 4)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  "회원가입",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
                             )),
                       ],
                     ),

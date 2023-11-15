@@ -109,7 +109,7 @@ public class IdcardController {
         log.info("controller entered method ocrLicense");
         RecognizedLicenseResponse result = analysisService.analysisLicense(file);
         if(result ==  null){
-            return ERROR("운전명허증을 다시 촬영해주세요", HttpStatus.BAD_REQUEST);
+            return ERROR("운전면허증을 다시 촬영해주세요", HttpStatus.BAD_REQUEST);
         }
         return OK(result);
     }

@@ -46,6 +46,16 @@ class _BusinessCardDetailPage extends State<BusinessCardDetailPage> {
         iconTheme: IconThemeData(
           color: Colors.black, // 원하는 색상으로 변경
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // 뒤로가기 버튼이 눌렸을 때 실행되는 함수
+            // 원하는 동작을 여기에 추가
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                "/main", (route) => false,
+                arguments: 1); // 예시로 뒤로가기 기능 수행
+          },
+        ),
       ),
       body: BusinessCardDetail(args: args),
     );

@@ -342,6 +342,12 @@ class _BusinessCardSendBluetoothPageState
     double screenHeight = MediaQuery.of(context).size.height;
     showModalBottomSheet(
       context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+      ),
       builder: (builder) {
         return SizedBox(
           height: screenHeight * 0.3,

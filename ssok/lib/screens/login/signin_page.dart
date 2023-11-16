@@ -242,8 +242,8 @@ class _SigninPage extends State<SigninPage> {
                           maxLength: 10,
                           buildCounter: (BuildContext context, { int? currentLength, int? maxLength, bool? isFocused }) => null,
                           inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z가-힣]')),// 영어와 한글만 허용
                             FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
+                            FilteringTextInputFormatter.deny(RegExp(r'[!@#%^&*(),.?":{}|<>]')), //특수문자를 거부하는
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.02),

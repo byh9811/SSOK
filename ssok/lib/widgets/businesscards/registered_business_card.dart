@@ -230,7 +230,7 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(left: 30),
+                padding: EdgeInsets.only(left: 8),
                 child: TextButton(
                   onPressed: () {
                     showDialog(
@@ -246,8 +246,8 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
                     );
                   },
                   child: Text(
-                    '다른 직업도 있으신가요?',
-                    style: TextStyle(fontSize: 11, color: Color(0xFF00ADEF)),
+                    '새로운 명함 등록하기',
+                    style: TextStyle(fontSize: 15, color: Color(0xFF00ADEF)),
                   ),
                 ),
               )

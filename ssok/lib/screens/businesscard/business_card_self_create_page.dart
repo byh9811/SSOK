@@ -262,8 +262,8 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                     children: [
                       SizedBox(height: screenHeight * 0.02),
                       BusinessCardText(
-                        title: "이름",
-                        hintContent: "이름 입력",
+                        title: "이름 *",
+                        hintContent: "홍길동",
                         updateValue: (newValue) {
                           setState(() {
                             name = newValue;
@@ -294,8 +294,8 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                         isChecked: isCheckedList[0],
                       ),
                       BusinessCardText(
-                        title: "회사",
-                        hintContent: "회사 입력",
+                        title: "회사 *",
+                        hintContent: "Samsung",
                         updateValue: (newValue) {
                           setState(() {
                             company = newValue;
@@ -326,8 +326,8 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                         isChecked: isCheckedList[2],
                       ),
                       BusinessCardText(
-                        title: "직책(업무)",
-                        hintContent: "직책(업무) 입력",
+                        title: "직책 / 업무",
+                        hintContent: "Developer",
                         updateValue: (newValue) {
                           setState(() {
                             job = newValue;
@@ -359,7 +359,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                       ),
                       BusinessCardText(
                         title: "주소",
-                        hintContent: "주소 입력",
+                        hintContent: "서울특별시 강남구...",
                         updateValue: (newValue) {
                           setState(() {
                             address = newValue;
@@ -391,7 +391,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                       ),
                       BusinessCardText(
                         title: "휴대폰",
-                        hintContent: "휴대폰 입력",
+                        hintContent: "01012345678",
                         updateValue: (newValue) {
                           setState(() {
                             phone = newValue;
@@ -423,7 +423,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                       ),
                       BusinessCardText(
                         title: "회사번호",
-                        hintContent: "회사번호 입력",
+                        hintContent: "021234567",
                         updateValue: (newValue) {
                           setState(() {
                             tel = newValue;
@@ -455,7 +455,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                       ),
                       BusinessCardText(
                         title: "FAX",
-                        hintContent: "FAX 입력",
+                        hintContent: "021234567",
                         updateValue: (newValue) {
                           setState(() {
                             fax = newValue;
@@ -487,7 +487,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                       ),
                       BusinessCardText(
                         title: "이메일",
-                        hintContent: "이메일 입력",
+                        hintContent: "email@domain.com",
                         updateValue: (newValue) {
                           setState(() {
                             email = newValue;
@@ -519,7 +519,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                       ),
                       BusinessCardText(
                         title: "홈페이지",
-                        hintContent: "홈페이지 입력",
+                        hintContent: "www.homepage.com",
                         updateValue: (newValue) {
                           setState(() {
                             website = newValue;
@@ -775,15 +775,15 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
             children: [
               Text(
                 "※ 추가된 텍스트는 끌어당겨 이동",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
               Text(
                 "※ 버튼을 통해 타겟을 설정하고 화살표를 이용하여 상세 이동",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
               Text(
                 "※ +,-버튼을 통해 글씨 크기 조정",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
           ),

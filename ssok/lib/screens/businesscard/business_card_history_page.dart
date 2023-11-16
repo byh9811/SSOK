@@ -12,10 +12,8 @@ class BusineessCardHistoryPage extends StatefulWidget {
 }
 
 class _BusineessCardHistoryPage extends State<BusineessCardHistoryPage> {
-  
   @override
   Widget build(BuildContext context) {
-
     final args = ModalRoute.of(context)!.settings.arguments as int;
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -38,25 +36,28 @@ class _BusineessCardHistoryPage extends State<BusineessCardHistoryPage> {
           color: Colors.black, // 원하는 색상으로 변경
         ),
       ),
-      body: Column(children: [          Divider(
-            height: 1,
-            color: Colors.black,
-            thickness: 1,
-          ),BusinessCardHistory(exchangeSeq: args)]),
+      body: Column(children: [
+        Divider(
+          height: 1,
+          color: Colors.black,
+          thickness: 1,
+        ),
+        BusinessCardHistory(exchangeSeq: args)
+      ]),
     );
   }
 }
 
-class BusinessCardHistory extends StatefulWidget{
+class BusinessCardHistory extends StatefulWidget {
   final int exchangeSeq;
-  const BusinessCardHistory({Key? key, required this.exchangeSeq}) : super(key: key);
+  const BusinessCardHistory({Key? key, required this.exchangeSeq})
+      : super(key: key);
 
   @override
   State<BusinessCardHistory> createState() => _BusinessCardHistory(exchangeSeq);
 }
 
-class _BusinessCardHistory extends State<BusinessCardHistory>{
-
+class _BusinessCardHistory extends State<BusinessCardHistory> {
   final int exchangeSeq;
   _BusinessCardHistory(this.exchangeSeq);
 
@@ -64,7 +65,7 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
 
   late List<dynamic> imageList;
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -72,11 +73,12 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
     getHistory();
   }
 
-  void getHistory()async{
-    final response = await apiService.getRequest("namecard-service/timeline/${exchangeSeq}", TokenManager().accessToken);
+  void getHistory() async {
+    final response = await apiService.getRequest(
+        "namecard-service/timeline/${exchangeSeq}", TokenManager().accessToken);
 
     final jsonData = jsonDecode(response.body);
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       setState(() {
         imageList = jsonData["response"];
       });
@@ -90,89 +92,90 @@ class _BusinessCardHistory extends State<BusinessCardHistory>{
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      color: Colors.white,
-      child: SizedBox(
-        height: screenHeight * 0.9,
+    return Expanded(
+      child: Container(
+        color: Colors.white,
         child: ListView.builder(
           itemCount: imageList.length,
           itemBuilder: (context, index) {
             return Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: screenWidth * 0,
-                ),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              padding: EdgeInsets.symmetric(
+                vertical: screenWidth * 0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
                     children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          if (imageList.length == 1)
-                            Container(
-                              width: 100,
-                              height: 230,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/1.PNG'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                      if (imageList.length == 1)
+                        Container(
+                          width: 100,
+                          height: 230,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/1.PNG'),
+                              fit: BoxFit.cover,
                             ),
-                          if (imageList.length != 1 && index == 0)
-                            Container(
-                              width: 100,
-                              height: 230,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/2.PNG'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          if (imageList.length >= 3 &&
-                              index != 0 &&
-                              index != imageList.length - 1)
-                            Container(
-                              width: 100,
-                              height: 230,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/3.PNG'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          if (index != 0 && index == imageList.length - 1)
-                            Container(
-                              width: 100,
-                              height: 230,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/4.PNG'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          Text(
-                            imageList[index]["date"],
                           ),
-                        ],
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.09), // 그림자 색상과 투명도
-                              spreadRadius: -8, // 그림자 확산 정도
-                              blurRadius: 10, // 그림자 흐림 정도
-                              offset: Offset(0, 0), // 그림자의 위치 (가로, 세로) - 오른쪽 아래 방향
-                            ),
-                          ],
                         ),
-                        child: Image.network(imageList[index]["imgUrl"] ?? '',
-                            width: screenWidth * 0.6, height: screenHeight * 0.2),
-                      )
-                    ]));
+                      if (imageList.length != 1 && index == 0)
+                        Container(
+                          width: 100,
+                          height: 230,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/2.PNG'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      if (imageList.length >= 3 &&
+                          index != 0 &&
+                          index != imageList.length - 1)
+                        Container(
+                          width: 100,
+                          height: 230,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/3.PNG'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      if (index != 0 && index == imageList.length - 1)
+                        Container(
+                          width: 100,
+                          height: 230,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/4.PNG'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      Text(
+                        imageList[index]["date"],
+                      ),
+                    ],
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.09), // 그림자 색상과 투명도
+                          spreadRadius: -8, // 그림자 확산 정도
+                          blurRadius: 10, // 그림자 흐림 정도
+                          offset: Offset(0, 0), // 그림자의 위치 (가로, 세로) - 오른쪽 아래 방향
+                        ),
+                      ],
+                    ),
+                    child: Image.network(imageList[index]["imgUrl"] ?? '',
+                        width: screenWidth * 0.6, height: screenHeight * 0.2),
+                  )
+                ],
+              ),
+            );
           },
         ),
       ),

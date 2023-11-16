@@ -11,6 +11,7 @@ import 'package:ssok/screens/identification/service_aggreement_page.dart';
 import 'package:ssok/screens/loading/basic_loading_page.dart';
 import 'package:ssok/screens/loading/transfer_loading_page.dart';
 import 'package:ssok/widgets/content_box.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 import 'package:ssok/widgets/register_button.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -145,13 +146,21 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
                                     image: pickedImage!, data: data),
                               );
                             } catch (e) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text("OCR 인식 실패"),
-                              ));
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  "/main", (route) => false,
-                                  arguments: 0);
+                              // ignore: use_build_context_synchronously
+                              showSuccessDialog(
+                                  context, "OCR인식 실패", "주민등록증이 제대로 식별되지 않았습니다.",
+                                  () {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "/main", (route) => false,
+                                    arguments: 0);
+                              });
+                              // ScaffoldMessenger.of(context)
+                              //     .showSnackBar(SnackBar(
+                              //   content: Text("OCR 인식 실패"),
+                              // ));
+                              // Navigator.of(context).pushNamedAndRemoveUntil(
+                              //     "/main", (route) => false,
+                              //     arguments: 0);
                             }
                           } else {
                             Navigator.of(context).pop();

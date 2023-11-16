@@ -6,11 +6,15 @@ class ModalTypeButton extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.ontap,
+    required this.color,
+    required this.splashColor,
   }) : super(key: key);
 
   final String title;
   final IconData icon;
   final Function() ontap;
+  final Color color;
+  final Color splashColor;
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +30,11 @@ class ModalTypeButton extends StatelessWidget {
         height: screenHeight * 0.11,
         child: Material(
           borderRadius: BorderRadius.circular(10.0),
-          color: Color(0xFFBEC4C6),
+          color: color,
           child: InkWell(
-            splashColor: Color(0xFFA8AEB1),
+            splashColor: splashColor,
             onTap: ontap,
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

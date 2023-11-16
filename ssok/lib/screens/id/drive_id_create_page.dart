@@ -125,11 +125,10 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
               .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("등록 실패"),
-        ));
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
+        showSuccessDialog(context, "등록 오류", "등록에 실패했습니다", () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
+        });
         throw Exception('Failed to load');
       }
     }
@@ -148,11 +147,13 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
         print(args!.data.licenseAddress);
         setState(() {
           _nameController.text = args!.data.licenseName ?? "";
-          _personalNumberController.text = args!.data.licensePersonalNumber ?? "";
+          _personalNumberController.text =
+              args!.data.licensePersonalNumber ?? "";
           _typeController.text = args!.data.licenseType ?? "";
           _addressController.text = args!.data.licenseAddress ?? "";
           _numberController.text = args!.data.licenseNumber ?? "";
-          _renewStartDateController.text = args!.data.licenseRenewStartDate ?? "";
+          _renewStartDateController.text =
+              args!.data.licenseRenewStartDate ?? "";
           _renewEndDateController.text = args!.data.licenseRenewEndDate ?? "";
           _conditionController.text = args!.data.licenseCondition ?? "";
           _codeController.text = args!.data.licenseCode ?? "";
@@ -204,7 +205,10 @@ class _DriveIdCreatePageState extends State<DriveIdCreatePage> {
           children: [
             Padding(padding: EdgeInsets.only(top: 10)),
             Center(
-              child: Image.file(File(image.path), width: 280,),
+              child: Image.file(
+                File(image.path),
+                width: 280,
+              ),
             ),
             Form(
                 child: Theme(

@@ -15,8 +15,8 @@ class BusinessTransferModal extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
-      width: screenWidth * 0.75,
-      height: screenHeight * 0.3,
+      width: screenWidth * 0.67,
+      height: screenHeight * 0.28,
       child: Column(
         children: [
           Align(
@@ -40,36 +40,38 @@ class BusinessTransferModal extends StatelessWidget {
               fontSize: 24,
             ),
           ),
-          SizedBox(height: screenHeight * 0.04),
+          SizedBox(height: screenHeight * 0.03),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ModalTypeButton(
-                title: "받기",
-                icon: Icons.archive,
-                ontap: () {
-                  print(myNamecardItem.namecardName);
-                  Navigator.of(context).pushNamed(
-                      '/businesscard/receive/bluetooth',
-                      arguments: myNamecardItem);
-                },
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
+                child: ModalTypeButton(
+                  title: "받기",
+                  icon: Icons.archive,
+                  ontap: () {
+                    print(myNamecardItem.namecardName);
+                    Navigator.of(context).pushNamed(
+                        '/businesscard/receive/bluetooth',
+                        arguments: myNamecardItem);
+                  },
+                  color: Color(0xFFC9FFB6),
+                  splashColor: Color(0xFFA7FC89),
+                ),
               ),
-              ModalTypeButton(
-                title: "보내기",
-                icon: Icons.send,
-                ontap: () {
-                  Navigator.of(context).pushNamed(
-                      '/businesscard/send/bluetooth',
-                      arguments: myNamecardItem);
-                },
-              ),
-              ModalTypeButton(
-                title: "Link",
-                icon: Icons.share,
-                ontap: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed('/card/self/create');
-                },
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
+                child: ModalTypeButton(
+                  title: "보내기",
+                  icon: Icons.send,
+                  ontap: () {
+                    Navigator.of(context).pushNamed(
+                        '/businesscard/send/bluetooth',
+                        arguments: myNamecardItem);
+                  },
+                  color: Color(0xFFEFF299),
+                  splashColor: Color(0xFFF2F76C),
+                ),
               ),
             ],
           )

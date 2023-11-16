@@ -90,91 +90,155 @@ class _LoginPageState extends State<LoginPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: screenHeight * 0.1),
-              Image.asset(
-                'assets/mainLogo.png',
-                height: 300,
-              ),
-              SizedBox(height: screenHeight * 0.04),
-              Form(
-                  child: Column(
-                children: [
-                  TextField(
-                    controller: idController, // Use the ID controller
-                    decoration: InputDecoration(
-                        labelText: 'ID',
-                        hintText: "아이디를 입력하세요",
-                        labelStyle: TextStyle(color: Colors.black),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1, color: Colors.blue),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1, color: Colors.black),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        )),
-                    keyboardType: TextInputType.text,
-                  ),
-                  SizedBox(height: screenHeight * 0.03),
-                  TextField(
-                    controller:
-                        passwordController, // Use the password controller
-                    obscureText: true, // 비밀번호 안보이도록 하는 것
-                    decoration: InputDecoration(
-                        labelText: 'PW',
-                        hintText: " 비밀번호를 입력하세요",
-                        labelStyle: TextStyle(color: Colors.black),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1, color: Colors.blue),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(width: 1, color: Colors.black),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        )),
-                    keyboardType: TextInputType.text,
-                  ),
-                ],
-              )),
-              SizedBox(height: screenHeight * 0.06),
-              ElevatedButton(
-                onPressed: () {
-                  fetchTodos();
-                },
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50))),
-                child: Text("로그인"),
-              ),
-              SizedBox(height: screenHeight * 0.01),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ServiceAggreementPage(
-                          onTap: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/signin');
-                          },
+        body: GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: screenHeight * 0.1),
+                Image.asset(
+                  'assets/mainLogo.png',
+                  height: 300,
+                ),
+                SizedBox(height: screenHeight * 0.04),
+                Form(
+                    child: Column(
+                  children: [
+                    TextField(
+                      controller: idController, // Use the ID controller
+                      decoration: InputDecoration(
+                          labelText: 'ID',
+                          hintText: "아이디를 입력하세요",
+                          labelStyle: TextStyle(color: Colors.black),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(width: 1, color: Color(0xFF00ADEF)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.black),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          )),
+                      keyboardType: TextInputType.text,
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+                    TextField(
+                      controller:
+                          passwordController, // Use the password controller
+                      obscureText: true, // 비밀번호 안보이도록 하는 것
+                      decoration: InputDecoration(
+                          labelText: 'PW',
+                          hintText: " 비밀번호를 입력하세요",
+                          labelStyle: TextStyle(color: Colors.black),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(width: 1, color: Color(0xFF00ADEF)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.black),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          )),
+                      keyboardType: TextInputType.text,
+                    ),
+                  ],
+                )),
+                SizedBox(height: screenHeight * 0.04),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+                  child: TextButton(
+                    onPressed: () {
+                      fetchTodos();
+                    },
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all(
+                        Size(screenWidth, screenHeight * 0.07),
+                      ),
+                      side: MaterialStateProperty.all(
+                        BorderSide(
+                          width: 2.3,
+                          color: Color(0xFF00ADEF),
                         ),
                       ),
-                    );
-                  },
-                  style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all(Size(200, 50))),
-                  child: Text("회원가입"))
-            ],
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      "로그인",
+                      style: TextStyle(
+                        color: Color(0xFF00ADEF),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ServiceAggreementPage(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/signin');
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all(
+                        Size(screenWidth, screenHeight * 0.07),
+                      ),
+                      side: MaterialStateProperty.all(
+                        BorderSide(
+                          width: 2.3,
+                          color: Color(0xFF00ADEF),
+                        ),
+                      ),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      "회원가입",
+                      style: TextStyle(
+                        color: Color(0xFF00ADEF),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

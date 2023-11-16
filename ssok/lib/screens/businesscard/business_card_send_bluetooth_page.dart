@@ -234,7 +234,7 @@ class _BusinessCardSendBluetoothPageState
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           RippleWave(
-            color: Color(0xFF00ADEF),
+            color: Color(0xFFEFF299),
             childTween: Tween(begin: 1.0, end: 1.2),
             animationController: animationController,
             repeat: false,
@@ -265,18 +265,21 @@ class _BusinessCardSendBluetoothPageState
                     advertisingStart();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00ADEF),
+                    backgroundColor: Colors.white38,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        Icons.radar,
-                        size: 20,
+                        Icons.send,
+                        size: 22,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: Text("연결 시작"),
+                        padding: EdgeInsets.only(left: screenWidth * 0.03),
+                        child: Text(
+                          "명함 전송",
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ],
                   ),

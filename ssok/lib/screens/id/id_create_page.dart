@@ -86,11 +86,11 @@ class _IdCreatePageState extends State<IdCreatePage> {
               .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("등록 실패"),
-        ));
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
+        // ignore: use_build_context_synchronously
+        showSuccessDialog(context, "등록 오류", "등록에 실패했습니다", () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 0);
+        });
         throw Exception('Failed to load');
       }
     }
@@ -111,8 +111,10 @@ class _IdCreatePageState extends State<IdCreatePage> {
           _personalNumberController.text =
               args!.data.registrationCardPersonalNumber ?? "";
           _addressController.text = args!.data.registrationCardAddress ?? "";
-          _issueDateController.text = args!.data.registrationCardIssueDate ?? "";
-          _authorityController.text = args!.data.registrationCardAuthority ?? "";
+          _issueDateController.text =
+              args!.data.registrationCardIssueDate ?? "";
+          _authorityController.text =
+              args!.data.registrationCardAuthority ?? "";
           image = args!.image;
         });
       } else {

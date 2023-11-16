@@ -315,7 +315,7 @@ class _BusinessCardReceiveBluetoothPageState
         children: [
           SizedBox(height: screenHeight * 0.1),
           RippleWave(
-            color: Color(0xFF00ADEF),
+            color: Color(0xFFC9FFB6),
             repeat: false,
             animationController: animationController,
             child: Image.asset(
@@ -338,18 +338,21 @@ class _BusinessCardReceiveBluetoothPageState
                     scanningStart();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00ADEF),
+                    backgroundColor: Colors.black45,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        Icons.radar,
-                        size: 20,
+                        Icons.pan_tool,
+                        size: 22,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 3.0),
-                        child: Text("스캔"),
+                        padding: EdgeInsets.only(left: screenWidth * 0.03),
+                        child: Text(
+                          "명함 받기",
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ],
                   ),
@@ -360,7 +363,7 @@ class _BusinessCardReceiveBluetoothPageState
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                   child: Text(
-                    "※ 스캔버튼을 눌러 주변의 명함 전송과 통신하여 명함을 밭을 수 있어요",
+                    "※ 버튼을 눌러 주변의 명함 전송과 통신하여 명함을 밭을 수 있어요",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,

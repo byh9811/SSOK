@@ -65,7 +65,10 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
   }
 
   Future<XFile?> pickAndCropImageByStorage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png'],
+    );
     if (result != null) {
       File file = File(result.files.single.path!);
       // if (file.path.split('.').last.toLowerCase() != 'jpg') {
@@ -195,8 +198,8 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                       );
                     } catch (e) {
                       // ignore: use_build_context_synchronously
-                      showSuccessDialog(
-                          context, "OCR인식 실패", "운전면허증이 제대로 식별되지 않았습니다.", () {
+                      showSuccessDialog(context, "명함 인식 실패",
+                          "명함이 제대로 식별되지 않았습니다. \n다시 시도해 주세요.", () {
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             "/main", (route) => false,
                             arguments: 1);
@@ -212,6 +215,8 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                     Navigator.of(context).pop();
                   }
                 },
+                color: Color(0xFFFFD5A5),
+                splashColor: Color(0xFFFFC37E),
               ),
               ModalTypeButton(
                 title: "파일 업로드",
@@ -241,8 +246,8 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                       );
                     } catch (e) {
                       // ignore: use_build_context_synchronously
-                      showSuccessDialog(
-                          context, "OCR인식 실패", "운전면허증이 제대로 식별되지 않았습니다.", () {
+                      showSuccessDialog(context, "명함 인식 실패",
+                          "명함이 제대로 식별되지 않았습니다. \n다시 시도해 주세요.", () {
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             "/main", (route) => false,
                             arguments: 1);
@@ -258,6 +263,8 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                     Navigator.of(context).pop();
                   }
                 },
+                color: Color(0xFFC9F5FF),
+                splashColor: Color(0xFFA1EEFF),
               ),
               ModalTypeButton(
                 title: "직접 생성",
@@ -267,6 +274,8 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                       '/businesscard/self/create',
                       arguments: apiUrl);
                 },
+                color: Color(0xFFFCD4FF),
+                splashColor: Color(0xFFFABBFF),
               ),
             ],
           )

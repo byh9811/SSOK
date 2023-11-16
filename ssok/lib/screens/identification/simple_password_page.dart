@@ -66,6 +66,16 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
     }
   }
 
+  void clearSecretNumberState() {
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex = 0;
+        result = "";
+        secretNumberStates = List.generate(6, (index) => false);
+      });
+    }
+  }
+
   void updateSecretNumberState(String index) {
     setState(() {
       secretNumberStates[currentIndex++] = true;
@@ -97,19 +107,16 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
           children: [
             Column(
               children: [
-                SizedBox(height: 10),
+                SizedBox(height: screenHeight * 0.05),
                 Text(
-                  "2차 비밀번호 입력",
-                  style: TextStyle(fontSize: 30),
+                  "간편 비밀번호 입력",
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: screenHeight * 0.02),
                 Text("$attempts번 남았습니다.")
               ],
             ),
-            // Text(
-            //   "2차 비밀번호 입력",
-            //   style: TextStyle(fontSize: 30),
-            // ),
+            SizedBox(height: screenHeight * 0.04),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(
@@ -117,75 +124,90 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
                 (index) => SecretNumberView(state: secretNumberStates[index]),
               ),
             ),
-            Container(
-              height: screenHeight * 0.5,
-              color: Colors.amber,
+            Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PasswordNumberButton(
-                        num: "1",
-                        onTap: () => updateSecretNumberState("1"),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: screenHeight * 0.05),
+                    child: Container(
+                      height: screenHeight * 0.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              PasswordNumberButton(
+                                num: "1",
+                                onTap: () => updateSecretNumberState("1"),
+                              ),
+                              PasswordNumberButton(
+                                num: "2",
+                                onTap: () => updateSecretNumberState("2"),
+                              ),
+                              PasswordNumberButton(
+                                num: "3",
+                                onTap: () => updateSecretNumberState("3"),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              PasswordNumberButton(
+                                num: "4",
+                                onTap: () => updateSecretNumberState("4"),
+                              ),
+                              PasswordNumberButton(
+                                num: "5",
+                                onTap: () => updateSecretNumberState("5"),
+                              ),
+                              PasswordNumberButton(
+                                num: "6",
+                                onTap: () => updateSecretNumberState("6"),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              PasswordNumberButton(
+                                num: "7",
+                                onTap: () => updateSecretNumberState("7"),
+                              ),
+                              PasswordNumberButton(
+                                num: "8",
+                                onTap: () => updateSecretNumberState("8"),
+                              ),
+                              PasswordNumberButton(
+                                num: "9",
+                                onTap: () => updateSecretNumberState("9"),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              PasswordNumberButton(
+                                num: "지움",
+                                onTap: () => deleteSecretNumberState(),
+                                text: true,
+                              ),
+                              PasswordNumberButton(
+                                num: "0",
+                                onTap: () => updateSecretNumberState("0"),
+                              ),
+                              PasswordNumberButton(
+                                  num: "초기화",
+                                  onTap: () => clearSecretNumberState(),
+                                  text: true),
+                            ],
+                          )
+                        ],
                       ),
-                      PasswordNumberButton(
-                        num: "2",
-                        onTap: () => updateSecretNumberState("2"),
-                      ),
-                      PasswordNumberButton(
-                        num: "3",
-                        onTap: () => updateSecretNumberState("3"),
-                      ),
-                    ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PasswordNumberButton(
-                        num: "4",
-                        onTap: () => updateSecretNumberState("4"),
-                      ),
-                      PasswordNumberButton(
-                        num: "5",
-                        onTap: () => updateSecretNumberState("5"),
-                      ),
-                      PasswordNumberButton(
-                        num: "6",
-                        onTap: () => updateSecretNumberState("6"),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PasswordNumberButton(
-                        num: "7",
-                        onTap: () => updateSecretNumberState("7"),
-                      ),
-                      PasswordNumberButton(
-                        num: "8",
-                        onTap: () => updateSecretNumberState("8"),
-                      ),
-                      PasswordNumberButton(
-                        num: "9",
-                        onTap: () => updateSecretNumberState("9"),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PasswordNumberButton(
-                          num: "지움", onTap: () => deleteSecretNumberState()),
-                      PasswordNumberButton(
-                        num: "0",
-                        onTap: () => updateSecretNumberState("0"),
-                      ),
-                      PasswordNumberButton(num: "", onTap: () {}),
-                    ],
-                  )
                 ],
               ),
             ),
@@ -201,9 +223,11 @@ class PasswordNumberButton extends StatefulWidget {
     Key? key,
     required this.num,
     required this.onTap,
+    this.text,
   }) : super(key: key);
   final String num;
   final Function() onTap;
+  final bool? text;
   @override
   State<PasswordNumberButton> createState() => _PasswordNumberButtonState();
 }
@@ -219,12 +243,13 @@ class _PasswordNumberButtonState extends State<PasswordNumberButton> {
         height: screenHeight * 0.1,
         width: screenWidth * 0.2,
         decoration: BoxDecoration(
-            color: Color(0xFFD9D9D9),
-            borderRadius: BorderRadius.all(Radius.circular(30.0))),
+            color: Color(0xFF00496F),
+            borderRadius: BorderRadius.all(Radius.circular(50.0))),
         alignment: Alignment.center,
         child: Text(
           widget.num,
-          style: TextStyle(fontSize: 30),
+          style: TextStyle(
+              fontSize: widget.text != null ? 20 : 30, color: Colors.white),
         ),
       ),
     );

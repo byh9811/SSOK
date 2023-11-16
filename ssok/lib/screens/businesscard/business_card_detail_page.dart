@@ -151,6 +151,8 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
         nameCardPos = NameCardPos(data["lat"], data["lon"]);
         isLoading = false;
       });
+      // 갱신이라면 alert 생성
+      if (nameCardHead.updateStatus == "UPDATED") {}
     }
   }
 
@@ -283,7 +285,7 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                     aspectRatio: 9 / 5,
                     child: Container(
                         decoration: BoxDecoration(
-                          color: _isBack ? Colors.amber : Colors.white,
+                          color: _isBack ? Colors.white : Colors.white,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey,

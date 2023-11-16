@@ -68,6 +68,11 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
       File file = File(result.files.single.path!);
+      // if (file.path.split('.').last.toLowerCase() != 'jpg') {
+      //   showSuccessDialog(context, "파일 형식 오류", ".jpg파일만 등록 가능합니다",
+      //       () => Navigator.of(context).pop());
+      //   return null;
+      // }
       XFile pickedFile = XFile(file.path);
       final CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
@@ -214,6 +219,14 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                 ontap: () async {
                   XFile? cuttedImage = await pickAndCropImageByStorage();
                   if (cuttedImage != null) {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        opaque: false, // 배경이 투명해야 함을 나타냅니다
+                        pageBuilder: (BuildContext context, _, __) {
+                          return TransferLoadingPage();
+                        },
+                      ),
+                    );
                     File file = File(cuttedImage!.path);
                     try {
                       final data = await ocrNC(file);

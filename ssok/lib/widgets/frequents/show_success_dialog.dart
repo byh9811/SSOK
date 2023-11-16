@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 class Constants {
   Constants._();
@@ -7,7 +8,9 @@ class Constants {
 }
 
 void showSuccessDialog(
-    BuildContext context, String title, String content, Function() onPressed) {
+    BuildContext context, String title, String content, Function() onPressed,
+    {int? height}) {
+  int tempHeight = height ?? 60;
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -18,7 +21,8 @@ void showSuccessDialog(
         ),
         elevation: 0,
         title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        content: Text(content),
+        content: Container(
+            height: tempHeight.toDouble(), child: WrappedKoreanText(content)),
         actions: [
           TextButton(
             onPressed: onPressed,

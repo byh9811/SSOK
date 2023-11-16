@@ -8,6 +8,7 @@ import 'package:ssok/screens/mainpage/business_card_page.dart';
 import 'package:ssok/screens/mainpage/credit_card_page.dart';
 import 'package:ssok/screens/mainpage/receipt_page.dart';
 import 'package:ssok/screens/mainpage/pocket_page.dart';
+import 'package:ssok/widgets/frequents/confirm.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -37,17 +38,10 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, ()
-    {
+    Future.delayed(Duration.zero, () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (ModalRoute
-            .of(context)
-            ?.settings
-            .arguments != null) {
-          currentIndex = ModalRoute
-              .of(context)!
-              .settings
-              .arguments as int;
+        if (ModalRoute.of(context)?.settings.arguments != null) {
+          currentIndex = ModalRoute.of(context)!.settings.arguments as int;
         } else {
           currentIndex = 2; // 기본값 설정
         }
@@ -87,30 +81,33 @@ class _MainPageState extends State<MainPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final result = await showDialog<String>(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('로그아웃'),
-                    content: const Text('로그아웃 하시겠습니까?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          userLogOut();
-                        },
-                        child: const Text('네'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context, '아니오');
-                        },
-                        child: const Text('아니오'),
-                      ),
-                    ],
-                  );
-                },
-              );
-              if (result == '네') {}
+              confirmDialog(context, "로그아웃", "로그아웃 하시겠습니까?", () {
+                userLogOut();
+              }, height: 20);
+              // final result = await showDialog<String>(
+              //   context: context,
+              //   builder: (BuildContext context) {
+              //     return AlertDialog(
+              //       title: const Text('로그아웃'),
+              //       content: const Text('로그아웃 하시겠습니까?'),
+              //       actions: [
+              //         TextButton(
+              //           onPressed: () {
+              //             userLogOut();
+              //           },
+              //           child: const Text('네'),
+              //         ),
+              //         TextButton(
+              //           onPressed: () {
+              //             Navigator.pop(context, '아니오');
+              //           },
+              //           child: const Text('아니오'),
+              //         ),
+              //       ],
+              //     );
+              //   },
+              // );
+              // if (result == '네') {}
             },
             icon: Icon(Icons.logout),
             color: Color.fromARGB(255, 225, 225, 225),
@@ -134,7 +131,7 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: SizedBox(
         height: 60.0,
         child: BottomNavigationBar(
-          currentIndex: currentIndex, // 현재 보여주는 탭  
+          currentIndex: currentIndex, // 현재 보여주는 탭
           onTap: (newIndex) {
             setState(() {
               // 보여주려는 index 변경

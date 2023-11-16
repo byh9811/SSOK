@@ -13,6 +13,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:ssok/widgets/creditcards/creditcard_payment_timer.dart';
 import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 import 'package:wrapped_korean_text/wrapped_korean_text.dart';
+import 'package:local_auth_android/local_auth_android.dart';
 
 class CreditCardPaymentPage extends StatefulWidget {
   const CreditCardPaymentPage({super.key});
@@ -87,6 +88,13 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       authenticated = await auth.authenticate(
         //  androidAuthStrings: AndroidAuthMessages(
         localizedReason: '얼굴을 인식하거나 지문을 스캔 해주세요.',
+        authMessages: const <AuthMessages>[
+          AndroidAuthMessages(
+            signInTitle: '본인 인증',
+            biometricHint: "",
+            cancelButton: '취소',
+          ),
+        ],
         options: const AuthenticationOptions(
           useErrorDialogs: false,
           stickyAuth: true,
@@ -331,7 +339,10 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
           ),
           elevation: 0,
           title: Text("오류", style: TextStyle(fontWeight: FontWeight.bold)),
-          content: Container(height: 50,child:WrappedKoreanText("NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.")),
+          content: Container(
+              height: 60,
+              child:
+                  WrappedKoreanText("NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.")),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
@@ -359,7 +370,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
           ],
         ),
       );
-      // print("NFC 불가능!@@@@@@@@@@@@@@@@@@@@@@@@@@");
+      print("NFC 불가능!@@@@@@@@@@@@@@@@@@@@@@@@@@");
       return false;
       // throw "NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.";
     } else {

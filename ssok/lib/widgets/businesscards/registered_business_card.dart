@@ -258,8 +258,8 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
             child: InkWell(
               onTap: () {
                 Navigator.of(context).pushNamed("/businesscard/my",
-                    arguments:
-                        widget.myNamecardItems[_currentPage].namecardSeq);
+                  arguments:
+                    widget.myNamecardItems[_currentPage].namecardSeq);
               },
               child: Stack(
                 alignment: Alignment.center,

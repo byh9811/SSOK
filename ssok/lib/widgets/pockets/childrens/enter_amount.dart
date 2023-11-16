@@ -26,8 +26,8 @@ class _EnterAmountState extends State<EnterAmount> {
   int withDrawMoney = 0;
 
   void sendMoneyToDonate() async {
-    if (withDrawMoney <= 0) {
-      showSuccessDialog(context, "기부 실패", "1원 이상의 금액만 기부할 수 있습니다.", () {
+    if (withDrawMoney < 10) {
+      showSuccessDialog(context, "기부 실패", "10원 이상의 금액만 기부할 수 있습니다.", () {
         Navigator.of(context).pop();
       });
       return;
@@ -37,7 +37,7 @@ class _EnterAmountState extends State<EnterAmount> {
         'pocket-service/donate',
         {
           "donateSeq": widget.donateSeq.toString(),
-          "donateAmt": withDrawMoney.toString()
+          "donateAmt": (withDrawMoney/10).toInt()*10
         },
         TokenManager().accessToken);
     print(response.body);
@@ -76,7 +76,7 @@ class _EnterAmountState extends State<EnterAmount> {
         'pocket-service/pocket/history',
         {
           "pocketHistoryType": "WITHDRAWAL",
-          "pocketHistoryTransAmt": withDrawMoney.toString()
+          "pocketHistoryTransAmt": (withDrawMoney/1).toInt()
         },
         TokenManager().accessToken);
     print(response.body);

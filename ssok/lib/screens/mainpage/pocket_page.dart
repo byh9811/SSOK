@@ -83,8 +83,7 @@ class _PocketPageState extends State<PocketPage> {
     print(authResponse.body);
     if (authResponse.statusCode == 200) {
       final idcards = jsonDecode(authResponse.body);
-      // if(idcards["response"]["summaryRegistrationCard"]!=null || idcards["response"]["summaryLicense"]!=null) {
-      if(true) {
+      if(idcards["response"]["summaryRegistrationCard"]!=null || idcards["response"]["summaryLicense"]!=null) {
         setState(() {
           idcardRegistered = true;
         });
@@ -160,8 +159,7 @@ class _PocketPageState extends State<PocketPage> {
     } else {
       // 모든 데이터가 로딩된 후에는 해당 화면을 보여줌
       print(";asldjfl;sjdafl;jasdkjf;l:;:::$idcardRegistered");
-      // if (!idcardRegistered) {
-      if (false) {
+      if (!idcardRegistered) {
         return CanNotRegisteredPocket();
       } else if (accountNum == null) {
         return NotRegisteredPocket();

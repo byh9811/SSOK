@@ -262,7 +262,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                     children: [
                       SizedBox(height: screenHeight * 0.02),
                       BusinessCardText(
-                        title: "이름(입력 필수)",
+                        title: "이름 *",
                         hintContent: "홍길동",
                         updateValue: (newValue) {
                           setState(() {
@@ -294,7 +294,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                         isChecked: isCheckedList[0],
                       ),
                       BusinessCardText(
-                        title: "회사(입력 필수)",
+                        title: "회사 *",
                         hintContent: "Samsung",
                         updateValue: (newValue) {
                           setState(() {
@@ -326,7 +326,7 @@ class _BusinessCardSelfCreatePageState extends State<BusinessCardSelfCreatePage>
                         isChecked: isCheckedList[2],
                       ),
                       BusinessCardText(
-                        title: "직책(업무)",
+                        title: "직책 / 업무",
                         hintContent: "Developer",
                         updateValue: (newValue) {
                           setState(() {
@@ -775,15 +775,15 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
             children: [
               Text(
                 "※ 추가된 텍스트는 끌어당겨 이동",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
               Text(
                 "※ 버튼을 통해 타겟을 설정하고 화살표를 이용하여 상세 이동",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
               Text(
                 "※ +,-버튼을 통해 글씨 크기 조정",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
           ),

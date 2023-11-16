@@ -13,11 +13,10 @@ function App() {
         </div>
         <br></br>
         <div>
-          <a href="" onClick={popUp}><img className="google" src="googleplay.png"></img></a>
+          <a href="https://drive.google.com/file/d/1vWzL3Q-GX3M40nIuMNALvRM7Xgw_k1Fj/view?usp=sharing" ><img className="google" src="googleplay.png"></img></a>
         </div>
         <div className='buttonWrapper'>
-          {/* <button onClick={popUp} >어플 설치하기</button> */}
-          {/* <a href="https://ssok.site">결제는 SSOK POS기로 SSOK</a> */}
+          <a href="https://ssok.site">결제는 "SSOK POS"로 쏘옥~</a>
         </div>
       </div>
       <div class="satellites" >

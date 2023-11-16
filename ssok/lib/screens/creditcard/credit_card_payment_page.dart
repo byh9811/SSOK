@@ -174,13 +174,11 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
 
     Future<bool> biometricsFlag = _authenticateWithBiometrics();
 
-    biometricsFlag.then((bool isAuthenticated) {
+    biometricsFlag.then((bool isAuthenticated) async {
       if (isAuthenticated) {
         // Future<bool> NFCFlag = checkNFCAvailability();
-        checkNFCAvailability();
-        print("142줄 NFCFlag Error");
-
-        print(NFCFlag);
+        await checkNFCAvailability();
+        print("nfcflag : " + NFCFlag.toString());
         if (NFCFlag) {
           Future.delayed(Duration(seconds: 60), () async {
             if (!_isPaymentDone) {

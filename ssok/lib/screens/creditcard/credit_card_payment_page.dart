@@ -11,12 +11,20 @@ import 'package:ssok/widgets/creditcards/childrens/my_credit_card.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:ssok/widgets/creditcards/creditcard_payment_timer.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
+import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 class CreditCardPaymentPage extends StatefulWidget {
   const CreditCardPaymentPage({super.key});
 
   @override
   State<CreditCardPaymentPage> createState() => _CreditCardPaymentPageState();
+}
+
+class Constants {
+  Constants._();
+  static const double padding = 20;
+  static const double avatarRadius = 45;
 }
 
 class PaymentItem {
@@ -77,12 +85,19 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       });
 
       authenticated = await auth.authenticate(
+        //  androidAuthStrings: AndroidAuthMessages(
         localizedReason: '얼굴을 인식하거나 지문을 스캔 해주세요.',
         options: const AuthenticationOptions(
           useErrorDialogs: false,
           stickyAuth: true,
           biometricOnly: true,
         ),
+
+        //  authMessages: const <AuthMessages>[
+        //   AndroidAuthMessages(
+        //     signInTitle: 'Oops! Biometric authentication required!',
+        //     cancelButton: 'No thanks',
+        //   ),
       );
 
       if (authenticated) {
@@ -111,9 +126,13 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
               updatePasswordMatchStatus: updatePasswordMatchStatus);
         },
       );
+      print("안녕 ???" + isPasswordMatched.toString());
+
       if (isPasswordMatched) {
         return true;
       } else {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
         return false;
       }
     }
@@ -151,41 +170,29 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       if (isAuthenticated) {
         // Future<bool> NFCFlag = checkNFCAvailability();
         checkNFCAvailability();
-        // NFCFlag.then((bool isNFCAvailable){
         print("142줄 NFCFlag Error");
+
         print(NFCFlag);
         if (NFCFlag) {
           Future.delayed(Duration(seconds: 60), () async {
             if (!_isPaymentDone) {
               await NfcManager.instance.stopSession();
-              // ignore: use_build_context_synchronously
-              await showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text("시간 초과"),
-                  content: Text(
-                    "결제 시간이 초과했습니다. 다시 시도해주세요.",
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            "/main", (route) => false,
-                            arguments: 3);
-                      },
-                      child: Text("확인"),
-                    ),
-                  ],
-                ),
-              );
+              showSuccessDialog(context, "시간 초과", "결제 시간이 초과했습니다. 다시 시도해주세요.",
+                  () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    "/main", (route) => false,
+                    arguments: 3);
+              });
 
               print(
                   "60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@60초가 지났다. 종료해라@@@@@@@@@");
             }
             return;
           });
+        }
+        if (!NFCFlag) {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
         }
         print("들어왔습니다.");
         _tagRead();
@@ -203,7 +210,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
       "amount": amount.toString(),
       "type": "01",
       "installPeriod": "0",
-      "shopName": "날봐날봐털쌤 2",
+      "shopName": "SSOK-친환경 편의점",
       "shopNumber": "123-45-67890",
       "paymentItemList": paymentItemList
     };
@@ -215,61 +222,26 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
         TokenManager().accessToken);
     if (response.statusCode == 200) {
       // ignore: use_build_context_synchronously
-      await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: Text("결제 완료"),
-          content: Text(
-            "결제에 성공했습니다.",
-            style: TextStyle(color: Colors.black, fontSize: 16),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    "/main", (route) => false,
-                    arguments: 3);
-              },
-              child: Text("확인"),
-            ),
-          ],
-        ),
-      );
-      Navigator.of(context).pop();
+      showSuccessDialog(context, "결제 완료", "결제에 성공했습니다.", () {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
+      });
+
       // Navigator.of(context).pop();
     } else {
       print(response.statusCode);
       // ignore: use_build_context_synchronously
-      await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: Text("결제 실패"),
-          content: Text(
-            "결제에 실패했습니다. 다시 시도해주세요.",
-            style: TextStyle(color: Colors.black, fontSize: 16),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    "/main", (route) => false,
-                    arguments: 3);
-              },
-              child: Text("확인"),
-            ),
-          ],
-        ),
-      );
-      Navigator.of(context).pop();
+      showSuccessDialog(context, "결제 실패", "결제에 실패했습니다. 다시 시도해주세요.", () {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
+      });
       // Navigator.of(context).pop();
       throw Exception('Failed to load');
     }
   }
 
   void _tagRead() {
-    checkNFCAvailability();
+    // checkNFCAvailability();
     print("1231232131");
 
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
@@ -346,15 +318,23 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
     print("@@?@??");
     if (!(await NfcManager.instance.isAvailable())) {
       print("gege");
+      setState(() {
+        NFCFlag = false;
+      });
       // ignore: use_build_context_synchronously
       await showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: Text("오류"),
-          content: Text(
-            "NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.",
-            style: TextStyle(color: Colors.black, fontSize: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Constants.padding),
           ),
+          elevation: 0,
+          title: Text("오류", style: TextStyle(fontWeight: FontWeight.bold)),
+          content: Container(
+              height: 50,
+              child:
+                  WrappedKoreanText("NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.")),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
@@ -376,15 +356,13 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     "/main", (route) => false,
                     arguments: 3);
-                // Navigator.of(context).pop();
-                // Navigator.of(context).pop();
-                // Navigator.of(context).pop();
               },
               child: Text("확인"),
             ),
           ],
         ),
       );
+      // print("NFC 불가능!@@@@@@@@@@@@@@@@@@@@@@@@@@");
       return false;
       // throw "NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.";
     } else {

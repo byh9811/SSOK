@@ -56,9 +56,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: "Pretendard"
-      ),
+      theme: ThemeData(fontFamily: "Pretendard"),
+      // localizationsDelegates: [
+      //   // ... 여러 가지 델리게이트들을 추가할 수 있습니다.
+      //   DefaultMaterialLocalizations.delegate,
+      //   DefaultWidgetsLocalizations.delegate,
+      // ],
+      // supportedLocales: [
+      //   const Locale('ko', 'KR'), // 한글 설정
+      //   // 여러 다른 언어 설정도 추가할 수 있습니다.
+      // ],
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {

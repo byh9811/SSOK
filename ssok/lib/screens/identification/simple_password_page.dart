@@ -18,6 +18,7 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
   List<bool> secretNumberStates = [false, false, false, false, false, false];
   String result = "";
   int currentIndex = 0;
+  int attempts = 5;
 
   void checkSimplePassword(String? loginId, String simplePassword) async {
     if (loginId != null) {
@@ -37,20 +38,31 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
           widget.updatePasswordMatchStatus(true);
           Navigator.of(context).pop();
         } else {
-          // 간편 비밀번호 불일치 시
-          // ignore: use_build_context_synchronously
-          showSuccessDialog(context, "비밀번호 불일치", "비밀번호를 확인 후 다시 입력하세요", () {
-            setState(() {
-              secretNumberStates = List.generate(6, (index) => false);
-              result = "";
-              currentIndex = 0;
+          if (attempts >= 1) {
+            // ignore: use_build_context_synchronously
+            showSuccessDialog(context, "비밀번호 불일치", "비밀번호를 확인 후 다시 입력하세요", () {
+              setState(() {
+                secretNumberStates = List.generate(6, (index) => false);
+                result = "";
+                currentIndex = 0;
+              });
+              Navigator.of(context).pop();
             });
-            Navigator.of(context).pop();
-          });
+          }
         }
       } else {
         throw Exception('Failed to load');
       }
+    }
+  }
+
+  void deleteSecretNumberState() {
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex--;
+        result = result.substring(0, currentIndex);
+        secretNumberStates[currentIndex] = false;
+      });
     }
   }
 
@@ -61,6 +73,15 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
     });
     if (currentIndex == 6) {
       checkSimplePassword(TokenManager().loginId, result);
+      setState(() {
+        attempts--;
+      });
+      if (attempts == 0) {
+        showSuccessDialog(context, "인증 실패", "다시 시도해주세요.", () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 3);
+        });
+      }
     }
   }
 
@@ -74,10 +95,21 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.12),
         child: Column(
           children: [
-            Text(
-              "2차 비밀번호 입력",
-              style: TextStyle(fontSize: 30),
+            Column(
+              children: [
+                SizedBox(height: 10),
+                Text(
+                  "2차 비밀번호 입력",
+                  style: TextStyle(fontSize: 30),
+                ),
+                SizedBox(height: 10),
+                Text("$attempts번 남았습니다.")
+              ],
             ),
+            // Text(
+            //   "2차 비밀번호 입력",
+            //   style: TextStyle(fontSize: 30),
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(
@@ -145,7 +177,8 @@ class _SimplePasswordPageState extends State<SimplePasswordPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      PasswordNumberButton(num: "지움", onTap: () {}),
+                      PasswordNumberButton(
+                          num: "지움", onTap: () => deleteSecretNumberState()),
                       PasswordNumberButton(
                         num: "0",
                         onTap: () => updateSecretNumberState("0"),

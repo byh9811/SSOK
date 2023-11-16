@@ -23,8 +23,7 @@ import 'package:ssok/widgets/frequents/main_button.dart';
 import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 class BusinessCardSelfCreatePage extends StatefulWidget {
-  final String? apiUrl;
-  const BusinessCardSelfCreatePage({super.key, String? this.apiUrl});
+  const BusinessCardSelfCreatePage({Key? key}) : super(key: key);
 
   @override
   State<BusinessCardSelfCreatePage> createState() =>
@@ -65,7 +64,8 @@ class _BusinessCardSelfCreatePageState
     false,
   ];
   late ApiService apiService = ApiService();
-  String apiUrl = 'namecard-service/';
+  late String apiUrl;
+  late String titleType;
 
   void isCheckedChange() {
     int temp = currentOffsetIndex;
@@ -172,13 +172,13 @@ class _BusinessCardSelfCreatePageState
     if (jsonData['success']) {
       print(jsonData);
       // ignore: use_build_context_synchronously
-      showSuccessDialog(context, "명함", "명함이 생성되었습니다", () {
+      showSuccessDialog(context, "명함", "명함이 ${titleType}되었습니다", () {
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("명함생성 실패"),
+        content: Text("명함${titleType} 실패"),
       ));
       Navigator.of(context)
           .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
@@ -201,13 +201,18 @@ class _BusinessCardSelfCreatePageState
 
     Future.delayed(Duration.zero, () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (ModalRoute.of(context)?.settings.arguments != null) {
-          apiUrl = ModalRoute.of(context)!.settings.arguments as String;
+        Map<String, dynamic>? arguments =
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+        if (arguments != null) {
+          apiUrl = arguments['apiUrl'] as String;
+          titleType = arguments['type'] as String;
         } else {
           apiUrl = 'namecard-service/'; // 기본값 설정
+          titleType = "등록";
         }
         print("===================================");
         print(apiUrl);
+        print(titleType);
       });
     });
   }
@@ -558,13 +563,14 @@ class _BusinessCardSelfCreatePageState
                       onPressed: () {
                         confirmDialog(
                           context,
-                          "명함생성",
-                          "명함을 생성하시겠습니까?",
+                          "명함 ${titleType}",
+                          "명함을 ${titleType}하시겠습니까?",
                           () async {
                             if (registeredName.isEmpty ||
                                 registeredCompany.isEmpty) {
                               showSuccessDialog(
-                                  context, "명함 생성", "이름과 회사명은 필수입니다!", () {
+                                  context, "명함 ${titleType}", "이름과 회사명은 필수입니다!",
+                                  () {
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();
                               });

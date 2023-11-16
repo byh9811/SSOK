@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/loading/namecard_detail_loading_page.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 import 'package:ssok/widgets/modals/business_memo_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -110,6 +111,8 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
   bool isLoading = true;
   _BusinessCardDetail(this.args);
   ApiService apiService = ApiService();
+  GlobalKey<_BusinessCardDetailHeaderState> childKey =
+      GlobalKey<_BusinessCardDetailHeaderState>();
 
   @override
   void initState() {
@@ -118,6 +121,35 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
     // nameCardBody = NameCardBody("", "", "", "", "", "", "");
     // nameCardPos = NameCardPos(0.0, 0.0);
     getNameCardDetail();
+  }
+
+  void updateStatus() async {
+    print(nameCardHead);
+    print(nameCardHead.exchangeSeq);
+    print(nameCardHead.updateStatus);
+    int? exchangeSeq = nameCardHead.exchangeSeq;
+    try {
+      final response = await apiService.postRequest(
+          "namecard-service/$exchangeSeq", null, TokenManager().accessToken);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+        // ignore: use_build_context_synchronously
+        showSuccessDialog(context, "업데이트 완료", "최신 명함으로 적용되었습니다", () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+        });
+      } else {
+        // ignore: use_build_context_synchronously
+        showSuccessDialog(context, "업데이트 실패", "최신 명함으로 적용되지 않았습니다", () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
+        });
+      }
+    } catch (e) {
+      print("에러 발생: $e");
+    }
   }
 
   void getNameCardDetail() async {
@@ -152,7 +184,19 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
         isLoading = false;
       });
       // 갱신이라면 alert 생성
-      if (nameCardHead.updateStatus == "UPDATED") {}
+      if (args["additionalData"] == "UPDATED") {
+        // ignore: use_build_context_synchronously
+        yesornoDialog(
+          context,
+          "명함 업데이트",
+          "상대방이 명함을 최신화 했습니다. 적용 하시겠습니까?",
+          updateStatus,
+          () {
+            showSuccessDialog(context, "적용 안함", "최신 명함으로 적용되지 않았습니다",
+                () => Navigator.of(context).pop());
+          },
+        );
+      }
     }
   }
 
@@ -197,28 +241,6 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
   ApiService apiService = ApiService();
 
   _BusinessCardDetailHeaderState(this.nameCardHead);
-
-  void updateStatus() async {
-    print(nameCardHead);
-    print(nameCardHead.exchangeSeq);
-    print(nameCardHead.updateStatus);
-    int? exchangeSeq = nameCardHead.exchangeSeq;
-    try {
-      final response = await apiService.postRequest(
-          "namecard-service/$exchangeSeq", null, TokenManager().accessToken);
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        // final responseData = jsonDecode(utf8.decode(response.bodyBytes))["response"];
-
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
-      } else {
-        print("통신실패@@@@");
-      }
-    } catch (e) {
-      print("에러 발생: $e");
-    }
-  }
 
   void getNameCardDetailMemo() async {
     int? exchangeSeq = nameCardHead.exchangeSeq;
@@ -376,21 +398,21 @@ class _BusinessCardDetailHeaderState extends State<BusinessCardDetailHeader> {
                     ],
                   ),
                 ),
-                if (nameCardHead.updateStatus == "UPDATED")
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: IconButton(
-                      constraints: BoxConstraints(),
-                      padding: EdgeInsets.zero,
-                      iconSize: 22,
-                      color: Colors.red,
-                      onPressed: () {
-                        confirmDialog(context, "명함 업데이트", "해당 명함을 최신화하시겠습니까?",
-                            updateStatus);
-                      },
-                      icon: Icon(Icons.refresh),
-                    ),
-                  ),
+                // if (nameCardHead.updateStatus == "UPDATED")
+                //   Padding(
+                //     padding: const EdgeInsets.only(left: 8.0),
+                //     child: IconButton(
+                //       constraints: BoxConstraints(),
+                //       padding: EdgeInsets.zero,
+                //       iconSize: 22,
+                //       color: Colors.red,
+                //       onPressed: () {
+                //         confirmDialog(context, "명함 업데이트", "해당 명함을 최신화하시겠습니까?",
+                //             updateStatus);
+                //       },
+                //       icon: Icon(Icons.refresh),
+                //     ),
+                //   ),
               ],
             ),
           ),
@@ -510,81 +532,89 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
           )
         ]),
         SizedBox(height: screenHeight * 0.01),
-        if(nameCardBody.nameCardAddress!="")Row(
-          children: [
-            SizedBox(
-              width: screenWidth * 0.75,
-              child: Text(
-                nameCardBody.nameCardAddress.toString(),
+        if (nameCardBody.nameCardAddress != "")
+          Row(
+            children: [
+              SizedBox(
+                width: screenWidth * 0.75,
+                child: Text(
+                  nameCardBody.nameCardAddress.toString(),
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 3.0, bottom: 1.0),
+                child: IconButton(
+                  constraints: BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  iconSize: 22,
+                  onPressed: () {
+                    setState(() {
+                      toLaunch = Uri.parse(
+                          'nmap://search?query=${nameCardBody.nameCardAddress}');
+                      _launchInMap(toLaunch);
+                    });
+                  },
+                  icon: Icon(Icons.pin_drop),
+                ),
+              ),
+            ],
+          ),
+        SizedBox(height: screenHeight * 0.03),
+        if (nameCardBody.nameCardPhone != "" ||
+            nameCardBody.nameCardTel != "" ||
+            nameCardBody.nameCardFax != "" ||
+            nameCardBody.nameCardEmail != "")
+          header("연락처"),
+        if (nameCardBody.nameCardPhone != "")
+          Row(
+            children: [
+              Text(
+                "휴대폰 : " + nameCardBody.nameCardPhone.toString(),
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 3.0, bottom: 1.0),
-              child: IconButton(
-                constraints: BoxConstraints(),
-                padding: EdgeInsets.zero,
-                iconSize: 22,
-                onPressed: () {
-                  setState(() {
-                    toLaunch = Uri.parse(
-                        'nmap://search?query=${nameCardBody.nameCardAddress}');
-                    _launchInMap(toLaunch);
-                  });
-                },
-                icon: Icon(Icons.pin_drop),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: screenHeight * 0.03),
-        if(nameCardBody.nameCardPhone!="" || nameCardBody.nameCardTel!="" || nameCardBody.nameCardFax!="" || nameCardBody.nameCardEmail!="")header("연락처"),
-        if(nameCardBody.nameCardPhone!="")Row(
-          children: [
-            Text(
-              "휴대폰 : " + nameCardBody.nameCardPhone.toString(),
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 3.0, bottom: 1.0),
-              child: IconButton(
-                constraints: BoxConstraints(),
-                padding: EdgeInsets.zero,
-                iconSize: 22,
-                onPressed: () {
-                  _makePhoneCall(nameCardBody.nameCardPhone.toString());
-                },
-                icon: Icon(Icons.call),
-              ),
-            )
-          ],
-        ),
+              Padding(
+                padding: const EdgeInsets.only(left: 3.0, bottom: 1.0),
+                child: IconButton(
+                  constraints: BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  iconSize: 22,
+                  onPressed: () {
+                    _makePhoneCall(nameCardBody.nameCardPhone.toString());
+                  },
+                  icon: Icon(Icons.call),
+                ),
+              )
+            ],
+          ),
         SizedBox(height: screenHeight * 0.01),
-        if(nameCardBody.nameCardTel != "")
+        if (nameCardBody.nameCardTel != "")
           Text(
-              "회사 : " + nameCardBody.nameCardTel.toString(),
-              style: TextStyle(
-                fontSize: 16,
-              ),
+            "회사 : " + nameCardBody.nameCardTel.toString(),
+            style: TextStyle(
+              fontSize: 16,
+            ),
           ),
         SizedBox(height: screenHeight * 0.01),
-        if(nameCardBody.nameCardFax!="")Text(
-          "FAX : " + nameCardBody.nameCardFax.toString(),
-          style: TextStyle(
-            fontSize: 16,
+        if (nameCardBody.nameCardFax != "")
+          Text(
+            "FAX : " + nameCardBody.nameCardFax.toString(),
+            style: TextStyle(
+              fontSize: 16,
+            ),
           ),
-        ),
         SizedBox(height: screenHeight * 0.01),
-        if(nameCardBody.nameCardEmail!="")Text(
-          "Email : " + nameCardBody.nameCardEmail.toString(),
-          style: TextStyle(
-            fontSize: 16,
+        if (nameCardBody.nameCardEmail != "")
+          Text(
+            "Email : " + nameCardBody.nameCardEmail.toString(),
+            style: TextStyle(
+              fontSize: 16,
+            ),
           ),
-        ),
       ],
     );
   }

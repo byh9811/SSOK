@@ -12,6 +12,8 @@ import 'package:ssok/dto/business_card_data.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/screens/loading/transfer_loading_page.dart';
+import 'package:ssok/widgets/frequents/confirm.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 class Endpoint {
   final String id;
@@ -112,8 +114,8 @@ class _BusinessCardReceiveBluetoothPageState
           }
         },
         onEndpointLost: (id) {
-          showSnackbar(
-              "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
+          // showSnackbar(
+          //     "Lost discovered Endpoint: ${endpointMap[id]?.endpointName}, id $id");
         },
       );
       showSnackbar("스캔을 시작합니다.");
@@ -153,47 +155,73 @@ class _BusinessCardReceiveBluetoothPageState
         },
         TokenManager().accessToken);
     print(jsonDecode(utf8.decode(response.bodyBytes)));
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
+    final jsonData = jsonDecode(response.body);
+    if (jsonData['success']) {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
       // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('명함 수신 완료'),
-            content: Text('당신도 명함을 보내시겠습니까?'),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context, '아니요');
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      "/main", (route) => false,
-                      arguments: 1);
-                },
-                child: Text('아니요'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context, '네');
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      opaque: false, // 배경이 투명해야 함을 나타냅니다
-                      pageBuilder: (BuildContext context, _, __) {
-                        return TransferLoadingPage();
-                      },
-                    ),
-                  );
-                  transferReverse(namecardBSeq, namecardASeq);
-                },
-                child: Text('네'),
-              ),
-            ],
+      yesornoDialog(
+        context,
+        "명함 수신 완료",
+        "당신도 명함을 보내시겠습니까?",
+        () {
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              opaque: false, // 배경이 투명해야 함을 나타냅니다
+              pageBuilder: (BuildContext context, _, __) {
+                return TransferLoadingPage();
+              },
+            ),
           );
+          transferReverse(namecardBSeq, namecardASeq);
         },
+        () => Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1),
       );
+      // showDialog(
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       title: Text('명함 수신 완료'),
+      //       content: Text('당신도 명함을 보내시겠습니까?'),
+      //       actions: [
+      //         TextButton(
+      //           onPressed: () async {
+      //             Navigator.pop(context, '아니요');
+      //             Navigator.of(context).pushNamedAndRemoveUntil(
+      //                 "/main", (route) => false,
+      //                 arguments: 1);
+      //           },
+      //           child: Text('아니요'),
+      //         ),
+      //         TextButton(
+      //           onPressed: () async {
+      //             Navigator.pop(context, '네');
+      //             Navigator.of(context).push(
+      //               PageRouteBuilder(
+      //                 opaque: false, // 배경이 투명해야 함을 나타냅니다
+      //                 pageBuilder: (BuildContext context, _, __) {
+      //                   return TransferLoadingPage();
+      //                 },
+      //               ),
+      //             );
+      //             transferReverse(namecardBSeq, namecardASeq);
+      //           },
+      //           child: Text('네'),
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
     } else {
+      // ignore: use_build_context_synchronously
+      showSuccessDialog(
+        context,
+        "전송 실패",
+        "교환을 한 상대입니다",
+        () => Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1),
+      );
       throw Exception('Failed to load');
     }
   }
@@ -210,38 +238,53 @@ class _BusinessCardReceiveBluetoothPageState
         },
         TokenManager().accessToken);
     print(jsonDecode(utf8.decode(response.bodyBytes)));
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
+    final jsonData = jsonDecode(response.body);
+    if (jsonData['success']) {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
       // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('명함 교환 완료'),
-            // content: Text('당신도 명함을 보내시겠습니까?'),
-            actions: [
-              // TextButton(
-              //   onPressed: () async {
-              //     transfer(namecardBSeq, namecardASeq);
-              //   },
-              //   child: Text('네'),
-              // ),
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context, '닫기');
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      "/main", (route) => false,
-                      arguments: 1);
-                },
-                child: Text('닫기'),
-              ),
-            ],
-          );
-        },
+      showSuccessDialog(
+        context,
+        "명함 교환 완료",
+        "명함 교환이 완료 되었습니다",
+        () => Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1),
       );
+      // showDialog(
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       title: Text('명함 교환 완료'),
+      //       // content: Text('당신도 명함을 보내시겠습니까?'),
+      //       actions: [
+      //         // TextButton(
+      //         //   onPressed: () async {
+      //         //     transfer(namecardBSeq, namecardASeq);
+      //         //   },
+      //         //   child: Text('네'),
+      //         // ),
+      //         TextButton(
+      //           onPressed: () async {
+      //             Navigator.pop(context, '닫기');
+      //             Navigator.of(context).pushNamedAndRemoveUntil(
+      //                 "/main", (route) => false,
+      //                 arguments: 1);
+      //           },
+      //           child: Text('닫기'),
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
     } else {
+      // ignore: use_build_context_synchronously
+      showSuccessDialog(
+        context,
+        "전송 실패",
+        jsonData['error']['message'],
+        () => Navigator.of(context)
+            .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1),
+      );
       throw Exception('Failed to load');
     }
   }
@@ -393,14 +436,23 @@ class _BusinessCardReceiveBluetoothPageState
                           onConnectionInit(id, info);
                         },
                         onConnectionResult: (id, status) {
-                          showSnackbar(status);
+                          // showSuccessDialog(
+                          //   context,
+                          //   "전송 실패",
+                          //   "거절로 인해 전송에 실패 했습니다.",
+                          //   () => Navigator.of(context).pushNamedAndRemoveUntil(
+                          //       "/main", (route) => false,
+                          //       arguments: 1),
+                          // );
+                          // showSnackbar("뭘봐");
+                          // showSnackbar(status);
                         },
                         onDisconnected: (id) {
                           setState(() {
                             endpointMap.remove(id);
                           });
-                          showSnackbar(
-                              "Disconnected from: ${endpoint.name}, id $id");
+                          // showSnackbar(
+                          //     "Disconnected from: ${endpoint.name}, id $id");
                         },
                       );
                     },
@@ -491,7 +543,7 @@ class _BusinessCardReceiveBluetoothPageState
                               try {
                                 await Nearby().rejectConnection(id);
                               } catch (e) {
-                                showSnackbar(e);
+                                print(e);
                               }
                             },
                           ),

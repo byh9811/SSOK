@@ -271,8 +271,9 @@ class _BusinessCreateModalState extends State<BusinessCreateModal> {
                 icon: Icons.palette,
                 ontap: () {
                   Navigator.of(context).pushReplacementNamed(
-                      '/businesscard/self/create',
-                      arguments: apiUrl);
+                    '/businesscard/self/create',
+                    arguments: {'apiUrl': apiUrl, 'type': titleType},
+                  );
                 },
                 color: Color(0xFFFCD4FF),
                 splashColor: Color(0xFFFABBFF),

@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:ripple_wave/ripple_wave.dart';
 import 'package:ssok/dto/business_card_data.dart';
 import 'package:ssok/screens/loading/transfer_loading_page.dart';
+import 'package:ssok/widgets/frequents/show_success_dialog.dart';
 
 class BusinessCardSendBluetoothPage extends StatefulWidget {
   const BusinessCardSendBluetoothPage({super.key});
@@ -27,6 +28,7 @@ class _BusinessCardSendBluetoothPageState
   bool advertising = false;
   // bool scanning = false;
   late MyNameCard myNamecardItem;
+  bool success = false;
 
   @override
   void initState() {
@@ -51,18 +53,29 @@ class _BusinessCardSendBluetoothPageState
         strategy,
         onConnectionInitiated: onConnectionInit,
         onConnectionResult: (id, status) {
-          showSnackbar(status);
+          // showSnackbar(status);
+          if (!success) {
+            showSuccessDialog(
+              context,
+              "명함 전송 실패",
+              "거절로 인해 명함전송에 실패했습니다.",
+              () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  "/main", (route) => false,
+                  arguments: 1),
+            );
+          }
           sendBusinessCard(myNamecardItem.namecardSeq);
         },
         onDisconnected: (id) {
-          showSnackbar(
-              "Disconnected: ${endpointMap[id]!.endpointName}, id $id");
+          // showSnackbar(
+          //     "Disconnected: ${endpointMap[id]!.endpointName}, id $id");
+          showSnackbar("연결 실패");
           setState(() {
             endpointMap.remove(id);
           });
         },
       );
-      showSnackbar("연결을 시작합니다");
+      // showSnackbar("연결을 시작합니다");
       start();
       setState(() {
         advertising = true;
@@ -80,34 +93,40 @@ class _BusinessCardSendBluetoothPageState
     }
   }
 
-  void sendBusinessCard(int myNamecardSeq) {
+  void sendBusinessCard(int myNamecardSeq) async {
     endpointMap.forEach((key, value) {
       String myNamecardSeqString = myNamecardSeq.toString();
 
-      showSnackbar(
-          " ${value.endpointName} $myNamecardSeqString이 ~에게 명함을 보내요 ~~ , id: $key");
+      // showSnackbar(
+      //     " ${value.endpointName} $myNamecardSeqString이 ~에게 명함을 보내요 ~~ , id: $key");
       Nearby().sendBytesPayload(
           key, Uint8List.fromList(myNamecardSeqString.codeUnits));
-      Navigator.of(context).pop();
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('명함 전송 성공'),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  // Navigator.pop(context, '닫기');
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      "/main", (route) => false,
-                      arguments: 1);
-                },
-                child: Text('닫기'),
-              ),
-            ],
-          );
-        },
-      );
+      // showSuccessDialog(
+      //     context,
+      //     "명함 전송 성공",
+      //     "명함이 전송되었습니다.",
+      //     () => Navigator.of(context).pushNamedAndRemoveUntil(
+      //         "/main", (route) => false,
+      //         arguments: 1));
+      // showDialog(
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AlertDialog(
+      //       title: Text('명함 전송 성공'),
+      //       actions: [
+      //         TextButton(
+      //           onPressed: () async {
+      //             // Navigator.pop(context, '닫기');
+      //             Navigator.of(context).pushNamedAndRemoveUntil(
+      //                 "/main", (route) => false,
+      //                 arguments: 1);
+      //           },
+      //           child: Text('닫기'),
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
     });
   }
 
@@ -370,7 +389,7 @@ class _BusinessCardSendBluetoothPageState
                               horizontal: screenWidth * 0.06),
                           child: button(
                             "수락",
-                            () {
+                            () async {
                               Navigator.pop(context);
                               Navigator.of(context).push(
                                 PageRouteBuilder(
@@ -383,15 +402,16 @@ class _BusinessCardSendBluetoothPageState
                               setState(() {
                                 endpointMap[id] = info;
                               });
-                              Nearby().acceptConnection(
+                              await Nearby().acceptConnection(
                                 // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
                                 id,
                                 onPayLoadRecieved: (endid, payload) async {
                                   // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
+
                                   if (payload.type == PayloadType.BYTES) {
                                     String str = String.fromCharCodes(
                                         payload.bytes!); // 바이트 데이터를 문자열로 반환
-                                    showSnackbar("$endid: $str");
+                                    // showSnackbar("$endid: $str");
                                   }
                                 },
                                 onPayloadTransferUpdate:
@@ -405,12 +425,35 @@ class _BusinessCardSendBluetoothPageState
                                       PayloadStatus.FAILURE) {
                                     // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
                                     print("failed");
-                                    showSnackbar("$endid 명함 전송 실패");
+                                    // showSnackbar("$endid 명함 전송 실패");
+                                  } else if (payloadTransferUpdate.status ==
+                                      PayloadStatus.NONE) {
+                                    // showSuccessDialog(
+                                    //   context,
+                                    //   "명함 전송 실패",
+                                    //   "명함이 실패.",
+                                    //   () => Navigator.of(context)
+                                    //       .pushNamedAndRemoveUntil(
+                                    //           "/main", (route) => false,
+                                    //           arguments: 1),
+                                    // );
                                   } else if (payloadTransferUpdate
                                           .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
                                       PayloadStatus.SUCCESS) {
-                                    showSnackbar(
-                                        "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
+                                    setState(() {
+                                      success = true;
+                                    });
+                                    showSuccessDialog(
+                                      context,
+                                      "명함 전송 성공",
+                                      "명함이 전송되었습니다.",
+                                      () => Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                              "/main", (route) => false,
+                                              arguments: 1),
+                                    );
+                                    // showSnackbar(
+                                    //     "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
                                   }
                                 },
                               );

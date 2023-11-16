@@ -50,7 +50,9 @@ List<CreditCardHistory> parseCreditCardHistory(Map<String, Object?> jsonStr) {
                 receiptDetailDocumentId: item['receiptDetailDocumentId'],
                 shopName: item['shopName'],
                 payAmt: item['payAmt'],
-                approvedDate: DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.parse(item['approvedDate'])),
+                approvedDate: DateFormat("yyyy-MM-dd HH:mm:ss").format(
+                    DateTime.parse(item['approvedDate'])
+                        .add(Duration(hours: 9))),
                 transactionType: item['transactionType'],
               ))
           .toList();

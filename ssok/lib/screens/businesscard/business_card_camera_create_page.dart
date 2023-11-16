@@ -35,7 +35,7 @@ class _BusinessCardCameraCreatePageState
 
   void register() async {
     if (businessCardInfo["namecardName"].isNotEmpty &&
-        businessCardInfo["namecardCompany"].isNotEmpty
+            businessCardInfo["namecardCompany"].isNotEmpty
         // businessCardInfo["namecardJob"].isNotEmpty &&
         // businessCardInfo["namecardAddress"].isNotEmpty &&
         // businessCardInfo["namecardPhone"].isNotEmpty &&
@@ -65,20 +65,20 @@ class _BusinessCardCameraCreatePageState
       Map<String, dynamic> jsonData = jsonDecode(response);
       if (jsonData["success"]) {
         // ignore: use_build_context_synchronously
-        showSuccessDialog(context, "명함", "명함이 생성되었습니다", () {
+        showSuccessDialog(context, "명함", "명함이 ${args!.type}되었습니다", () {
           Navigator.of(context)
               .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("명함생성 실패"),
+          content: Text("명함${args!.type} 실패"),
         ));
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 1);
         throw Exception('Failed to load');
       }
     } else {
-      showSuccessDialog(context, "명함 생성", "이름과 회사명은 필수입니다!", () {
+      showSuccessDialog(context, "명함 ${args!.type}", "이름과 회사명은 필수입니다!", () {
         Navigator.of(context).pop();
       });
     }

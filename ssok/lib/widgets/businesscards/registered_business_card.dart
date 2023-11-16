@@ -88,25 +88,12 @@ class _MyFavoriteCard extends State<MyFavoriteCard> {
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
       child: Column(
         children: <Widget>[
-          Row(
-            children: [
-              Expanded(
-                  child: Text(
-                "즐겨찾기(${widget.favorites.length})",
-                style: TextStyle(fontSize: 18),
-              )),
-              InkWell(
-                onTap: () {
-                  print("등록일순");
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.tune),
-                    Text("등록일 순"),
-                  ],
-                ),
-              ),
-            ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "즐겨찾기(${widget.favorites.length})",
+              style: TextStyle(fontSize: 18),
+            ),
           ),
           SizedBox(height: screenHeight * 0.005),
           Divider(
@@ -258,8 +245,8 @@ class _MyBusinessCardState extends State<MyBusinessCard> {
             child: InkWell(
               onTap: () {
                 Navigator.of(context).pushNamed("/businesscard/my",
-                  arguments:
-                    widget.myNamecardItems[_currentPage].namecardSeq);
+                    arguments:
+                        widget.myNamecardItems[_currentPage].namecardSeq);
               },
               child: Stack(
                 alignment: Alignment.center,
@@ -349,23 +336,58 @@ class ExchangeCardList extends StatefulWidget {
 }
 
 class _ExchangeCardListState extends State<ExchangeCardList> {
+  List<NameCard> sortedExchangeItems = [];
+  bool sortByRegistrationDate = true;
+
+  @override
+  void initState() {
+    super.initState();
+    sortedExchangeItems = List.from(widget.myExchangeItems);
+    sortedExchangeItems.sort((a, b) => a.name.compareTo(b.name));
+  }
+
+  void myEschangeItemsSort() {
+    setState(() {
+      sortByRegistrationDate = !sortByRegistrationDate;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     print("교환 명함 길이 : ${widget.myExchangeItems.length}");
 
+    if (sortByRegistrationDate) {
+      sortedExchangeItems = List.from(widget.myExchangeItems);
+      sortedExchangeItems
+          .sort((a, b) => a.exchangeDate.compareTo(b.exchangeDate));
+    } else {
+      sortedExchangeItems = List.from(widget.myExchangeItems);
+      sortedExchangeItems.sort((a, b) => a.name.compareTo(b.name));
+    }
+
     return Column(
       children: [
-        ExchangeCardListHeader(namecardCnt: widget.myExchangeItems.length),
-        ExchangeCardListBody(myExchangeItems: widget.myExchangeItems),
+        ExchangeCardListHeader(
+          namecardCnt: widget.myExchangeItems.length,
+          onSortPressed: myEschangeItemsSort,
+          sortByRegistrationDate: sortByRegistrationDate,
+        ),
+        ExchangeCardListBody(myExchangeItems: sortedExchangeItems),
       ],
     );
   }
 }
 
 class ExchangeCardListHeader extends StatefulWidget {
-  const ExchangeCardListHeader({Key? key, required this.namecardCnt})
-      : super(key: key);
+  const ExchangeCardListHeader({
+    Key? key,
+    required this.namecardCnt,
+    required this.onSortPressed,
+    required this.sortByRegistrationDate,
+  }) : super(key: key);
   final int namecardCnt;
+  final VoidCallback onSortPressed;
+  final bool sortByRegistrationDate;
   @override
   State<ExchangeCardListHeader> createState() => _ExchangeCardListHeaderState();
 }
@@ -388,13 +410,11 @@ class _ExchangeCardListHeaderState extends State<ExchangeCardListHeader> {
                 style: TextStyle(fontSize: 18),
               )),
               InkWell(
-                onTap: () {
-                  print("등록일순");
-                },
+                onTap: widget.onSortPressed,
                 child: Row(
                   children: [
                     Icon(Icons.tune),
-                    Text("등록일 순"),
+                    Text(widget.sortByRegistrationDate ? "등록일 순" : "가나다 순"),
                   ],
                 ),
               ),

@@ -37,9 +37,11 @@ class _NotRegisteredBusinessCardState extends State<NotRegisteredBusinessCard> {
           Column(
             children: [
               Expanded(
-                child: Text(
-                  "등록된 명함이 없습니다",
-                  style: TextStyle(color: Color(0xFF989898)),
+                child: Center(
+                  child: Text(
+                    "등록된 명함이 없습니다",
+                    style: TextStyle(color: Color(0xFFD6D6D6)),
+                  ),
                 ),
               ),
               SizedBox(

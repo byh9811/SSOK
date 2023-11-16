@@ -59,6 +59,55 @@ void confirmDialog(
   );
 }
 
+void yesornoDialog(BuildContext context, String title, String content,
+    Function() onPressed, Function() onPressed2,
+    {int? height}) {
+  int tempHeight = height ?? 60;
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    // transitionDuration: Duration(milliseconds: 700),
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Constants.padding),
+        ),
+        elevation: 0,
+        // backgroundColor: Colors.transparent,
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Container(
+            height: tempHeight.toDouble(), child: WrappedKoreanText(content)),
+        actions: [
+          TextButton(
+            onPressed: onPressed2,
+            child: Text(
+              "아니요",
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Color(0xFFF5F5F6)),
+            ),
+          ),
+          TextButton(
+            onPressed: onPressed,
+            child: Text(
+              "네",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Color(0xFF00ADEF)),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 void showCustomDialog(BuildContext context) {
   showGeneralDialog(
     context: context,

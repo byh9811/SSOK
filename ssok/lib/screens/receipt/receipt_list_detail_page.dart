@@ -189,8 +189,9 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
                   ),
                   ContentByReceipt(
                     title: "승인 일시",
-                    content: DateFormat("yyyy-MM-dd HH:mm:ss")
-                        .format(DateTime.parse(receiptDetail!.approvedDate)),
+                    content: DateFormat("yyyy-MM-dd HH:mm:ss").format(
+                        DateTime.parse(receiptDetail!.approvedDate)
+                            .add(Duration(hours: 9))),
                   ),
                   ContentByReceipt(
                     title: "승인 번호",

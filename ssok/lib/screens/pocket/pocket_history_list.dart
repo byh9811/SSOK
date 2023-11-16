@@ -271,29 +271,28 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
                                 Row(
                                   children: [
                                     Tooltip(
-                                        verticalOffset: -5.0,
-                                        key: tooltipkeyDeposit,
-                                        preferBelow: true,
-                                        triggerMode: TooltipTriggerMode.tap,
-                                        margin: EdgeInsets.only(
-                                          left: screenWidth*0.18,
-                                            right: screenWidth * 0.05,
-                                            bottom: screenHeight * 0.10),
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: screenHeight * 0.012,
-                                            horizontal: screenWidth * 0.02),
-                                        height: 30,
-                                        showDuration: Duration(seconds: 1),
-                                        message:
-                                            '잔돈 저금 : ${numberFormat.format(selectedPocketHistory.change)}원 \n탄소중립포인트 : ${numberFormat.format(selectedPocketHistory.carbon)}원',
-                                        decoration: BoxDecoration(
-                                          color: Colors.white, // 배경색
-                                          border: Border.all(
-                                              color: Colors.blue), // 테두리 색
-                                        ),
-                                        textStyle: TextStyle(
-                                            color:
-                                                Color.fromRGBO(0, 22, 138, 1))),
+                                      verticalOffset: -5.0,
+                                      key: tooltipkeyDeposit,
+                                      preferBelow: true,
+                                      triggerMode: TooltipTriggerMode.tap,
+                                      margin: EdgeInsets.only(
+                                        left: screenWidth*0.18,
+                                          right: screenWidth * 0.05,
+                                          bottom: screenHeight * 0.10),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: screenHeight * 0.012,
+                                        horizontal: screenWidth * 0.02),
+                                      height: 30,
+                                      showDuration: Duration(seconds: 1),
+                                      message: '잔돈 저금 : ${numberFormat.format(selectedPocketHistory.change)}원 \n탄소중립포인트 : ${numberFormat.format(selectedPocketHistory.carbon)}원',
+                                      decoration: BoxDecoration(
+                                        color: Colors.white, // 배경색
+                                        border: Border.all(
+                                          color: Colors.blue), // 테두리 색
+                                      ),
+                                      textStyle: TextStyle(
+                                        color:
+                                          Color.fromRGBO(0, 22, 138, 1))),
                                     Text(
                                       "적립 + ${numberFormat.format(selectedPocketHistory.deposit)}원",
                                       style: TextStyle(

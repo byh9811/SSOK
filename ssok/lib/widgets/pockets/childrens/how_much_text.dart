@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:wrapped_korean_text/wrapped_korean_text.dart';
 
 class HowMuchText extends StatefulWidget {
   const HowMuchText({
@@ -33,12 +34,18 @@ class _HowMuchTextState extends State<HowMuchText> {
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.09),
           child: Stack(
             children: [
-              Text(
-                widget.title,
-                style: TextStyle(
-                  fontSize: 27,
-                ),
-              ),
+              Container(
+                  height: 80,
+                  child: WrappedKoreanText(widget.title,
+                      style: TextStyle(
+                        fontSize: 27,
+                      ))),
+              // Text(
+              //   widget.title,
+              //   style: TextStyle(
+              //     fontSize: 27,
+              //   ),
+              // ),
               Padding(
                 padding: EdgeInsets.only(top: screenHeight * 0.01),
                 child: Align(

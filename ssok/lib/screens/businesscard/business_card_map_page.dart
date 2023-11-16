@@ -169,24 +169,48 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    width: 200, // 이미지의 너비
-                    height: 100, // 이미지의 높이
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover, // 이미지를 컨테이너에 맞추도록 조정
-                        image: NetworkImage(businessCard.namecardImage),
+                  InkWell(
+                    onTap: (){
+                      print("클릭되었음");
+                      print(marker.info.id);
+                      print("==========");
+                      print(int.tryParse(marker.info.id));
+                      Navigator.of(context).pushNamed("/businesscard/detail", arguments: {
+                        'exchangeSeq': data.exchangeSeq,
+                        'additionalData': "CHECKED",
+                      },);
+                    },
+                    child: Container(
+                      width: 200, // 이미지의 너비
+                      height: 100, // 이미지의 높이
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover, // 이미지를 컨테이너에 맞추도록 조정
+                          image: NetworkImage(businessCard.namecardImage),
+                        ),
+                        borderRadius:
+                            BorderRadius.circular(10), // 모서리를 둥글게 (선택 사항)
                       ),
-                      borderRadius:
-                          BorderRadius.circular(10), // 모서리를 둥글게 (선택 사항)
                     ),
                   ),
                   SizedBox(height: 5),
-                  Text(
-                    businessCard.namecardName,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: (){
+                      print("클릭되었음");
+                      print(marker.info.id);
+                      print("==========");
+                      print(int.tryParse(marker.info.id));
+                      Navigator.of(context).pushNamed("/businesscard/detail", arguments: {
+                        'exchangeSeq': data.exchangeSeq,
+                        'additionalData': "CHECKED",
+                      },);
+                    },
+                    child: Text(
+                      businessCard.namecardName,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   SizedBox(height: 5),

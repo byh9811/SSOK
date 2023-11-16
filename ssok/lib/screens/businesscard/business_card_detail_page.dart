@@ -508,7 +508,7 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
           )
         ]),
         SizedBox(height: screenHeight * 0.01),
-        Row(
+        if(nameCardBody.nameCardAddress!="")Row(
           children: [
             SizedBox(
               width: screenWidth * 0.75,
@@ -537,9 +537,9 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
             ),
           ],
         ),
-        SizedBox(height: screenHeight * 0.035),
-        header("연락처"),
-        Row(
+        SizedBox(height: screenHeight * 0.03),
+        if(nameCardBody.nameCardPhone!="" || nameCardBody.nameCardTel!="" || nameCardBody.nameCardFax!="" || nameCardBody.nameCardEmail!="")header("연락처"),
+        if(nameCardBody.nameCardPhone!="")Row(
           children: [
             Text(
               "휴대폰 : " + nameCardBody.nameCardPhone.toString(),
@@ -562,23 +562,22 @@ class _BusinessCardDetailBodyState extends State<BusinessCardDetailBody> {
           ],
         ),
         SizedBox(height: screenHeight * 0.01),
-        nameCardBody.nameCardTel != null
-            ? Text(
-                "회사 : " + nameCardBody.nameCardTel.toString(),
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              )
-            : SizedBox(height: 0),
+        if(nameCardBody.nameCardTel != "")
+          Text(
+              "회사 : " + nameCardBody.nameCardTel.toString(),
+              style: TextStyle(
+                fontSize: 16,
+              ),
+          ),
         SizedBox(height: screenHeight * 0.01),
-        Text(
+        if(nameCardBody.nameCardFax!="")Text(
           "FAX : " + nameCardBody.nameCardFax.toString(),
           style: TextStyle(
             fontSize: 16,
           ),
         ),
         SizedBox(height: screenHeight * 0.01),
-        Text(
+        if(nameCardBody.nameCardEmail!="")Text(
           "Email : " + nameCardBody.nameCardEmail.toString(),
           style: TextStyle(
             fontSize: 16,

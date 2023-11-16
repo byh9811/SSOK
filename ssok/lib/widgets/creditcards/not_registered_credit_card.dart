@@ -57,7 +57,7 @@ class NotRegisteredCreditCard extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(left: screenWidth * 0.08),
+          padding: EdgeInsets.only(left: screenWidth * 0.1),
           child: Row(
             children: [
               Text(
@@ -72,7 +72,7 @@ class NotRegisteredCreditCard extends StatelessWidget {
                 child: Text(
                   "로 결제하고",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                   ),
                 ),
               ),
@@ -85,7 +85,7 @@ class NotRegisteredCreditCard extends StatelessWidget {
             children: [
               Text(
                 "포켓머니",
-                style: TextStyle(fontSize: 20, color: Color(0xFF00496F)),
+                style: TextStyle(fontSize: 25, color: Color(0xFF00496F)),
               ),
               Text(
                 "를 받을 수 있어요",

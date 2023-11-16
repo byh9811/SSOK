@@ -5,7 +5,9 @@ import 'dart:math' as math;
 class MyCreditCard extends StatelessWidget {
   const MyCreditCard({
     Key? key,
-    required this.vertical, this.cardNum, this.ownerName,
+    required this.vertical,
+    this.cardNum,
+    this.ownerName,
   }) : super(key: key);
   final bool vertical;
   final String? cardNum;
@@ -24,7 +26,7 @@ class MyCreditCard extends StatelessWidget {
         placeNfcIconAtTheEnd: true,
         cardType: CardType.other,
         creditCardType: CreditCardType.none,
-        cardProviderLogo: FlutterLogo(),
+        cardProviderLogo: Image.asset("assets/logo.png", width: 60),
         cardProviderLogoPosition: CardProviderLogoPosition.right,
       ),
     );

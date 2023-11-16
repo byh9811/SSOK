@@ -271,10 +271,12 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
                                 Row(
                                   children: [
                                     Tooltip(
+                                        verticalOffset: -5.0,
                                         key: tooltipkeyDeposit,
                                         preferBelow: true,
                                         triggerMode: TooltipTriggerMode.tap,
                                         margin: EdgeInsets.only(
+                                          left: screenWidth*0.18,
                                             right: screenWidth * 0.05,
                                             bottom: screenHeight * 0.10),
                                         padding: EdgeInsets.symmetric(
@@ -306,10 +308,10 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
                                       onPressed: () {
                                         tooltipkeyDeposit.currentState
                                             ?.ensureTooltipVisible();
-                                        Future.delayed(Duration(seconds: 2),
-                                            () {
-                                          // tooltipkey.currentState?.hideTooltip();
-                                        });
+                                        // Future.delayed(Duration(seconds: 2),
+                                        //     () {
+                                        //   // tooltipkey.currentState?.hideTooltip();
+                                        // });
                                       },
                                       icon: Icon(Icons.info_outline,
                                           color: Colors.grey,
@@ -322,10 +324,12 @@ class _PocketHistoryListState extends State<PocketHistoryList> {
                                 Row(
                                   children: [
                                     Tooltip(
+                                        verticalOffset: -5.0,
                                         key: tooltipkeyWith,
                                         preferBelow: true,
                                         triggerMode: TooltipTriggerMode.tap,
                                         margin: EdgeInsets.only(
+                                            left: screenWidth*0.3,
                                             right: screenWidth * 0.05,
                                             bottom: screenHeight * 0.10),
                                         padding: EdgeInsets.symmetric(

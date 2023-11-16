@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:nearby_connections/nearby_connections.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ripple_wave/ripple_wave.dart';
 import 'package:ssok/dto/business_card_data.dart';
 import 'package:ssok/screens/loading/transfer_loading_page.dart';
 
@@ -16,18 +17,23 @@ class BusinessCardSendBluetoothPage extends StatefulWidget {
 }
 
 class _BusinessCardSendBluetoothPageState
-    extends State<BusinessCardSendBluetoothPage> {
+    extends State<BusinessCardSendBluetoothPage>
+    with SingleTickerProviderStateMixin {
   // final String userName = Random().nextInt(10000).toString();
   final Strategy strategy = Strategy.P2P_STAR;
   Map<String, ConnectionInfo> endpointMap = {};
   String? tempFileUri;
   Map<int, String> map = {};
   bool advertising = false;
-  bool scanning = false;
+  // bool scanning = false;
   late MyNameCard myNamecardItem;
 
   @override
   void initState() {
+    animationController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
     super.initState();
     [
       Permission.bluetooth,
@@ -56,13 +62,15 @@ class _BusinessCardSendBluetoothPageState
           });
         },
       );
-      showSnackbar("연결하기 : $a");
+      showSnackbar("연결을 시작합니다");
+      start();
       setState(() {
         advertising = true;
       });
       Future.delayed(const Duration(milliseconds: 10000), () async {
         await Nearby().stopAdvertising();
         // pointClear();
+        stop();
         setState(() {
           advertising = false;
         });
@@ -176,6 +184,16 @@ class _BusinessCardSendBluetoothPageState
     });
   }
 
+  late AnimationController animationController;
+
+  void start() {
+    animationController.repeat();
+  }
+
+  void stop() {
+    animationController.stop();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -215,47 +233,64 @@ class _BusinessCardSendBluetoothPageState
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-              alignment: Alignment.center,
-              child: Container(
-                width: 400,
-                height: 500,
-                child: Transform.rotate(
-                  angle: -pi / 2, // 반시계 방향으로 90도 회전
-                  child: Image.network(myNamecardItem.namecardImg),
-                ),
-              )),
-          SizedBox(height: screenHeight * 0.04),
-          Text(
-            "User : ${myNamecardItem.namecardName}",
-            style: TextStyle(color: Colors.white),
+          RippleWave(
+            color: Color(0xFF00ADEF),
+            childTween: Tween(begin: 1.0, end: 1.2),
+            animationController: animationController,
+            repeat: false,
+            child: Container(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 400,
+                  height: 500,
+                  child: Transform.rotate(
+                    angle: -pi / 2, // 반시계 방향으로 90도 회전
+                    child: Image.network(myNamecardItem.namecardImg),
+                  ),
+                )),
           ),
+
+          SizedBox(height: screenHeight * 0.04),
+          // Text(
+          //   "User : ${myNamecardItem.namecardName}",
+          //   style: TextStyle(color: Colors.white),
+          // ),
           SizedBox(height: screenHeight * 0.01),
-          ElevatedButton(
-            onPressed: () {
-              pointClear();
-              advertisingStart();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF00ADEF),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
+          if (!advertising)
+            Column(
               children: [
-                Icon(
-                  Icons.radar,
-                  size: 20,
+                ElevatedButton(
+                  onPressed: () {
+                    pointClear();
+                    advertisingStart();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF00ADEF),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.radar,
+                        size: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Text("연결 시작"),
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(height: screenHeight * 0.02),
                 Padding(
-                  padding: const EdgeInsets.only(left: 3.0),
-                  child: Text(advertising ? "연결 중" : "연결 시작"),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
+                  child: Text(
+                    "※ 연결 시작을 누르고 요청이 들어오면 수락/거절을 통해 다른사람에게 명함을 보낼 수 있어요",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
-          ),
-          SizedBox(
-            height: screenHeight * 0.02,
-          ),
           // SizedBox(
           //   height: screenHeight * 0.025,
           // ),
@@ -272,7 +307,11 @@ class _BusinessCardSendBluetoothPageState
 
   void showSnackbar(dynamic a) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(a.toString()),
+      content: Text(
+        a.toString(),
+        style: TextStyle(fontSize: 16),
+      ),
+      backgroundColor: Color(0xFF00496F),
     ));
   }
 
@@ -287,80 +326,97 @@ class _BusinessCardSendBluetoothPageState
           child: Center(
             child: Column(
               children: <Widget>[
-                Text("id: $id"),
-                Text("Token: ${info.authenticationToken}"),
-                Text("Name${info.endpointName}"),
-                Text("Incoming: ${info.isIncomingConnection}"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-                      child: button(
-                        "수락",
-                        () {
-                          Navigator.pop(context);
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              opaque: false, // 배경이 투명해야 함을 나타냅니다
-                              pageBuilder: (BuildContext context, _, __) {
-                                return TransferLoadingPage();
-                              },
-                            ),
-                          );
-                          setState(() {
-                            endpointMap[id] = info;
-                          });
-                          Nearby().acceptConnection(
-                            // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
-                            id,
-                            onPayLoadRecieved: (endid, payload) async {
-                              // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
-                              if (payload.type == PayloadType.BYTES) {
-                                String str = String.fromCharCodes(
-                                    payload.bytes!); // 바이트 데이터를 문자열로 반환
-                                showSnackbar("$endid: $str");
+                // Text("id: $id"),
+                // Text("Token: ${info.authenticationToken}"),
+                // Text("Name${info.endpointName}"),
+                // Text("Incoming: ${info.isIncomingConnection}"),
+                SizedBox(height: screenHeight * 0.04),
+                Text(
+                  "${info.endpointName}님께 명함 요청이 들어왔습니다",
+                  style: TextStyle(fontSize: 23),
+                ),
+                SizedBox(height: screenHeight * 0.04),
+                Text(
+                  "명함을 보내시겠습니까?",
+                  style: TextStyle(fontSize: 20, color: Color(0xFF00496F)),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: screenHeight * 0.05),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.06),
+                          child: button(
+                            "거절",
+                            () async {
+                              Navigator.pop(context);
+                              try {
+                                await Nearby().rejectConnection(id);
+                              } catch (e) {
+                                showSnackbar(e);
                               }
                             },
-                            onPayloadTransferUpdate:
-                                (endid, payloadTransferUpdate) {
-                              if (payloadTransferUpdate
-                                      .status == // 상태 == IN_PROGRESS인 경우 전송 중인 데이터 양 등을 업데이트
-                                  PayloadStatus.IN_PROGRESS) {
-                                print(payloadTransferUpdate.bytesTransferred);
-                              } else if (payloadTransferUpdate.status ==
-                                  PayloadStatus.FAILURE) {
-                                // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
-                                print("failed");
-                                showSnackbar("$endid 명함 전송 실패");
-                              } else if (payloadTransferUpdate
-                                      .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
-                                  PayloadStatus.SUCCESS) {
-                                showSnackbar(
-                                    "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
-                              }
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.06),
+                          child: button(
+                            "수락",
+                            () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  opaque: false, // 배경이 투명해야 함을 나타냅니다
+                                  pageBuilder: (BuildContext context, _, __) {
+                                    return TransferLoadingPage();
+                                  },
+                                ),
+                              );
+                              setState(() {
+                                endpointMap[id] = info;
+                              });
+                              Nearby().acceptConnection(
+                                // acceptConnection : 수락하고 데이터를 주고 받기 위한 기능 제공
+                                id,
+                                onPayLoadRecieved: (endid, payload) async {
+                                  // onPayLoadRecieved : 연결된 디바이스로부터 데이터를 수신했을때 호출
+                                  if (payload.type == PayloadType.BYTES) {
+                                    String str = String.fromCharCodes(
+                                        payload.bytes!); // 바이트 데이터를 문자열로 반환
+                                    showSnackbar("$endid: $str");
+                                  }
+                                },
+                                onPayloadTransferUpdate:
+                                    (endid, payloadTransferUpdate) {
+                                  if (payloadTransferUpdate
+                                          .status == // 상태 == IN_PROGRESS인 경우 전송 중인 데이터 양 등을 업데이트
+                                      PayloadStatus.IN_PROGRESS) {
+                                    print(
+                                        payloadTransferUpdate.bytesTransferred);
+                                  } else if (payloadTransferUpdate.status ==
+                                      PayloadStatus.FAILURE) {
+                                    // 상태 == FAILURE인 경우  전송 실패에 대한 처리를 수행
+                                    print("failed");
+                                    showSnackbar("$endid 명함 전송 실패");
+                                  } else if (payloadTransferUpdate
+                                          .status == // 상태 == SUCCESS 전송이 성공적으로 완료되었을 때 처리를 수행
+                                      PayloadStatus.SUCCESS) {
+                                    showSnackbar(
+                                        "$endid 명함 전송 성공 = ${payloadTransferUpdate.totalBytes}");
+                                  }
+                                },
+                              );
                             },
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-                      child: button(
-                        "거절",
-                        () async {
-                          Navigator.pop(context);
-                          try {
-                            await Nearby().rejectConnection(id);
-                          } catch (e) {
-                            showSnackbar(e);
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),

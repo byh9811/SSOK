@@ -519,7 +519,7 @@ class _BusinessCardReceiveBluetoothPageState
                                   if (payload.type == PayloadType.BYTES) {
                                     String str = String.fromCharCodes(
                                         payload.bytes!); // 바이트 데이터를 문자열로 반환
-                                    showSnackbar("$endid: $str");
+                                    // showSnackbar("$endid: $str");
                                     int seq = int.parse(str);
                                     print(
                                         "namecardSeqA :  ${myNamecardItem.namecardSeq} , namecardSeqB : $seq");

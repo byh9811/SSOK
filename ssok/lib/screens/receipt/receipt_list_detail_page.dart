@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ssok/screens/loading/receipt_detail_loading_page.dart';
 import 'package:ssok/widgets/receipts/childrens/dotted_divider.dart';
 
 import '../../http/http.dart';
@@ -20,19 +21,18 @@ class ReceiptDetailInfo {
   final int vat;
   final int priceWithOutVat;
 
-  ReceiptDetailInfo({
-    required this.cardCompany,
-    required this.cardNumberFirstSection,
-    required this.cardType,
-    required this.approvedNum,
-    required this.shopName,
-    required this.payAmt,
-    required this.approvedDate,
-    required this.transactionType,
-    required this.paymentItemList,
-    required this.vat,
-    required this.priceWithOutVat
-  });
+  ReceiptDetailInfo(
+      {required this.cardCompany,
+      required this.cardNumberFirstSection,
+      required this.cardType,
+      required this.approvedNum,
+      required this.shopName,
+      required this.payAmt,
+      required this.approvedDate,
+      required this.transactionType,
+      required this.paymentItemList,
+      required this.vat,
+      required this.priceWithOutVat});
 }
 
 class InnerPaymentItem {
@@ -40,28 +40,25 @@ class InnerPaymentItem {
   final int itemPrice;
   final int itemCnt;
 
-  InnerPaymentItem({
-    required this.itemName,
-    required this.itemPrice,
-    required this.itemCnt
-  });
+  InnerPaymentItem(
+      {required this.itemName, required this.itemPrice, required this.itemCnt});
 }
 
 ReceiptDetailInfo? parseReceiptDetail(Map<String, dynamic> jsonStr) {
   final response = jsonStr['response'] as Map<String, dynamic>?;
   print(response);
   if (response != null) {
-    List<InnerPaymentItem> paymentItemList = (response['paymentItemList'] as List)
-        .map((item) => InnerPaymentItem(
-        itemName: item['itemName'],
-        itemPrice: item['itemPrice'],
-        itemCnt: item['itemCnt']
-    )).toList();
+    List<InnerPaymentItem> paymentItemList =
+        (response['paymentItemList'] as List)
+            .map((item) => InnerPaymentItem(
+                itemName: item['itemName'],
+                itemPrice: item['itemPrice'],
+                itemCnt: item['itemCnt']))
+            .toList();
 
     int vat = (response["payAmt"] / 10).toInt();
 
-    return
-      ReceiptDetailInfo(
+    return ReceiptDetailInfo(
         cardCompany: response["cardCompany"],
         cardNumberFirstSection: response["cardNumberFirstSection"],
         cardType: response["cardType"],
@@ -72,8 +69,7 @@ ReceiptDetailInfo? parseReceiptDetail(Map<String, dynamic> jsonStr) {
         transactionType: response["transactionType"],
         paymentItemList: paymentItemList,
         vat: vat,
-        priceWithOutVat: response["payAmt"] - vat
-      );
+        priceWithOutVat: response["payAmt"] - vat);
   }
 
   return null;
@@ -113,20 +109,33 @@ class ReceiptDetail extends StatefulWidget {
 }
 
 class _ReceiptDetailState extends State<ReceiptDetail> {
-
   ApiService apiService = ApiService();
   late Map<String, Object?> jsonString = {};
-  late ReceiptDetailInfo? receiptDetail;
+  late ReceiptDetailInfo receiptDetail;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    receiptDetail = ReceiptDetailInfo(
+        cardCompany: "",
+        cardNumberFirstSection: "",
+        cardType: "",
+        approvedNum: "",
+        shopName: "",
+        payAmt: 0,
+        approvedDate: "",
+        transactionType: "",
+        paymentItemList: [
+          InnerPaymentItem(itemName: "", itemPrice: 0, itemCnt: 0)
+        ],
+        vat: 0,
+        priceWithOutVat: 0);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("왔다!");
       getReceiptDetail();
       receiptDetail = parseReceiptDetail(jsonString)!;
     });
-
   }
 
   void getReceiptDetail() async {
@@ -141,6 +150,7 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
       setState(() {
         jsonString = jsonData;
         receiptDetail = parseReceiptDetail(jsonString)!;
+        isLoading = false;
       });
     } else {
       throw Exception('Failed to load');
@@ -157,70 +167,75 @@ class _ReceiptDetailState extends State<ReceiptDetail> {
     double screenWidth = MediaQuery.of(context).size.width;
     var numberFormat = NumberFormat('###,###,###,###');
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.07),
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.035),
-            TitleByReceipt(
-              title: receiptDetail!.shopName,
-              price: numberFormat.format(receiptDetail!.payAmt),
-              cardInfo: "${receiptDetail!.cardCompany} ${receiptDetail!.cardType} (${receiptDetail!.cardNumberFirstSection})",
+    return isLoading
+        ? ReceiptDetailLoadingPage()
+        : SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.07),
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.035),
+                  TitleByReceipt(
+                    title: receiptDetail!.shopName,
+                    price: numberFormat.format(receiptDetail!.payAmt),
+                    cardInfo:
+                        "${receiptDetail!.cardCompany} ${receiptDetail!.cardType} (${receiptDetail!.cardNumberFirstSection})",
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  Divider(
+                    height: 1,
+                    thickness: 3,
+                    color: Colors.black,
+                  ),
+                  ContentByReceipt(
+                    title: "승인 일시",
+                    content: DateFormat("yyyy-MM-dd HH:mm:ss")
+                        .format(DateTime.parse(receiptDetail!.approvedDate)),
+                  ),
+                  ContentByReceipt(
+                    title: "승인 번호",
+                    content: receiptDetail!.approvedNum,
+                  ),
+                  ContentByReceipt(
+                    title: "거래 유형",
+                    content: receiptDetail!.transactionType,
+                  ),
+                  ContentByReceipt(
+                    title: "할부",
+                    content: "일시불",
+                  ),
+                  SizedBox(height: screenHeight * 0.026),
+                  DottedDivider(),
+                  Column(
+                    children: receiptDetail!.paymentItemList.map((item) {
+                      return MenuByReceipt(
+                        title: item.itemName,
+                        amount: item.itemCnt,
+                        price: '${numberFormat.format(item.itemPrice)}원',
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(height: screenHeight * 0.026),
+                  DottedDivider(),
+                  ContentByReceipt(
+                    title: "공급가액",
+                    content:
+                        '${numberFormat.format(receiptDetail!.priceWithOutVat)}원',
+                  ),
+                  ContentByReceipt(
+                    title: "부가세",
+                    content: '${numberFormat.format(receiptDetail!.vat)}원',
+                  ),
+                  SizedBox(height: screenHeight * 0.026),
+                  DottedDivider(),
+                  ContentByReceipt(
+                    title: "가맹점명",
+                    content: receiptDetail!.shopName,
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: screenHeight * 0.015),
-            Divider(
-              height: 1,
-              thickness: 3,
-              color: Colors.black,
-            ),
-            ContentByReceipt(
-              title: "승인 일시",
-              content: DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.parse(receiptDetail!.approvedDate)),
-            ),
-            ContentByReceipt(
-              title: "승인 번호",
-              content: receiptDetail!.approvedNum,
-            ),
-            ContentByReceipt(
-              title: "거래 유형",
-              content: receiptDetail!.transactionType,
-            ),
-            ContentByReceipt(
-              title: "할부",
-              content: "일시불",
-            ),
-            SizedBox(height: screenHeight * 0.026),
-            DottedDivider(),
-            Column(
-              children: receiptDetail!.paymentItemList.map((item) {
-                return MenuByReceipt(
-                  title: item.itemName,
-                  amount: item.itemCnt,
-                  price: '${numberFormat.format(item.itemPrice)}원',
-                );
-              }).toList(),
-            ),
-            SizedBox(height: screenHeight * 0.026),
-            DottedDivider(),
-            ContentByReceipt(
-              title: "공급가액",
-              content: '${numberFormat.format(receiptDetail!.priceWithOutVat)}원',
-            ),
-            ContentByReceipt(
-              title: "부가세",
-              content: '${numberFormat.format(receiptDetail!.vat)}원',
-            ),
-            SizedBox(height: screenHeight * 0.026),
-            DottedDivider(),
-            ContentByReceipt(
-              title: "가맹점명",
-              content: receiptDetail!.shopName,
-            ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }
 

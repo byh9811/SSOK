@@ -53,7 +53,10 @@ class _CreditCardCreatePage extends State<CreditCardCreatePage> {
                 title: "메인으로",
                 color: "0xFF00ADEF",
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      "/main", (route) => false,
+                      arguments: 3);
+                  // Navigator.pop(context);
                 })
           ],
         ),

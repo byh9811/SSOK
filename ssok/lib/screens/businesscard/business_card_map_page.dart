@@ -194,11 +194,23 @@ class _BusinessCardMapPageState extends State<BusinessCardMapPage> {
                     ),
                   ),
                   SizedBox(height: 5),
-                  Text(
-                    businessCard.namecardName,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: (){
+                      print("클릭되었음");
+                      print(marker.info.id);
+                      print("==========");
+                      print(int.tryParse(marker.info.id));
+                      Navigator.of(context).pushNamed("/businesscard/detail", arguments: {
+                        'exchangeSeq': data.exchangeSeq,
+                        'additionalData': "CHECKED",
+                      },);
+                    },
+                    child: Text(
+                      businessCard.namecardName,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   SizedBox(height: 5),

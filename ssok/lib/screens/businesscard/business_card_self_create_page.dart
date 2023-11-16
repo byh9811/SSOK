@@ -782,7 +782,7 @@ class _BusinessCardBoxState extends State<BusinessCardBox> {
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
               Text(
-                "※ +,-버튼을 통해 글씨 크기 조정",
+                "※ +,- 버튼을 통해 글씨 크기 조정",
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],

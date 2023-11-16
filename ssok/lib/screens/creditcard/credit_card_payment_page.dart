@@ -331,10 +331,7 @@ class _CreditCardPaymentPageState extends State<CreditCardPaymentPage> {
           ),
           elevation: 0,
           title: Text("오류", style: TextStyle(fontWeight: FontWeight.bold)),
-          content: Container(
-              height: 50,
-              child:
-                  WrappedKoreanText("NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.")),
+          content: Container(height: 50,child:WrappedKoreanText("NFC를 지원하지 않는 기기이거나 일시적으로 비활성화 되어 있습니다.")),
           actions: <Widget>[
             TextButton(
               onPressed: () async {

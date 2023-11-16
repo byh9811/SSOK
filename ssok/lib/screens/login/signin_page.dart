@@ -318,11 +318,11 @@ class _SigninPage extends State<SigninPage> {
                           children: [
                             Expanded(
                               child: TextField(
-                                readOnly: isPosId,
                                 decoration: InputDecoration(labelText: '아이디'),
                                 keyboardType: TextInputType.text,
                                 onChanged: (value) {
                                   id = value;
+                                  isPosId=false;
                                 },
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
@@ -337,7 +337,7 @@ class _SigninPage extends State<SigninPage> {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: idColor, // 원하는 색상으로 변경
                                   ),
-                                  onPressed: !isPosId ? () => checkId() : null,
+                                  onPressed: () => checkId(),
                                   child: Text("중복 확인")),
                             ),
                           ],

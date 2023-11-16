@@ -234,10 +234,11 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
                 height: 180,
               ),
               Tooltip(
+                verticalOffset: -30,
                 key: tooltipkey,
                 triggerMode: TooltipTriggerMode.tap,
                 margin: EdgeInsets.only(
-                    right: screenWidth * 0.25, bottom: screenHeight * 0.10),
+                    left:screenWidth*0.09, right: screenWidth * 0.25, bottom: screenHeight * 0.10),
                 padding: EdgeInsets.symmetric(
                     vertical: screenHeight * 0.012,
                     horizontal: screenWidth * 0.02),

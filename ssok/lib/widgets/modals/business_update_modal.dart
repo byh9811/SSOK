@@ -177,14 +177,13 @@ class _ContentByCardUpdateState extends State<ContentByCardUpdate> {
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
             child: TextField(
               controller: controller,
-              onEditingComplete: () {
-                widget.change(controller.text);
-              },
+              onEditingComplete: () {},
               onChanged: (newValue) {
                 // setState(() {
                 //   controller.text = newValue;
                 // });
                 // widget.change(newValue);
+                widget.change(controller.text);
               },
               onSubmitted: (text) {}, // Enter를 누를 때 실행되는 함수
               readOnly: widget.addressType,

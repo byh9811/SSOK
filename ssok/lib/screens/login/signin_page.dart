@@ -327,6 +327,7 @@ class _SigninPage extends State<SigninPage> {
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.deny(RegExp(r'\s')), // 공백을 거부하는 형식 지정기
                                   FilteringTextInputFormatter.deny(RegExp(r'[!@#%^&*(),.?":{}|<>]')), //특수문자를 거부하는
+                                  FilteringTextInputFormatter.deny(RegExp(r'[^a-zA-Z0-9]')), //영어,숫자 제외 거부
                                 ],
                               ),
                             ),

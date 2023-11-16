@@ -13,10 +13,10 @@ class _IdPageState extends State<ReceiptPage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(height: screenHeight * 0.02),
         introText(),
-        SizedBox(height: screenHeight * 0.03),
         ReceiptHistoryList(),
       ],
     );

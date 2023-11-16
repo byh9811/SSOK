@@ -151,6 +151,8 @@ class _BusinessCardDetail extends State<BusinessCardDetail> {
         nameCardPos = NameCardPos(data["lat"], data["lon"]);
         isLoading = false;
       });
+      // 갱신이라면 alert 생성
+      if (nameCardHead.updateStatus == "UPDATED") {}
     }
   }
 

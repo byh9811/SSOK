@@ -69,7 +69,7 @@ class _BusinessCardSendBluetoothPageState
         onDisconnected: (id) {
           // showSnackbar(
           //     "Disconnected: ${endpointMap[id]!.endpointName}, id $id");
-          showSnackbar("연결 실패");
+          // showSnackbar("연결 실패");
           setState(() {
             endpointMap.remove(id);
           });
@@ -80,7 +80,7 @@ class _BusinessCardSendBluetoothPageState
       setState(() {
         advertising = true;
       });
-      Future.delayed(const Duration(milliseconds: 10000), () async {
+      Future.delayed(const Duration(milliseconds: 30000), () async {
         await Nearby().stopAdvertising();
         // pointClear();
         stop();

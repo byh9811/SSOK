@@ -123,9 +123,10 @@ class _BusinessCardReceiveBluetoothPageState
         scanning = true;
       });
     } catch (e) {
-      showSnackbar(e);
+      // showSnackbar(e);
+      print(e);
     }
-    Future.delayed(const Duration(milliseconds: 10000), () async {
+    Future.delayed(const Duration(milliseconds: 30000), () async {
       await Nearby().stopDiscovery();
       // pointClear();
       stop();

@@ -147,9 +147,8 @@ class _NotRegisteredIdCardState extends State<NotRegisteredIdCard> {
                               );
                             } catch (e) {
                               // ignore: use_build_context_synchronously
-                              showSuccessDialog(
-                                  context, "OCR인식 실패", "주민등록증이 제대로 식별되지 않았습니다.",
-                                  () {
+                              showSuccessDialog(context, "주민등록증 인식 실패",
+                                  "주민등록증이 제대로 식별되지 않았습니다. \n다시 시도해 주세요.", () {
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     "/main", (route) => false,
                                     arguments: 0);

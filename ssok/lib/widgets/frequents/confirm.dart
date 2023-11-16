@@ -9,7 +9,9 @@ class Constants {
 }
 
 void confirmDialog(
-    BuildContext context, String title, String content, Function() onPressed) {
+    BuildContext context, String title, String content, Function() onPressed,
+    {int? height}) {
+  int tempHeight = height ?? 60;
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -22,7 +24,8 @@ void confirmDialog(
         elevation: 0,
         // backgroundColor: Colors.transparent,
         title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        content: Container(height: 100, child: WrappedKoreanText(content)),
+        content: Container(
+            height: tempHeight.toDouble(), child: WrappedKoreanText(content)),
         actions: [
           TextButton(
             onPressed: () {

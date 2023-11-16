@@ -73,11 +73,11 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
             ,
             style: TextStyle(fontWeight: FontWeight.bold)),
         content: Container(
-          height: 100,
+          height: _isCheckedChanges ? 40 : 90,
           child: WrappedKoreanText(
             _isCheckedChanges
                 ? "더이상 결제 시 잔돈이 저금되지 않습니다."
-                : "카드 결제 시 1000원 이하의 잔돈이 포켓머니에 저금 됩니다.\n\n예) 1,700 결제 시 300원 저금",
+                : "카드 결제 시 1,000원 이하의 잔돈이 포켓머니에 저금 됩니다.\n\n예) 1,700 결제 시 300원 저금",
             style: TextStyle(color: Colors.black, fontSize: 16),
           ),
         ),
@@ -238,7 +238,9 @@ class _AllRegisteredPocketState extends State<AllRegisteredPocket> {
                 key: tooltipkey,
                 triggerMode: TooltipTriggerMode.tap,
                 margin: EdgeInsets.only(
-                    left:screenWidth*0.09, right: screenWidth * 0.25, bottom: screenHeight * 0.10),
+                    left: screenWidth * 0.09,
+                    right: screenWidth * 0.25,
+                    bottom: screenHeight * 0.10),
                 padding: EdgeInsets.symmetric(
                     vertical: screenHeight * 0.012,
                     horizontal: screenWidth * 0.02),

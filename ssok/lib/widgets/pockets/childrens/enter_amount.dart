@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ssok/http/http.dart';
 import 'package:ssok/http/token_manager.dart';
 import 'package:ssok/widgets/frequents/main_button.dart';
@@ -16,6 +17,8 @@ class EnterAmount extends StatefulWidget {
   @override
   State<EnterAmount> createState() => _EnterAmountState();
 }
+
+var numberFormat = NumberFormat('###,###,###,###');
 
 class _EnterAmountState extends State<EnterAmount> {
   ApiService apiService = ApiService();
@@ -39,10 +42,10 @@ class _EnterAmountState extends State<EnterAmount> {
         TokenManager().accessToken);
     print(response.body);
     if (response.statusCode == 200) {
-      showSuccessDialog(context, "이체 성공", "기부가 완료되었습니다.", () {
+      showSuccessDialog(context, "기부 성공", "기부가 완료되었습니다.", () {
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 2);
-      });
+      }, height: 30);
       print(response.body);
       // Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false);
     } else if (response.statusCode == 400) {
@@ -51,13 +54,13 @@ class _EnterAmountState extends State<EnterAmount> {
         // ignore: use_build_context_synchronously
         showSuccessDialog(context, "기부 실패", "보유 포켓머니가 부족합니다.", () {
           Navigator.of(context).pop();
-        });
+        }, height: 30);
       }
     } else {
       showSuccessDialog(context, "기부 실패", "잠시후 다시 시도 해주세요.", () {
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 2);
-      });
+      }, height: 30);
     }
   }
 
@@ -65,7 +68,7 @@ class _EnterAmountState extends State<EnterAmount> {
     if (withDrawMoney <= 0) {
       showSuccessDialog(context, "이체 실패", "1원 이상의 금액만 이체할 수 있습니다.", () {
         Navigator.of(context).pop();
-      });
+      }, height: 30);
       return;
     }
 
@@ -81,7 +84,7 @@ class _EnterAmountState extends State<EnterAmount> {
       showSuccessDialog(context, "이체 성공", "이체가 완료되었습니다.", () {
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 2);
-      });
+      }, height: 30);
 
       print(response.body);
       // Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false);
@@ -92,13 +95,13 @@ class _EnterAmountState extends State<EnterAmount> {
         // showAlet("이체", "보유 포켓머니가 부족합니다.", false);
         showSuccessDialog(context, "이체 실패", "보유 포켓머니가 부족합니다.", () {
           Navigator.of(context).pop();
-        });
+        }, height: 30);
       }
     } else {
       showSuccessDialog(context, "이체 실패", "잠시후 다시 시도 해주세요.", () {
         Navigator.of(context)
             .pushNamedAndRemoveUntil("/main", (route) => false, arguments: 2);
-      });
+      }, height: 30);
     }
   }
 

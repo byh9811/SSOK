@@ -63,14 +63,43 @@ class _RegisteredCreditCardState extends State<RegisteredCreditCard> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<TooltipState> tooltipkey = GlobalKey<TooltipState>();
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
         SizedBox(height: screenHeight * 0.15),
-        Text(
-          widget.creditCard.cardName,
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+        Tooltip(
+          verticalOffset: -20,
+          key: tooltipkey,
+          triggerMode: TooltipTriggerMode.tap,
+          margin: EdgeInsets.only(
+              left: screenWidth * 0.2,
+              right: screenWidth * 0.25,
+              bottom: screenHeight * 0.1),
+          padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.012, horizontal: screenWidth * 0.02),
+          height: 30,
+          showDuration: Duration(seconds: 1),
+          message: '카드번호 : ${widget.creditCard.cardNum}',
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              widget.creditCard.cardName,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+            ),
+            IconButton(
+              onPressed: () {
+                tooltipkey.currentState?.ensureTooltipVisible();
+                Future.delayed(Duration(seconds: 2), () {
+                  // tooltipkey.currentState?.hideTooltip();
+                });
+              },
+              icon: Icon(Icons.info_outline, color: Colors.grey),
+            )
+          ],
         ),
         SizedBox(height: screenHeight * 0.09),
         Container(

@@ -1,0 +1,11 @@
+== 도메인 API
+
+=== 도메인 등록
+
+==== HTTP Request
+include::{snippets}/domain-join/http-request.adoc[]
+include::{snippets}/domain-join/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/domain-join/http-response.adoc[]
+include::{snippets}/domain-join/response-fields.adoc[]

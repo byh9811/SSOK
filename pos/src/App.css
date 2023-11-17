@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css?family=Jua:400');
+
+/* 전체 */
+.App{
+  padding: 40px;
+  font-family: Jua;
+}
+.totalWrapper{
+  border: solid 3px black;
+  background-color: rgb(251, 255, 232);
+  border-radius: 20px;
+  overflow: hidden;
+}
+/* 헤더 */
+.headerWrapper{
+  background-color: rgb(183, 178, 255);
+  padding: 5px;
+  height: 5vh;
+  border-bottom: solid 3px black;
+}
+.header{
+  display: flex;
+}
+.header .headerImg{
+  width: 80px;
+}
+.header .posName{
+  font-weight: 800;
+  font-size: 23px;
+}
+
+/* 컨텐츠 레퍼 */
+.contentWrapper{
+  height: 82vh;
+  display: flex;
+}
+/* 왼쪽 */
+.contentWrapper .leftContentWrapper{
+  height: 100%;
+  width: 70%;
+  border-right: 3px solid rgb(0, 0, 0);
+}
+.itemListWrapper{
+  height: auto;
+  min-height: 85%;
+  /* 푸터 높이 */
+  border-bottom: 3px solid black;
+  text-align: center;
+}
+
+.itemWrapper{
+  border: solid 3px black;
+  border-radius: 10px;
+  margin:30px 15px 15px 15px;
+  width: 200px;
+  height: 200px;
+  position: relative;
+  display: inline-block;
+}
+
+
+/* 결제 라인 */
+.paymentWrapper{
+  background-color: rgb(243, 243, 243);
+  height: 15%;
+  position : relative;
+  display: flex;
+  font-size: 25px;
+}
+.paymentWrapper .payWrapper{
+  width: 65%;
+}
+
+.paymentWrapper .payWrapper .card{
+  margin: 20px;
+  text-align: center;
+}
+
+.paymentWrapper .payWrapper .card .cardNum{
+  width: 80px;
+  height: 30px;
+  margin: 0 6px;
+  vertical-align: middle;
+}
+.paymentWrapper .total{
+  width: 20%;
+  border-left: 3px solid rgb(0, 0, 0);
+  border-right: 3px solid rgb(0, 0, 0);
+  text-align: center;
+  display: inline;
+  align-content: center;
+}
+.paymentWrapper .total .totalTitle{
+  width: 100%;
+  height: 40%;
+  border-bottom: 1px solid black;
+}
+.paymentWrapper .total .totalMoney{
+  width: 100%;
+  height: 60%;
+  padding: 10px 0;
+}
+.payBtn{
+  width: 148px;
+  font-size: 60px;
+  text-align: center;
+  justify-content: center;
+  margin: auto;
+}
+
+
+
+
+
+
+/* item.jsx */
+.itemWrapper{
+  background-color: rgb(235, 235, 235);
+  border : 3px solid black;
+}
+.itemWrapper .itemInfoWrapper{
+}
+.itemWrapper .itemInfoWrapper .itemName{
+  display:inline-block;
+  /* overflow: hidden; */
+  word-break:keep-all;
+  height: 40px;
+  margin-top: 30px;
+}
+.itemInfoWrapper div{
+  margin:10px;
+}
+.itemWrapper .itemInfoWrapper .itemPrice{
+  margin:30px;
+}
+/* 오른쪽 */
+.contentWrapper .rightContentWrapper{
+  height: 100%;
+  width: 30%;
+  background-color: #fff;
+}
+
+/* SelectItem */
+.selectItemWrapper{
+  
+}
+.selectItemWrapper{
+
+}
+.itemInfo{
+  background-color: #777777;
+  display: flex;
+  padding :10px;
+  border-bottom: 2px solid black;
+  text-align: center;
+}
+
+.selectItemInfo{
+  background-color: #ffffff;
+  display: flex;
+  padding :10px;
+  border-bottom: 2px solid black;
+  text-align: center;
+}
+
+.selectItemName{
+  width: 45%;
+}
+.selectItemCnt{
+  width: 15%;
+}
+.selectItemPrice{
+  width:20%;
+}
+.rmBtn{
+  width: 20%;
+}

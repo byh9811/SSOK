@@ -169,21 +169,21 @@
 <table align="center">
     <tr align="center">
         <td style="min-width: 150px;">
-            <a href="https://github.com/ksungjoon">
+            <a href="https://github.com/marugy">
               <img src="https://avatars.githubusercontent.com/u/91540464?v=4" width="200">
               <br />
               <b>marugy</b>
             </a>
         </td>
         <td style="min-width: 150px;">
-            <a href="https://github.com/PARKHEECHANG">
+            <a href="https://github.com/najonghyun">
               <img src="https://avatars.githubusercontent.com/u/102370959?v=4" width="200">
               <br />
               <b>najonghyun</b>
             </a> 
         </td>
         <td style="min-width: 150px;">
-            <a href="https://github.com/heon-2">
+            <a href="https://github.com/signalman">
               <img src="https://avatars.githubusercontent.com/u/32051350?v=4" width="200">
               <br />
               <b>signalman</b>
@@ -203,21 +203,21 @@
     </tr>
 <tr align="center">
         <td style="min-width: 150px;">
-            <a href="https://github.com/ksungjoon">
+            <a href="https://github.com/byh9811">
               <img src="https://avatars.githubusercontent.com/u/50614241?v=4" width="200">
               <br />
               <b>byh9811</b>
             </a>
         </td>
         <td style="min-width: 150px;">
-            <a href="https://github.com/PARKHEECHANG">
+            <a href="https://github.com/jinsikhong">
               <img src="https://avatars.githubusercontent.com/u/28581484?v=4" width="200">
               <br />
               <b>jinsikhong</b>
             </a> 
         </td>
         <td style="min-width: 150px;">
-            <a href="https://github.com/heon-2">
+            <a href="https://github.com/yhj0214">
               <img src="https://avatars.githubusercontent.com/u/87259492?v=4" width="200">
               <br />
               <b>yhj0214</b>
@@ -256,16 +256,16 @@
 
 ## 산출물
 ### WBS
-<img src="exec/img/WBS.PNG" width="400">
+<img src="exec/img/WBS.png" width="400">
 
 ### ERD
-<img src="exec/img/ERD.PNG" width="400">
+<img src="exec/img/ERD.png" width="400">
 
 ### 기능 명세서
-<img src="exec/img/기능명세서1.PNG" width="400">
-<img src="exec/img/기능명세서2.PNG" width="400">
+<img src="exec/img/기능명세서1.png" width="400">
+<img src="exec/img/기능명세서2.png" width="400">
 
 ### API 명세서
-<img src="exec/img/API명세서1.PNG" width="400">
-<img src="exec/img/API명세서2.PNG" width="400">
+<img src="exec/img/API명세서1.png" width="400">
+<img src="exec/img/API명세서2.png" width="400">
 
